@@ -47,6 +47,11 @@ User.beforeCreate(async (user) => {
   user.password = await bcrypt.hash(user.password, salts);
 });
 
+User.beforeUpdate(async (user) => {
+  const salts = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salts);
+});
+
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
