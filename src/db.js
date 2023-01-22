@@ -52,6 +52,10 @@ User.beforeUpdate(async (user) => {
   user.password = await bcrypt.hash(user.password, salts);
 });
 
+User.prototype.validPassword = async (password) => {
+  return await bcrypt.compare(password, this.password);
+};
+
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
