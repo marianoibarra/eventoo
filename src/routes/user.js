@@ -5,7 +5,7 @@ const { modifyData } = require("../controllers/modifyData");
 
 const router = Router();
 
-router.post("/", createUser);
+router.post("/register", createUser);
 router.post("/recoverypassword", forgot);
 router.put("/:id", modifyData);
 
