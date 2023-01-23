@@ -92,11 +92,11 @@ const createEvent = async (req, res) => {
         })
         
         address.forEach(async a => {
-            const address = await Address.findOne({ where: { address_line: a, city: a, state: a, country: a, zip_code: a } })
+            const address = await Address.findOne({ where: { address_line: a.address_line, city: a.city, state: a.state, country: a.country, zip_code: a.zip_code } })
             if (address) await address.addEvent(event)
         });
         category.forEach(async c => {
-            const category = await Category.findOne({ where: { name:c } })
+            const category = await Category.findOne({ where: { name:c.name } })
             if (category) await season.addEvent(event)
         });
         const newEvent = await Event.findByPk(event.event_id, {
