@@ -32,13 +32,75 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const {  } = sequelize.models;
+const { 
+  Event, 
+  User_Event,
+  User_Transaction,
+  Transaction, 
+  User, 
+  Address, 
+  BankAccount, 
+  Category, 
+  Ticket 
+} = sequelize.models;
+
+// Relaciones
+
+// User.belongsToMany(Transaction, { through: User_Transaction });
+// Transaction.belongsToMany(User, { through: User_Transaction });
+
+// User.belongsToMany(Event, { through: User_Event });
+// Event.belongsToMany(User, { through: User_Event });
+
+// Address.hasMany(User)
+// User.belongsTo(Address)
+
+// User.hasMany(BankAccount)
+// BankAccount.belongsTo(User)
+
+// Address.hasMany(Event)
+// Event.belongsTo(Address)
+
+// BankAccount.hasMany(Event)
+// Event.belongsTo(BankAccount)
+
+// Category.hasMany(User)
+// Event.belongsTo(Category)
+
+// Event.hasMany(Ticket)
+// Ticket.belongsTo(Event)
+
+// Event.hasMany(Transaction)
+// Transaction.belongsTo(Event)
+
+// Transaction.hasMany(Ticket)
+// Ticket.belongsTo(Transaction)
+
+
 
 // Encripta la contraseña antes de crear el usuario
+User.beforeCreate(async function (user) {
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+});
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+User.beforeUpdate(async function (user) {
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+});
 
+// Funcion que se va a usar en el logeo, para verificar que sea la contraseña
+User.prototype.validPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+// Event.beforeCreate(async function (event) {
+//   const titleCapitalized =
+//     event.name.charAt(0).toUpperCase() +
+//     event.name.slice(1).toLowerCase();
+
+//   event.name = titleCapitalized;
+// });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
