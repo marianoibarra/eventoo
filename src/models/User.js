@@ -1,28 +1,42 @@
 const { DataTypes } = require('sequelize');
 
-
 module.exports = (sequelize) => {
     sequelize.define('user',{
-        id: {
-            type: DataTypes.BIGINT,
-            primaryKey: true,
-            allowNull: true,
-            unique: true,  
-        },
         email: {
-            type: DataTypes.BIGINT,
-            allowNull: true,
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            isEmail: {
+              msg: 'invalid email'
+            },
+            isUnique(email, next) {
+              User.findOne({where: {email}})
+                .then((email) => {
+                  if (email) {
+                    throw new Error();
+                  }
+                  return next()
+                })
+                .catch(e => next('email already exist'))
+            }
+          },
         },
         password: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             allowNull: true,
+            validate: {
+              is: {
+                args: /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/gm,
+                msg: "This password does not meet the security requirements"
+              }
+            }
         },
         name: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(30),
             allowNull:true,
         },
         last_name: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(30),
             allowNull:true,
         },
         profile_pic: {
@@ -30,7 +44,7 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         born: {
-            type:DataTypes.DATE,
+            type:DataTypes.DATEONLY,
             allowNull:true,
         },
         isBanned: {
