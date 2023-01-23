@@ -1,29 +1,20 @@
 const { Sequelize } = require ('sequelize');
-const { Event, Category, BankAccount, Address } =  require ('../db')// importar las relaciones de los modelos  de la bd.(corroborar que esten bien nombrados)
+const { Event, Category, BankAccount, Address } =  require ('../models')// importar las relaciones de los modelos  de la bd.(corroborar que esten bien nombrados)
 
 
 const getEvents = async (req, res) => {
     try {
         const events = await Event.findAll({
-            include: [{
-               model: Category, through: {
-                attributes: []
-                }
-            },
-                { model: BankAccount, through: {
-                attributes:[]
-                }
-            },
-                { model: Address, through: {
-                attributes:[]    
-                }
-            }
+            include: [
+                { model: Category, through: { attributes: [] } },
+                { model: BankAccount, through: { attributes: [] } },
+                { model: Address, through: { attributes: [] } }
             ],
             order: [
                 [ 'name', 'ASC' ]
             ]
     })
-
+    return res.json(events)
     } catch (error) {
         console.log(error)
         return res.status(500).json({
@@ -34,19 +25,8 @@ const getEvents = async (req, res) => {
 };
 
 
-
-
-const createEvent = async (req, res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}
-
 module.exports = {
     getEvents,
-    createEvent
 }
 
 // // - **`GET /event?state=state`**

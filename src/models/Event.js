@@ -17,11 +17,11 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true,
         },
-        start_Date: {
+        start_date: {
             type: DataTypes.TIMETAMPTZ,
             allowNull:true,
         },
-        end_Date: {
+        end_date: {
             type: DataTypes.TIMETAMPTZ,
             allowNull:true,
         },
@@ -45,11 +45,11 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull:true,
         },
-        age_Range: {
+        age_range: {
             type: DataTypes.STRING,
             allowNull:true,
         },
-        guests_Capacity: {
+        guests_capacity: {
             type: DataTypes.BIGINT,
             allowNull:true,
         },
