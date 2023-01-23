@@ -1,14 +1,10 @@
-const router = require('express').Router();
-const { register, login, verifyToken, test, reset_password, forgot_password, checkResetToken, change_password } = require('../controllers/user')
+const router = require("express").Router();
+const userMiddleware = require("./user");
+const eventMiddleware = require("./event");
+const loginMiddleware = require("./login");
 
-router.post('/register', register)
-router.post('/login', login)
-
-router.get('/login', verifyToken, test)
-
-router.post('/forgot-password', forgot_password)
-router.get('/reset-password/:reset_token', checkResetToken)
-router.put('/reset-password', reset_password)
-router.put('/change-password', change_password)
+router.use("/user", userMiddleware);
+router.use("/event", eventMiddleware);
+router.use("/login", loginMiddleware);
 
 module.exports = router;
