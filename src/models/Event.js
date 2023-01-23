@@ -3,12 +3,6 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define('user',{
-        id: {
-            type: DataTypes.BIGINT,
-            primaryKey: true,
-            allowNull: true,
-            unique: true,  
-        },
         name: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -46,7 +40,7 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         age_range: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING, // "12 - 50"
             allowNull:true,
         },
         guests_capacity: {
@@ -55,10 +49,6 @@ module.exports = (sequelize) => {
         },
         placeName: {
             type: DataTypes.STRING,
-            allowNull:true,
-        },
-        created_at: {
-            type: DataTypes.TIMETAMPTZ,
             allowNull:true,
         },
         advertisingTime_start: {

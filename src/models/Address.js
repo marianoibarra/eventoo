@@ -3,12 +3,6 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define('address',{
-        id: {
-            type: DataTypes.BIGINT,
-            primaryKey: true,
-            allowNull: true,
-            unique: true  
-        },
         address_line: {
             type: DataTypes.STRING,
             allowNull: true,
