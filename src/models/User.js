@@ -1,33 +1,56 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-
-  const User = sequelize.define("User", {
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isEmail: {
-          msg: 'invalid email'
+    sequelize.define('user',{
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            isEmail: {
+              msg: 'invalid email'
+            },
+            isUnique(email, next) {
+              User.findOne({where: {email}})
+                .then((email) => {
+                  if (email) {
+                    throw new Error();
+                  }
+                  return next()
+                })
+                .catch(e => next('email already exist'))
+            }
+          },
         },
-        isUnique(email, next) {
-          User.findOne({where: {email}})
-            .then((email) => {
-              if (email) {
-                throw new Error();
+        password: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            validate: {
+              is: {
+                args: /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/gm,
+                msg: "This password does not meet the security requirements"
               }
-              return next()
-            })
-            .catch(e => next('email already exist'))
-        }
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    name: {
-      type: DataTypes.STRING
-    },
-  })
-}
+            }
+        },
+        name: {
+            type: DataTypes.STRING(30),
+            allowNull:true,
+        },
+        last_name: {
+            type: DataTypes.STRING(30),
+            allowNull:true,
+        },
+        profile_pic: {
+            type: DataTypes.STRING,
+            allowNull:true,
+        },
+        born: {
+            type:DataTypes.DATEONLY,
+            allowNull:true,
+        },
+        isBanned: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+      
+    })
+};
