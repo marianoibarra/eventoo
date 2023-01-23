@@ -8,5 +8,3 @@ router.use("/event", eventMiddleware);
 router.use("/login", loginMiddleware);
 
 module.exports = router;
-
-module.exports = router;
