@@ -26,11 +26,11 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         isPublic: {
-            type: DataTypes.BOLEEAN,
+            type: DataTypes.BOOLEAN,
             allowNull:true,
         },
         isVirtual: {
-            type: DataTypes.BOLEEAN,
+            type: DataTypes.BOOLEAN,
             allowNull:true,
         },
         virtualURL: {
@@ -38,11 +38,11 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         isPremium: {
-            type: DataTypes.BOLEEAN,
+            type: DataTypes.BOOLEAN,
             allowNull:true,
         },
         isPaid: {
-            type: DataTypes.BOLEEAN,
+            type: DataTypes.BOOLEAN,
             allowNull:true,
         },
         age_Range: {
@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         guests_Capacity: {
-            type: DataTypes.BIGINIT,
+            type: DataTypes.BIGINT,
             allowNull:true,
         },
         placeName: {

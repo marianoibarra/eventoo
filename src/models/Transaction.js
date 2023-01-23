@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
             unique: true  
         },
         isPaid: {
-            type: DataTypes.BOLEAN,
+            type: DataTypes.BOOLEAN,
             allowNull: true,
         },
         payment_proof: {
