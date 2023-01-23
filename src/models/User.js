@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    token: {
+    name: {
       type: DataTypes.STRING
     },
   })
