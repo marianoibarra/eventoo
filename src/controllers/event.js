@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Event, Address, Category } = require("../db");
 
 const createEvent = async (req, res) => {
@@ -128,6 +129,52 @@ const getEvents = async (req, res) => {
   }
 };
 
+const getEventsByCity = async (req, res) => {
+
+  const { city } = req.query;
+  city = city.trim()
+
+  try {
+    const eventsByCity = await Event.findAll({
+      where: {
+        city: {
+          [ Op.iLike ]: `${city}%`
+        }
+      },
+      include: [{ model: Address }],
+      order: [[ 'name', 'ASC' ]]
+    })
+    if (eventsByCity.length) return res.json(eventsByCity)
+    return res.status(404).json({
+      error:{
+        message:'There are no events for that city...',
+  
+      }
+    })
+  } catch (error) {
+    console.log(error)
+        return res.status(500).json({
+            error: {
+                message: "Server error"}
+        })
+  }
+
+}
+
+const getPaidEvents=async(req,res)=>{
+  const {isPaid}=req.query;
+  try{
+    const paidEvents= await Event.findAll({
+      where:{ isPaid}
+    })
+    if(paidEvents)
+    res.json(paidEvents)
+  }catch(error){
+    
+  }
+}
+
+
 const modifyEvent = async (req, res) => {
   const { id } = req.params;
   const eventId = Number(id);
@@ -212,6 +259,21 @@ const deleteEvent = async (req, res) => {
 module.exports = {
   createEvent,
   getEvents,
+  getEventsByCity,
+  getPaidEvents,
   modifyEvent,
   deleteEvent,
 };
+
+//  endpoints GET FILTROS : 
+
+
+//  localhost:3001/events?city=${city} haciendo Ani
+//  /events?categoryName = name;
+//  /events/?today
+//  /events/?thisWeekend
+//  /events/?isPaid=true haciendo Mary
+//  /events/?isPublic=true
+//  /events/?ageRange
+
+

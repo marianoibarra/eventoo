@@ -40,7 +40,7 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         age_range: {
-            type: DataTypes.STRING, // "12 - 50"
+            type: DataTypes.ENUM('ALL PUBLIC', '+ 13', '+ 16', '+ 18'),
             allowNull:true,
         },
         guests_capacity: {
