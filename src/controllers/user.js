@@ -32,23 +32,20 @@ const register = async (req, res) => {
 
     const newUser = await User.create({
       email,
-      password: hashedPassword,
+      password,
       name,
       last_name,
       profile_pic,
       born,
     });
 
-    const address = await Address.create({ 
+    newUser.createAddress({
       address_line, 
       city, 
       state, 
       country, 
       zip_code 
     });
-
-    newUser.addAddress(address);
-    //await newUser.save();
 
     res.send({msg: "User created successfully"});
   } catch (err) {
@@ -61,7 +58,12 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     if(!email || !password) return res.status(500).send({msg: 'You must enter an email and a password'})
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ 
+      where: { email },
+      include: {
+        model: Address
+      }
+    });
     if (!user) {
       return res
         .status(401)
@@ -77,7 +79,7 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: "90d"});
 
-    return res.send({ message: "Logged in successfully", id: user.id, token });
+    return res.send({ user, message: "Logged in successfully", id: user.id, token });
     
   } catch (error) {
     return res.status(500).send({ message: "Internal server error" });
@@ -102,8 +104,10 @@ const verifyToken = (req, res, next) => {
 
 const test = async (req, res) => {
 
+
+
   try {
-    res.send('todo ok')
+    res.send(`el id es: ${req.userId}`)
   } catch (error) {
     res.status(400).send(error.message)
   }
@@ -182,6 +186,14 @@ const reset_password = async (req, res) => {
 }
 
 const change_password = async (req, res) => {
+
+  const { password } = req.body
+
+  const user = await User.findOne({where: {id: req.userId}})
+
+  user.update({password: password}) 
+
+  res.send('Password changed successfully')
   
 }
 

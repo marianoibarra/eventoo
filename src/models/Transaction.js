@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('transaction',{
+    sequelize.define('Transaction',{
         isPaid: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
@@ -13,3 +13,4 @@ module.exports = (sequelize) => {
        
     })
 };
+

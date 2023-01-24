@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 
 module.exports = (sequelize) => {
-    sequelize.define('user',{
+    sequelize.define('Event',{
         name: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -12,11 +12,11 @@ module.exports = (sequelize) => {
             allowNull: true,
         },
         start_date: {
-            type: DataTypes.TIMETAMPTZ,
+            type: DataTypes.DATE,
             allowNull:true,
         },
         end_date: {
-            type: DataTypes.TIMETAMPTZ,
+            type: DataTypes.DATE,
             allowNull:true,
         },
         isPublic: {
@@ -52,11 +52,11 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         advertisingTime_start: {
-            type: DataTypes.TIMETAMPTZ,
+            type: DataTypes.DATE,
             allowNull:true,
         },
         adversiting_end: {
-            type: DataTypes.TIMETAMPTZ,
+            type: DataTypes.DATE,
             allowNull:true,
         },
         cover_pic: {

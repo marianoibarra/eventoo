@@ -29,6 +29,7 @@ fs.readdirSync(path.join(__dirname, "/models"))
   });
 
 // Injectamos la conexion (sequelize) a todos los modelos
+
 modelDefiners.forEach((model) => model(sequelize));
 // Capitalizamos los nombres de los modelos ie: product => Product
 let entries = Object.entries(sequelize.models);
@@ -49,42 +50,44 @@ const {
   Transaction, 
   User, 
   Address, 
-  BankAccount, 
+  Bank_Account, 
   Category, 
   Ticket 
 } = sequelize.models;
 
 // Relaciones
 
-// User.belongsToMany(Transaction, { through: User_Transaction });
-// Transaction.belongsToMany(User, { through: User_Transaction });
+User.belongsToMany(Transaction, { through: User_Transaction });
+Transaction.belongsToMany(User, { through: User_Transaction });
 
-// User.belongsToMany(Event, { through: User_Event });
-// Event.belongsToMany(User, { through: User_Event });
+User.belongsToMany(Event, { through: User_Event });
+Event.belongsToMany(User, { through: User_Event });
 
-// Address.hasMany(User)
-// User.belongsTo(Address)
+Address.hasMany(User)
+User.belongsTo(Address)
 
-// User.hasMany(BankAccount)
-// BankAccount.belongsTo(User)
+Category.hasMany(Event)
+Event.belongsTo(Category)
 
-// Address.hasMany(Event)
-// Event.belongsTo(Address)
+User.hasMany(Bank_Account)
+Bank_Account.belongsTo(User)
 
-// BankAccount.hasMany(Event)
-// Event.belongsTo(BankAccount)
+Address.hasMany(Event, )
+Event.belongsTo(Address, {
+  onUpdate: 'CASCADE'
+})
 
-// Category.hasMany(User)
-// Event.belongsTo(Category)
+Bank_Account.hasMany(Event)
+Event.belongsTo(Bank_Account)
 
-// Event.hasMany(Ticket)
-// Ticket.belongsTo(Event)
+Event.hasMany(Ticket)
+Ticket.belongsTo(Event)
 
-// Event.hasMany(Transaction)
-// Transaction.belongsTo(Event)
+Event.hasMany(Transaction)
+Transaction.belongsTo(Event)
 
-// Transaction.hasMany(Ticket)
-// Ticket.belongsTo(Transaction)
+Transaction.hasMany(Ticket)
+Ticket.belongsTo(Transaction)
 
 
 // Encripta la contraseña antes de crear y de actualizar el usuario

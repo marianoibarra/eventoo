@@ -1,10 +1,64 @@
-const { Event } = require("../models/Event");
-const { Address } = require("../models/Address");
-const { Category } = require("../models/Category");
+const { Event, Address, Category } = require("../db");
 
 const createEvent = async (req, res) => {
+  const {
+    name,
+    description,
+    start_date,
+    end_date,
+    isPublic,
+    isVirtual,
+    virtualURL,
+    //accountBank,//
+    category,
+    isPremium,
+    isPaid,
+    age_Range,
+    guests_capacity,
+    placeName,
+    advertisingTime_start,
+    adversiting_end,
+    cover_pic,
+    address_line,
+    city,
+    state,
+    country,
+    zip_code,
+  } = req.body; // consultar accontbank, category and address...
 
-  const { 
+  try {
+    // if (!name ||
+    //     !description ||
+    //     !start_date ||
+    //     !end_date ||
+    //     !isPublic ||
+    //     !isVirtual ||
+    //     !virtualURL ||
+    //     !category ||
+    //     !isPremium ||
+    //     !isPaid ||
+    //     !age_Range ||
+    //     !guests_capacity ||
+    //     !placeName ||
+    //     !created_at ||
+    //     !advertisingTime_start ||
+    //     !adversiting_end ||
+    //     !cover_pic ||
+    //     !address_line ||
+    //     !state ||
+    //     !city ||
+    //     !country ||
+    //     !zip_code
+    //     )
+    //     {
+    //         return res.status(400).json({
+    //             error: {
+    //                 message: 'name, description, start_date, end_date, isPublic, isVirtual, virtualURL, category, address, isPremium, isPaid, age_Range, guests_capacity, placeName, created_at, advertisingTime_start, adversiting_end, cover_pic cannot be empty',
+    //                 values: { ...req.body }
+    //             }
+    //     })
+    // }
+    const event = await Event.create({
       name,
       description,
       start_date,
@@ -12,133 +66,70 @@ const createEvent = async (req, res) => {
       isPublic,
       isVirtual,
       virtualURL,
-      //accountBank,//
-      category,
-      address,
       isPremium,
       isPaid,
       age_Range,
       guests_capacity,
-      placeName, 
-      created_at, 
-      advertisingTime_start,  
+      placeName,
+      advertisingTime_start,
       adversiting_end,
-      cover_pic
-  } = req.body; // consultar accontbank, category and address... 
-
-  try {
-      const { address_line, city, state, country, zip_code } = address;
-      const addressDb = await Address.findOrCreate({
-          where: { address_line, city, state, country, zip_code },
-      });
-      const address_id = addressDb.id;
-      const categoryDb = await Category.findOne({where : {name: category}});
-      const category_id = categoryDb.id;
-
-      if (!name ||
-          !description || 
-          !start_date || 
-          !end_date ||
-          !isPublic || 
-          !isVirtual || 
-          !virtualURL || 
-          !category ||
-          !address || 
-          !isPremium ||
-          !isPaid || 
-          !age_Range || 
-          !guests_capacity || 
-          !placeName || 
-          !created_at || 
-          !advertisingTime_start ||
-          !adversiting_end ||
-          !cover_pic )
-          {
-              return res.status(400).json({
-                  error: {
-                      message: 'name, description, start_date, end_date, isPublic, isVirtual, virtualURL, category, address, isPremium, isPaid, age_Range, guests_capacity, placeName, created_at, advertisingTime_start, adversiting_end, cover_pic cannot be empty',
-                      values: { ...req.body }
-                  } 
-          })
-      }
-      const event = await Event.create({
-          name,
-          description,
-          start_date,
-          end_date,
-          isPublic,
-          isVirtual,
-          virtualURL,
-          //accountBank,//
-          categoryId : category_id,
-          addressId : address_id,
-          isPremium,
-          isPaid,
-          age_Range,
-          guests_capacity,
-          placeName, 
-          created_at, 
-          advertisingTime_start,  
-          adversiting_end,
-          cover_pic
-      }).catch(e => {
-          return res.status(500).json({
-              error: {
-                  message: "Error while creating resource",
-                  values: { ...req.body }
-              }
-          })
-      })
-      
-      address.forEach(async a => {
-          const address = await Address.findOne({ where: { address_line: a.address_line, city: a.city, state: a.state, country: a.country, zip_code: a.zip_code } })
-          if (address) await address.addEvent(event)
-      });
-      category.forEach(async c => {
-          const category = await Category.findOne({ where: { name:c.name } })
-          if (category) await season.addEvent(event)
-      });
-      const newEvent = await Event.findByPk(event.event_id, {
-          include: [
-              { model: Category, through: { attributes: [] } },
-              { model: Address, through: { attributes: [] } }
-          ]
-      })
-      return res.status(201).json(newEvent)
-      
-  } catch (error) {
-      console.log(error)
+      cover_pic,
+    }).catch((e) => {
       return res.status(500).json({
-          error: {
-              message: "Server error"}
-      })
+        error: {
+          message: "Error while creating resource",
+          values: { ...req.body },
+        },
+      });
+    });
+
+    event.createAddress({
+      address_line,
+      city,
+      state,
+      country,
+      zip_code,
+    });
+
+    await Category.create({ name: category }); //QUITAR!
+
+    const categoryDb = await Category.findOne({ where: { name: category } });
+
+    await event.setCategory(categoryDb);
+
+    const newEvent = await Event.findByPk(event.id, {
+      include: [{ model: Category, attributes: ["name"] }, { model: Address }],
+    });
+    return res.status(201).json(newEvent);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: {
+        message: "Server error",
+      },
+    });
   }
-}
+};
 
 const getEvents = async (req, res) => {
   try {
-      const events = await Event.findAll({
-          include: [
-              { model: Category, through: { attributes: [] } },
-              { model: BankAccount, through: { attributes: [] } },
-              { model: Address, through: { attributes: [] } }
-          ],
-          order: [
-              [ 'name', 'ASC' ]
-          ]
-  })
-  return res.json(events)
+    const events = await Event.findAll({
+      include: [{ model: Category }, { model: Address }],
+      order: [["name", "ASC"]],
+    });
+    return res.json(events);
   } catch (error) {
-      console.log(error)
-      return res.status(500).json({
-          error: {
-              message: "Server error"}
-          })
+    console.log(error);
+    return res.status(500).json({
+      error: {
+        message: "Server error",
+      },
+    });
   }
 };
 
 const modifyEvent = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
   const eventId = Number(id);
   const {
     name,
@@ -148,25 +139,38 @@ const modifyEvent = async (req, res) => {
     isPublic,
     isVirtual,
     virtualURL,
-    /* bank data obj,*/
     isPremium,
     isPaid,
     category,
     age_range,
     guests_capacity,
-    address,
     placeName,
     cover_pic,
+    address_line,
+    city,
+    state,
+    country,
+    zip_code,
   } = req.body;
   try {
-    const { address_line, city, state, country, zip_code } = address;
-    const addressDb = await Address.findOrCreate({
-      where: { address_line, city, state, country, zip_code },
-    });
-    const address_id = addressDb.id;
-    const categoryDb = await Category.findOne({ where: { name: category } });
-    const category_id = categoryDb.id;
+    //     const addressDb = await Address.findOrCreate({
+    //   where: { address_line, city, state, country, zip_code },
+    // });
+    // const address_id = addressDb.id;
+    // const category_id = categoryDb.id;
     const eventFound = await Event.findByPk(eventId);
+    await Category.create({ name: category }); //QUITAR!
+    const categoryDb = await Category.findOne({
+      where: { name: category ? category : null },
+    });
+
+    if (address_line && city && state && country && zip_code) {
+      const newAddress = await Address.create({address_line, city, state, country, zip_code})
+      await eventFound.setAddress(newAddress);
+    }
+
+    if (category) await eventFound.setCategory(categoryDb);
+
     await eventFound.update({
       name,
       description,
@@ -177,21 +181,24 @@ const modifyEvent = async (req, res) => {
       virtualURL,
       isPremium,
       isPaid,
-      CategoryId: category_id,
       age_range,
       guests_capacity,
-      AddressId: address_id,
       placeName,
       cover_pic,
     });
-    res.send("data updated successfully");
+
+    const eventUpdated = await Event.findByPk(eventFound.id, {
+      include: [{ model: Address }, { model: Category }],
+    });
+
+    res.send({ msg: "data updated successfully", data: eventUpdated });
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
 };
 
 const deleteEvent = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params
   const eventId = Number(id);
   try {
     const eventToBeDeleted = await Event.findByPk(eventId);

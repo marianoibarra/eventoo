@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 
 module.exports = (sequelize) => {
-    sequelize.define('address',{
+    sequelize.define('Address',{
         address_line: {
             type: DataTypes.STRING,
             allowNull: true,

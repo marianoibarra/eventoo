@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
+const regexp_password = require('../helpers/regexps');
 
 module.exports = (sequelize) => {
-    sequelize.define('user',{
+  const User = sequelize.define("User", {
         email: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -24,12 +25,6 @@ module.exports = (sequelize) => {
         password: {
             type: DataTypes.STRING,
             allowNull: true,
-            validate: {
-              is: {
-                args: /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/gm,
-                msg: "This password does not meet the security requirements"
-              }
-            }
         },
         name: {
             type: DataTypes.STRING(30),
