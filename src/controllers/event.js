@@ -285,6 +285,30 @@ const getByAgeRange = async (req, res) => {
   }
 };
 
+// const getEventsByCategory = async (req ,res) => {
+//   const { modality, name } = req.query;
+//   try {
+//     if (!name) {
+//       const categoryModality = await Category.findAll ({
+//         where: { modality : modality}
+//         });
+//     if (!categoryModality.length > 0) {
+//       res.send ("Sorry, there are not events with that modality")
+//     }
+//     const eventsModality = await Event.findAll ({
+//       where: { 
+        
+//     })
+    
+
+//     } else {
+
+//     }
+//   }
+  
+
+// };
+
 const getMyEvents = async (req, res) => {
   try {
     const userEvents = await User_Event.findAll({
@@ -400,6 +424,7 @@ module.exports = {
   getEventsToday,
   getByAgeRange,
   getMyEvents,
+  // getEventsByCategory,
   modifyEvent,
   deleteEvent,
 };
