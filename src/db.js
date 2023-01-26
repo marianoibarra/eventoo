@@ -3,9 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
-const { userInfo } = require("os");
-const categoryMock = require("./mocks/category");
-const modalityMock = require("./mocks/modality");
+
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
@@ -56,7 +54,8 @@ const {
   Category, 
   Ticket,
   Review,
-  Modality
+  Modality,
+  EmailCode
 } = sequelize.models;
 
 // Relaciones
@@ -67,9 +66,11 @@ Transaction.belongsToMany(User, { through: User_Transaction });
 User.belongsToMany(Event, { through: User_Event });
 Event.belongsToMany(User, { through: User_Event });         
 
-// User.belongsToMany(Event, { through: 'Favorites' });
-// Event.belongsToMany(User, { through: 'Favorites' });
+User.belongsToMany(Event, { through: 'Favorites' });
+Event.belongsToMany(User, { through: 'Favorites' });
 
+User.hasOne(EmailCode)
+EmailCode.belongsTo(User)
 
 Address.hasMany(User)
 User.belongsTo(Address)
@@ -87,9 +88,7 @@ User.hasMany(Bank_Account)
 Bank_Account.belongsTo(User)
 
 Address.hasMany(Event, )
-Event.belongsTo(Address, {
-  onUpdate: 'CASCADE'
-})
+Event.belongsTo(Address)
 
 Bank_Account.hasMany(Event)
 Event.belongsTo(Bank_Account)
@@ -114,8 +113,11 @@ User.beforeCreate(async function (user) {
 });
 
 User.beforeUpdate(async function (user) {
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
+  if(user.password) {
+    console.log(user)
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+  }
 });
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña
@@ -123,21 +125,12 @@ User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-User.beforeUpdate(async function (user) {
-  const address = await user.getAddress()
-  if (user.name && user.last_name && user.email && user.password && user.born && user.emailIsVerified) {
-    user.dataIsFullFilled = true;
-  } else {
-    user.dataIsFullFilled = false;
-  }
-})
 
 // Event.beforeCreate(async function (event) {
 //   const titleCapitalized =
 //     event.name.charAt(0).toUpperCase() +
 //     event.name.slice(1).toLowerCase();
 //   event.name = titleCapitalized;
-
 
 
 module.exports = {

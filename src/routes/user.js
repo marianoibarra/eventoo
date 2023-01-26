@@ -1,19 +1,21 @@
 const { Router } = require("express");
-const { register, login, verifyToken, test, reset_password, forgot_password, checkResetToken, change_password } = require('../controllers/user')
+const { register, login, verifyToken, test, resetPassword, forgotPassword, checkResetToken, changePassword, verifyEmailCode, resendEmailCode } = require('../controllers/user')
 
 const router = Router();
 
 router.post('/register', register)
 router.post('/login', login)
-router.post('/forgot-password', forgot_password)
+router.post('/forgot-password', forgotPassword)
 router.get('/reset-password/:reset_token', checkResetToken)
-router.put('/reset-password', reset_password)
-router.put('/change-password', verifyToken, change_password)
+router.put('/reset-password', resetPassword)
+router.put('/change-password', verifyToken, changePassword)
+router.post('/verify-email', verifyToken, verifyEmailCode)
+router.post('/verify-email/resend', verifyToken , resendEmailCode)
 
 //router.put('/user', modifyUser)
 
 //probar token login
-router.get('/test-token', verifyToken, test)
+router.get('/test-token', test)
 
 
 
