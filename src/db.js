@@ -109,7 +109,7 @@ User.prototype.validPassword = async function (password) {
 
 // Event.beforeCreate(async function (event) {
 //   const titleCapitalized =
-//     event.name.charAt(0).toUpperCase() +
+//     event.name.charAt(0).toUpperCase() 
 //     event.name.slice(1).toLowerCase();
 //   event.name = titleCapitalized;
 

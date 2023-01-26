@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const { Event, Address, Category } = require("../db");
+const moment = require("moment");
 
 const createEvent = async (req, res) => {
   const {
@@ -14,7 +15,7 @@ const createEvent = async (req, res) => {
     category,
     isPremium,
     isPaid,
-    age_Range,
+    age_range,
     guests_capacity,
     placeName,
     advertisingTime_start,
@@ -25,7 +26,7 @@ const createEvent = async (req, res) => {
     state,
     country,
     zip_code,
-  } = req.body; // consultar accontbank, category and address...
+  } = req.body; 
 
   try {
     // if (!name ||
@@ -69,12 +70,12 @@ const createEvent = async (req, res) => {
       virtualURL,
       isPremium,
       isPaid,
-      age_Range,
+      age_range,
       guests_capacity,
       placeName,
       advertisingTime_start,
       adversiting_end,
-      cover_pic,
+      cover_pic
     }).catch((e) => {
       return res.status(500).json({
         error: {
@@ -84,7 +85,7 @@ const createEvent = async (req, res) => {
       });
     });
 
-    event.createAddress({
+    await event.createAddress ({
       address_line,
       city,
       state,
@@ -131,26 +132,43 @@ const getEvents = async (req, res) => {
 
 const getEventsByCity = async (req, res) => {
 
-  const { city } = req.query;
-  city = city.trim()
+const { city, state } = req.query;
+// city = city.trim();
+// state = state.trim ();
+ 
 
-  try {
-    const eventsByCity = await Event.findAll({
-      where: {
-        city: {
-          [ Op.iLike ]: `${city}%`
+  try { 
+    if(city && state) {
+      const recordcity = await Address.findOne({
+        where: {
+          city: {
+          [ Op.iLike ]: `${city}%`},
+          state: {
+          [ Op.iLike ]: `${state}%`},       
         }
-      },
-      include: [{ model: Address }],
-      order: [[ 'name', 'ASC' ]]
-    })
-    if (eventsByCity.length) return res.json(eventsByCity)
+      })
+      const idCity = recordcity.id
+      const eventsByCity = await Event.findAll({
+        where: {
+             AddressId: idCity
+          },
+        include: [{ model: Category }, { model: Address }],
+        order: [[ 'name', 'ASC' ]]
+      })
+
+      if (eventsByCity.length) return res.json(eventsByCity)
+      return res.status(404).json({
+        error:{
+          message:'There are no events for that city...',
+    
+        }
+      })
+    }
     return res.status(404).json({
-      error:{
-        message:'There are no events for that city...',
-  
-      }
-    })
+      error: {
+          message: "There are no cities available with that name"}
+      })     
+   
   } catch (error) {
     console.log(error)
         return res.status(500).json({
@@ -161,19 +179,111 @@ const getEventsByCity = async (req, res) => {
 
 }
 
-const getPaidEvents=async(req,res)=>{
-  const {isPaid}=req.query;
-  try{
-    const paidEvents= await Event.findAll({
-      where:{ isPaid}
-    })
-    if(paidEvents)
-    res.json(paidEvents)
-  }catch(error){
+const getPaidEvents = async (req, res) => {
+  try {
+    const paidEvents = await Event.findAll({
+      where: { isPaid: true },
+      include: [{ model: Address }, { model: Category }],
+    });
+    if (paidEvents.length > 0) {
+      res.json(paidEvents);
+    } else {
+      res.send("There are not paid events");
+    }
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+};
+
+const getPublicEvents = async (req, res) => {
+  try {
+    const publicEvents = await Event.findAll({
+      where: { isPublic: true },
+      include: [{ model: Address }, { model: Category }]
+    });
+    if (publicEvents.length > 0) {
+      res.json(publicEvents);
+    } else {
+      res.send("There are not public events");
+    }
     
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
   }
 }
 
+const getThisWeekend = async (req, res) => {
+  const saturday = moment().day(6).format("YYYY-MM-DD");
+  const sunday = moment().day(7).format("YYYY-MM-DD");
+
+  try {
+    const eventsOnWeekend = await Event.findAll({
+      where: {
+        [Op.or]: [
+          {
+            start_date: sunday,
+          },
+          { start_date: saturday },
+        ],
+      },
+      include: [
+        { model: Address },
+        {
+          model: Category,
+        },
+      ],
+    });
+    if (eventsOnWeekend.length > 0) {
+      res.json(eventsOnWeekend);
+    } else {
+      res.status(404).send("There are not events on this weekend");
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const getEventsToday = async (req, res) => {
+
+  const today= moment().format("YYYY-MM-DD");
+
+  try {
+    const todayEvents  = await Event.findAll({
+      where: { start_date: today },
+      include: [
+        { model: Address },
+        { model: Category},
+      ],
+    });
+    if (todayEvents.length >0) {
+      res.json(todayEvents);
+    } else {
+      res.status(404).send("There are not events today");
+    }
+  } catch (error) {
+    res.status(404).json({error: error.message})
+  }
+};
+
+const getByAgeRange = async (req, res) => {
+  const { range } = req.query;
+  try {
+    const eventsByRange = await Event.findAll({
+      where: {
+        age_range: range,
+      },
+      include: [{ model: Address }, { model: Category }],
+    });
+
+   if(eventsByRange.length>0) {
+    res.json(eventsByRange);
+   } else {
+    res.send("Sorry, there are not events with that age range")
+   }
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
 
 const modifyEvent = async (req, res) => {
   const { id } = req.params;
@@ -261,19 +371,14 @@ module.exports = {
   getEvents,
   getEventsByCity,
   getPaidEvents,
+  getPublicEvents,
+  getThisWeekend,
+  getEventsToday,
+  getByAgeRange,
   modifyEvent,
   deleteEvent,
 };
 
-//  endpoints GET FILTROS : 
 
-
-//  localhost:3001/events?city=${city} haciendo Ani
-//  /events?categoryName = name;
-//  /events/?today
-//  /events/?thisWeekend
-//  /events/?isPaid=true haciendo Mary
-//  /events/?isPublic=true
-//  /events/?ageRange
 
 
