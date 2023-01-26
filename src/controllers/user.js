@@ -39,7 +39,7 @@ const register = async (req, res) => {
       born,
     });
 
-    newUser.createAddress({
+    await newUser.createAddress({
       address_line, 
       city, 
       state, 
@@ -47,7 +47,9 @@ const register = async (req, res) => {
       zip_code 
     });
 
-    res.send({msg: "User created successfully"});
+    const a = await User.findOne({where: {id: newUser.id}, include: {model: Address}})
+
+    res.send({data: a, msg: "User created successfully"});
   } catch (err) {
     res.send(err.message);
   }

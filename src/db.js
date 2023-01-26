@@ -4,6 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const { userInfo } = require("os");
+const categoryMock = require("./mocks/category");
+const modalityMock = require("./mocks/modality");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
@@ -52,7 +54,9 @@ const {
   Address, 
   Bank_Account, 
   Category, 
-  Ticket 
+  Ticket,
+  Review,
+  Modality
 } = sequelize.models;
 
 // Relaciones
@@ -61,13 +65,23 @@ User.belongsToMany(Transaction, { through: User_Transaction });
 Transaction.belongsToMany(User, { through: User_Transaction });
 
 User.belongsToMany(Event, { through: User_Event });
-Event.belongsToMany(User, { through: User_Event });
+Event.belongsToMany(User, { through: User_Event });         
+
+// User.belongsToMany(Event, { through: 'Favorites' });
+// Event.belongsToMany(User, { through: 'Favorites' });
+
 
 Address.hasMany(User)
 User.belongsTo(Address)
 
 Category.hasMany(Event)
 Event.belongsTo(Category)
+
+Modality.hasMany(Event)
+Event.belongsTo(Modality)
+
+Modality.hasMany(Category)
+Category.belongsTo(Modality)
 
 User.hasMany(Bank_Account)
 Bank_Account.belongsTo(User)
@@ -86,6 +100,9 @@ Ticket.belongsTo(Event)
 Event.hasMany(Transaction)
 Transaction.belongsTo(Event)
 
+Event.hasMany(Review)
+Review.belongsTo(Event)
+
 Transaction.hasMany(Ticket)
 Ticket.belongsTo(Transaction)
 
@@ -103,9 +120,17 @@ User.beforeUpdate(async function (user) {
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña
 User.prototype.validPassword = async function (password) {
-
   return await bcrypt.compare(password, this.password);
 };
+
+User.beforeUpdate(async function (user) {
+  const address = await user.getAddress()
+  if (user.name && user.last_name && user.email && user.password && user.born && user.emailIsVerified) {
+    user.dataIsFullFilled = true;
+  } else {
+    user.dataIsFullFilled = false;
+  }
+})
 
 // Event.beforeCreate(async function (event) {
 //   const titleCapitalized =

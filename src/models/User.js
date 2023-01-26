@@ -52,6 +52,14 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull:true,
         },
+        emailIsVerify: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: true
+        },
+        registerIsCompleted: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
+        }
       
     })
 };
