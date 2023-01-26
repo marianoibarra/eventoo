@@ -285,6 +285,30 @@ const getByAgeRange = async (req, res) => {
   }
 };
 
+const getMyEvents = async (req, res) => {
+  try {
+    const userEvents = await User_Event.findAll({
+      where: {
+        UserId: req.userId,
+      },
+    });
+    if (!userEvents.length > 0) {
+      res.send("You do not have any events");
+      return;
+    } else {
+      const allMyEvents = userEvents.map(async (e) => {
+        await Event.findOne({
+          where: { id: e.EventId },
+          include: [{ model: Address }, { model: Category }],
+        });
+      });
+      res.json(allMyEvents);
+    }
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+};
+
 const modifyEvent = async (req, res) => {
   const { id } = req.params;
   const eventId = Number(id);
@@ -375,6 +399,7 @@ module.exports = {
   getThisWeekend,
   getEventsToday,
   getByAgeRange,
+  getMyEvents,
   modifyEvent,
   deleteEvent,
 };

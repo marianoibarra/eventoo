@@ -9,8 +9,10 @@ const {
     getPublicEvents,
     getThisWeekend,
     getEventsToday,
-    getByAgeRange, 
+    getByAgeRange,
+    getMyEvents 
 } = require('../controllers/event')
+const { verifyToken } = require("../controllers/user");
 
 const router = Router();
 
@@ -21,6 +23,7 @@ router.get("/public", getPublicEvents);
 router.get("/byAgeRange", getByAgeRange);
 router.get("/thisWeekend", getThisWeekend);
 router.get("/today", getEventsToday);
+router.get("/myEvents", verifyToken, getMyEvents);
 router.post("/", createEvent);
 router.put("/:id", modifyEvent);
 router.delete("/:id", deleteEvent);
