@@ -62,8 +62,8 @@ const {
 User.belongsToMany(Transaction, { through: User_Transaction });
 Transaction.belongsToMany(User, { through: User_Transaction });
 
-User.belongsToMany(Event, { through: User_Event });
-Event.belongsToMany(User, { through: User_Event });         
+User.belongsToMany(Event, { through: User_Event, as: 'events' });
+Event.belongsToMany(User, { through: User_Event, as: 'users' });         
 
 User.belongsToMany(Event, { through: 'Favorites' });
 Event.belongsToMany(User, { through: 'Favorites' });

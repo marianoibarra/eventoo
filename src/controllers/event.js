@@ -1,4 +1,4 @@
-const { Event, Address, Category, User_Event } = require("../db");
+const { Event, Address, Category, User_Event, User } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
@@ -8,6 +8,8 @@ const createEvent = async (req, res) => {
     description,
     start_date,
     end_date,
+    start_time,
+    end_time,
     isPublic,
     modality,
     virtualURL,
@@ -27,14 +29,19 @@ const createEvent = async (req, res) => {
     state,
     country,
     zip_code,
+    disability_access,
+    parking,
+    smoking_zone,
+    pet_friendly,
   } = req.body; // consultar accontbank, modalityName and address...
-
 
   try {
     // if (!name ||
     //     !description ||
     //     !start_date ||
     //     !end_date ||
+    //     !start_time ||
+    //     !end_time ||
     //     !isPublic ||
     //     !modality ||
     //     !virtualURL ||
@@ -53,6 +60,10 @@ const createEvent = async (req, res) => {
     //     !city ||
     //     !country ||
     //     !zip_code
+    //     !disability_access ||
+    //     !parking ||
+    //     !smoking_zone ||
+    //     !pet_friendly
     //     )
     //     {
     //         return res.status(400).json({
@@ -62,53 +73,68 @@ const createEvent = async (req, res) => {
     //             }
     //     })
     // }
-    const event = await Event.create({
-      name,
-      description,
-      start_date,
-      end_date,
-      isPublic,
-      modality,
-      virtualURL,
-      isPremium,
-      isPaid,
-      age_range,
-      guests_capacity,
-      placeName,
-      advertisingTime_start,
-      adversiting_end,
-      cover_pic
-    }).catch((e) => {
-      return res.status(500).json({
-        error: {
-          message: "Error while creating resource",
-          values: { ...req.body },
+    const event = await Event.create(
+      {
+        name,
+        description,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        isPublic,
+        modality,
+        virtualURL,
+        isPremium,
+        isPaid,
+        age_range,
+        guests_capacity,
+        placeName,
+        advertisingTime_start,
+        adversiting_end,
+        cover_pic,
+        disability_access,
+        parking,
+        smoking_zone,
+        pet_friendly,
+        
+        Address: {
+          address_line,
+          city,
+          state,
+          country,
+          zip_code,
         },
-      });
-    });
+      },
+      {
+        include: [Address],
+      }
+    );
 
-    await event.createAddress({
-      address_line,
-      city,
-      state,
-      country,
-      zip_code,
-    });
-
-    // await Category.create({ modalityName: modalityName,categoryName:categoryName }); //QUITAR!
+    // const user = await User.findOne({where: { id: req.userId}})
+    // await event.addUser(user, { through: {role: 'CREATOR'}})
 
     const categoryDb = await Category.findOne({
-      where: { modalityName: modalityName, categoryName: categoryName },
+      where: { categoryName: categoryName },
     });
-
+    
     await event.setCategory(categoryDb);
+    
 
     const newEvent = await Event.findByPk(event.id, {
       include: [
-        { model: Category, attributes: ["categoryName"] },
+        { model: Category, attributes: ["categoryName", "modalityName"] },
         { model: Address },
-      ],
+        /*
+        { model: User,
+          attributes: ['id'],
+          as: 'users',
+          through: {
+            attributes: ['role']
+          }
+        }
+        ,*/]
     });
+
     return res.status(201).json(newEvent);
   } catch (error) {
     console.log(error);
@@ -124,7 +150,7 @@ const getEvents = async (req, res) => {
   try {
     const events = await Event.findAll({
       include: [{ model: Category }, { model: Address }],
-      order: [["categoryName", "ASC"]],
+      order: [["name", "ASC"]],
     });
     return res.json(events);
   } catch (error) {
@@ -137,34 +163,46 @@ const getEvents = async (req, res) => {
   }
 };
 
-const getEventsByCity = async (req, res) => {
-  const { city, state } = req.query;
+const getEventsByState = async (req, res) => {
+  const { country, state } = req.query;
 
   try {
-    if (city && state) {
-      const recordcity = await Address.findOne({
+    if (country && state) {
+      const addresses = await Address.findAll({
         where: {
-          city: {
-            [Op.iLike]: `${city}%`,
+          country: {
+            [Op.iLike]: `${country}`,
           },
           state: {
-            [Op.iLike]: `${state}%`,
+            [Op.iLike]: `${state}`,
           },
         },
-      });
-      const idCity = recordcity.id;
-      const eventsByCity = await Event.findAll({
-        where: {
-          AddressId: idCity,
-        },
-        include: [{ model: Category }, { model: Address }],
-        order: [["categoryName", "ASC"]],
+        attributes: ["id"],
       });
 
-      if (eventsByCity.length) return res.json(eventsByCity);
+      const addressesIds = addresses.map((a) => a.id);
+
+      const EventsByStates = await Event.findAll({
+        include: [
+          { model: Category },
+          {
+            model: Address,
+            where: {
+              id: {
+                [Op.in]: addressesIds
+              },
+            },
+          },
+        ],
+        order: [["name", "ASC"]],
+      }, {
+        raw: true
+      });
+
+      if (EventsByStates.length) return res.json(EventsByStates);
       return res.status(404).json({
         error: {
-          message: "There are no events for that city...",
+          message: "There are no events for that state...",
         },
       });
     }
@@ -199,23 +237,21 @@ const getPaidEvents = async (req, res) => {
   }
 };
 
-
 const getPublicEvents = async (req, res) => {
   try {
     const publicEvents = await Event.findAll({
       where: { isPublic: true },
-      include: [{ model: Address }, { model: Category }]
+      include: [{ model: Address }, { model: Category }],
     });
     if (publicEvents.length > 0) {
       res.json(publicEvents);
     } else {
       res.send("There are not public events");
     }
-    
   } catch (error) {
     res.status(404).json({ msg: error.message });
   }
-}
+};
 
 const getThisWeekend = async (req, res) => {
   const saturday = moment().day(6).format("YYYY-MM-DD");
@@ -249,24 +285,20 @@ const getThisWeekend = async (req, res) => {
 };
 
 const getEventsToday = async (req, res) => {
-
-  const today= moment().format("YYYY-MM-DD");
+  const today = moment().format("YYYY-MM-DD");
 
   try {
-    const todayEvents  = await Event.findAll({
+    const todayEvents = await Event.findAll({
       where: { start_date: today },
-      include: [
-        { model: Address },
-        { model: Category},
-      ],
+      include: [{ model: Address }, { model: Category }],
     });
-    if (todayEvents.length >0) {
+    if (todayEvents.length > 0) {
       res.json(todayEvents);
     } else {
       res.status(404).send("There are not events today");
     }
   } catch (error) {
-    res.status(404).json({error: error.message})
+    res.status(404).json({ error: error.message });
   }
 };
 
@@ -280,88 +312,76 @@ const getByAgeRange = async (req, res) => {
       include: [{ model: Address }, { model: Category }],
     });
 
-   if(eventsByRange.length>0) {
-    res.json(eventsByRange);
-   } else {
-    res.send("Sorry, there are not events with that age range")
-   }
+    if (eventsByRange.length > 0) {
+      res.json(eventsByRange);
+    } else {
+      res.send("Sorry, there are not events with that age range");
+    }
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
 };
-
 
 const getMyEvents = async (req, res) => {
   try {
     const userEvents = await User_Event.findAll({
       where: {
         UserId: req.userId,
+        role: 'CREATOR'
       },
     });
-    if (!userEvents.length > 0) {
-      res.send("You do not have any events");
-      return;
-    } else {
-      const allMyEvents = userEvents.map(async (e) => {
-        await Event.findOne({
-          where: { id: e.EventId },
-          include: [{ model: Address }, { model: Category }],
-        });
+
+    if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
+
+    // const allMyEvents = userEvents.map(async (e) => {
+    //   await Event.findOne({
+    //     where: { id: e.EventId },
+    //     include: [Address, Category ],
+    //   });
+    // });
+
+    const allMyEvents = []
+
+    for(let e of userEvents) {
+      let event = await Event.findOne({
+        where: { id: e.EventId },
+        include: [Address, Category ],
       });
-      res.json(allMyEvents);
+      allMyEvents.push(event)
     }
+
+    console.log(allMyEvents);
+    res.json(allMyEvents);
+    
   } catch (error) {
     res.status(404).json({ msg: error.message });
   }
 };
 
 const getEventsByCategory = async (req, res) => {
-  const { modalityName, categoryName } = req.query;
+  const { categoryName } = req.query;
   try {
-    const eventsModality = await Event.findAll({
-      where: {
-        modality: modalityName,
-      },
-      include: [{ model: Address }, { model: Category }],
-    });
 
-    const modalityCategories = await Category.findAll({
-      where: {
-        modalityName: modalityName,
-      },
-      attributes: ["id", "categoryName"],
-    });
-
-    if (eventsModality.length === 0) {
-      res.send("There are not events with that modality");
-    } else {
-      if (!categoryName) {
-        res.json({
-          events: eventsModality,
-          categories: modalityCategories.map((c) => c.categoryName),
-        });
-      } else {
-        const specificCategory = modalityCategories.find(
-          (c) => c.categoryName === categoryName
-        );
-        const idCategory = specificCategory?.id;
-        const filteredEvents = eventsModality.filter(
-          (e) => e.categoryId === idCategory
-        );
-        if (filteredEvents.length === 0) {
-          res.json({
-            msg: "There are not events with that category",
-            events: eventsModality,
-            categories: modalityCategories.map((c) => c.categoryName),
-          });
-        } else {
-          res.json({
-            events: filteredEvents,
-            categories: modalityCategories.map((c) => c.categoryName),
-          });
+    const events = await Event.findAll({
+      include: [
+        Address,
+        {
+          model: Category,
+          where: {
+            categoryName: categoryName,
+          },
+        },
+        {
+          model: User,
+          attributes: ['id']
         }
-      }
-    }
+      ]
+    });
+
+    if (events.length === 0) return res.send("There are not events with that modality");
+    
+    res.json(events);
+
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
@@ -375,6 +395,8 @@ const modifyEvent = async (req, res) => {
     description,
     start_date,
     end_date,
+    start_time,
+    end_time,
     isPublic,
     modality,
     virtualURL,
@@ -391,6 +413,10 @@ const modifyEvent = async (req, res) => {
     state,
     country,
     zip_code,
+    disability_access,
+    parking,
+    smoking_zone,
+    pet_friendly,
   } = req.body;
   try {
     //     const addressDb = await Address.findOrCreate({
@@ -401,7 +427,7 @@ const modifyEvent = async (req, res) => {
     // await Category.create({ modalityName:modalityName,categoryName:categoryName }); //QUITAR!
     const categoryDb = await Category.findOne({
       // where: { categoryName: categoryName ? categoryName : null },
-      where: { modalityName: modalityName, categoryName: categoryName },
+      where: { categoryName: categoryName? categoryName : null },
     });
 
     if (address_line && city && state && country && zip_code) {
@@ -422,8 +448,10 @@ const modifyEvent = async (req, res) => {
       description,
       start_date,
       end_date,
+      start_time,
+      end_time,
       isPublic,
-      modality,
+      categoryName,
       virtualURL,
       isPremium,
       isPaid,
@@ -431,6 +459,10 @@ const modifyEvent = async (req, res) => {
       guests_capacity,
       placeName,
       cover_pic,
+      disability_access,
+      parking,
+      smoking_zone,
+      pet_friendly,
     });
 
     const eventUpdated = await Event.findByPk(eventFound.id, {
@@ -458,7 +490,7 @@ const deleteEvent = async (req, res) => {
 module.exports = {
   createEvent,
   getEvents,
-  getEventsByCity,
+  getEventsByState,
   getPaidEvents,
   getPublicEvents,
   getThisWeekend,
@@ -472,7 +504,3 @@ module.exports = {
   modifyEvent,
   deleteEvent,
 };
-
-
-
-
