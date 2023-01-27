@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { modifyBank_Account, deleteBank_Account, createBank_Account, getBank_Account, } = require('../controllers/bank_Account');
+const { modifyBank_Account, deleteBank_Account, createBank_Account, getBank_Account, } = require('../controllers/bankAccount');
 const { verifyToken } = require("../controllers/user");
 
 const router = Router();

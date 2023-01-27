@@ -13,7 +13,7 @@ const createEvent = async (req, res) => {
     isPublic,
     virtualURL,
     //accountBank,//
-    categoryName,
+    category,
     isPremium,
     isPaid,
     age_range,
@@ -64,7 +64,7 @@ const createEvent = async (req, res) => {
     //     {
     //         return res.status(400).json({
     //             error: {
-    //                 message: 'name, description, start_date, end_date, isPublic, modality, virtualURL, modalityName, categoryName,address, isPremium, isPaid, age_Range, guests_capacity, placeName, created_at, advertisingTime_start, adversiting_end, cover_pic cannot be empty',
+    //                 message: 'name, description, start_date, end_date, isPublic, modality, virtualURL, modalityName, category, address, isPremium, isPaid, age_Range, guests_capacity, placeName, created_at, advertisingTime_start, adversiting_end, cover_pic cannot be empty',
     //                 values: { ...req.body }
     //             }
     //     })
@@ -109,7 +109,7 @@ const createEvent = async (req, res) => {
     // await event.addUser(user, { through: {role: 'CREATOR'}})
 
     const categoryDb = await Category.findOne({
-      where: { categoryName: categoryName },
+      where: { name: category },
     });
     
     await event.setCategory(categoryDb);
@@ -117,7 +117,7 @@ const createEvent = async (req, res) => {
 
     const newEvent = await Event.findByPk(event.id, {
       include: [
-        { model: Category, attributes: ["categoryName", "modalityName"] },
+        { model: Category, attributes: ["name", "modality"] },
         { model: Address },
         /*
         { model: User,
@@ -401,7 +401,7 @@ const getMyEventsGuest = async (req, res) => {
 }
     
 const getEventsByCategory = async (req, res) => {
-  const { categoryName } = req.query;
+  const { category } = req.query;
   try {
 
     const events = await Event.findAll({
@@ -411,7 +411,7 @@ const getEventsByCategory = async (req, res) => {
         {
           model: Category,
           where: {
-            categoryName: categoryName,
+            name: category,
           },
         },
         {
@@ -441,12 +441,10 @@ const modifyEvent = async (req, res) => {
     start_time,
     end_time,
     isPublic,
-    modality,
     virtualURL,
     isPremium,
     isPaid,
-    modalityName,
-    categoryName,
+    category,
     age_range,
     guests_capacity,
     placeName,
@@ -467,7 +465,7 @@ const modifyEvent = async (req, res) => {
     
     const categoryDb = await Category.findOne({
      
-      where: { categoryName: categoryName? categoryName : null },
+      where: { name: category ? category : null },
     });
 
     if (address_line && city && state && country && zip_code) {
@@ -481,7 +479,7 @@ const modifyEvent = async (req, res) => {
       await eventFound.setAddress(newAddress);
     }
 
-    if (categoryName) await eventFound.setCategory(categoryDb);
+    if (category) await eventFound.setCategory(categoryDb);
 
     await eventFound.update({
       name,
@@ -491,7 +489,7 @@ const modifyEvent = async (req, res) => {
       start_time,
       end_time,
       isPublic,
-      categoryName,
+      category,
       virtualURL,
       isPremium,
       isPaid,
