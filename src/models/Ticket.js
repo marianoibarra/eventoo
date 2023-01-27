@@ -6,6 +6,10 @@ module.exports = (sequelize) => {
         transaction_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
-        },     
+        }, 
+        price: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+        }, 
     })
 };

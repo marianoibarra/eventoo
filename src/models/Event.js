@@ -31,10 +31,6 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull:true,
         },
-        modality: {
-            type: DataTypes.ENUM('PRESENTIAL', 'VIRTUAL'),
-            allowNull:true,
-        },
         virtualURL: {
             type: DataTypes.STRING,
             allowNull:true,

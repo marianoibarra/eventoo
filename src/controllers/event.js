@@ -11,7 +11,6 @@ const createEvent = async (req, res) => {
     start_time,
     end_time,
     isPublic,
-    modality,
     virtualURL,
     //accountBank,//
     modalityName,
@@ -82,7 +81,6 @@ const createEvent = async (req, res) => {
         start_time,
         end_time,
         isPublic,
-        modality,
         virtualURL,
         isPremium,
         isPaid,
@@ -97,7 +95,7 @@ const createEvent = async (req, res) => {
         smoking_zone,
         pet_friendly,
         
-        Address: {
+        Address: { 
           address_line,
           city,
           state,
@@ -108,6 +106,8 @@ const createEvent = async (req, res) => {
       {
         include: [Address],
       }
+
+      //tendriamos que hacer lo mismo con category, que address? ANALU
     );
 
     // const user = await User.findOne({where: { id: req.userId}})
@@ -322,7 +322,7 @@ const getByAgeRange = async (req, res) => {
   }
 };
 
-const getMyEvents = async (req, res) => {
+const getMyEventsCreator = async (req, res) => {
   try {
     const userEvents = await User_Event.findAll({
       where: {
@@ -332,13 +332,6 @@ const getMyEvents = async (req, res) => {
     });
 
     if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
-
-    // const allMyEvents = userEvents.map(async (e) => {
-    //   await Event.findOne({
-    //     where: { id: e.EventId },
-    //     include: [Address, Category ],
-    //   });
-    // });
 
     const allMyEvents = []
 
@@ -357,6 +350,36 @@ const getMyEvents = async (req, res) => {
     res.status(404).json({ msg: error.message });
   }
 };
+
+const getMyEventsGuest = async (req, res) => {
+  try {
+    const userEvents = await User_Event.findAll({
+      where: {
+        UserId: req.userId,
+        role: 'GUEST'
+      },
+    });
+
+    if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
+
+    const allMyEvents = []
+
+    for(let e of userEvents) {
+      let event = await Event.findOne({
+        where: { id: e.EventId },
+        include: [Address, Category ],
+      });
+      allMyEvents.push(event)
+    }
+
+    console.log(allMyEvents);
+    res.json(allMyEvents);
+    
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+}
+    
 
 const getEventsByCategory = async (req, res) => {
   const { categoryName } = req.query;
@@ -419,7 +442,7 @@ const modifyEvent = async (req, res) => {
     pet_friendly,
   } = req.body;
   try {
-    //     const addressDb = await Address.findOrCreate({
+    //   const addressDb = await Address.findOrCreate({
     //   where: { address_line, city, state, country, zip_code },
     // });
     // const address_id = addressDb.id;
@@ -496,10 +519,10 @@ module.exports = {
   getThisWeekend,
   getEventsToday,
   getByAgeRange,
-  getMyEvents,
+  getMyEventsCreator,
+  getMyEventsGuest,
   getByAgeRange,
   getThisWeekend,
-  getMyEvents,
   getEventsByCategory,
   modifyEvent,
   deleteEvent,
