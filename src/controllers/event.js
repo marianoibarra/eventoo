@@ -178,7 +178,7 @@ const getEventsByState = async (req, res) => {
       const addressesIds = addresses.map((a) => a.id);
 
       const EventsByStates = await Event.findAll({
-        //is public 
+        where: { ispublic: true },
         include: [
           { model: Category },
           {
@@ -220,7 +220,12 @@ const getEventsByState = async (req, res) => {
 const getPaidEvents = async (req, res) => {
   try {
     const paidEvents = await Event.findAll({
-      where: { isPaid: true },
+      where: {
+        [Op.and]: [
+          { isPublic: true },
+          { isPaid: true },
+        ],
+      },
       include: [{ model: Address }, { model: Category }],
     });
     if (paidEvents.length > 0) {
@@ -262,6 +267,7 @@ const getThisWeekend = async (req, res) => {
           },
           { start_date: saturday },
         ],
+        isPublic: true
       },
       include: [
         { model: Address },
@@ -278,14 +284,19 @@ const getThisWeekend = async (req, res) => {
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
-};
+};// agregar filtro de ispublic
 
 const getEventsToday = async (req, res) => {
   const today = moment().format("YYYY-MM-DD");
 
   try {
     const todayEvents = await Event.findAll({
-      where: { start_date: today },
+      where: {
+        [Op.and]: [
+          { start_date: today  },
+          { isPublic: true },
+        ],
+      },
       include: [{ model: Address }, { model: Category }],
     });
     if (todayEvents.length > 0) {
@@ -303,7 +314,10 @@ const getByAgeRange = async (req, res) => {
   try {
     const eventsByRange = await Event.findAll({
       where: {
-        age_range: range,
+        [Op.and]: [
+          {  age_range: range },
+          { isPublic: true },
+        ],
       },
       include: [{ model: Address }, { model: Category }],
     });
@@ -333,7 +347,12 @@ const getMyEventsCreator = async (req, res) => {
 
     for(let e of userEvents) {
       let event = await Event.findOne({
-        where: { id: e.EventId },
+        where: {
+          [Op.and]: [
+            { id: e.EventId },
+            { isPublic: true },
+          ],
+        },
         include: [Address, Category ],
       });
       allMyEvents.push(event)
@@ -362,7 +381,12 @@ const getMyEventsGuest = async (req, res) => {
 
     for(let e of userEvents) {
       let event = await Event.findOne({
-        where: { id: e.EventId },
+        where: {
+          [Op.and]: [
+            { id: e.EventId },
+            { isPublic: true },
+          ],
+        },
         include: [Address, Category ],
       });
       allMyEvents.push(event)
@@ -381,6 +405,7 @@ const getEventsByCategory = async (req, res) => {
   try {
 
     const events = await Event.findAll({
+      where : { isPublic: true},
       include: [
         Address,
         {
