@@ -10,8 +10,9 @@ const {
     getThisWeekend,
     getEventsToday,
     getByAgeRange,
-    getMyEvents,
-    getEventsByCategory
+    getMyEventsCreator,
+    getEventsByCategory,
+    getMyEventsGuest
 } = require('../controllers/event')
 
 const { verifyToken } = require("../controllers/user");
@@ -26,9 +27,9 @@ router.get("/paid",  getPaidEvents);
 router.get("/byAgeRange", getByAgeRange);
 router.get("/thisWeekend", getThisWeekend);
 router.get("/today", getEventsToday);
-router.get("/myEvents", verifyToken, getMyEvents);
+router.get("/myEventsCreator", verifyToken, getMyEventsCreator);
 router.get('/byCategory',getEventsByCategory);
-
+router.get('/myEventsGuest', verifyToken, getMyEventsGuest);
 router.post("/", createEvent); //agregar verifyToken!
 router.put("/:id", modifyEvent); //agregar verifyToken!
 router.delete("/:id", deleteEvent); //agregar verifyToken!

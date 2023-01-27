@@ -11,10 +11,8 @@ const createEvent = async (req, res) => {
     start_time,
     end_time,
     isPublic,
-    modality,
     virtualURL,
     //accountBank,//
-    modalityName,
     categoryName,
     isPremium,
     isPaid,
@@ -43,9 +41,7 @@ const createEvent = async (req, res) => {
     //     !start_time ||
     //     !end_time ||
     //     !isPublic ||
-    //     !modality ||
     //     !virtualURL ||
-    //     !modalityName ||
     //     !isPremium ||
     //     !isPaid ||
     //     !age_Range ||
@@ -82,7 +78,6 @@ const createEvent = async (req, res) => {
         start_time,
         end_time,
         isPublic,
-        modality,
         virtualURL,
         isPremium,
         isPaid,
@@ -97,7 +92,7 @@ const createEvent = async (req, res) => {
         smoking_zone,
         pet_friendly,
         
-        Address: {
+        Address: { 
           address_line,
           city,
           state,
@@ -183,6 +178,7 @@ const getEventsByState = async (req, res) => {
       const addressesIds = addresses.map((a) => a.id);
 
       const EventsByStates = await Event.findAll({
+        where: { ispublic: true },
         include: [
           { model: Category },
           {
@@ -224,7 +220,12 @@ const getEventsByState = async (req, res) => {
 const getPaidEvents = async (req, res) => {
   try {
     const paidEvents = await Event.findAll({
-      where: { isPaid: true },
+      where: {
+        [Op.and]: [
+          { isPublic: true },
+          { isPaid: true },
+        ],
+      },
       include: [{ model: Address }, { model: Category }],
     });
     if (paidEvents.length > 0) {
@@ -266,6 +267,7 @@ const getThisWeekend = async (req, res) => {
           },
           { start_date: saturday },
         ],
+        isPublic: true
       },
       include: [
         { model: Address },
@@ -282,14 +284,19 @@ const getThisWeekend = async (req, res) => {
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
-};
+};// agregar filtro de ispublic
 
 const getEventsToday = async (req, res) => {
   const today = moment().format("YYYY-MM-DD");
 
   try {
     const todayEvents = await Event.findAll({
-      where: { start_date: today },
+      where: {
+        [Op.and]: [
+          { start_date: today  },
+          { isPublic: true },
+        ],
+      },
       include: [{ model: Address }, { model: Category }],
     });
     if (todayEvents.length > 0) {
@@ -307,7 +314,10 @@ const getByAgeRange = async (req, res) => {
   try {
     const eventsByRange = await Event.findAll({
       where: {
-        age_range: range,
+        [Op.and]: [
+          {  age_range: range },
+          { isPublic: true },
+        ],
       },
       include: [{ model: Address }, { model: Category }],
     });
@@ -322,7 +332,7 @@ const getByAgeRange = async (req, res) => {
   }
 };
 
-const getMyEvents = async (req, res) => {
+const getMyEventsCreator = async (req, res) => {
   try {
     const userEvents = await User_Event.findAll({
       where: {
@@ -333,18 +343,16 @@ const getMyEvents = async (req, res) => {
 
     if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
 
-    // const allMyEvents = userEvents.map(async (e) => {
-    //   await Event.findOne({
-    //     where: { id: e.EventId },
-    //     include: [Address, Category ],
-    //   });
-    // });
-
     const allMyEvents = []
 
     for(let e of userEvents) {
       let event = await Event.findOne({
-        where: { id: e.EventId },
+        where: {
+          [Op.and]: [
+            { id: e.EventId },
+            { isPublic: true },
+          ],
+        },
         include: [Address, Category ],
       });
       allMyEvents.push(event)
@@ -358,11 +366,46 @@ const getMyEvents = async (req, res) => {
   }
 };
 
+const getMyEventsGuest = async (req, res) => {
+  try {
+    const userEvents = await User_Event.findAll({
+      where: {
+        UserId: req.userId,
+        role: 'GUEST'
+      },
+    });
+
+    if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
+
+    const allMyEvents = []
+
+    for(let e of userEvents) {
+      let event = await Event.findOne({
+        where: {
+          [Op.and]: [
+            { id: e.EventId },
+            { isPublic: true },
+          ],
+        },
+        include: [Address, Category ],
+      });
+      allMyEvents.push(event)
+    }
+
+    console.log(allMyEvents);
+    res.json(allMyEvents);
+    
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+}
+    
 const getEventsByCategory = async (req, res) => {
   const { categoryName } = req.query;
   try {
 
     const events = await Event.findAll({
+      where : { isPublic: true},
       include: [
         Address,
         {
@@ -419,14 +462,11 @@ const modifyEvent = async (req, res) => {
     pet_friendly,
   } = req.body;
   try {
-    //     const addressDb = await Address.findOrCreate({
-    //   where: { address_line, city, state, country, zip_code },
-    // });
-    // const address_id = addressDb.id;
+    
     const eventFound = await Event.findByPk(eventId);
-    // await Category.create({ modalityName:modalityName,categoryName:categoryName }); //QUITAR!
+    
     const categoryDb = await Category.findOne({
-      // where: { categoryName: categoryName ? categoryName : null },
+     
       where: { categoryName: categoryName? categoryName : null },
     });
 
@@ -496,10 +536,10 @@ module.exports = {
   getThisWeekend,
   getEventsToday,
   getByAgeRange,
-  getMyEvents,
+  getMyEventsCreator,
+  getMyEventsGuest,
   getByAgeRange,
   getThisWeekend,
-  getMyEvents,
   getEventsByCategory,
   modifyEvent,
   deleteEvent,

@@ -3,6 +3,13 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define('Event',{
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+			allowNull: false,
+			unique: true,
+            defaultValue: DataTypes.UUIDV4
+        },
         name: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -29,10 +36,6 @@ module.exports = (sequelize) => {
         },
         isPublic: {
             type: DataTypes.BOOLEAN,
-            allowNull:true,
-        },
-        modality: {
-            type: DataTypes.ENUM('PRESENTIAL', 'VIRTUAL'),
             allowNull:true,
         },
         virtualURL: {
