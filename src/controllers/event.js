@@ -13,7 +13,6 @@ const createEvent = async (req, res) => {
     isPublic,
     virtualURL,
     //accountBank,//
-    modalityName,
     categoryName,
     isPremium,
     isPaid,
@@ -42,9 +41,7 @@ const createEvent = async (req, res) => {
     //     !start_time ||
     //     !end_time ||
     //     !isPublic ||
-    //     !modality ||
     //     !virtualURL ||
-    //     !modalityName ||
     //     !isPremium ||
     //     !isPaid ||
     //     !age_Range ||
@@ -106,8 +103,6 @@ const createEvent = async (req, res) => {
       {
         include: [Address],
       }
-
-      //tendriamos que hacer lo mismo con category, que address? ANALU
     );
 
     // const user = await User.findOne({where: { id: req.userId}})
@@ -183,6 +178,7 @@ const getEventsByState = async (req, res) => {
       const addressesIds = addresses.map((a) => a.id);
 
       const EventsByStates = await Event.findAll({
+        //is public 
         include: [
           { model: Category },
           {
@@ -380,7 +376,6 @@ const getMyEventsGuest = async (req, res) => {
   }
 }
     
-
 const getEventsByCategory = async (req, res) => {
   const { categoryName } = req.query;
   try {
@@ -442,14 +437,11 @@ const modifyEvent = async (req, res) => {
     pet_friendly,
   } = req.body;
   try {
-    //   const addressDb = await Address.findOrCreate({
-    //   where: { address_line, city, state, country, zip_code },
-    // });
-    // const address_id = addressDb.id;
+    
     const eventFound = await Event.findByPk(eventId);
-    // await Category.create({ modalityName:modalityName,categoryName:categoryName }); //QUITAR!
+    
     const categoryDb = await Category.findOne({
-      // where: { categoryName: categoryName ? categoryName : null },
+     
       where: { categoryName: categoryName? categoryName : null },
     });
 
