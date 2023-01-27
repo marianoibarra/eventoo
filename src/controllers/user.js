@@ -1,4 +1,4 @@
-const { User, Address, EmailCode } = require("../db");
+const { User, Address, EmailCode, RoleAdmin } = require("../db");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
@@ -52,11 +52,17 @@ const register = async (req, res) => {
           code: code,
           expiration: expiration,
         },
+        RoleAdmin:{}
+        
       },
       {
-        include: [Address, EmailCode],
+        include: [Address, EmailCode, RoleAdmin],
       }
     );
+    
+    const prueba = await newUser.getRoleAdmin()
+
+    console.log(prueba)
 
     // sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 

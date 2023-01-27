@@ -50,11 +50,13 @@ const {
   Transaction, 
   User, 
   Address, 
-  Bank_Account, 
+  BankAccount, 
   Category, 
   Ticket,
   Review,
-  EmailCode
+  EmailCode,
+  RoleAdmin
+
 } = sequelize.models;
 
 // Relaciones
@@ -71,20 +73,23 @@ Event.belongsToMany(User, { through: 'Favorites' });
 User.hasOne(EmailCode)
 EmailCode.belongsTo(User)
 
+RoleAdmin.hasMany(User)
+User.belongsTo(RoleAdmin)
+
 Address.hasMany(User)
 User.belongsTo(Address)
 
 Category.hasMany(Event)
 Event.belongsTo(Category)
 
-User.hasMany(Bank_Account,{ onDelete: 'cascade'})
-Bank_Account.belongsTo(User)
+User.hasMany(BankAccount,{ onDelete: 'cascade'})
+BankAccount.belongsTo(User)
 
-Address.hasMany(Event, )
+Address.hasMany(Event)
 Event.belongsTo(Address)
 
-Bank_Account.hasMany(Event)
-Event.belongsTo(Bank_Account)
+BankAccount.hasMany(Event)
+Event.belongsTo(BankAccount)
 
 Event.hasMany(Ticket)
 Ticket.belongsTo(Event)

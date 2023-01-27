@@ -2,10 +2,13 @@ const { DataTypes } = require('sequelize');
 
 
 module.exports = (sequelize) => {
-    sequelize.define('roleAdmin',{
+    sequelize.define('RoleAdmin', {
         name: {
-            type: DataTypes.STRING(20),
-            allowNull: true,
-        },              
+            type: DataTypes.ENUM('USER', 'ADMIN', 'SUPERADMIN'),
+            allowNull: false,
+            defaultValue: 'USER'
+        },          
+    },{
+        timestamps: false
     })
 };

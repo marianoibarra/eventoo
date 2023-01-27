@@ -113,9 +113,8 @@ const createEvent = async (req, res) => {
     });
     
     await event.setCategory(categoryDb);
-    
 
-    const newEvent = await Event.findByPk(event.id, {
+    await event.reload({
       include: [
         { model: Category, attributes: ["name", "modality"] },
         { model: Address },
@@ -128,9 +127,10 @@ const createEvent = async (req, res) => {
           }
         }
         ,*/]
-    });
+    })
+    
 
-    return res.status(201).json(newEvent);
+    return res.status(201).json({newEvent, event});
   } catch (error) {
     console.log(error);
     return res.status(500).json({
