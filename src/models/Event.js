@@ -70,6 +70,22 @@ module.exports = (sequelize) => {
         cover_pic: {
             type: DataTypes.STRING,
             allowNull:true,
-        }
+        },
+        disability_access: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        parking: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        smoking_zone: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        pet_friendly: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },    
     })
 };

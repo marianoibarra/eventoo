@@ -29,6 +29,7 @@ const createEvent = async (req, res) => {
     zip_code,
   } = req.body; // consultar accontbank, modalityName and address...
 
+
   try {
     // if (!name ||
     //     !description ||
@@ -76,7 +77,7 @@ const createEvent = async (req, res) => {
       placeName,
       advertisingTime_start,
       adversiting_end,
-      cover_pic,
+      cover_pic
     }).catch((e) => {
       return res.status(500).json({
         error: {
@@ -198,6 +199,25 @@ const getPaidEvents = async (req, res) => {
   }
 };
 
+
+const getPublicEvents = async (req, res) => {
+  try {
+    const publicEvents = await Event.findAll({
+      where: { isPublic: true },
+      include: [{ model: Address }, { model: Category }]
+    });
+    if (publicEvents.length > 0) {
+      res.json(publicEvents);
+    } else {
+      res.send("There are not public events");
+    }
+    
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+}
+
+
 const getByAgeRange = async (req, res) => {
   const { range } = req.query;
   try {
@@ -248,6 +268,49 @@ const getThisWeekend = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
+
+const getEventsToday = async (req, res) => {
+
+  const today= moment().format("YYYY-MM-DD");
+
+  try {
+    const todayEvents  = await Event.findAll({
+      where: { start_date: today },
+      include: [
+        { model: Address },
+        { model: Category},
+      ],
+    });
+    if (todayEvents.length >0) {
+      res.json(todayEvents);
+    } else {
+      res.status(404).send("There are not events today");
+    }
+  } catch (error) {
+    res.status(404).json({error: error.message})
+  }
+};
+
+const getByAgeRange = async (req, res) => {
+  const { range } = req.query;
+  try {
+    const eventsByRange = await Event.findAll({
+      where: {
+        age_range: range,
+      },
+      include: [{ model: Address }, { model: Category }],
+    });
+
+   if(eventsByRange.length>0) {
+    res.json(eventsByRange);
+   } else {
+    res.send("Sorry, there are not events with that age range")
+   }
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
 
 const getMyEvents = async (req, res) => {
   try {
@@ -324,6 +387,7 @@ const getEventsByCategory = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
+
 const modifyEvent = async (req, res) => {
   const { id } = req.params;
   const eventId = Number(id);
@@ -417,6 +481,11 @@ module.exports = {
   getEvents,
   getEventsByCity,
   getPaidEvents,
+  getPublicEvents,
+  getThisWeekend,
+  getEventsToday,
+  getByAgeRange,
+  getMyEvents,
   getByAgeRange,
   getThisWeekend,
   getMyEvents,
@@ -424,3 +493,7 @@ module.exports = {
   modifyEvent,
   deleteEvent,
 };
+
+
+
+

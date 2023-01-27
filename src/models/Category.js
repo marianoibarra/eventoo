@@ -9,6 +9,6 @@ module.exports = (sequelize) => {
         categoryName: { //subcategorias
             type: DataTypes.STRING(20),
             allowNull: true,
-        },              
+        }     
     })
 };

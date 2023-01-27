@@ -9,8 +9,8 @@ module.exports = (sequelize) => {
         payment_proof: {
             type: DataTypes.STRING,
             allowNull: true,
-        },
-       
+        },       
     })
 };
+
 
