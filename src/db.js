@@ -77,7 +77,7 @@ User.belongsTo(Address)
 Category.hasMany(Event)
 Event.belongsTo(Category)
 
-User.hasMany(Bank_Account)
+User.hasMany(Bank_Account,{ onDelete: 'cascade'})
 Bank_Account.belongsTo(User)
 
 Address.hasMany(Event, )

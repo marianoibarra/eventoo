@@ -33,6 +33,5 @@ router.post("/", createEvent); //agregar verifyToken!
 router.put("/:id", modifyEvent); //agregar verifyToken!
 router.delete("/:id", deleteEvent); //agregar verifyToken!
 
+
 module.exports = router;
-
-
