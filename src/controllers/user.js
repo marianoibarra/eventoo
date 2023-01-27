@@ -58,7 +58,7 @@ const register = async (req, res) => {
       }
     );
 
-    sendEmail(newUser.email, code, newUser.name, "confirmEmail");
+    // sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 
     const token = jwt.sign({ id: newUser.id }, process.env.SECRET, {
       expiresIn: "90d",
