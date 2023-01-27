@@ -36,7 +36,6 @@ module.exports = (sequelize) => {
         },
         profile_pic: {
             type: DataTypes.STRING,
-            allowNull:true,
             validate: {
               isURL: {
                 args: true,
@@ -50,8 +49,11 @@ module.exports = (sequelize) => {
         },
         isBanned: {
             type: DataTypes.BOOLEAN,
-            allowNull:true,
+            defaultValue: false,
         },
-      
+        emailIsVerify: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
+        },      
     })
 };

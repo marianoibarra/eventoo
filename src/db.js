@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
-const { userInfo } = require("os");
+
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
@@ -52,7 +52,10 @@ const {
   Address, 
   Bank_Account, 
   Category, 
-  Ticket 
+  Ticket,
+  Review,
+  Modality,
+  EmailCode
 } = sequelize.models;
 
 // Relaciones
@@ -61,7 +64,13 @@ User.belongsToMany(Transaction, { through: User_Transaction });
 Transaction.belongsToMany(User, { through: User_Transaction });
 
 User.belongsToMany(Event, { through: User_Event });
-Event.belongsToMany(User, { through: User_Event });
+Event.belongsToMany(User, { through: User_Event });         
+
+User.belongsToMany(Event, { through: 'Favorites' });
+Event.belongsToMany(User, { through: 'Favorites' });
+
+User.hasOne(EmailCode)
+EmailCode.belongsTo(User)
 
 Address.hasMany(User)
 User.belongsTo(Address)
@@ -69,13 +78,17 @@ User.belongsTo(Address)
 Category.hasMany(Event)
 Event.belongsTo(Category)
 
+Modality.hasMany(Event)
+Event.belongsTo(Modality)
+
+Modality.hasMany(Category)
+Category.belongsTo(Modality)
+
 User.hasMany(Bank_Account)
 Bank_Account.belongsTo(User)
 
 Address.hasMany(Event, )
-Event.belongsTo(Address, {
-  onUpdate: 'CASCADE'
-})
+Event.belongsTo(Address)
 
 Bank_Account.hasMany(Event)
 Event.belongsTo(Bank_Account)
@@ -85,6 +98,9 @@ Ticket.belongsTo(Event)
 
 Event.hasMany(Transaction)
 Transaction.belongsTo(Event)
+
+Event.hasMany(Review)
+Review.belongsTo(Event)
 
 Transaction.hasMany(Ticket)
 Ticket.belongsTo(Transaction)
@@ -97,22 +113,24 @@ User.beforeCreate(async function (user) {
 });
 
 User.beforeUpdate(async function (user) {
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
+  if(user.password) {
+    console.log(user)
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+  }
 });
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña
 User.prototype.validPassword = async function (password) {
-
   return await bcrypt.compare(password, this.password);
 };
+
 
 // Event.beforeCreate(async function (event) {
 //   const titleCapitalized =
 //     event.name.charAt(0).toUpperCase() 
 //     event.name.slice(1).toLowerCase();
 //   event.name = titleCapitalized;
-
 
 
 module.exports = {

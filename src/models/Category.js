@@ -6,8 +6,8 @@ module.exports = (sequelize) => {
         modalityName:{
             type: DataTypes.ENUM('PRESENTIAL', 'VIRTUAL')
         },
-        categoryName: { //subcategorias
-            type: DataTypes.STRING(20),
+        categoryName: { 
+            type: DataTypes.STRING(40),
             allowNull: true,
         }     
     })
