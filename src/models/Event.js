@@ -31,8 +31,8 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull:true,
         },
-        isVirtual: {
-            type: DataTypes.BOOLEAN,
+        modality: {
+            type: DataTypes.ENUM('PRESENTIAL', 'VIRTUAL'),
             allowNull:true,
         },
         virtualURL: {
