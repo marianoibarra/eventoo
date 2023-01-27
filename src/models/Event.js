@@ -12,19 +12,27 @@ module.exports = (sequelize) => {
             allowNull: true,
         },
         start_date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull:true,
         },
         end_date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull:true,
+        },
+        start_time:{
+            type: DataTypes.TIME,
+            allowNull:true
+        },
+        end_time:{
+            type: DataTypes.TIME,
+            allowNull:true
         },
         isPublic: {
             type: DataTypes.BOOLEAN,
             allowNull:true,
         },
-        isVirtual: {
-            type: DataTypes.BOOLEAN,
+        modality: {
+            type: DataTypes.ENUM('PRESENTIAL', 'VIRTUAL'),
             allowNull:true,
         },
         virtualURL: {
@@ -40,7 +48,7 @@ module.exports = (sequelize) => {
             allowNull:true,
         },
         age_range: {
-            type: DataTypes.STRING, // "12 - 50"
+            type: DataTypes.ENUM('ALL PUBLIC', '+13', '+16', '+18'),
             allowNull:true,
         },
         guests_capacity: {
@@ -62,6 +70,22 @@ module.exports = (sequelize) => {
         cover_pic: {
             type: DataTypes.STRING,
             allowNull:true,
-        }
+        },
+        disability_access: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        parking: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        smoking_zone: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },
+        pet_friendly: {
+            type: DataTypes.BOOLEAN,
+            allowNull:true,
+        },    
     })
 };

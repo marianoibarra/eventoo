@@ -1,23 +1,56 @@
 const { Router } = require("express");
-const { modifyEvent, deleteEvent, createEvent, getEvents, } = require('../controllers/event');
-const {Category, Modality} = require('../db')
-const categoryMock = require("../mocks/category");
+const { 
+    modifyEvent, 
+    deleteEvent, 
+    createEvent, 
+    getEvents, 
+    getEventsByCity,
+    getPaidEvents,
+    getPublicEvents,
+    getThisWeekend,
+    getEventsToday,
+    getByAgeRange,
+    getMyEvents,
+} = require('../controllers/event')
+
+const {
+  modifyEvent,
+  deleteEvent,
+  createEvent,
+  getEvents,
+  getPaidEvents,
+  getEventsByCity,
+  getByAgeRange,
+  getThisWeekend,
+  getMyEvents,
+  getEventsByCategory,
+} = require("../controllers/event");
+
+const { verifyToken } = require("../controllers/user");
 
 const router = Router();
 
-// router.get("/", getEvents);
-router.get("/", async (req, res) => {
-  try {
-    const a = await Category.findAll({include: [ Modality ]})
-    res.send(a)
-    
-  } catch (e) {
-    res.status(400).send(e.message)
-  }
-  
-});
+router.get("/", getEvents);
+
+router.get("/byCity", getEventsByCity);
+router.get("/paid",  getPaidEvents);
+router.get("/public", getPublicEvents);
+router.get("/byAgeRange", getByAgeRange);
+router.get("/thisWeekend", getThisWeekend);
+router.get("/today", getEventsToday);
+router.get("/myEvents", verifyToken, getMyEvents);
+
+router.get("/paid", getPaidEvents);
+router.get("/byCity", getEventsByCity); 
+router.get("/byAgeRange", getByAgeRange);
+router.get("/thisWeekend", getThisWeekend);
+router.get("/myEvents", verifyToken, getMyEvents);
+router.get('/byCategory',getEventsByCategory);
+
 router.post("/", createEvent);
 router.put("/:id", modifyEvent);
 router.delete("/:id", deleteEvent);
 
 module.exports = router;
+
+
