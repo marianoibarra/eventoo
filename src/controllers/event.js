@@ -217,27 +217,6 @@ const getPublicEvents = async (req, res) => {
   }
 }
 
-
-const getByAgeRange = async (req, res) => {
-  const { range } = req.query;
-  try {
-    const eventsByRange = await Event.findAll({
-      where: {
-        age_range: range,
-      },
-      include: [{ model: Address }, { model: Category }],
-    });
-
-    if (eventsByRange.length > 0) {
-      res.json(eventsByRange);
-    } else {
-      res.send("Sorry, there are not events with that age range");
-    }
-  } catch (error) {
-    res.status(404).json({ error: error.message });
-  }
-};
-
 const getThisWeekend = async (req, res) => {
   const saturday = moment().day(6).format("YYYY-MM-DD");
   const sunday = moment().day(7).format("YYYY-MM-DD");

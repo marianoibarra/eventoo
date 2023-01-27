@@ -54,7 +54,6 @@ const {
   Category, 
   Ticket,
   Review,
-  Modality,
   EmailCode
 } = sequelize.models;
 
@@ -77,12 +76,6 @@ User.belongsTo(Address)
 
 Category.hasMany(Event)
 Event.belongsTo(Category)
-
-Modality.hasMany(Event)
-Event.belongsTo(Modality)
-
-Modality.hasMany(Category)
-Category.belongsTo(Modality)
 
 User.hasMany(Bank_Account)
 Bank_Account.belongsTo(User)
