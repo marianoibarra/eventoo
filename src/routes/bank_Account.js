@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/", verifyToken, createBank_Account);
 router.get("/", verifyToken, getBank_Account);
-router.put("/", verifyToken, modifyBank_Account);
-router.delete("/", verifyToken, deleteBank_Account);
+router.put("/:id", verifyToken, modifyBank_Account);
+router.delete("/:id", verifyToken, deleteBank_Account);
 
 module.exports = router;

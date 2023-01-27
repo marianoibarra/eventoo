@@ -1,50 +1,73 @@
 const { Bank_Account,  } = require("../db");
 const jwt = require('jsonwebtoken')
-// comentario
+
+
+
 
 const createBank_Account = async (req, res) => {
-  const { id } = req.userId
   try {
-    const { name, cbu } = req.body;
-    const bank_Account = await Bank_Account.create({ name, cbu, userId: req.userId });
+    const { name, CBU } = req.body;
+    const userId  = req.userId
+    const bank_Account = await Bank_Account.create({ name, CBU, userId }).catch((e) => {
+      return res.status(500).json({
+        error: {
+          message: "Error while creating resource",
+          values: { ...req.body },
+        },
+      });
+    });
+    await bank_Account.setUser(userId);
+    return res.status(200).json({ bank_Account });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+};
 
-    res.status(201).json({ message: 'Bank account created successfully', bank_Account });
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+const getBank_Account = async (req, res) => {
+  try {
+    const bankAccounts = await Bank_Account.findAll({
+      where: { UserId: req.userId },
+    });
+    return res.status(200).json({ bankAccounts });
+  } catch (err) {
+    return res.status(500).json({ error: "Error while retrieving bank accounts" });
   }
 };
 
 
 const modifyBank_Account = async (req, res) => {
-  const { name, cbu } = req.body;
   try {
-    res.status(201).json({ message: 'Bank account modifyBank_Account successfully', cbu, name });
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+    const { name, CBU } = req.body;
+    const bank_Account = await Bank_Account.findOne({
+      where: { id: req.params.id, UserId: req.userId }
+    });
+    if (!bank_Account) {
+      return res.status(404).json({ error: "Cuenta bancaria no encontrada" });
+    }
+    bank_Account.name = name;
+    bank_Account.CBU = CBU;
+    await bank_Account.save();
+    return res.status(200).json({ bank_Account });
+  } catch (err) {
+    return res.status(500).json({ error: "Error al actualizar la cuenta bancaria" });
   }
 };
 
 
 
 const deleteBank_Account = async (req, res) => {
-  const { name, cbu } = req.body;
   try {
-    res.status(201).json({ message: 'Bank account deleteBank_Account successfully', cbu, name });
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
-  }
-};
-
-const getBank_Account = async (req, res) => {
-  const { id } = req.userId
-  try {
-    const bankAccount = await Bank_Account.findByPk(id);
-    if (!bankAccount) {
-      return res.status(404).json({ message: 'Bank account not found' });
+    const userId  = req.userId
+    const bank_Account = await Bank_Account.findOne({
+      where: { id: req.params.id, UserId: userId }
+    });
+    if (!bank_Account) {
+      return res.status(404).json({ error: "Cuenta bancaria no encontrada" });
     }
-    res.status(200).json(bankAccount);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving bank account' });
+    await bank_Account.destroy();
+    return res.status(200).json({ message: "Cuenta bancaria eliminada exitosamente" });
+  } catch (err) {
+    return res.status(500).json({ error: "Error al eliminar la cuenta bancaria" });
   }
 };
 
