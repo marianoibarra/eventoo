@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   getPublicEvents,
-  // getEvents,
+  getByPrivacity,
   getEventsByState,
   getPaidEvents,
   getThisWeekend,
@@ -19,7 +19,7 @@ router.get("/events/byAgeRange", getByAgeRange);
 router.get("/events/thisWeekend", getThisWeekend);
 router.get("/events/today", getEventsToday);
 router.get("/events/byCategory",getEventsByCategory);
-// router.get("/", getEvents);
+router.get("/events/:privacity",getByPrivacity)
 
 
 module.exports = router;

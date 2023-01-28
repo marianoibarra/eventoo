@@ -2,23 +2,6 @@ const { Event, Address, Category, User_Event, User } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
-// const getEvents = async (req, res) => {
-//   try {
-//     const events = await Event.findAll({
-//       include: [{ model: Category }, { model: Address }],
-//       order: [["name", "ASC"]],
-//     });
-//     return res.json(events);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({
-//       error: {
-//         message: "Server error",
-//       },
-//     });
-//   }
-// };
-
 const getPublicEvents = async (req, res) => {
   try {
     const publicEvents = await Event.findAll({
@@ -130,7 +113,11 @@ const getByAgeRange = async (req, res) => {
       where: {
         [Op.and]: [{ age_range: range }, { isPublic: true }],
       },
-      include: [{ model: Address }, { model: Category },  { model: User, as: "users" },],
+      include: [
+        { model: Address },
+        { model: Category },
+        { model: User, as: "users" },
+      ],
     });
 
     if (eventsByRange.length > 0) {
@@ -184,7 +171,11 @@ const getEventsToday = async (req, res) => {
       where: {
         [Op.and]: [{ start_date: today }, { isPublic: true }],
       },
-      include: [{ model: Address }, { model: Category }, { model: User, as: "users" },],
+      include: [
+        { model: Address },
+        { model: Category },
+        { model: User, as: "users" },
+      ],
     });
     if (todayEvents.length > 0) {
       res.json(todayEvents);
@@ -195,40 +186,6 @@ const getEventsToday = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
-
-// const getMyEventsGuest = async (req, res) => {
-//   try {
-//     const userEvents = await User_Event.findAll({
-//       where: {
-//         UserId: req.userId,
-//         role: 'GUEST'
-//       },
-//     });
-
-//     if (!userEvents.length > 0) return res.status(500).send("You do not have any events");
-
-//     const allMyEvents = []
-
-//     for(let e of userEvents) {
-//       let event = await Event.findOne({
-//         where: {
-//           [Op.and]: [
-//             { id: e.EventId },
-//             { isPublic: true },
-//           ],
-//         },
-//         include: [Address, Category ],
-//       });
-//       allMyEvents.push(event)
-//     }
-
-//     console.log(allMyEvents);
-//     res.json(allMyEvents);
-
-//   } catch (error) {
-//     res.status(404).json({ msg: error.message });
-//   }
-// }
 
 const getEventsByCategory = async (req, res) => {
   const { category } = req.query;
@@ -245,7 +202,7 @@ const getEventsByCategory = async (req, res) => {
         },
         {
           model: User,
-          as: 'users',
+          as: "users",
           attributes: ["id"],
         },
       ],
@@ -260,8 +217,36 @@ const getEventsByCategory = async (req, res) => {
   }
 };
 
+const getByPrivacity = async (req, res) => {
+  const { privacity } = req.params;
+  try {
+    const events = await Event.findAll({
+      where: { isPublic: privacity },
+      include: [
+        { model: Category },
+        { model: Address },
+        {
+          model: User,
+          as: "users",
+          attributes: ["id"],
+        },
+      ],
+      order: [["name", "ASC"]],
+    });
+
+    return res.json(events);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: {
+        message: error.message,
+      },
+    });
+  }
+};
+
 module.exports = {
-  //   getEvents,
+  getByPrivacity,
   getEventsByState,
   getPaidEvents,
   getPublicEvents,
