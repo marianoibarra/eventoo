@@ -1,14 +1,12 @@
-const { Bank_Account,  } = require("../db");
-const jwt = require('jsonwebtoken')
+const { BankAccount } = require("../db");
 
 
-
-
-const createBank_Account = async (req, res) => {
+const createBankAccount = async (req, res) => {
   try {
     const { name, CBU } = req.body;
     const userId  = req.userId
-    const bank_Account = await Bank_Account.create({ name, CBU, userId }).catch((e) => {
+
+    const bankAccountFromDB = await BankAccount.create({ name, CBU, userId }).catch((e) => {
       return res.status(500).json({
         error: {
           message: "Error while creating resource",
@@ -16,16 +14,16 @@ const createBank_Account = async (req, res) => {
         },
       });
     });
-    await bank_Account.setUser(userId);
-    return res.status(200).json({ bank_Account });
+    await bankAccountFromDB.setUser(userId);
+    return res.status(200).json({ bankAccount: bankAccountFromDB });
   } catch (err) {
     return res.status(401).json({ error: "Invalid token" });
   }
 };
 
-const getBank_Account = async (req, res) => {
+const getBankAccount = async (req, res) => {
   try {
-    const bankAccounts = await Bank_Account.findAll({
+    const bankAccounts = await BankAccount.findAll({
       where: { UserId: req.userId },
     });
     return res.status(200).json({ bankAccounts });
@@ -35,19 +33,19 @@ const getBank_Account = async (req, res) => {
 };
 
 
-const modifyBank_Account = async (req, res) => {
+const modifyBankAccount = async (req, res) => {
   try {
     const { name, CBU } = req.body;
-    const bank_Account = await Bank_Account.findOne({
+    const bankAccount = await BankAccount.findOne({
       where: { id: req.params.id, UserId: req.userId }
     });
-    if (!bank_Account) {
+    if (!bankAccount) {
       return res.status(404).json({ error: "Cuenta bancaria no encontrada" });
     }
-    bank_Account.name = name;
-    bank_Account.CBU = CBU;
-    await bank_Account.save();
-    return res.status(200).json({ bank_Account });
+    BankAccount.name = name;
+    BankAccount.CBU = CBU;
+    await BankAccount.save();
+    return res.status(200).json({ BankAccount });
   } catch (err) {
     return res.status(500).json({ error: "Error al actualizar la cuenta bancaria" });
   }
@@ -55,16 +53,16 @@ const modifyBank_Account = async (req, res) => {
 
 
 
-const deleteBank_Account = async (req, res) => {
+const deleteBankAccount = async (req, res) => {
   try {
     const userId  = req.userId
-    const bank_Account = await Bank_Account.findOne({
+    const BankAccount = await BankAccount.findOne({
       where: { id: req.params.id, UserId: userId }
     });
-    if (!bank_Account) {
+    if (!BankAccount) {
       return res.status(404).json({ error: "Cuenta bancaria no encontrada" });
     }
-    await bank_Account.destroy();
+    await BankAccount.destroy();
     return res.status(200).json({ message: "Cuenta bancaria eliminada exitosamente" });
   } catch (err) {
     return res.status(500).json({ error: "Error al eliminar la cuenta bancaria" });
@@ -73,8 +71,8 @@ const deleteBank_Account = async (req, res) => {
 
 
 module.exports = { 
-  createBank_Account,
-  modifyBank_Account,
-  deleteBank_Account,
-  getBank_Account,
+  createBankAccount,
+  modifyBankAccount,
+  deleteBankAccount,
+  getBankAccount,
 };

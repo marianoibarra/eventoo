@@ -212,7 +212,7 @@ const forgotPassword = async (req, res) => {
 
     sendEmail(
       user.email,
-      `${CLIENT_URL}/reset-password/${reset_token}`,
+      `${process.env.CLIENT_URL}/reset-password/${reset_token}`,
       user.name,
       "resetPassword"
     );

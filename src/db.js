@@ -70,6 +70,9 @@ Event.belongsToMany(User, { through: User_Event, as: 'users' });
 User.belongsToMany(Event, { through: 'Favorites' });
 Event.belongsToMany(User, { through: 'Favorites' });
 
+User.belongsToMany(Event, { through: Review, as: 'reviewedEvents' });
+Event.belongsToMany(User, { through: Review, as: 'reviewedBy' });
+
 User.hasOne(EmailCode)
 EmailCode.belongsTo(User)
 

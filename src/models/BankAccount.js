@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             allowNull: true,
         },
         CBU:{
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             allowNull: true,
         }              
     })

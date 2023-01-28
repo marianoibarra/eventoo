@@ -5,7 +5,7 @@ const bankAccountMiddleware = require ("./bankAccount")
 
 router.use("/user", userMiddleware);
 router.use("/event", eventMiddleware);
-router.use("/bank_Account", bankAccountMiddleware);
+router.use("/bank-account", bankAccountMiddleware);
 
 
 module.exports = router;
