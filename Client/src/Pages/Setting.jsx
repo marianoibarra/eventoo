@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../Components/Footer/Footer";
 import NavBar from '../Components/NavBar/NavBar';
-import SettingForm from '../Components/settingForm';
+import SettingForm from '../Components/settingForm/SettingForm';
 export default function Setting() {
   return (
     <div>
