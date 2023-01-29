@@ -130,7 +130,7 @@ const createEvent = async (req, res) => {
     })
     
 
-    return res.status(201).json({newEvent, event});
+    return res.status(201).json({event});
   } catch (error) {
     console.log(error);
     return res.status(500).json({

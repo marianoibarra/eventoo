@@ -88,6 +88,8 @@ const resendEmailCode = async (req, res) => {
     await user.setEmailCode(newCode);
 
     sendEmail(user.email, newCode, newUser.name, "confirmEmail");
+
+    res.send({msg: "Email code resended"})
   } catch (e) {
     res.status(400).send(e.message);
   }
@@ -123,7 +125,7 @@ const verifyEmailCode = async (req, res) => {
   const expiration = new Date(userWithEmailCode.EmailCode.expiration);
   const now = new Date();
   if (now > expiration) {
-    return res.status(401).send({ isValid: false, message: "The code is invalid or has expired" })
+    return res.status(401).send({ isValid: false, msg: "The code is invalid or has expired" })
   } 
 
   await userWithEmailCode.update({emailIsVerify: true})
@@ -132,8 +134,7 @@ const verifyEmailCode = async (req, res) => {
     emailCode.destroy();
   });
 
-  res.send({ isValid: true, message: "The code is valid" });
-  
+  res.send({ isValid: true, msg: "The code is valid" });
   } catch (e) {
     console.log(e);
     res.status(400).send(e.message);
@@ -216,7 +217,7 @@ const forgotPassword = async (req, res) => {
       user.name,
       "resetPassword"
     );
-    res.send("done");
+    res.send({msg: "Email sended successfully"});
   } catch (error) {
     res.status(501).send(error.message);
   }
@@ -231,17 +232,17 @@ const checkResetToken = async (req, res) => {
 
       const user = await User.findOne({ where: { id } });
 
-      if (!user) return res.status(401).json({ msg: "This URL is invalid" });
+      if (!user) return res.status(401).json({ msg: "This token is invalid" });
 
       const changePassToken = jwt.sign({ id: user.id }, process.env.SECRET, {
-        expiresIn: "5m",
+        expiresIn: "10m",
       });
       res.json({ name: user.name, changePassToken });
     } else {
-      res.status(401).json({ msg: "No token" });
+      res.status(400).json({ msg: "No token" });
     }
   } catch (error) {
-    res.status(401).json({ msg: "This URL is invalid or expired" });
+    res.status(401).json({ msg: "This token is invalid or expired" });
   }
 };
 
@@ -254,7 +255,7 @@ const resetPassword = async (req, res) => {
 
       const user = await User.findOne({ where: { id } });
 
-      if (!user) return res.status(401).json({ msg: "invalid token" });
+      if (!user) return res.status(401).json({ msg: "Invalid token or expired" });
 
       await user.update({
         password: newPassword,
@@ -264,11 +265,11 @@ const resetPassword = async (req, res) => {
 
       res.json({ msg: "Password changed successfully" });
     } else {
-      res.status(401).json({ msg: "No token" });
+      res.status(400).json({ msg: "No token" });
     }
   } catch (error) {
     console.log(error);
-    res.status(401).json({ msg: "Token expired" });
+    res.status(401).json({ msg: "Invalid token or expired" });
   }
 };
 
