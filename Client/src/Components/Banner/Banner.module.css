@@ -1,0 +1,61 @@
+::-webkit-scrollbar {
+    display: none;
+}
+ 
+ 
+ .ContenedorHero {
+     width: 100%;
+     height: 500px;
+     background: url('../../Assets/backGroundLanding.png');
+     background-size: cover;
+     background-position: bottom;
+     background-repeat: no-repeat;
+ }
+
+
+ .ContenedorTex {
+     position: absolute;
+     top: 15%;
+     left: 5%;
+ }
+
+
+ .Text {
+     width: max-content;
+     font-weight: 100;
+     color: var(--white-text);
+     display: flex;
+     flex-direction: row;
+     gap: 10px;
+     font-size: 80px;
+ }
+
+ 
+ .Titulo {
+    display: flex;
+    align-items: center;
+    font-weight: 300;
+    font-size: 80px;
+    line-height: 33px;
+    color: var(--primary-color);
+    flex-direction: row;
+    margin-top: 4px;
+ }
+
+
+ 
+
+ @media (min-width: 768px) {
+     .text {
+         padding-left: 105px;
+     }
+
+ }
+
+ @media (min-width: 1024px) {
+
+     .text {
+         font-size: 32px;
+         line-height: 32px;
+     }
+ }
