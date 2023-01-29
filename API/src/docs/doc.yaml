@@ -1,318 +1,742 @@
 openapi: 3.0.3
 info:
   title: Eventoo API
-  description: This is the Eventoo API documentation based on the OpenAPI 3.0 specification.
+  description: |-
+    This is the Eventoo API documentation based on the OpenAPI 3.0 specification.
   version: 22-ENE
 servers:
-- url: https://petstore3.swagger.io/api/v3
+  - url: https://petstore3.swagger.io/api/v3
 tags:
-- name: user
-  description: Operations about user
-- name: pet
-  description: Everything about your Pets
-  externalDocs:
-    description: Find out more
-    url: http://swagger.io
-- name: store
-  description: Access to Petstore orders
-  externalDocs:
-    description: Find out more about our store
-    url: http://swagger.io
+  - name: /user
+    description: Operar sobre el usuario
+  - name: /event
+    description: Operar sobre los eventos del usuario logueado
+  - name: /home
+    description: Requiere toda la informacion publica para mostrar en la home
+  - name: /transaction
+    description: Requiere toda la informacion publica para mostrar en la home
+  - name: /bank-account
+    description: Requiere toda la informacion publica para mostrar en la home
+  - name: /favorites
+    description: Requiere toda la informacion publica para mostrar en la home
+  - name: /reviews
+    description: Requiere toda la informacion publica para mostrar en la home
+
+  
 paths:
-  /pet:
-    put:
-      tags:
-      - pet
-      summary: Update an existing pet
-      description: Update an existing pet by Id
-      operationId: updatePet
-      requestBody:
-        description: Update an existent pet in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Pet'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: Pet not found
-        "405":
-          description: Validation exception
-      security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+  /user/register:
     post:
       tags:
-      - pet
-      summary: Add a new pet to the store
-      description: Add a new pet to the store
-      operationId: addPet
+        - /user
+      summary: Registro de usuarios
+      description: Crea la cuenta y envia al mail del usuario un codigo de 6 digitos para validar su email
+      operationId: createUser
       requestBody:
-        description: Create a new pet in the store
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Pet'
+              $ref: '#/components/schemas/User'
+                
           application/xml:
             schema:
-              $ref: '#/components/schemas/Pet'
+              $ref: '#/components/schemas/User'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
+              $ref: '#/components/schemas/User'
       responses:
-        "200":
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "User created successfully"
+                  id:
+                    type: string
+                    format: uuid
+                    example: "7aec1b42-7b5c-4c8d-9e5f-9b9c11b8f2b1"
+                  token: 
+                    type: string
+                    format: uuid
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        400: 
+          $ref: '#/components/responses/BadRequest'
+  /user/verify-email:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Verifica el codigo de 6 digitos enviado por email
+      description: ''
+      operationId: verifyEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailCode:
+                  type: string
+                  example: 406976
+      responses:
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: The code is valid
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404': 
+          description: Invalid code
+          content:
+            application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
-        "405":
-          description: Invalid input
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: The code is invalid or has expired
+  /user/verify-email/resend:
+    post:
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Reenvia el codigo de 6 digitos enviado por email
+      description: ''
+      operationId: resendCodeEmail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Email code resended
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /user/login:
+    post:
+      tags:
+        - /user
+      summary: Loguearse mediante una cuenta local
+      description: ''
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: mariano@email.com
+                password:
+                  type: string
+                  format: password
+                  example: Test1234!
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "Logged in successfully"
+                  id:
+                    type: string
+                    format: uuid
+                    example: "7aec1b42-7b5c-4c8d-9e5f-9b9c11b8f2b1"
+                  token: 
+                    type: string
+                    format: uuid
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        '400':
+          description: Email or password is incorrect
+  /user/forgot-password:
+    post:
+      tags:
+        - /user
+      summary: Olvide mi contraseña
+      description: Envia al email del usuario un link al front con un token en params para resetear su contraseña
+      operationId: forgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: mariano@email.com
+      responses:
+        '200':
+          description: Email sended successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Email sended successfully
+        400: 
+          description: Email does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "Email does not exist"
+        500: 
+          description: Internal error
+  /user/reset-password/{emailToken}:
+    get:
+      tags:
+        - /user
+      summary: Chequea si el token recibido por email es valido y no está expirado
+      description: ''
+      operationId: CheckResetToken
+      parameters:
+        - name: emailToken
+          in: path
+          description: 'El token se debe obtener por params'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Se devuelve el nombre del usuario para poder brindarle una pantalla personalizada y un token que le brinda 10 minutos para ingresar su nueva contraseña, el mismo se usa en la proxima solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Juan
+                  changePassToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /user/reset-password/:
+    put:
+      tags:
+        - /user
+      summary: Recibe la nueva contraseña luego de haberse validado el token del email
+      description: ''
+      operationId: resetPass
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - changePassToken
+                - password
+              type: object
+              properties:
+                changePassToken:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                newPassword:
+                  type: string
+                  format: password
+                  example: NewPass123!
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Password changed successfully     
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /user/change-password/:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Cambia la contraseña del usuario logueado
+      description: ''
+      operationId: changePass
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - password
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+                  example: NewPass123!
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Password changed successfully     
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /event:
+    post:
+      tags:
+        - /event
+      summary: Crea un nuevo evento
+      description: ""
+      operationId: createEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'          
+        '400':
+          description: Faltan datos obligatorios
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - /event
+      summary: Devuelve todos los eventos creados por el usuario logueado
+      description: ""
+      operationId: getEventCreator
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Event'
+                    - $ref: '#/components/schemas/Event'  
+                    - $ref: '#/components/schemas/Event'  
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /event/{eventId}:
+    put:
+      tags:
+        - /event
+      summary: Modifica un evento del usuario logueado
+      description: ""
+      operationId: modifyEvent
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a modificar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      requestBody:
+        description: Recibe cualquier propiedad del evento y las modifica sin alterar el resto, por ejemplo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: Nuevo nombre del evento
+                age_range: 
+                  type: string
+                  example: 'ALL PUBLIC'
+                parking: 
+                  type: string
+                  example: false
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Event'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Nuevo nombre del evento
+                      age_range: 
+                        type: string
+                        example: 'ALL PUBLIC'
+                      parking: 
+                        type: string
+                        example: false
+                        
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - /event
+      summary: Modifica un evento del usuario logueado
+      description: ""
+      operationId: modifyEvent
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a modificar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      requestBody:
+        description: Recibe cualquier propiedad del evento y las modifica sin alterar el resto, por ejemplo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: Nuevo nombre del evento
+                age_range: 
+                  type: string
+                  example: 'ALL PUBLIC'
+                parking: 
+                  type: string
+                  example: false
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Event'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Nuevo nombre del evento
+                      age_range: 
+                        type: string
+                        example: 'ALL PUBLIC'
+                      parking: 
+                        type: string
+                        example: false
+                        
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
   /pet/findByStatus:
     get:
       tags:
-      - pet
+        - pet
       summary: Finds Pets by status
       description: Multiple status values can be provided with comma separated strings
       operationId: findPetsByStatus
       parameters:
-      - name: status
-        in: query
-        description: Status values that need to be considered for filter
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          enum:
-          - available
-          - pending
-          - sold
-          default: available
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - pending
+              - sold
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
-                x-content-type: application/json
+                  $ref: '#/components/schemas/Pet'          
             application/xml:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Pet'
-        "400":
+        '400':
           description: Invalid status value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/findByTags:
     get:
       tags:
-      - pet
+        - pet
       summary: Finds Pets by tags
-      description: "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+      description: Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
       operationId: findPetsByTags
       parameters:
-      - name: tags
-        in: query
-        description: Tags to filter by
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: tags
+          in: query
+          description: Tags to filter by
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
-                x-content-type: application/json
+                  $ref: '#/components/schemas/Pet'          
             application/xml:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Pet'
-        "400":
+        '400':
           description: Invalid tag value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/{petId}:
     get:
       tags:
-      - pet
+        - pet
       summary: Find pet by ID
       description: Returns a single pet
       operationId: getPetById
       parameters:
-      - name: petId
-        in: path
-        description: ID of pet to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
+        - name: petId
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/Pet'          
             application/xml:
               schema:
                 $ref: '#/components/schemas/Pet'
-        "400":
+        '400':
           description: Invalid ID supplied
-        "404":
+        '404':
           description: Pet not found
       security:
-      - api_key: []
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - api_key: []
+        - petstore_auth:
+            - write:pets
+            - read:pets
     post:
       tags:
-      - pet
+        - pet
       summary: Updates a pet in the store with form data
-      description: ""
+      description: ''
       operationId: updatePetWithForm
       parameters:
-      - name: petId
-        in: path
-        description: ID of pet that needs to be updated
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      - name: name
-        in: query
-        description: Name of pet that needs to be updated
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: status
-        in: query
-        description: Status of pet that needs to be updated
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: petId
+          in: path
+          description: ID of pet that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Name of pet that needs to be updated
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status of pet that needs to be updated
+          schema:
+            type: string
       responses:
-        "405":
+        '405':
           description: Invalid input
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - petstore_auth:
+            - write:pets
+            - read:pets
     delete:
       tags:
-      - pet
+        - pet
       summary: Deletes a pet
       description: delete a pet
       operationId: deletePet
       parameters:
-      - name: api_key
-        in: header
-        description: ""
-        required: false
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: petId
-        in: path
-        description: Pet id to delete
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: petId
+          in: path
+          description: Pet id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "400":
+        '400':
           description: Invalid pet value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/{petId}/uploadImage:
     post:
       tags:
-      - pet
+        - pet
       summary: uploads an image
-      description: ""
+      description: ''
       operationId: uploadFile
       parameters:
-      - name: petId
-        in: path
-        description: ID of pet to update
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      - name: additionalMetadata
-        in: query
-        description: Additional Metadata
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: petId
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/octet-stream:
@@ -320,26 +744,25 @@ paths:
               type: string
               format: binary
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
-      x-swagger-router-controller: Pet
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /store/inventory:
     get:
       tags:
-      - store
+        - store
       summary: Returns pet inventories by status
       description: Returns a map of status codes to quantities
       operationId: getInventory
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
@@ -348,14 +771,12 @@ paths:
                 additionalProperties:
                   type: integer
                   format: int32
-                x-content-type: application/json
       security:
-      - api_key: []
-      x-swagger-router-controller: Store
+        - api_key: []
   /store/order:
     post:
       tags:
-      - store
+        - store
       summary: Place an order for a pet
       description: Place a new order in the store
       operationId: placeOrder
@@ -371,473 +792,278 @@ paths:
             schema:
               $ref: '#/components/schemas/Order'
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
-        "405":
+        '405':
           description: Invalid input
-      x-swagger-router-controller: Store
   /store/order/{orderId}:
     get:
       tags:
-      - store
+        - store
       summary: Find purchase order by ID
-      description: For valid response try integer IDs with value <= 5 or > 10. Other
-        values will generate exceptions.
+      description: For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
       operationId: getOrderById
       parameters:
-      - name: orderId
-        in: path
-        description: ID of order that needs to be fetched
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
+        - name: orderId
+          in: path
+          description: ID of order that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Order'          
             application/xml:
               schema:
                 $ref: '#/components/schemas/Order'
-        "400":
+        '400':
           description: Invalid ID supplied
-        "404":
+        '404':
           description: Order not found
-      x-swagger-router-controller: Store
     delete:
       tags:
-      - store
+        - store
       summary: Delete purchase order by ID
-      description: For valid response try integer IDs with value < 1000. Anything
-        above 1000 or nonintegers will generate API errors
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
       operationId: deleteOrder
       parameters:
-      - name: orderId
-        in: path
-        description: ID of the order that needs to be deleted
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
+        - name: orderId
+          in: path
+          description: ID of the order that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "400":
+        '400':
           description: Invalid ID supplied
-        "404":
+        '404':
           description: Order not found
-      x-swagger-router-controller: Store
-  /user:
-    post:
-      tags:
-      - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      requestBody:
-        description: Created user object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        default:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-      x-swagger-router-controller: User
-  /user/createWithList:
-    post:
-      tags:
-      - user
-      summary: Creates list of users with given input array
-      description: Creates list of users with given input array
-      operationId: createUsersWithListInput
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        default:
-          description: successful operation
-      x-swagger-router-controller: User
-  /user/login:
-    get:
-      tags:
-      - user
-      summary: Logs user into the system
-      description: ""
-      operationId: loginUser
-      parameters:
-      - name: username
-        in: query
-        description: The user name for login
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: password
-        in: query
-        description: The password for login in clear text
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              style: simple
-              explode: false
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              style: simple
-              explode: false
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/xml:
-              schema:
-                type: string
-                x-content-type: application/xml
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Invalid username/password supplied
-      x-swagger-router-controller: User
-  /user/logout:
-    get:
-      tags:
-      - user
-      summary: Logs out current logged in user session
-      description: ""
-      operationId: logoutUser
-      parameters: []
-      responses:
-        default:
-          description: successful operation
-      x-swagger-router-controller: User
-  /user/{username}:
-    get:
-      tags:
-      - user
-      summary: Get user by user name
-      description: ""
-      operationId: getUserByName
-      parameters:
-      - name: username
-        in: path
-        description: 'The name that needs to be fetched. Use user1 for testing. '
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        "400":
-          description: Invalid username supplied
-        "404":
-          description: User not found
-      x-swagger-router-controller: User
-    put:
-      tags:
-      - user
-      summary: Update user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-      - name: username
-        in: path
-        description: name that need to be deleted
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        description: Update an existent user in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        default:
-          description: successful operation
-      x-swagger-router-controller: User
-    delete:
-      tags:
-      - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-      - name: username
-        in: path
-        description: The name that needs to be deleted
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "400":
-          description: Invalid username supplied
-        "404":
-          description: User not found
-      x-swagger-router-controller: User
 components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg: 
+                type: string
+                example: "You are not authenticated"
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Order:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        petId:
-          type: integer
-          format: int64
-          example: 198772
-        quantity:
-          type: integer
-          format: int32
-          example: 7
-        shipDate:
-          type: string
-          format: date-time
-        status:
-          type: string
-          description: Order Status
-          example: approved
-          enum:
-          - placed
-          - approved
-          - delivered
-        complete:
-          type: boolean
-      example:
-        petId: 198772
-        quantity: 7
-        id: 10
-        shipDate: 2000-01-23T04:56:07.000+00:00
-        complete: true
-        status: approved
-      xml:
-        name: order
-    Customer:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 100000
-        username:
-          type: string
-          example: fehguy
-        address:
-          type: array
-          xml:
-            name: addresses
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Address'
-      xml:
-        name: customer
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          example: 437 Lytton
-        city:
-          type: string
-          example: Palo Alto
-        state:
-          type: string
-          example: CA
-        zip:
-          type: string
-          example: "94301"
-      xml:
-        name: address
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        name:
-          type: string
-          example: Dogs
-      example:
-        name: Dogs
-        id: 1
-      xml:
-        name: category
     User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        username:
-          type: string
-          example: theUser
-        firstName:
-          type: string
-          example: John
-        lastName:
-          type: string
-          example: James
-        email:
-          type: string
-          example: john@email.com
-        password:
-          type: string
-          example: "12345"
-        phone:
-          type: string
-          example: "12345"
-        userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
-      example:
-        firstName: John
-        lastName: James
-        password: "12345"
-        userStatus: 1
-        phone: "12345"
-        id: 10
-        email: john@email.com
-        username: theUser
+      allOf:
+        - type: object
+          required:
+            - email
+            - password
+            - first_name
+            - last_name
+            - born
+          properties:
+            email:
+              type: string
+              example: mariano@email.com
+            password:
+              type: string
+              format: password
+              example: Test1234!
+            first_name:
+              type: string
+              example: Mariano
+            last_name:
+              type: string
+              example: Ibarra
+            profile_pic:
+              type: string
+              example: https://www.imagen.com/
+            born:
+              type: string
+              format: date
+              example: '2023-01-01'
+        - $ref: '#/components/schemas/Address'
+        - type: object
+          required:
+            - email
+            - password
+            - first_name
+            - last_name
+            - born
+          properties:
+            userStatus:
+              type: integer
+              description: User Status
+              format: int32
+              example: 1
+            emailIsVerified:
+              type: boolean
+              example: false
+            isBanned:
+              type: boolean
+              example: false
       xml:
         name: user
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      example:
-        name: name
-        id: 0
-      xml:
-        name: tag
-    Pet:
+    Address:
       required:
-      - name
-      - photoUrls
+        - address_line
+        - city
+        - state
+        - country
+        - zip_code
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
+        address_line:
+          type: string
+          example: "Cordoba 1234"
+        city:
+          type: string
+          example: Rosario
+        state:
+          type: string
+          example: Santa Fe
+        country:
+          type: string
+          example: Argentina
+        zip_code:
+          type: string
+          example: S2000
+      xml:
+        name: address
+    Event:
+      allOf:
+        - type: object
+          required:
+            - name
+            - description
+          properties:
+            name:
+              type: string
+              example: "Fiesta de cumpleaños"
+              description: Nombre del evento
+            description:
+              type: string
+              example: "Una fiesta de cumpleaños muy divertida"
+              description: Descripción del evento
+            cover_pic:
+              type: string
+              format: uri
+              example: "https://www.imagen.com/"
+        - $ref: '#/components/schemas/Address'
+        - type: object
+          required:
+            - start_date
+            - start_time
+            - isPublic
+            - age_range
+            - guests_capacity
+            - placeName
+          properties:
+            start_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de inicio del evento
+            end_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de fin del evento
+            start_time:
+              type: string
+              format: time
+              example: "20:00"
+              description: Hora de inicio del evento
+            end_time:
+              type: string
+              format: time
+              example: "22:00"
+              description: Hora de fin del evento
+            isPublic:
+              type: boolean
+              example: true
+              description: Indica si el evento es público o privado
+            virtualURL:
+              type: string
+              example: "https://example.com/evento123"
+              description: URL virtual del evento
+            isPremium:
+              type: boolean
+              example: false
+              description: Indica si el evento es premium
+            isPaid:
+              type: boolean
+              example: true
+              description: Indica si el evento es de pago
+            age_range:
+              type: string
+              enum:
+                - "ALL PUBLIC"
+                - "+13"
+                - "+16"
+                - "+18"
+              example: "+18"
+              description: Rango de edad permitido en el evento
+            guests_capacity:
+              type: integer
+              example: 100
+              description: Capacidad de invitados del evento
+            placeName:
+              type: string
+              example: "Sala de fiestas Los Pinos"
+              description: Lugar donde se llevará a cabo el evento
+            disability_access:
+              type: boolean
+              example: true
+              description: Si cuenta con acceso adaptados para personas con discapacidad
+            parking:
+              type: boolean
+              example: true
+              description: Si cuenta con estacionamiento
+            smoking_zone:
+              type: boolean
+              example: true
+              description: Si cuenta con sector fumadores
+            pet_friendly:
+              type: boolean
+              example: true
+              description: Si se permite asistir acompañado de mascotas
+            bankAccountId:
+              type: string
+              format: uuid
+              example: "d0043047-06a1-4659-91f5-c441e4d2e281"
+      xml:
+        name: event
+    BankAccount:
+      type: object
+      properties:
         name:
           type: string
-          example: doggie
-        category:
-          $ref: '#/components/schemas/Category'
-        photoUrls:
-          type: array
-          xml:
-            wrapped: true
-          items:
-            type: string
-            xml:
-              name: photoUrl
-        tags:
-          type: array
-          xml:
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
+          example: "BBVA"
+        CBU:
           type: string
-          description: pet status in the store
-          enum:
-          - available
-          - pending
-          - sold
-      example:
-        photoUrls:
-        - photoUrls
-        - photoUrls
-        name: doggie
-        id: 10
-        category:
-          name: Dogs
-          id: 1
-        tags:
-        - name: name
-          id: 0
-        - name: name
-          id: 0
-        status: available
-      xml:
-        name: pet
+          example: "1234567890123456789012"
     ApiResponse:
       type: object
       properties:
@@ -846,42 +1072,21 @@ components:
           format: int32
         type:
           type: string
-        message:
+        msg:
           type: string
-      example:
-        code: 0
-        type: type
-        message: message
       xml:
         name: '##default'
-  requestBodies:
-    Pet:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-    UserArray:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
+    Error:
+      type: object
+      properties:
+        msg:
+          type: string
+      required:
+        - msg
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  security:
+  - bearerAuth: [] 
