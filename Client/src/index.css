@@ -1,13 +1,89 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --primary-color: #007F80;
+  --accent-color: #005D5E;
+  --secondary-color: #BC4001;
+
+  --ligth-background-color: #FDF7F4;
+  --white-text: #FDF7F4;
+
+  --dark-background-color: #121318;
+  --dark-text: #121318;
+
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--dark-text);
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.btnprimario {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--white-text);
+    cursor: pointer;
+    margin: 0 auto;
+    height: 50px;
+    background-size: 300% 100%;
+    border-radius: 10px;
+
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+    transition: all .4s ease-in-out;
+}
+
+.btnprimario:hover{
+  background-position: 100% 0;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  box-shadow: 0 3px 5px 0 rgb(0 0 0 / 65%);
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.width-75 {
+  width: 75%;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.width-25 {
+  width: 25%;
 }
