@@ -88,6 +88,7 @@ const resendEmailCode = async (req, res) => {
     await user.setEmailCode(newCode);
 
     sendEmail(user.email, newCode, newUser.name, "confirmEmail");
+
     res.send({msg: "Email code resended"})
   } catch (e) {
     res.status(400).send(e.message);
@@ -134,7 +135,6 @@ const verifyEmailCode = async (req, res) => {
   });
 
   res.send({ isValid: true, msg: "The code is valid" });
-  
   } catch (e) {
     console.log(e);
     res.status(400).send(e.message);
