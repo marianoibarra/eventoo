@@ -106,7 +106,12 @@
     }
 
     .ContenedorDetalles {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
+    }
+    .ContenedorDestacado{
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
     }
 }
