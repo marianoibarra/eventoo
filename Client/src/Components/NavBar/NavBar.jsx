@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "./menu/Menu";
 import { FaLanguage } from "react-icons/fa";
-import Estilo from "./Navbar.module.css";
+import Estilo from "./NavBar.module.css";
 
 const Navbar = () => {
   const navigate = useNavigate()
