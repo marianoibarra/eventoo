@@ -8,6 +8,8 @@ export default function Setting() {
       <NavBar />
 
       <SettingForm />
+      {//click en un boton ? <User/> click en otro boton?  <Events/> click en otro boton <Cuenta bancaria /> : <User/>, 
+      }
 
       <Footer />
     </div>
