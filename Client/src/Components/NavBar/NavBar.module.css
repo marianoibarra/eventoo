@@ -1,0 +1,62 @@
+.ContenedorHeader {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  background-color: transparent;
+  position: fixed;
+  z-index: 300;
+
+  transform: translate(-50%, -50%);
+  top: 35px;
+  left: 50%;
+}
+
+.ContenedorNavbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  position: relative;
+  padding: 0 20px;
+  
+}
+
+.Titulo {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 33px;
+  color: var(--accent-color);
+  position: fixed;
+  left: 15px;
+  top: 15px;
+}
+.MenuItem{
+  color: var(  --text-color);
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 33px;
+  text-decoration: none;
+  background-color: transparent;
+  border: 0;
+  display: flex;
+  gap: 15px;
+  flex-direction: row;
+}
+.MenuItem:hover{
+  color: var(--accent-color);
+}
+
+@media (min-width: 768px) {
+  .ContenedorNavbar svg {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ContenedorNavbar {
+    padding: 0 100px;
+  }
+}

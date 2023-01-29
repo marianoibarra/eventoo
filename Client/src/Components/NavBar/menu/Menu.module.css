@@ -1,0 +1,73 @@
+.menuContainer {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+}
+
+.menu {
+    cursor: pointer;
+  position: absolute;
+  top: 90px;
+  right: 60px;
+  width: max-content;
+  height: max-content;
+  box-shadow: 0 2px 4px var(--primary-color);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.menuIcon {
+  background-color: transparent;
+  border: none;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.menuPhoto {
+  width: 120px;
+  height: 120px;
+  right: 0;
+  top: 0;
+  border-radius: 50%;
+  position: fixed;
+}
+
+.menuInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.menuName {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.menuEmail {
+  font-size: 0.8rem;
+  border-bottom:  3px solid var(--accent-color);
+}
+
+.menuLinks {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuLink {
+  text-decoration: none;
+  color: #000;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.menuLink:hover {
+  background-color: var(--primary-color);
+}
+
