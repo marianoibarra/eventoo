@@ -108,10 +108,11 @@ const getPaidEvents = async (req, res) => {
 };
 const getByAgeRange = async (req, res) => {
   const { range } = req.query;
+
   try {
     const eventsByRange = await Event.findAll({
       where: {
-        [Op.and]: [{ age_range: range }, { isPublic: true }],
+        [Op.and]: [{ age_range: range  }, { isPublic: true }],
       },
       include: [
         { model: Address },
