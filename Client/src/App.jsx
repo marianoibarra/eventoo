@@ -10,6 +10,8 @@ import Contact from "./Pages/Contact";
 import Error from "./Pages/Error";
 import Home from "./Pages/Home";
 import Event from "./Pages/Event";
+import CreateUser from "./Pages/CreateUser";
+import Login from "./Pages/Login";
 
 function App() {
   return (
@@ -22,11 +24,11 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/Help" element={<Help />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<Error />}></Route>
         <Route path="/home" element={<Home />}></Route>
+        <Route path="/create-user" element={<CreateUser />}></Route>
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/event" element={<Event />}></Route>
-        <Route path="/event" element={<Event />}></Route>
-        <Route path="/event" element={<Event />}></Route>
+        <Route path="*" element={<Error />}></Route>
       </Routes>
     </div>
   );
