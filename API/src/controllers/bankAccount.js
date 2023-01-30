@@ -37,7 +37,7 @@ const getBankAccount = async (req, res) => {
       where: { UserId: req.userId },
     });
     return res.status(200).json({ bankAccounts });
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ error: "Error while retrieving bank accounts" });
   }
 };
