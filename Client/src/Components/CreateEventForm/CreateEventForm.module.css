@@ -1,0 +1,39 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.createEvent{
+    text-align: center;
+}
+.container{
+    height: 100% vh;
+    display: flex;
+    margin-top: 70px;
+}
+  
+.title{
+    color:var(--primary-color);
+}
+  
+.split{
+    width: 949px;
+    height: 0px;
+    border: 3px solid var(--primary-color);
+    border-radius: 15px;
+    margin:30px;
+}
+  
+.footerForm{
+    height: 35px;
+    width: 100%;
+    background-color: #121318;
+}
+  
+/* Paleta colores{
+    #121318 Negro
+    #005D5E Turquesa O
+    #007F80 Turquesa
+    #BC4001 Naranja
+    #FDF7F4 Fondo
+} */
