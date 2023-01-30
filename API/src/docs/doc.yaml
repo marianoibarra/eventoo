@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Eventoo API
-  description: |-
+  description: 
     This is the Eventoo API documentation based on the OpenAPI 3.0 specification. **Version: 29/01/2023**
   version: 29-ENE
 servers:
