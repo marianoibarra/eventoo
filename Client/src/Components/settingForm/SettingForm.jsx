@@ -19,7 +19,6 @@ const SettingForm = () => {
     const [input, setInput] = useState(initialInput);
 
     const handleOnChange = (event) => {
-        console.log(event.target.value);
         const obj = {
             ...input,
             [event.target.name]: event.target.value
@@ -29,6 +28,7 @@ const SettingForm = () => {
 
     return (
         <>
+        <div className={style.prueba}>
         <h1 className={style.title}>Welcome, <span>{initialName}</span></h1>
         <div className={style.containerhero}>
             <form className={style.containerform}>
@@ -38,8 +38,8 @@ const SettingForm = () => {
                         <input type='text' name="name" value={input.name} onChange={handleOnChange}/>
                     </div>
                     <div className={style.container_input_name_last}>
-                        <legend htmlFor="last_Name">Last Name</legend>
-                        <input type='text' name="last_Name" value={input.last_name} onChange={handleOnChange}/>                        
+                        <legend htmlFor="last_name">Last Name</legend>
+                        <input type='text' name="last_name" value={input.last_name} onChange={handleOnChange}/>                        
                     </div>
                 </div>
                 <div className={style.container_input}>
@@ -66,7 +66,7 @@ const SettingForm = () => {
             <div className={style.divprueba}>
                 <img src={input.profile_pic} alt="Profile Pic" className={style.imagesetting} />
             </div>
-            
+        </div>
         </div>
         </>
     )
