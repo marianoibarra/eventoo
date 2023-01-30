@@ -70,12 +70,12 @@ const deleteBankAccount = async (req, res) => {
       where: { id: req.params.id, UserId: userId }
     });
     if (!BankAccount) {
-      return res.status(404).json({ error: "Cuenta bancaria no encontrada" });
+      return res.status(404).json({ error: "bank account not found" });
     }
     await BankAccount.destroy();
-    return res.status(200).json({ message: "Cuenta bancaria eliminada exitosamente" });
+    return res.status(200).json({ message: "Bank account successfully removed" });
   } catch (err) {
-    return res.status(500).json({ error: "Error al eliminar la cuenta bancaria" });
+    return res.status(500).json({ error: "Error deleting bank account"});
   }
 };
 
