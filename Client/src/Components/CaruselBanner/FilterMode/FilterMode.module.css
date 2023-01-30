@@ -1,0 +1,68 @@
+.containerFilterMode {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 19.2vh;
+    margin-top: 22%;
+    z-index: 1;
+}
+
+h2 {
+    margin: 0 auto;
+    display: flex;
+    width: 100%;
+    padding-left: 9%;
+    margin-bottom: 11%;
+    color: var(--white-text);
+    font-size: 20px;
+    font-weight: 400;
+    user-select: none;
+}
+
+.looking,
+.state,
+.where {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+    width: 27.2vw;
+    height: 100%;
+    background-color: var(--primary-color);
+    border-right: 2px solid var(--accent-color);
+    z-index: 1;
+}
+
+.looking {
+    border-radius: 15px 0 0 15px;
+}
+
+.where {
+    border-radius: 0 15px 15px 0;
+}
+
+
+
+.select_Looking {
+    height: 4.8vh;
+    width: 22.3vw;
+    margin-bottom: 3%;
+}
+
+.select_Looking {
+    background-color: var(--primary-color);
+    border: none;
+    border-bottom: 3px solid var(--accent-color);
+    margin: 0 auto;
+    font-size: 185%;
+    font-weight: 100;
+    color: rgba(253, 247, 244, 0.5);
+    user-select: none;
+}
+
+option {
+    font-size: 20px;
+    color: var(--white-text);
+    user-select: none;
+}

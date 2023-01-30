@@ -45,26 +45,26 @@ a:hover {
 
 .btnprimario {
   display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--white-text);
-    cursor: pointer;
-    margin: 0 auto;
-    height: 50px;
-    background-size: 300% 100%;
-    border-radius: 10px;
-
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
-    transition: all .4s ease-in-out;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  color: var(--white-text);
+  cursor: pointer;
+  margin: 0 auto;
+  height: 50px;
+  background-size: 300% 100%;
+  border-radius: 10px;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+  transition: all .4s ease-in-out;
 }
 
-.btnprimario:hover{
+.btnprimario:hover {
   background-position: 100% 0;
   moz-transition: all .4s ease-in-out;
   -o-transition: all .4s ease-in-out;
@@ -88,13 +88,14 @@ a:hover {
 .width-25 {
   width: 25%;
 }
-html{
+
+html {
   min-height: 100%;
   position: relative;
-  background-color: var(  --ligth-background-color);
+  background-color: var(--ligth-background-color);
 }
 
-footer{
+footer {
   position: absolute;
   bottom: 0;
   width: 100%;

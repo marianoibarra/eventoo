@@ -4,8 +4,9 @@ import Navbar from '../Components/NavBar/NavBar'
 function Event() {
   return (
     <div>
-            <Navbar/>
-      <Footer/>
+      <Navbar />
+      Evento!!!      
+      <Footer />
     </div>
   )
 }

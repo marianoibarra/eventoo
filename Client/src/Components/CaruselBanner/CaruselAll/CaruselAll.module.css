@@ -1,0 +1,29 @@
+.container_carusel{
+    width:  83.33vw;
+    height: 68.18vh;
+    margin: 0 auto;
+    margin-bottom: 10%;
+}
+
+.container_text{
+    font-size: 250%;
+    color: var(--dark-text);
+    border-bottom: 4px solid var(--accent-color);
+}
+
+/* .carusel_cards{
+    display: grid;
+    grid-auto-flow: column;
+    scroll-behavior: auto;
+    gap: 1.2rem;
+    overflow-y: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+} */
+
+.carusel_cards{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
+}

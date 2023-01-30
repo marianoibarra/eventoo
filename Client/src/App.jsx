@@ -13,6 +13,9 @@ import Event from "./Pages/Event";
 import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
 
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 function App() {
   return (
     <div >
