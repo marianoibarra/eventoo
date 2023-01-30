@@ -88,11 +88,12 @@ Event.belongsTo(Category)
 User.hasMany(BankAccount,{ onDelete: 'cascade'})
 BankAccount.belongsTo(User)
 
+BankAccount.hasMany(Event)
+Event.belongsTo(BankAccount)
+
 Address.hasMany(Event)
 Event.belongsTo(Address)
 
-BankAccount.hasMany(Event)
-Event.belongsTo(BankAccount)
 
 Event.hasMany(Ticket)
 Ticket.belongsTo(Event)

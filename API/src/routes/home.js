@@ -8,6 +8,7 @@ const {
   getEventsToday,
   getByAgeRange,
   getEventsByCategory,
+  getCategories,
 } = require("../controllers/home");
 
 const router = Router();
@@ -20,6 +21,6 @@ router.get("/events/thisWeekend", getThisWeekend);
 router.get("/events/today", getEventsToday);
 router.get("/events/byCategory",getEventsByCategory);
 router.get("/events/:privacity",getByPrivacity)
-
+router.get("/categories",getCategories)
 
 module.exports = router;
