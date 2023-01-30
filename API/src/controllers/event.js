@@ -1,8 +1,9 @@
-const { Event, Address, Category, User_Event, User } = require("../db");
+const { Event, Address, Category, User_Event, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
 
 const createEvent = async (req, res) => {
+  const userId = req.userId;
   const {
     name,
     description,
@@ -31,7 +32,11 @@ const createEvent = async (req, res) => {
     parking,
     smoking_zone,
     pet_friendly,
+    bankAccountName,
   } = req.body; // consultar accontbank, modalityName and address...
+
+ 
+
 
   try {
     // if (!name ||
@@ -105,6 +110,21 @@ const createEvent = async (req, res) => {
       }
     );
 
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(400).json({ error: "Username does not exist" });
+    }
+
+     const bankAccount = await BankAccount.findOne({
+      where: { UserId:userId , name: bankAccountName },
+    });
+
+    if (!bankAccount) {
+      return res.status(400).json({ error: "The bank account does not exist" });
+    }
+
+    await event.setBankAccount(bankAccount);
+
     // const user = await User.findOne({where: { id: req.userId}})
     // await event.addUser(user, { through: {role: 'CREATOR'}})
 
@@ -116,7 +136,7 @@ const createEvent = async (req, res) => {
     await event.addUsers(req.userId, { through: { role: "CREATOR" } });
 
     await event.reload({
-      include: [
+      include: [{model: BankAccount, where: { UserId: userId }, },
         { model: Category, attributes: ["name", "modality"] },
         { model: Address },
         {
@@ -172,6 +192,7 @@ const getEventByUser = async (req, res) => {
           id: e.EventId,
         },
         include: [
+          BankAccount,
           Address,
           Category,
           {
@@ -193,6 +214,7 @@ const getEventByUser = async (req, res) => {
           id: e.EventId,
         },
         include: [
+          BankAccount,
           Address,
           Category,
           {
@@ -284,6 +306,7 @@ const modifyEvent = async (req, res) => {
 
     const eventUpdated = await Event.findByPk(eventFound.id, {
       include: [
+        {model: BankAccount},
         { model: Address },
         { model: Category },
         { model: User, as: "users" },

@@ -1,12 +1,12 @@
 import React from 'react'
 import Footer from '../Components/Footer/Footer'
-import Navbar from '../Components/NavBar/NavBar'
+import LoginForm from '../Components/LoginForm/LoginForm'
+
 
 function Login() {
   return (
-    <div>
-      <Navbar/>
-      
+    <div className='login'>
+      <LoginForm/>
       <Footer/>
     </div>
   )

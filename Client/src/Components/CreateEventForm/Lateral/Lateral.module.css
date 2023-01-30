@@ -1,0 +1,15 @@
+.container{
+    background: black;
+    height: auto;
+    width: 65px;
+  }
+  
+  .menu{
+      position: fixed;
+      min-height: 80px;
+      width: 50px;
+      text-align: center;
+      word-wrap: break-word;
+      background-color: aquamarine;
+      margin: 5px;
+    }

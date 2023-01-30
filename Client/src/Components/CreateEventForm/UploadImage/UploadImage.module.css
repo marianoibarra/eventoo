@@ -1,0 +1,16 @@
+.image{
+    color: var(--primary-color);
+    margin: 15px 0;
+}
+
+.container_image{
+    display: flex;
+    justify-content: center;
+}
+
+.picture{
+    /* background-image: url('../Resources/Portada.jpg'); */
+    height: 250px;
+    width: 500px;
+    margin: 0;
+}

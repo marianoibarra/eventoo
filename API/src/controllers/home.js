@@ -246,6 +246,21 @@ const getByPrivacity = async (req, res) => {
   }
 };
 
+const getCategories = async (req, res) => {
+
+  try {
+    const { Virtual } = req.body;
+    const categories = Virtual === "true"
+    ? await Category.findAll({ where: { modality: 'Virtual' } })
+    : Virtual === "false"
+    ? await Category.findAll({ where: { modality: 'Presential' } })
+    : await Category.findAll();
+    return res.status(200).json({ categories });
+    } catch (err) {
+    return res.status(500).json({ error: 'An error occurred while getting the categories' });
+    }
+    };
+
 module.exports = {
   getByPrivacity,
   getEventsByState,
@@ -257,4 +272,5 @@ module.exports = {
   getByAgeRange,
   getThisWeekend,
   getEventsByCategory,
+  getCategories,
 };
