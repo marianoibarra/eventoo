@@ -13,7 +13,6 @@ const createEvent = async (req, res) => {
     end_time,
     isPublic,
     virtualURL,
-    //accountBank,//
     category,
     isPremium,
     isPaid,
@@ -32,8 +31,8 @@ const createEvent = async (req, res) => {
     parking,
     smoking_zone,
     pet_friendly,
-    bankAccountName,
-  } = req.body; // consultar accontbank, modalityName and address...
+    bankAccount,
+  } = req.body;
 
  
 
@@ -96,7 +95,6 @@ const createEvent = async (req, res) => {
         parking,
         smoking_zone,
         pet_friendly,
-
         Address: {
           address_line,
           city,
@@ -110,39 +108,28 @@ const createEvent = async (req, res) => {
       }
     );
 
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(400).json({ error: "Username does not exist" });
+    if (bankAccount) {
+      const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
+      await event.setBankAccount(bankAccountFromDB);
     }
 
-     const bankAccount = await BankAccount.findOne({
-      where: { UserId:userId , name: bankAccountName },
-    });
-
-    if (!bankAccount) {
-      return res.status(400).json({ error: "The bank account does not exist" });
+    if (category) {
+      const categoryFromDB = await Category.findOne({
+        where: { name: category },
+      });
+      await event.setCategory(categoryFromDB);
     }
 
-    await event.setBankAccount(bankAccount);
-
-    // const user = await User.findOne({where: { id: req.userId}})
-    // await event.addUser(user, { through: {role: 'CREATOR'}})
-
-    const categoryDb = await Category.findOne({
-      where: { name: category },
-    });
-
-    await event.setCategory(categoryDb);
     await event.addUsers(req.userId, { through: { role: "CREATOR" } });
 
     await event.reload({
-      include: [{model: BankAccount, where: { UserId: userId }, },
+      include: [{model: BankAccount},
         { model: Category, attributes: ["name", "modality"] },
         { model: Address },
         {
           model: User,
           as: "users",
-        },
+        }
         /*
         { model: User,
           attributes: ['id'],
@@ -155,8 +142,8 @@ const createEvent = async (req, res) => {
       ],
     });
 
-
     return res.status(201).json(event);
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({

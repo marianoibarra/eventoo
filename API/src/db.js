@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const moment = require('moment')
 
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
@@ -121,6 +122,40 @@ User.beforeUpdate(async function (user) {
     user.password = await bcrypt.hash(user.password, salt);
   }
 });
+
+Event.beforeFind((options) => {
+  options.where.isToday = (options.where.isToday === true || options.where.isToday === 'true');
+  options.where.isNextWeekend = (options.where.isNextWeekend === true || options.where.isNextWeekend === 'true');
+
+  if (options.where.isNextWeekend) {
+    options.where.start_date = {
+      [Sequelize.Op.or]: [
+        {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
+        {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
+      ]
+    };
+  }
+
+  if (options.where.isToday) {
+    options.where.start_date = {
+      [Sequelize.Op.eq]: moment().format("YYYY-MM-DD")
+    };
+  }
+
+  let exclude = [];
+  Object.keys(Event.rawAttributes).forEach((attribute) => {
+    if (Event.rawAttributes[attribute].references) {
+      exclude.push(attribute);
+    }
+  });
+
+  options.attributes = {
+    exclude: [...exclude, 'isToday', 'isNextWeekend']
+  }
+
+  delete options.where.isToday;
+  delete options.where.isNextWeekend;
+})
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña
 User.prototype.validPassword = async function (password) {
