@@ -11,11 +11,11 @@ const addFavorite = async (req, res) => {
     const user = await User.findByPk(userId);
     const eventFavorite = await Event.findByPk(id);
 
-    await user.addEvent(eventFavorite);
+    await user.addEvent(eventFavorite, { as: 'eventFavorites'});
 
     const result = await User.findOne({
         where: {  userId: req.userId },
-        include:  { model: Event, where: { id: req.body.id }, as: 'Favorites'},
+        include:  { model: Event, where: { id: req.body.id }, as: 'eventFavorites'},
       });
 
     return res.status(201).json(result);
@@ -29,11 +29,11 @@ const getFavorites = async (req, res) => {
     const userId  = req.userId;
     try {
      const allFavorites = await User.findByPk(userId, {
-         include: [ { model: Event, as: 'Favorites' }]    
+         include: [ { model: Event, as: 'eventFavorites' }]    
      });
-     if (!allFavorites.length === 0){
+     
      return res.json( allFavorites );
-     }
+    
     } catch (error) {
         res.status(404).json({ msg: "There are no favorite events associated with the user" });
      }
@@ -45,9 +45,9 @@ const getFavorites = async (req, res) => {
     const { id } = req.params;
     const userId  = req.userId;
   try {
-    const user =await User.findByPk(userId);
-    const eventFavorite =await Event.findByPk(id);
-    await user.removeEvent(eventFavorite);
+    const user = await User.findByPk(userId);
+    const eventFavorite = await Event.findByPk(id);
+    await user.removeEvents(eventFavorite, { as: 'eventFavorites'});
     return res.status(204).json({});
   } catch (error) {
     return res.status(404).json({ error: "Error deleting favorite" });
