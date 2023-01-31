@@ -7,13 +7,15 @@
 }
 
 .title {
+    font-weight: 250;
     margin-top: 70px;
     text-align: center;
     margin-right: 35rem;
 }
 
 .title span {
-    color: #007F80;
+    font-weight: 500;
+    color: var(--primary-color);
 }
 
 .containerhero {
@@ -29,7 +31,7 @@
 }
 
 input {
-    background-color: #FDF7F4;
+    background-color: var(--ligth-background-color);
     margin-left: 5px;
     border: 0px;
     outline: none;
@@ -51,13 +53,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .container_input {
-    border-bottom: solid 2px #007F80;
+    border-bottom: solid 2px var(--primary-color);
     margin-bottom: 26px;
 }
 
 .container_input_name_last {
     width: 45%;
-    border-bottom: solid 2px #007F80;
+    border-bottom: solid 2px var(--primary-color);
     margin-top: 26px;
     margin-bottom: 26px;
 }
