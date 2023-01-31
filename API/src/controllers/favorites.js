@@ -1,18 +1,26 @@
-const { Event, User} = require("../db");
+const { Event, User } = require("../db");
 
 
-const createFavorite = async (req, res) => {
-  try {
+const addFavorite = async (req, res) => {
+
     const { id } = req.body;
-
     const userId  = req.userId;
+  
+ try {
+  
+    const user = await User.findByPk(userId);
+    const eventFavorite = await Event.findByPk(id);
 
-    const favoriteEvent = await Event.findByPk(id)
+    await user.addEvent(eventFavorite);
 
-    await favoriteEvent.addUser(userId);
-    return res.status(201).json({favoriteEvent});
+    const result = await User.findOne({
+        where: {  userId: req.userId },
+        include:  { model: Event, where: { id: req.body.id }, as: 'Favorites'},
+      });
+
+    return res.status(201).json(result);
   } catch (error) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(400).json({ error: "error adding favorite" });
   }
 };
 
@@ -23,8 +31,9 @@ const getFavorites = async (req, res) => {
      const allFavorites = await User.findByPk(userId, {
          include: [ { model: Event, as: 'Favorites' }]    
      });
-     return res.status(200).json({ allFavorites });
-
+     if (!allFavorites.length === 0){
+     return res.json( allFavorites );
+     }
     } catch (error) {
         res.status(404).json({ msg: "There are no favorite events associated with the user" });
      }
@@ -32,21 +41,21 @@ const getFavorites = async (req, res) => {
  
 
  const deleteFavorite = async (req, res) => {
-  try {
-    const userId  = req.userId;
 
-    const favoriteToBeDeleted = await Event.findOne( { where: { id: req.params.id, UserId: userId } }) 
-    await favoriteToBeDeleted.destroy();
-    res.send("Favorite removed successfully");
+    const { id } = req.params;
+    const userId  = req.userId;
+  try {
+    const user =await User.findByPk(userId);
+    const eventFavorite =await Event.findByPk(id);
+    await user.removeEvent(Book);
+    return res.status(204).json({});
   } catch (error) {
-    res.status(404).json({ error: "Error deleting favorite" });
+    return res.status(404).json({ error: "Error deleting favorite" });
   }
 };
 
-
-
 module.exports = { 
-  createFavorite,
+  addFavorite,
   getFavorites,
   deleteFavorite 
 };

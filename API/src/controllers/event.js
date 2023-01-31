@@ -36,8 +36,6 @@ const createEvent = async (req, res) => {
   } = req.body; // consultar accontbank, modalityName and address...
 
  
-
-
   try {
     // if (!name ||
     //     !description ||

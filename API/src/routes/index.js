@@ -9,6 +9,6 @@ router.use("/user", userMiddleware);
 router.use("/event", eventMiddleware);
 router.use("/bank-account", bankAccountMiddleware);
 router.use("/home", homeMiddleware)
-router.use("/favorities", favoritesMiddelewere);
+router.use("/favorites", favoritesMiddelewere);
 
 module.exports = router;

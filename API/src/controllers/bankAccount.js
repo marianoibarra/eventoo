@@ -1,7 +1,7 @@
 const { BankAccount } = require("../db");
 
 
-  const createBankAccount = async (req, res) => {
+const createBankAccount = async (req, res) => {
     try {
       const { name, CBU } = req.body;
       const userId  = req.userId
