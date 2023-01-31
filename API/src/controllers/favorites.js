@@ -47,7 +47,7 @@ const getFavorites = async (req, res) => {
   try {
     const user =await User.findByPk(userId);
     const eventFavorite =await Event.findByPk(id);
-    await user.removeEvent(Book);
+    await user.removeEvent(eventFavorite);
     return res.status(204).json({});
   } catch (error) {
     return res.status(404).json({ error: "Error deleting favorite" });
