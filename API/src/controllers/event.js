@@ -1,4 +1,4 @@
-const { Event, Address, Category, User_Event, User, BankAccount } = require("../db");
+const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
 
@@ -93,17 +93,14 @@ const createEvent = async (req, res) => {
         parking,
         smoking_zone,
         pet_friendly,
-        Address: {
+        address: {
           address_line,
           city,
           state,
           country,
           zip_code,
-        },
-      },
-      {
-        include: [Address],
-      }
+        }
+      },{ include: ['address'] }
     );
 
     if (bankAccount) {
@@ -118,27 +115,27 @@ const createEvent = async (req, res) => {
       await event.setCategory(categoryFromDB);
     }
 
-    await event.addUsers(req.userId, { through: { role: "CREATOR" } });
+    const organizer = await User.findByPk(req.userId)
+
+    await event.setOrganizer(organizer);
 
     await event.reload({
-      include: [{model: BankAccount},
-        { model: Category, attributes: ["name", "modality"] },
-        { model: Address },
+      include: [
+        'bankAccount',
         {
+          model: Address,
+          as: 'address',
+          attributes: { exclude: ['id'] }
+        },{
           model: User,
-          as: "users",
-        }
-        /*
-        { model: User,
-          attributes: ['id'],
-          as: 'users',
-          through: {
-            attributes: ['role']
-          }
-        }
-        ,*/
-      ],
-    });
+          as: 'organizer',
+          attributes: ["id", "name", "last_name", "profile_pic"] 
+        },{
+          model: Category,
+          as: 'category',
+          attributes: ["name", "modality"] 
+        },
+    ]});
 
     return res.status(201).json(event);
 
@@ -152,70 +149,13 @@ const createEvent = async (req, res) => {
   }
 };
 
-const getEventByUser = async (req, res) => {
+const getEventByUser = async ({ userId }, res) => {
   try {
-    const userEventsCreator = await User_Event.findAll({
-      where: {
-        [Op.and]: [{ UserId: req.userId }, { role: "CREATOR" }],
-      },
-    });
+    
 
-    const userEventsGuest = await User_Event.findAll({
-      where: {
-        [Op.and]: [{ UserId: req.userId }, { role: "GUEST" }],
-      },
-    });
 
-    if (userEventsCreator.length === 0 && userEventsGuest.length === 0)
-      return res.status(500).send("You do not have any events");
-
-    const allMyEvents = [];
-
-    for (let e of userEventsCreator) {
-      let eventByCreator = await Event.findOne({
-        where: {
-          id: e.EventId,
-        },
-        include: [
-          BankAccount,
-          Address,
-          Category,
-          {
-            model: User,
-            as: "users",
-            through: {
-              attributes: ["role"],
-            },
-          },
-        ],
-      });
-
-      allMyEvents.push({ ...eventByCreator.toJSON(), role: "CREATOR" });
-    }
-
-    for (let e of userEventsGuest) {
-      let eventByGuest = await Event.findOne({
-        where: {
-          id: e.EventId,
-        },
-        include: [
-          BankAccount,
-          Address,
-          Category,
-          {
-            model: User,
-            as: "users",
-            through: {
-              attributes: ["role"],
-            },
-          },
-        ],
-      });
-      allMyEvents.push({ ...eventByGuest.toJSON(), role: "GUEST" });
-    }
-    res.json(allMyEvents);
   } catch (error) {
-    res.status(404).json({ msg: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
@@ -246,13 +186,22 @@ const modifyEvent = async (req, res) => {
     parking,
     smoking_zone,
     pet_friendly,
+    bankAccount
   } = req.body;
   try {
-    const eventFound = await Event.findByPk(id);
+    const event = await Event.findByPk(id);
 
-    const categoryDb = await Category.findOne({
-      where: { name: category ? category : null },
-    });
+    if (bankAccount) {
+      const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
+      await event.setBankAccount(bankAccountFromDB);
+    }
+
+    if (category) {
+      const categoryFromDB = await Category.findOne({
+        where: { name: category },
+      });
+      await event.setCategory(categoryFromDB);
+    }
 
     if (address_line && city && state && country && zip_code) {
       const newAddress = await Address.create({
@@ -262,12 +211,10 @@ const modifyEvent = async (req, res) => {
         country,
         zip_code,
       });
-      await eventFound.setAddress(newAddress); //nop
+      await event.setAddress(newAddress); 
     }
 
-    if (category) await eventFound.setCategory(categoryDb);
-
-    await eventFound.update({
+    await event.update({
       name,
       description,
       start_date,
@@ -289,18 +236,28 @@ const modifyEvent = async (req, res) => {
       pet_friendly,
     });
 
-    const eventUpdated = await Event.findByPk(eventFound.id, {
+    await event.reload({
       include: [
-        {model: BankAccount},
-        { model: Address },
-        { model: Category },
-        { model: User, as: "users" },
+        'bankAccount',
+        {
+          model: Address,
+          as: 'address',
+          attributes: { exclude: ['id'] }
+        },{
+          model: User,
+          as: 'organizer',
+          attributes: ["id", "name", "last_name", "profile_pic"] 
+        },{
+          model: Category,
+          as: 'category',
+          attributes: ["name", "modality"] 
+        },
       ],
     });
 
-    res.send({ msg: "data updated successfully", data: eventUpdated });
+    res.send({ msg: "Data updated successfully", data: event });
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -309,7 +266,7 @@ const deleteEvent = async (req, res) => {
   try {
     const eventToBeDeleted = await Event.findByPk(id);
     await eventToBeDeleted.destroy();
-    res.send("event removed successfully");
+    res.send("Event removed successfully");
   } catch (error) {
     res.status(404).json({ error: error.message });
   }

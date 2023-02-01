@@ -43,7 +43,7 @@ const register = async (req, res) => {
         last_name,
         profile_pic,
         born,
-        Address: {
+        address: {
           address_line,
           city,
           state,
@@ -58,7 +58,7 @@ const register = async (req, res) => {
         
       },
       {
-        include: [Address, EmailCode, RoleAdmin],
+        include: ['address', EmailCode, RoleAdmin],
       }
     );
 
@@ -150,9 +150,7 @@ const login = async (req, res) => {
 
     const user = await User.findOne({
       where: { email },
-      include: {
-        model: Address,
-      },
+      include: 'address'
     });
     if (!user) {
       return res.status(401).send({ msg: "Email or password is incorrect" });
