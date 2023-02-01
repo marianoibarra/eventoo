@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 90vh;
 }
 
 .containerform {
@@ -17,6 +18,7 @@
   margin-bottom: 26px;
   margin-left: 5px;
   border: 0px;
+  font-size: 1vw;
   outline: none;
   background-color: transparent;
   border-bottom: solid 2px var(--white-text);
@@ -31,7 +33,7 @@
 .title {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  font-size: 70px;
+  font-size: 5vw;
   line-height: 53px;
   color: var(--accent-color);
   margin-bottom: 3vh;
@@ -40,7 +42,7 @@
 .subTitle {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
-  font-size: 200%;
+  font-size: 2vw;
   line-height: 53px;
   color: var(--white-text);
   width: 30vw;
@@ -51,12 +53,13 @@
   color: var(--accent-color);
   border: 0;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1.3vw;
 }
 .btn2{
-    width: 90%;
-    height: 4vh;
-    border-radius: 5px;
+  width: 90%;
+  height: 4vh;
+  border-radius: 0.3vw;
+  margin: 0.3vw;
 }
 .containerhero {
   background: url("../../Assets/desenfoqueImage1.png");

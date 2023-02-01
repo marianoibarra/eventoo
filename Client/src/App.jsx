@@ -15,6 +15,7 @@ import Login from "./Pages/Login";
 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import Cart from "./Pages/Cart";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/create-user" element={<CreateUser />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/event" element={<Event />}></Route>
+        <Route path="/cart" element={<Cart />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
     </div>
