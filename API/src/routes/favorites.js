@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/", verifyToken, addFavorite);
 router.get("/", verifyToken, getFavorites);
-router.delete("/:id", verifyToken, deleteFavorite);
+router.delete("/", verifyToken, deleteFavorite);
 
 module.exports = router;
