@@ -35,8 +35,6 @@ const createEvent = async (req, res) => {
   } = req.body;
 
  
-
-
   try {
     // if (!name ||
     //     !description ||

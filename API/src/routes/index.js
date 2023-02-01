@@ -11,4 +11,5 @@ router.use("/bank-account", bankAccountMiddleware);
 router.use("/home", homeMiddleware)
 router.use("/favorites", favoritesMiddleware)
 
+
 module.exports = router;

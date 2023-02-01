@@ -1,7 +1,7 @@
 const { BankAccount } = require("../db");
 
 
-  const createBankAccount = async (req, res) => {
+const createBankAccount = async (req, res) => {
     try {
       const { name, CBU } = req.body;
       const userId  = req.userId
@@ -37,7 +37,7 @@ const getBankAccount = async (req, res) => {
       where: { UserId: req.userId },
     });
     return res.status(200).json({ bankAccounts });
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ error: "Error while retrieving bank accounts" });
   }
 };
@@ -74,7 +74,7 @@ const deleteBankAccount = async (req, res) => {
     }
     await BankAccount.destroy();
     return res.status(200).json({ message: "Bank account successfully removed" });
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ error: "Error deleting bank account"});
   }
 };
