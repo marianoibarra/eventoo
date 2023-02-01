@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const moment = require('moment')
 
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
@@ -67,8 +68,8 @@ Transaction.belongsToMany(User, { through: User_Transaction });
 User.belongsToMany(Event, { through: User_Event, as: 'events' });
 Event.belongsToMany(User, { through: User_Event, as: 'users' });         
 
-User.belongsToMany(Event, { through: 'Favorites' });
-Event.belongsToMany(User, { through: 'Favorites' });
+User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
+Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
 User.belongsToMany(Event, { through: Review, as: 'reviewedEvents' });
 Event.belongsToMany(User, { through: Review, as: 'reviewedBy' });
@@ -88,11 +89,12 @@ Event.belongsTo(Category)
 User.hasMany(BankAccount,{ onDelete: 'cascade'})
 BankAccount.belongsTo(User)
 
+BankAccount.hasMany(Event)
+Event.belongsTo(BankAccount)
+
 Address.hasMany(Event)
 Event.belongsTo(Address)
 
-BankAccount.hasMany(Event)
-Event.belongsTo(BankAccount)
 
 Event.hasMany(Ticket)
 Ticket.belongsTo(Event)
@@ -120,6 +122,40 @@ User.beforeUpdate(async function (user) {
     user.password = await bcrypt.hash(user.password, salt);
   }
 });
+
+Event.beforeFind((options) => {
+  options.where.isToday = (options.where.isToday === true || options.where.isToday === 'true');
+  options.where.isNextWeekend = (options.where.isNextWeekend === true || options.where.isNextWeekend === 'true');
+
+  if (options.where.isNextWeekend) {
+    options.where.start_date = {
+      [Sequelize.Op.or]: [
+        {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
+        {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
+      ]
+    };
+  }
+
+  if (options.where.isToday) {
+    options.where.start_date = {
+      [Sequelize.Op.eq]: moment().format("YYYY-MM-DD")
+    };
+  }
+
+  let exclude = [];
+  Object.keys(Event.rawAttributes).forEach((attribute) => {
+    if (Event.rawAttributes[attribute].references) {
+      exclude.push(attribute);
+    }
+  });
+
+  options.attributes = {
+    exclude: [...exclude, 'isToday', 'isNextWeekend']
+  }
+
+  delete options.where.isToday;
+  delete options.where.isNextWeekend;
+})
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña
 User.prototype.validPassword = async function (password) {

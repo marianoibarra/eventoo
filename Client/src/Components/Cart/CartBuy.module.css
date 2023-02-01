@@ -1,0 +1,43 @@
+.cart-container {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #ddd;
+  }
+  
+  button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .image{
+    width: 7vw;
+    height: max-content;
+  }
+
+  @media (max-width: 748px) {
+    .cart-container {
+      width: 100%;
+    }
+  }

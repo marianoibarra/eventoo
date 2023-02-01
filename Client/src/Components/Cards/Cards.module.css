@@ -1,0 +1,117 @@
+.Contenedor {
+    width: 100%;
+}
+
+.ContenedorDestacado {
+    /* width: 100%;
+    height: 50vh;
+    max-width: 1234px;
+    margin: auto; */
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 150px;
+    /* padding: 0 0 10px 20px; */
+}
+
+.EncabezadoPrincipal {
+    color: var(--Accent-color);
+    font-weight: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    padding: 20px 0;
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+/* .ContenedorDetalles {  
+    display: flex;
+    margin-top: 3%;
+  } */
+
+.ContenedorImagen {
+    margin: 0 auto;
+}
+
+.ContenedorImagen img {
+    max-width: 350px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50px;
+}
+
+.ContenedorInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    height: 300px;
+    text-align: center;
+    width: 550px;
+    border: 3px solid var(--accent-color);
+    border-radius: 15px;
+}
+
+.ContenedorInfo h3 {
+    font-weight: 600;
+    font-size: 40px;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.ContenedorInfo p {
+    width: 300px;
+    font-weight: 300;
+    font-size: 20px;
+    margin: 15px auto;
+    letter-spacing: 0.4px;
+}
+
+
+
+@media (max-width: 768px) {
+    .EncabezadoPrincipal {
+        max-width: unset;
+        margin: 0;
+    }
+
+    .ContenedorImagen {
+        flex: 1;
+        margin: unset;
+        margin-bottom: 15px;
+        margin-right: 30px;
+        width: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .ContenedorInfo {
+        flex: 1;
+        max-width: unset;
+        min-height: 100%;
+        justify-content: center;
+    }
+
+    .ContenedorInfo p {
+        max-width: 513px;
+    }
+
+    .ContenedorImagen img {
+        max-width: 511px;
+        max-height: 460px;
+        border-radius: unset;
+    }
+
+    .ContenedorDetalles {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .ContenedorDestacado{
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+    }
+}

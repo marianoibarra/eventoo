@@ -1,0 +1,1370 @@
+openapi: 3.0.3
+info:
+  title: Eventoo API
+  description: 
+    This is the Eventoo API documentation based on the OpenAPI 3.0 specification. **Version: 29/01/2023**
+  version: 29-ENE
+servers:
+  - url: "http://localhost:3001/"
+tags:
+  - name: /home
+    description: Requiere toda la informacion publica para mostrar en la home
+  - name: /user
+    description: Operar sobre el usuario
+  - name: /event
+    description: Operar sobre los eventos del usuario logueado
+  - name: /bank-account
+    description: Operar sobre las cuentas bancarias
+  - name: /favorites
+    description: EN PRUEBAS
+  - name: /transaction
+    description: EN CONSTRUCCION
+  - name: /reviews
+    description: EN CONSTRUCCION
+
+  
+paths:
+  /user/register:
+    post:
+      tags:
+        - /user
+      summary: Registro de usuarios
+      description: Crea la cuenta y envia al mail del usuario un codigo de 6 digitos para validar su email
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+                
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "User created successfully"
+                  id:
+                    type: string
+                    format: uuid
+                    example: "7aec1b42-7b5c-4c8d-9e5f-9b9c11b8f2b1"
+                  token: 
+                    type: string
+                    format: uuid
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        400: 
+          $ref: '#/components/responses/BadRequest'
+  /user/verify-email:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Verifica el codigo de 6 digitos enviado por email
+      description: ''
+      operationId: verifyEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailCode:
+                  type: string
+                  example: 406976
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: The code is valid
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404': 
+          description: Invalid code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: The code is invalid or has expired
+  /user/verify-email/resend:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Reenvia el codigo de 6 digitos enviado por email
+      description: ''
+      operationId: resendCodeEmail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Email code resended
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /user/login:
+    post:
+      tags:
+        - /user
+      summary: Loguearse mediante una cuenta local
+      description: ''
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: mariano@email.com
+                password:
+                  type: string
+                  format: password
+                  example: Test1234!
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "Logged in successfully"
+                  id:
+                    type: string
+                    format: uuid
+                    example: "7aec1b42-7b5c-4c8d-9e5f-9b9c11b8f2b1"
+                  token: 
+                    type: string
+                    format: uuid
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        '400':
+          description: Email or password is incorrect
+  /user/forgot-password:
+    post:
+      tags:
+        - /user
+      summary: Olvide mi contraseña
+      description: Envia al email del usuario un link al front con un token en params para resetear su contraseña
+      operationId: forgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: mariano@email.com
+      responses:
+        '200':
+          description: Email sended successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Email sended successfully
+        400: 
+          description: Email does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "Email does not exist"
+        500: 
+          description: Internal error
+  /user/reset-password/{emailToken}:
+    get:
+      tags:
+        - /user
+      summary: Chequea si el token recibido por email es valido y no está expirado
+      description: ''
+      operationId: CheckResetToken
+      parameters:
+        - name: emailToken
+          in: path
+          description: 'El token se debe obtener por params'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Se devuelve el nombre del usuario para poder brindarle una pantalla personalizada y un token que le brinda 10 minutos para ingresar su nueva contraseña, el mismo se usa en la proxima solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Juan
+                  changePassToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /user/reset-password/:
+    put:
+      tags:
+        - /user
+      summary: Recibe la nueva contraseña luego de haberse validado el token del email
+      description: ''
+      operationId: resetPass
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - changePassToken
+                - password
+              type: object
+              properties:
+                changePassToken:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                newPassword:
+                  type: string
+                  format: password
+                  example: NewPass123!
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Password changed successfully     
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /user/change-password/:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - /user
+      summary: Cambia la contraseña del usuario logueado
+      description: ''
+      operationId: changePass
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - password
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+                  example: NewPass123!
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Password changed successfully     
+        '400': 
+          description: No token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: No token
+        '401': 
+          description: This token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: This token is invalid or expired
+  /event:
+    post:
+      tags:
+        - /event
+      summary: Crea un nuevo evento
+      description: ""
+      operationId: createEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'          
+        '400':
+          description: Faltan datos obligatorios
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - /event
+      summary: Devuelve todos los eventos creados por el usuario logueado
+      description: ""
+      operationId: getEventCreator
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+                example:
+                  - name: "Fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "BBVA"
+                      cbu: "1234567890123456789012"
+                  - name: "Otra fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441es690e279"
+                      name: "Santander"
+                      cbu: "9876543210987654321098"
+                  - name: "Recital de rock"
+                    description: "Una recital muy bueno"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Jujuy 123"
+                      city: "Buenos Aires"
+                      state: "Buenos Aires"
+                      country: "Argentina"
+                      zip_code: "S1307"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de la musica"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "Galicia"
+                      cbu: "1234567890123456789012"
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /event/{eventId}:
+    put:
+      tags:
+        - /event
+      summary: Modifica un evento del usuario logueado
+      description: ""
+      operationId: modifyEvent
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a modificar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      requestBody:
+        description: Recibe cualquier propiedad del evento y las modifica sin alterar el resto, por ejemplo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: Nuevo nombre del evento
+                age_range: 
+                  type: string
+                  example: 'ALL PUBLIC'
+                parking: 
+                  type: string
+                  example: false
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Event'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Nuevo nombre del evento
+                      age_range: 
+                        type: string
+                        example: 'ALL PUBLIC'
+                      parking: 
+                        type: string
+                        example: false
+                        
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - /event
+      summary: Elimina un evento del usuario logueado
+      description: ""
+      operationId: deleteEvent
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a eliminar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Event 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2 removed successfully
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /bankAccount:
+    post:
+      tags:
+        - /bank-account
+      summary: Crear una nueva cuenta bancaria al usuario logueado
+      description: ""
+      operationId: createBank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'          
+        '400':
+          description: Faltan datos obligatorios
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - /bank-account
+      summary: Devuelve todas las cuentas bancarias del usuario logueado
+      description: ""
+      operationId: getBank
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+                example:
+                  - name: BBVA
+                    cbu: "1234657890123456789012"
+                  - name: Santander
+                    cbu:  "9876543210987654321098"
+                  - name: Galicia
+                    cbu:  "0001112223334455667788"
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /bankAccount/{eventId}:
+    put:
+      tags:
+        - /bank-account
+      summary: Modifica una cuenta bancaria del usuario logueado
+      description: ""
+      operationId: modifyBank
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a modificar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      requestBody:
+        description: Recibe cualquier propiedad del evento y las modifica sin alterar el resto, por ejemplo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: Nuevo nombre del evento
+                age_range: 
+                  type: string
+                  example: 'ALL PUBLIC'
+                parking: 
+                  type: string
+                  example: false
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Event'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Nuevo nombre del evento
+                      age_range: 
+                        type: string
+                        example: 'ALL PUBLIC'
+                      parking: 
+                        type: string
+                        example: false
+                        
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - /bank-account
+      summary: Elimina una cuenta bancaria del usuario logueado
+      description: ""
+      operationId: deleteBank
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a eliminar
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Event 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2 removed successfully
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+        
+  /favorites:
+    post:
+      tags:
+        - /favorites
+      summary: Agrega un evento a los favoritos del usuario logueado
+      description: ""
+      operationId: createFav
+      requestBody:
+        description: Recibe el ID del evento por body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: 
+                  type: string
+                  example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Faltan datos obligatorios
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - /favorites
+      summary: Devuelve todos los favoritos del usuario logueado
+      description: ""
+      operationId: getFav
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Event'
+                example:
+                  - name: "Fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "BBVA"
+                      cbu: "1234567890123456789012"
+                  - name: "Otra fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441es690e279"
+                      name: "Santander"
+                      cbu: "9876543210987654321098"
+                  - name: "Recital de rock"
+                    description: "Una recital muy bueno"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Jujuy 123"
+                      city: "Buenos Aires"
+                      state: "Buenos Aires"
+                      country: "Argentina"
+                      zip_code: "S1307"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de la musica"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "Galicia"
+                      cbu: "1234567890123456789012"
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /favorites/{eventId}:
+    delete:
+      tags:
+        - /favorites
+      summary: Elimina un favorito del usuario logueado
+      description: ""
+      operationId: deleteFav
+      parameters:
+        - name: eventId
+          in: path
+          description: ID del evento a quitar de favoritos
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Event 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2 removed successfully from favorites
+        '400':
+          description: El evento no le pertenece al usuario logueado
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /home/categories:
+    get:
+      tags:
+        - /home
+      summary: Devuelve todas las categorias con su respectiva modalidad para mostrar en la home
+      description: ""
+      operationId: getCategories
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Category'
+                example:
+                  - name: "Concerts"
+                    modality: "Presential"
+                  - name: "Fairs"
+                    modality: "Presential"
+                  - name: "Festivals"
+                    modality: "Presential"
+                  - name: "Business meetings"
+                    modality: "Presential"
+                  - name: "Exhibitions"
+                    modality: "Presential"
+                  - name: "Congresses"
+                    modality: "Presential"
+                  - name: "Conventions"
+                    modality: "Presential"
+                  - name: "Workshops"
+                    modality: "Presential"
+                  - name: "Sports"
+                    modality: "Presential"
+                  - name: "Birthday celebration"
+                    modality: "Presential"
+                  - name: "Weddings celebration"
+                    modality: "Presential"
+                  - name: "Religious celebration"
+                    modality: "Presential"
+                  - name: "Parties"
+                    modality: "Presential"
+                  - name: "Plays"
+                    modality: "Presential"
+                  - name: "Fashion shows"
+                    modality: "Presential"
+                  - name: "Infantiles"
+                    modality: "Presential"
+                  - name: "Seminars"
+                    modality: "Virtual"
+                  - name: "Conferences"
+                    modality: "Virtual"
+                  - name: "Congresses"
+                    modality: "Virtual"
+                  - name: "Talks"
+                    modality: "Virtual"
+                  - name: "Online games"
+                    modality: "Virtual"
+                  - name: "Streaming sessions"
+                    modality: "Virtual"
+                  - name: "Video transmissions"
+                    modality: "Virtual"
+                  - name: "Online workshops"
+                    modality: "Virtual"
+                  - name: "Online courses"
+                    modality: "Virtual"
+                  - name: "Art samples"
+                    modality: "Virtual"
+        '500':
+          description: Internal Error
+  /home/events:
+    get:
+      tags:
+        - /home
+      summary: Devuelve todos los publicos para mostrar en la home, y puede recibir por query cualquier filtro necesario
+      description: "Se puede pasar cualquier propiedad del evento por la cual se desea filtrar de forma combinada, como por ejemplo:"
+      operationId: getEvents
+      parameters: 
+        - name: city
+          in: query
+          description: Ciudad en la que se realiza
+          required: false
+          example: Rosario
+          schema:        
+            type: string
+        - name: state
+          in: query
+          description: Provincia en la que se realiza
+          required: false
+          example: Santa Fe
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: Pais en la que se realiza
+          required: false
+          example: Argentina
+          schema:
+            type: string
+        - name: isPaid
+          in: query
+          description: Si es pago o no
+          required: false
+          example: true
+          schema:
+            type: boolean
+        - name: disability_access
+          in: query
+          description: Si cuenta con acceso para discapacitados
+          required: false
+          example: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Event'
+                example:
+                  - name: "Fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "BBVA"
+                      cbu: "1234567890123456789012"
+                  - name: "Otra fiesta de cumpleaños"
+                    description: "Una fiesta de cumpleaños muy divertida"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Cordoba 3701"
+                      city: "Rosario"
+                      state: "Santa Fe"
+                      country: "Argentina"
+                      zip_code: "S2000"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de fiestas Los Pinos"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441es690e279"
+                      name: "Santander"
+                      cbu: "9876543210987654321098"
+                  - name: "Recital de rock"
+                    description: "Una recital muy bueno"
+                    cover_pic: "https://www.imagen.com/"
+                    address:
+                      address_line: "Jujuy 123"
+                      city: "Buenos Aires"
+                      state: "Buenos Aires"
+                      country: "Argentina"
+                      zip_code: "S1307"
+                    start_date: "2022-07-15"
+                    end_date: "2022-07-15"
+                    start_time: "20:00"
+                    end_time: "22:00"
+                    isPublic: true
+                    virtualURL: null
+                    isPremium: false
+                    isPaid: true
+                    age_range: "+18"
+                    guests_capacity: 100
+                    placeName: "Sala de la musica"
+                    disability_access: true
+                    parking: true
+                    smoking_zone: true
+                    pet_friendly: true
+                    bankAccountId:
+                      id: "d0043047-06a1-4659-91f5-c441e4d2e281"
+                      name: "Galicia"
+                      cbu: "1234567890123456789012"
+        '500':
+          description: Internal Error
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg: 
+                type: string
+                example: "You are not authenticated"
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    User:
+      allOf:
+        - type: object
+          required:
+            - email
+            - password
+            - first_name
+            - last_name
+            - born
+          properties:
+            email:
+              type: string
+              example: mariano@email.com
+            password:
+              type: string
+              format: password
+              example: Test1234!
+            first_name:
+              type: string
+              example: Mariano
+            last_name:
+              type: string
+              example: Ibarra
+            profile_pic:
+              type: string
+              example: https://www.imagen.com/
+            born:
+              type: string
+              format: date
+              example: '2023-01-01'
+        - $ref: '#/components/schemas/Address'
+        - type: object
+          required:
+            - email
+            - password
+            - first_name
+            - last_name
+            - born
+          properties:
+            userStatus:
+              type: integer
+              description: User Status
+              format: int32
+              example: 1
+            emailIsVerified:
+              type: boolean
+              example: false
+            isBanned:
+              type: boolean
+              example: false
+      xml:
+        name: user
+    Address:
+      required:
+        - address_line
+        - city
+        - state
+        - country
+        - zip_code
+      type: object
+      properties:
+        address_line:
+          type: string
+          example: "Cordoba 1234"
+        city:
+          type: string
+          example: Rosario
+        state:
+          type: string
+          example: Santa Fe
+        country:
+          type: string
+          example: Argentina
+        zip_code:
+          type: string
+          example: S2000
+      xml:
+        name: address
+    Event:
+      allOf:
+        - type: object
+          required:
+            - name
+            - description
+          properties:
+            name:
+              type: string
+              example: "Fiesta de cumpleaños"
+              description: Nombre del evento
+            description:
+              type: string
+              example: "Una fiesta de cumpleaños muy divertida"
+              description: Descripción del evento
+            cover_pic:
+              type: string
+              format: uri
+              example: "https://www.imagen.com/"
+        - $ref: '#/components/schemas/Address'
+        - type: object
+          required:
+            - start_date
+            - start_time
+            - isPublic
+            - age_range
+            - guests_capacity
+            - placeName
+          properties:
+            start_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de inicio del evento
+            end_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de fin del evento
+            start_time:
+              type: string
+              format: time
+              example: "20:00"
+              description: Hora de inicio del evento
+            end_time:
+              type: string
+              format: time
+              example: "22:00"
+              description: Hora de fin del evento
+            isPublic:
+              type: boolean
+              example: true
+              description: Indica si el evento es público o privado
+            virtualURL:
+              type: string
+              example: "https://example.com/evento123"
+              description: URL virtual del evento
+            isPremium:
+              type: boolean
+              example: false
+              description: Indica si el evento es premium
+            isPaid:
+              type: boolean
+              example: true
+              description: Indica si el evento es de pago
+            age_range:
+              type: string
+              enum:
+                - "ALL PUBLIC"
+                - "+13"
+                - "+16"
+                - "+18"
+              example: "+18"
+              description: Rango de edad permitido en el evento
+            guests_capacity:
+              type: integer
+              example: 100
+              description: Capacidad de invitados del evento
+            placeName:
+              type: string
+              example: "Sala de fiestas Los Pinos"
+              description: Lugar donde se llevará a cabo el evento
+            disability_access:
+              type: boolean
+              example: true
+              description: Si cuenta con acceso adaptados para personas con discapacidad
+            parking:
+              type: boolean
+              example: true
+              description: Si cuenta con estacionamiento
+            smoking_zone:
+              type: boolean
+              example: true
+              description: Si cuenta con sector fumadores
+            pet_friendly:
+              type: boolean
+              example: true
+              description: Si se permite asistir acompañado de mascotas
+            bankAccountId:
+              type: string
+              format: uuid
+              example: "d0043047-06a1-4659-91f5-c441e4d2e281"
+      xml:
+        name: event
+    BankAccount:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "BBVA"
+        cbu:
+          type: string
+          example: "1234567890123456789012"
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+        modality:
+          type: string
+    Error:
+      type: object
+      properties:
+        msg:
+          type: string
+      required:
+        - msg
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

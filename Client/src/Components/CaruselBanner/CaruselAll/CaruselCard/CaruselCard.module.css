@@ -1,0 +1,39 @@
+
+/*la propiedad relative permite que la card haga desplazamiento hacia arriba cuando se usa el hover*/
+
+.container_card {
+    position: relative;
+    bottom: 0px;
+    margin: 0 50px;
+    margin-top: 15%;
+    width: 380px;
+    height: 530px;
+    background-image: url('../../../../Assets/cardTest.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: brightness(45%);
+    display: flex;
+    align-items: end;
+    border-radius: 10px;
+    cursor: grab;
+    transition: .8s all ease;
+}
+
+.container_card:active{
+    cursor:grabbing;
+}
+
+.container_details {
+    width: 380px;
+    height: 100px;
+    background-color: var(--primary-color);
+    border-radius: 0 0 10px 10px;
+}
+
+
+.container_card:hover{
+    position: relative;
+    filter: brightness(100%);
+    bottom: 20px;
+    transition: .8s all ease;
+} 

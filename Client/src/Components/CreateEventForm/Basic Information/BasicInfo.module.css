@@ -1,0 +1,17 @@
+.info{
+    width: 70%;
+}
+
+.title{
+    color: var(--primary-color);
+    margin-top: 15px;
+}
+
+.text{
+    margin: 5px;
+}
+
+.overview{
+    outline: none;
+    height: 150px;
+}
