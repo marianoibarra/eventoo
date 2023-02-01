@@ -5,7 +5,7 @@ const FilterMode = () => {
   return (
     <div className={Style.containerFilterMode}>
       <div className={Style.looking}>
-        <h2>Looking For</h2>
+        <h2 className={Style.titleFilter}>Looking For</h2>
         <select className={Style.select_Looking} name="" id="">
           <option selected disabled hidden>Mode</option>
           <option value="">IN-Person</option>
@@ -13,7 +13,7 @@ const FilterMode = () => {
         </select>
       </div>
       <div className={Style.state}>
-        <h2>In</h2>
+        <h2 className={Style.titleFilter}>In</h2>
         <select className={Style.select_Looking} name="" id="">
           <option selected disabled hidden>Buenos Aires</option>
           <option value="">IN-Person</option>
@@ -21,7 +21,7 @@ const FilterMode = () => {
         </select>
       </div>
       <div className={Style.where}>
-        <h2>Where</h2>
+        <h2 className={Style.titleFilter}>Where</h2>
         <select className={Style.select_Looking} name="" id="">
           <option selected disabled hidden>Date</option>
           <option value="">IN-Person</option>
