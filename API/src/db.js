@@ -46,8 +46,6 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { 
   Event, 
-  User_Event,
-  User_Transaction,
   Transaction, 
   User, 
   Address, 
@@ -62,17 +60,30 @@ const {
 
 // Relaciones
 
-User.belongsToMany(Transaction, { through: User_Transaction });
-Transaction.belongsToMany(User, { through: User_Transaction });
-
-User.belongsToMany(Event, { through: User_Event, as: 'events' });
-Event.belongsToMany(User, { through: User_Event, as: 'users' });         
-
 User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
 Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
-User.belongsToMany(Event, { through: Review, as: 'reviewedEvents' });
-Event.belongsToMany(User, { through: Review, as: 'reviewedBy' });
+User.belongsToMany(Event, { through: Review, as: 'reviews' });
+Event.belongsToMany(User, { through: Review, as: 'reviews' });
+
+User.belongsToMany(Event, { 
+  through: Transaction,
+  foreignKey: 'eventId',
+  otherKey: 'buyerId',
+  as: 'transaction' 
+});
+Event.belongsToMany(User, {
+   through: Transaction, 
+   foreignKey: 'buyerId',
+   otherKey: 'eventId',
+   as: 'transaction' 
+});
+
+Transaction.hasMany(Ticket, {foreignKey: 'transactionId', as: 'tickets'})
+Ticket.belongsTo(Transaction, {foreignKey: 'transactionId', as: 'transactions'})
+
+User.hasMany(Event, {foreignKey: 'organizerId', as: 'organizer'})
+Event.belongsTo(User, {foreignKey: 'organizerId', as: 'organizer'})
 
 User.hasOne(EmailCode)
 EmailCode.belongsTo(User)
@@ -81,32 +92,24 @@ RoleAdmin.hasMany(User)
 User.belongsTo(RoleAdmin)
 
 Address.hasMany(User)
-User.belongsTo(Address)
+User.belongsTo(Address, {as: 'address'})
 
 Category.hasMany(Event)
-Event.belongsTo(Category)
+Event.belongsTo(Category, {as: 'category'})
 
-User.hasMany(BankAccount,{ onDelete: 'cascade'})
+User.hasMany(BankAccount,{as: 'bankAccount', onDelete: 'cascade'})
 BankAccount.belongsTo(User)
 
 BankAccount.hasMany(Event)
-Event.belongsTo(BankAccount)
+Event.belongsTo(BankAccount, {as: 'bankAccount'})
 
 Address.hasMany(Event)
-Event.belongsTo(Address)
-
-
-Event.hasMany(Ticket)
-Ticket.belongsTo(Event)
-
-Event.hasMany(Transaction)
-Transaction.belongsTo(Event)
+Event.belongsTo(Address, {as: 'address'})
 
 Event.hasMany(Review)
 Review.belongsTo(Event)
 
-Transaction.hasMany(Ticket)
-Ticket.belongsTo(Transaction)
+
 
 
 // Encripta la contraseña antes de crear y de actualizar el usuario
@@ -126,6 +129,12 @@ User.beforeUpdate(async function (user) {
 Event.beforeFind((options) => {
   options.where.isToday = (options.where.isToday === true || options.where.isToday === 'true');
   options.where.isNextWeekend = (options.where.isNextWeekend === true || options.where.isNextWeekend === 'true');
+  
+  if(options.where.name) {
+    options.where.name = {
+      [Sequelize.Op.iLike]: `%${options.where.name}%`
+    }
+  } 
 
   if (options.where.isNextWeekend) {
     options.where.start_date = {
@@ -133,7 +142,7 @@ Event.beforeFind((options) => {
         {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
         {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
       ]
-    };
+    };[Op.iLike]
   }
 
   if (options.where.isToday) {
