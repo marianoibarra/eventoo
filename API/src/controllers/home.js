@@ -246,10 +246,9 @@ const { Event, Address, Category, User } = require("../db");
 // };
 
 const getEventsPublic = async (req, res) => {
-
   try {
+    const queryParams = req.query;
 
-    const queryParams = req.query
     const searchParams = {
       name: null,
       description: null,
@@ -257,8 +256,6 @@ const getEventsPublic = async (req, res) => {
       end_date: null,
       start_time: null,
       end_time: null,
-      isPublic: null,
-      virtualURL: null,
       isPremium: null,
       isPaid: null,
       age_range: null,
@@ -273,59 +270,59 @@ const getEventsPublic = async (req, res) => {
       pet_friendly: null,
       isToday: null,
       isNextWeekend: null,
-      '$User.id$': queryParams.userId ? queryParams.userId : null,
-      '$Category.name$': queryParams.category ? queryParams.category : null,
-      '$Category.modality$': queryParams.modality ? queryParams.modality : null,
-      '$Address.address_line$': queryParams.address_line ? queryParams.address_line : null,
-      '$Address.city$': queryParams.city ? queryParams.city : null,
-      '$Address.state$': queryParams.state ? queryParams.state : null,
-      '$Address.country$': queryParams.country ? queryParams.country : null,
-      '$Address.zip_code$': queryParams.zip_code ? queryParams.zip_code : null,
+      "$users.id$": queryParams.userId ? queryParams.userId : null,
+      "$category.name$": queryParams.category ? queryParams.category : null,
+      "$category.modality$": queryParams.modality ? queryParams.modality : null,
+      "$Address.address_line$": queryParams.address_line ? queryParams.address_line: null,
+      "$Address.city$": queryParams.city ? queryParams.city : null,
+      "$Address.state$": queryParams.state ? queryParams.state : null,
+      "$Address.country$": queryParams.country ? queryParams.country : null,
+      "$Address.zip_code$": queryParams.zip_code ? queryParams.zip_code : null,
+    };
+
+    for (let prop in searchParams) {
+      if (queryParams.hasOwnProperty(prop)) {
+        searchParams[prop] = queryParams[prop];
+      }
+      if (searchParams[prop] === null) {
+        delete searchParams[prop];
+      }
     }
 
-    for(let prop in searchParams) {
-      if(queryParams.hasOwnProperty(prop)) {
-        searchParams[prop] = queryParams[prop]
-      }
-      if(searchParams[prop] === null) {
-        delete searchParams[prop]
-      }
-    }
-
-    searchParams.isPublic = true
+    searchParams.isPublic = true;
 
     const publicEvents = await Event.findAll({
       where: searchParams,
-      include: [
-        Address,
-        Category,
-        User,
-      ],
+      include: [Address, Category,
+      {
+        model: User,
+        as: 'users'
+      }],
     });
 
     res.json(publicEvents);
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: error.message });
   }
-
-}
+};
 
 const getCategories = async (req, res) => {
-
   try {
     const { Virtual } = req.body;
-    const categories = Virtual === "true"
-    ? await Category.findAll({ where: { modality: 'Virtual' } })
-    : Virtual === "false"
-    ? await Category.findAll({ where: { modality: 'Presential' } })
-    : await Category.findAll();
+    const categories =
+      Virtual === "true"
+        ? await Category.findAll({ where: { modality: "Virtual" } })
+        : Virtual === "false"
+        ? await Category.findAll({ where: { modality: "Presential" } })
+        : await Category.findAll();
     return res.status(200).json({ categories });
-    } catch (err) {
-    return res.status(500).json({ error: 'An error occurred while getting the categories' });
-    }
-    };
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ error: "An error occurred while getting the categories" });
+  }
+};
 
 module.exports = {
   // getByPrivacity,
@@ -339,5 +336,5 @@ module.exports = {
   // getThisWeekend,
   // getEventsByCategory,
   getCategories,
-  getEventsPublic
+  getEventsPublic,
 };
