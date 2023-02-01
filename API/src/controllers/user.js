@@ -25,6 +25,8 @@ const register = async (req, res) => {
       return res.status(400).send({ msg: "This email is already in use" });
     }
 
+    console.log(!regexp_password.test(password), password);
+
     if (!regexp_password.test(password)) {
       return res.status(400).send({
         msg: "This password does not meet the security requirements",
@@ -59,12 +61,8 @@ const register = async (req, res) => {
         include: [Address, EmailCode, RoleAdmin],
       }
     );
-    
-    const prueba = await newUser.getRoleAdmin()
 
-    console.log(prueba)
-
-    // sendEmail(newUser.email, code, newUser.name, "confirmEmail");
+    sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 
     const token = jwt.sign({ id: newUser.id }, process.env.SECRET, {
       expiresIn: "90d",
@@ -76,6 +74,7 @@ const register = async (req, res) => {
       token,
     });
   } catch (e) {
+    console.log(e)
     res.status(400).send(e.message);
   }
 };

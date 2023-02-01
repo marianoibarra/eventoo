@@ -397,7 +397,7 @@ const emailTemplates = {
                                       <tbody>
                                         <tr style="vertical-align: top">
                                           <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                            <a href="https://email.com/" title="Email" target="_blank">
+                                            <a href="mailto:notifications@eventoo.site" title="Email" target="_blank">
                                               <img src="https://cdn.tools.unlayer.com/social/icons/circle/email.png" alt="Email" title="Email" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                             </a>
                                           </td>
@@ -908,7 +908,7 @@ const emailTemplates = {
                                     <tbody>
                                       <tr style="vertical-align: top">
                                         <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                          <a href="https://email.com/" title="Email" target="_blank">
+                                          <a href="mailto:notifications@eventoo.site" title="Email" target="_blank">
                                             <img src="https://cdn.tools.unlayer.com/social/icons/circle/email.png" alt="Email" title="Email" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                           </a>
                                         </td>

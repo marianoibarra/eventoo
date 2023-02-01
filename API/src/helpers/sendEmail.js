@@ -399,7 +399,7 @@ const sendEmail = (to, url, name, template) => {
                                         <tbody>
                                           <tr style="vertical-align: top">
                                             <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                              <a href="https://email.com/" title="Email" target="_blank">
+                                              <a href="mailto:notifications@eventoo.site" title="Email" target="_blank">
                                                 <img src="https://cdn.tools.unlayer.com/social/icons/circle/email.png" alt="Email" title="Email" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                               </a>
                                             </td>
@@ -696,7 +696,7 @@ const sendEmail = (to, url, name, template) => {
                               <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Cabin',sans-serif;" align="left">
   
                                 <div style="color: #e5eaf5; line-height: 140%; text-align: center; word-wrap: break-word;">
-                                  <p style="font-size: 14px; line-height: 140%;"><strong>T H A N K S&nbsp; &nbsp;F O R&nbsp; &nbsp;S I G N I N G&nbsp; &nbsp;U P !</strong></p>
+                                <p style="font-size: 14px; letter-spacing: 3.5px; text-transform: uppercase; line-height: 140%;"><strong>Thanks for signing up!</strong></p>
                                 </div>
   
                               </td>
@@ -910,7 +910,7 @@ const sendEmail = (to, url, name, template) => {
                                       <tbody>
                                         <tr style="vertical-align: top">
                                           <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                            <a href="https://email.com/" title="Email" target="_blank">
+                                            <a href="mailto:notifications@eventoo.site" title="Email" target="_blank">
                                               <img src="https://cdn.tools.unlayer.com/social/icons/circle/email.png" alt="Email" title="Email" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                             </a>
                                           </td>
@@ -998,9 +998,9 @@ const sendEmail = (to, url, name, template) => {
   }
 
   var transporter = nodemailer.createTransport({
-    host: "smtp-mail.outlook.com",
+    host: "smtp.hostinger.com",
     secureConnection: false, 
-    port: 587,
+    port: 465,
     tls: {
        ciphers:'SSLv3'
     },
@@ -1011,7 +1011,7 @@ const sendEmail = (to, url, name, template) => {
 });
 
   var message = {
-    from: process.env.EMAIL_USER,
+    from: `Eventoo <${process.env.EMAIL_USER}>`,
     to,
     subject: subjectTemplates[template],
     text: "Plaintext version of the message",
