@@ -67,8 +67,8 @@ Transaction.belongsToMany(User, { through: User_Transaction });
 User.belongsToMany(Event, { through: User_Event, as: 'events' });
 Event.belongsToMany(User, { through: User_Event, as: 'users' });         
 
-User.belongsToMany(Event, { through: 'Favorites' });
-Event.belongsToMany(User, { through: 'Favorites' });
+User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
+Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
 User.belongsToMany(Event, { through: Review, as: 'reviewedEvents' });
 Event.belongsToMany(User, { through: Review, as: 'reviewedBy' });
