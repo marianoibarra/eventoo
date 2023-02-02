@@ -8,7 +8,7 @@
     "nodemon": "nodemon index.js",
     "migrate": "sequelize db:migrate",
     "start": "npm run nodemon",
-    "node": "node index.js"
+    "node": "node --trace-warnings index.js"
   },
   "author": "",
   "license": "ISC",
