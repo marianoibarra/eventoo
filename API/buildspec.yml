@@ -11,8 +11,7 @@ phases:
   build:
     commands:
       - echo Build started
-      - cd API
-      - node index.js
+      - npm run node
 artifacts:
   files:
     - API/package.json
