@@ -57,15 +57,7 @@ const register = async (req, res) => {
         RoleAdmin: {},
       },
       {
-<<<<<<< Updated upstream
         include: ['address', EmailCode, RoleAdmin],
-=======
-<<<<<<< Updated upstream
-        include: [Address, EmailCode, RoleAdmin],
-=======
-        include: ["address", EmailCode, RoleAdmin],
->>>>>>> Stashed changes
->>>>>>> Stashed changes
       }
     );
 
@@ -167,17 +159,7 @@ const login = async (req, res) => {
 
     const user = await User.findOne({
       where: { email },
-<<<<<<< Updated upstream
       include: 'address'
-=======
-<<<<<<< Updated upstream
-      include: {
-        model: Address,
-      },
-=======
-      include: "address",
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     });
     if (!user) {
       return res.status(401).send({ msg: "Email or password is incorrect" });
