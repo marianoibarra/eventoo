@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Build started
+      - npm run node
+artifacts:
+  files:
+    - package.json
+    - package-lock.json
+    - node_modules/**/*
