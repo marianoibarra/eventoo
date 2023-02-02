@@ -2,6 +2,13 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define('Transaction',{
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            allowNull: false,
+            unique: true,
+            defaultValue: DataTypes.UUIDV4,
+          },
         isPaid: {
             type: DataTypes.BOOLEAN,
             allowNull: true,

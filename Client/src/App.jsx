@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom'
+import axios from 'axios'
+//pages
 import CreateEvent from "./Pages/CreateEvent";
 import Landing from "./Pages/Landing";
 import Setting from "./Pages/Setting";
@@ -12,12 +14,28 @@ import Home from "./Pages/Home";
 import Event from "./Pages/Event";
 import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
-
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 import Cart from "./Pages/Cart";
 
+//libraries
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 function App() {
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    // const data = localStorage.getItem("data");
+    // dispatch(getDataUser(data))
+    axios.defaults.headers.common["authorization"] = "Bearer " + token;
+  }, [])
+  
+/*
+data:
+{name,
+email,
+image,
+}
+*/ 
   return (
     <div >
       <Routes>

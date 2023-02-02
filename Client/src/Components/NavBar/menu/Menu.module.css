@@ -3,6 +3,7 @@
   top: 0px;
   right: 0px;
   cursor: pointer;
+  
 }
 
 .menu {
@@ -18,10 +19,10 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
+  background-color: var(--ligth-background-color) ;
 }
 
 .menuIcon {
-  background-color: transparent;
   border: none;
   position: fixed;
   right: 20px;
