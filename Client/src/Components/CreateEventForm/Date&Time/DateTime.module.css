@@ -12,3 +12,7 @@
 .text{
     margin: 5px;
 }
+
+.input{
+    width: auto;
+}
