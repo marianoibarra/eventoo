@@ -4,6 +4,11 @@ require("dotenv").config();
 const fillTables = require('./src/helpers/fillTables.js');
 const port = process.env.PORT || 3001;
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception: ', err);
+  process.exit(1);
+});
+
 conn.sync({ alter: true })
   .then(() => fillTables())
   .then(() =>
