@@ -1,5 +1,6 @@
 ;const app = require('./src/app.js');
 const { conn } = require('./src/db.js');
+require("dotenv").config();
 const fillTables = require('./src/helpers/fillTables.js');
 const port = process.env.PORT || 3001;
 
