@@ -1,1 +1,1 @@
-install cd API && npm install
+install: cd API && npm install
