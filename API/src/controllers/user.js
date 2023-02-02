@@ -4,7 +4,7 @@ require("dotenv").config();
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
-
+console.log(process.env)
 const register = async (req, res) => {
   try {
     const {
@@ -25,8 +25,6 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).send({ msg: "This email is already in use" });
     }
-
-    console.log(!regexp_password.test(password), password);
 
     if (!regexp_password.test(password)) {
       return res.status(400).send({
