@@ -14,6 +14,6 @@ phases:
       - npm run node
 artifacts:
   files:
-    - package.json
-    - package-lock.json
-    - node_modules/**/*
+    - API/package.json
+    - API/package-lock.json
+    - API/node_modules/**/*
