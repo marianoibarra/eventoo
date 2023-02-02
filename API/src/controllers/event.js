@@ -115,9 +115,19 @@ const createEvent = async (req, res) => {
       await event.setCategory(categoryFromDB);
     }
 
+<<<<<<< Updated upstream
     const organizer = await User.findByPk(req.userId)
 
     await event.setOrganizer(organizer);
+=======
+<<<<<<< Updated upstream
+    await event.addUsers(req.userId, { through: { role: "CREATOR" } });
+=======
+    const organizer = await User.findByPk(userId)
+
+    await event.setOrganizer(organizer);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
     await event.reload({
       include: [
