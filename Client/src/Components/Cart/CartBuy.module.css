@@ -21,16 +21,9 @@
   }
   
   th {
-    background-color: #ddd;
+    background-color: var(--primary-color);
   }
   
-  button {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
   .image{
     width: 20vw;
     height: max-content;
