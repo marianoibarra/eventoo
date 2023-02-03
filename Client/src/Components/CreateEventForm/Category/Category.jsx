@@ -1,17 +1,22 @@
 import React, {useState} from 'react';
 import style from './Category.module.css'
+import Map from './Map';
 
 const categoriesPresencial = [
-    "Conferencia",
-    "Seminario",
-    "Taller",
-    "Exposición",
+    "Concert",
+    "Food",
+    "Exhibitions",
+    "Sports",
+    "Music",
+    "Movies",
   ];
   
   const categoriesOnline = [
     "Webinar",
-    "Curso en línea",
+    "Online course",
     "Streaming",
+    "Talks",
+    "Art Samples",
   ];
   
 //   const EventTypeSelect = () => {
@@ -21,6 +26,7 @@ function Category(){
 
     const [selectedType, setSelectedType] = useState("");
     const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
   
     const handleTypeChange = (event) => {
       setSelectedType(event.target.value);
@@ -33,6 +39,10 @@ function Category(){
       }
     };
 
+    // const handleCategoryChange = (event) => {
+    //   setSelectedCategory(event.target.value);
+    // };
+
     return(
         <div className={style.info}>
             <h2 className={style.title}>Choose a category and access</h2>
@@ -44,19 +54,37 @@ function Category(){
             </select>
             <div>
             {categories.length > 0 && (
-            <label>
+            <div>
              Category:
-             <select>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-            </select>
-            </label>
-             )}
+              <select>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
-           
+            )}
+            {selectedCategory !== "" && (
+            <div>
+              <div>
+                {categories.find((category) => category.value === selectedCategory)
+                .placeholder}:
+                 <input type="text" />
+              </div>
+            </div>
+            )}
+             {selectedType !== "" && (
+           <div>
+              <div>
+                {selectedType === "Presencial"
+               ? <Map/>
+                : "URL:"}
+                <input type="text" />
+              </div>
+             </div>
+            )}
+          </div>
         </div>
     )
 };
