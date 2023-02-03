@@ -22,7 +22,7 @@
 
 .looking,
 .state,
-.where {
+.search {
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -32,13 +32,14 @@
     background-color: var(--primary-color);
     border-right: 2px solid var(--accent-color);
     z-index: 1;
+    transition: .5s all ease;
 }
 
 .looking {
     border-radius: 15px 0 0 15px;
 }
 
-.where {
+.search {
     border-radius: 0 15px 15px 0;
 }
 
@@ -61,8 +62,14 @@
     user-select: none;
 }
 
-option {
+.opcionSelect {
     font-size: 20px;
     color: var(--white-text);
     user-select: none;
+}
+
+.noVisibility {
+    width: 0vw;
+    opacity: 0;
+    transition: .5s all ease;
 }
