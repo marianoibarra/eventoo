@@ -28,7 +28,9 @@ const getEventsPublic = async (req, res) => {
       "$organizer.id$": queryParams.organizer ? queryParams.organizer : null,
       "$category.name$": queryParams.category ? queryParams.category : null,
       "$category.modality$": queryParams.modality ? queryParams.modality : null,
-      "$address.address_line$": queryParams.address_line ? queryParams.address_line: null,
+      "$address.address_line$": queryParams.address_line
+        ? queryParams.address_line
+        : null,
       "$address.city$": queryParams.city ? queryParams.city : null,
       "$address.state$": queryParams.state ? queryParams.state : null,
       "$address.country$": queryParams.country ? queryParams.country : null,
@@ -49,27 +51,27 @@ const getEventsPublic = async (req, res) => {
     const publicEvents = await Event.findAll({
       where: searchParams,
       include: [
-        'bankAccount',
+        "bankAccount",
         {
           model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
           model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
           model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
+          as: "category",
+          attributes: ["name", "modality"],
         },
       ],
     });
 
-    console.log(publicEvents);
     res.json(publicEvents);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: error.message });
   }
 };
@@ -91,7 +93,18 @@ const getCategories = async (req, res) => {
   }
 };
 
+const getEventById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = await Event.findByPk(id);
+    res.json(event);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCategories,
   getEventsPublic,
+  getEventById,
 };
