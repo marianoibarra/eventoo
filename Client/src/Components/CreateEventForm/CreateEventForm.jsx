@@ -5,6 +5,7 @@ import BasicInfo from './Basic Information/BasicInfo'
 import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
+import Tickets from './Tickets/Tickets';
 
 function Form(){
     return(
@@ -25,6 +26,8 @@ function Form(){
           <Category/>
           <div className={style.split}></div>
           <DateTime/>
+          <div className={style.split}></div>
+          <Tickets/>
           <div className={style.footerForm}>
             <button className={style.btnprimario}>Cancel</button>
             <button className={style.btnprimario}>Save & Next</button>
