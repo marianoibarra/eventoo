@@ -151,9 +151,66 @@ const createEvent = async (req, res) => {
 
 const getEventByUser = async ({ userId }, res) => {
   try {
-    
+        const userEventsCreator = await User_Event.findAll({
+      where: {
+        [Op.and]: [{ UserId: req.userId }, { role: "CREATOR" }],
+      },
+    });
 
+    const userEventsGuest = await User_Event.findAll({
+      where: {
+        [Op.and]: [{ UserId: req.userId }, { role: "GUEST" }],
+      },
+    });
 
+    if (userEventsCreator.length === 0 && userEventsGuest.length === 0)
+      return res.status(500).send("You do not have any events");
+
+    const allMyEvents = [];
+
+    for (let e of userEventsCreator) {
+      let eventByCreator = await Event.findOne({
+        where: {
+          id: e.EventId,
+        },
+        include: [
+          BankAccount,
+          Address,
+          Category,
+          {
+            model: User,
+            as: "users",
+            through: {
+              attributes: ["role"],
+            },
+          },
+        ],
+      });
+
+      allMyEvents.push({ ...eventByCreator.toJSON(), role: "CREATOR" });
+    }
+
+    for (let e of userEventsGuest) {
+      let eventByGuest = await Event.findOne({
+        where: {
+          id: e.EventId,
+        },
+        include: [
+          BankAccount,
+          Address,
+          Category,
+          {
+            model: User,
+            as: "users",
+            through: {
+              attributes: ["role"],
+            },
+          },
+        ],
+      });
+      allMyEvents.push({ ...eventByGuest.toJSON(), role: "GUEST" });
+    }
+    res.json(allMyEvents);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
