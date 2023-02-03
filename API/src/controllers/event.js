@@ -152,13 +152,12 @@ const createEvent = async (req, res) => {
 };
 
 const getEventByUser = async ({ userId }, res) => {
-  try {
-    
+ 
 
 
   } catch (error) {
     res.status(500).json({ msg: error.message });
-  }
+}
 };
 
 const modifyEvent = async (req, res) => {
