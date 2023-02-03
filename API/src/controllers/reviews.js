@@ -6,9 +6,24 @@ const {
 
 
 const addReview = async (req,res) => {
-    const { id } = req.body;
+   
     const userId  = req.userId;
-  
+    const { id, stars, comment } = req.body;
+    try {
+
+    // const user = await User.findByPk(userId);
+    // const event = await Event.findByPk(id);
+    const newReview = await Review.create({
+        id: id,
+        stars:stars ,
+        comment: comment,
+        user: userId
+    })
+
+        
+    } catch (error) {
+        res.status(500).json({ msg: error.message })
+    }
 };
 
 const getReviews =  async (req,res) => {
