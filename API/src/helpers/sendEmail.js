@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+require("dotenv").config();
 
 const sendEmail = (to, url, name, template) => {
 

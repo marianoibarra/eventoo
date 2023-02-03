@@ -115,11 +115,9 @@ const createEvent = async (req, res) => {
       await event.setCategory(categoryFromDB);
     }
 
-
     const organizer = await User.findByPk(req.userId)
 
     await event.setOrganizer(organizer);
-
 
     await event.reload({
       include: [
@@ -152,8 +150,34 @@ const createEvent = async (req, res) => {
 };
 
 const getEventByUser = async ({ userId }, res) => {
- 
-}
+  try {
+    const events = await Event.findAll({
+      where: {
+        organizerId: userId
+      },
+      include: [
+        'bankAccount',
+        {
+          model: Address,
+          as: 'address',
+          attributes: { exclude: ['id'] }
+        },{
+          model: User,
+          as: 'organizer',
+          attributes: ["id", "name", "last_name", "profile_pic"] 
+        },{
+          model: Category,
+          as: 'category',
+          attributes: ["name", "modality"] 
+        },
+    ]})
+    res.json(events);
+
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 const modifyEvent = async (req, res) => {
   const { id } = req.params;
   const {
