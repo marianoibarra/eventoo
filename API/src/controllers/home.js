@@ -66,6 +66,7 @@ const getEventsPublic = async (req, res) => {
       ],
     });
 
+    console.log(publicEvents);
     res.json(publicEvents);
   } catch (error) {
     console.log(error);
@@ -91,16 +92,6 @@ const getCategories = async (req, res) => {
 };
 
 module.exports = {
-  // getByPrivacity,
-  // getEventsByState,
-  // getPaidEvents,
-  // getPublicEvents,
-  // getThisWeekend,
-  // getEventsToday,
-  // getByAgeRange,
-  // getByAgeRange,
-  // getThisWeekend,
-  // getEventsByCategory,
   getCategories,
   getEventsPublic,
 };

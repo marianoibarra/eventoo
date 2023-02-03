@@ -1,9 +1,10 @@
 const { User, Address, EmailCode, RoleAdmin } = require("../db");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
-
+console.log(process.env)
 const register = async (req, res) => {
   try {
     const {
@@ -24,8 +25,6 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).send({ msg: "This email is already in use" });
     }
-
-    console.log(!regexp_password.test(password), password);
 
     if (!regexp_password.test(password)) {
       return res.status(400).send({
@@ -54,8 +53,7 @@ const register = async (req, res) => {
           code: code,
           expiration: expiration,
         },
-        RoleAdmin:{}
-        
+        RoleAdmin: {},
       },
       {
         include: ['address', EmailCode, RoleAdmin],
@@ -72,9 +70,15 @@ const register = async (req, res) => {
       msg: "User created successfully",
       id: newUser.id,
       token,
+      data: {
+        name,
+        last_name,
+        email,
+        profile_pic,
+      },
     });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(400).send(e.message);
   }
 };
@@ -88,7 +92,7 @@ const resendEmailCode = async (req, res) => {
 
     sendEmail(user.email, newCode, newUser.name, "confirmEmail");
 
-    res.send({msg: "Email code resended"})
+    res.send({ msg: "Email code resended" });
   } catch (e) {
     res.status(400).send(e.message);
   }
@@ -102,38 +106,42 @@ const verifyEmailCode = async (req, res) => {
         where: {
           id: req.userId,
         },
-        attributes: ['id'],
+        attributes: ["id"],
         include: {
           model: EmailCode,
           where: {
-            code: emailCode
+            code: emailCode,
           },
           attributes: ["code", "expiration"],
         },
-      }, {
+      },
+      {
         raw: true,
-        nested: true
+        nested: true,
       }
-  );
+    );
 
-    
-  if(!userWithEmailCode) {
-    return res.status(401).send({ isValid: false, msg: "The code is invalid or has expired" })
-  }
-    
-  const expiration = new Date(userWithEmailCode.EmailCode.expiration);
-  const now = new Date();
-  if (now > expiration) {
-    return res.status(401).send({ isValid: false, msg: "The code is invalid or has expired" })
-  } 
+    if (!userWithEmailCode) {
+      return res
+        .status(401)
+        .send({ isValid: false, msg: "The code is invalid or has expired" });
+    }
 
-  await userWithEmailCode.update({emailIsVerify: true})
+    const expiration = new Date(userWithEmailCode.EmailCode.expiration);
+    const now = new Date();
+    if (now > expiration) {
+      return res
+        .status(401)
+        .send({ isValid: false, msg: "The code is invalid or has expired" });
+    }
 
-  userWithEmailCode.getEmailCode().then(emailCode => {
-    emailCode.destroy();
-  });
+    await userWithEmailCode.update({ emailIsVerify: true });
 
-  res.send({ isValid: true, msg: "The code is valid" });
+    userWithEmailCode.getEmailCode().then((emailCode) => {
+      emailCode.destroy();
+    });
+
+    res.send({ isValid: true, msg: "The code is valid" });
   } catch (e) {
     console.log(e);
     res.status(400).send(e.message);
@@ -165,13 +173,24 @@ const login = async (req, res) => {
       expiresIn: "90d",
     });
 
-    return res.send({ msg: "Logged in successfully", id: user.id, token });
+    return res.send({
+      msg: "Logged in successfully",
+      id: user.id,
+      token,
+      data: {
+        name: user.name,
+        last_name: user.last_name,
+        email: user.email,
+        profile_pic: user.profile_pic
+      },
+    });
   } catch (error) {
     return res.status(500).send({ msg: "Internal server error" });
   }
 };
 
 const verifyToken = (req, res, next) => {
+  "6se74fd7s8f";
   const { authorization } = req.headers;
   if (authorization) {
     const token = authorization.split(" ")[1];
@@ -214,7 +233,7 @@ const forgotPassword = async (req, res) => {
       user.name,
       "resetPassword"
     );
-    res.send({msg: "Email sended successfully"});
+    res.send({ msg: "Email sended successfully" });
   } catch (error) {
     res.status(501).send(error.message);
   }
@@ -239,6 +258,7 @@ const checkResetToken = async (req, res) => {
       res.status(400).json({ msg: "No token" });
     }
   } catch (error) {
+    
     res.status(401).json({ msg: "This token is invalid or expired" });
   }
 };
@@ -252,7 +272,8 @@ const resetPassword = async (req, res) => {
 
       const user = await User.findOne({ where: { id } });
 
-      if (!user) return res.status(401).json({ msg: "Invalid token or expired" });
+      if (!user)
+        return res.status(401).json({ msg: "Invalid token or expired" });
 
       await user.update({
         password: newPassword,
@@ -290,5 +311,5 @@ module.exports = {
   test,
   changePassword,
   verifyEmailCode,
-  resendEmailCode
+  resendEmailCode,
 };

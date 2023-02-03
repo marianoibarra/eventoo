@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Sequelize } = require("sequelize");
+const { Sequelize, SequelizeScopeError } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -63,8 +63,10 @@ const {
 User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
 Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
-User.belongsToMany(Event, { through: Review, as: 'reviews' });
-Event.belongsToMany(User, { through: Review, as: 'reviews' });
+
+User.belongsToMany(Event, { through: 'Reviews', as: 'reviews' });
+Event.belongsToMany(User, { through: 'Reviews', as: 'reviews' });
+
 
 User.belongsToMany(Event, { 
   through: Transaction,
