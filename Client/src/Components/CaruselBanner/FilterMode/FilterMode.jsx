@@ -3,13 +3,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
+import { categorieSlice } from '../../../Slice/Filter/categorieSlice.js';
 import Style from './FilterMode.module.css'
 
 const FilterMode = () => {
-  const dispatch = useDispatch();//                      STATE GLOBAL.REDUCER.PROPIEDADREDUCER
-  const { categories, loading, error } = useSelector(state => state.categories.categories);
+  const dispatch = useDispatch();//                      
+  const { categories, loading } = useSelector(state => state.categories.categories);
   const [selectedModality, setSelectedModality] = useState(null);
   const [filteredCategories, setFilteredCategories] = useState([]);
+
 
   useEffect(() => {
     dispatch(axiosModeCategories());
@@ -25,6 +27,10 @@ const FilterMode = () => {
     setSelectedModality(event.target.value);
   };
 
+  const handleSelectFilter = event => {
+    dispatch(categorieSlice.actions.selectedFilter(event.target.value));
+  }
+
   return (
     <div className={Style.containerFilterMode}>
 
@@ -36,7 +42,7 @@ const FilterMode = () => {
           <option value="Virtual">virtual</option>
         </select>
         {selectedModality && (
-          <select className={Style.select_Looking} >
+          <select className={Style.select_Looking} onChange={handleSelectFilter} >
             {filteredCategories.map(c => (
               <option className={Style.opcionSelect} key={c.id} value={c.name}>{c.name}</option>
             ))}
