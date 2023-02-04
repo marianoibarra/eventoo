@@ -10,7 +10,7 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-conn.sync({ force: false })
+conn.sync({ force: true })
   .then(() => fillTables())
   .then(() =>
     app.listen(port, () => console.log(`Listening on port ${port}!`))
