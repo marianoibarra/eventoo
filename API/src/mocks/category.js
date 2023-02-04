@@ -1,5 +1,5 @@
 const categoryMock = [
-  { name: "Concerts", modality: 'Presential'},
+  { name: "Conciertossss", modality: 'Presential'},
   { name: "Fairs", modality: 'Presential'},
   { name: "Festivals", modality: 'Presential'},
   { name: "Business meetings", modality: 'Presential'},
