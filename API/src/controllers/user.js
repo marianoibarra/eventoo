@@ -56,7 +56,7 @@ const register = async (req, res) => {
         RoleAdmin: {},
       },
       {
-        include: ['address', EmailCode, RoleAdmin],
+        include: ["address", EmailCode, RoleAdmin],
       }
     );
 
@@ -158,7 +158,7 @@ const login = async (req, res) => {
 
     const user = await User.findOne({
       where: { email },
-      include: 'address'
+      include: "address",
     });
     if (!user) {
       return res.status(401).send({ msg: "Email or password is incorrect" });
@@ -181,7 +181,7 @@ const login = async (req, res) => {
         name: user.name,
         last_name: user.last_name,
         email: user.email,
-        profile_pic: user.profile_pic
+        profile_pic: user.profile_pic,
       },
     });
   } catch (error) {
@@ -258,7 +258,6 @@ const checkResetToken = async (req, res) => {
       res.status(400).json({ msg: "No token" });
     }
   } catch (error) {
-    
     res.status(401).json({ msg: "This token is invalid or expired" });
   }
 };
@@ -301,6 +300,52 @@ const changePassword = async (req, res) => {
   res.send("Password changed successfully");
 };
 
+const modifyUser = async (req, res) => {
+  const userId = req.userId;
+  const {
+    name,
+    last_name,
+    profile_pic,
+    born,
+    address_line,
+    city,
+    state,
+    country,
+    zip_code,
+  } = req.body;
+  try {
+    const user = await User.findByPk(userId);
+
+    if (address_line && city && state && country && zip_code) {
+      const newAddress = await Address.create({
+        address_line,
+        city,
+        state,
+        country,
+        zip_code,
+      });
+      await user.setAddress(newAddress);
+    }
+    await user.update({
+      name,
+      last_name,
+      profile_pic,
+      born,
+    });
+    await user.reload({
+      include: [
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        }
+      ],
+    });
+    res.json({ msg: "successful modification", data: user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   register,
   login,
@@ -312,4 +357,5 @@ module.exports = {
   changePassword,
   verifyEmailCode,
   resendEmailCode,
+  modifyUser
 };
