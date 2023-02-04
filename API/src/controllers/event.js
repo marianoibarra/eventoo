@@ -1,7 +1,6 @@
 const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
-
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -34,7 +33,6 @@ const createEvent = async (req, res) => {
     bankAccount,
   } = req.body;
 
- 
   try {
     // if (!name ||
     //     !description ||
@@ -99,8 +97,9 @@ const createEvent = async (req, res) => {
           state,
           country,
           zip_code,
-        }
-      },{ include: ['address'] }
+        },
+      },
+      { include: ["address"] }
     );
 
     if (bankAccount) {
@@ -115,30 +114,32 @@ const createEvent = async (req, res) => {
       await event.setCategory(categoryFromDB);
     }
 
-    const organizer = await User.findByPk(req.userId)
+    const organizer = await User.findByPk(req.userId);
 
     await event.setOrganizer(organizer);
 
     await event.reload({
       include: [
-        'bankAccount',
+        "bankAccount",
         {
           model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
-          model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
-          model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
+          as: "address",
+          attributes: { exclude: ["id"] },
         },
-    ]});
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
 
     return res.status(201).json(event);
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -153,26 +154,28 @@ const getEventByUser = async ({ userId }, res) => {
   try {
     const events = await Event.findAll({
       where: {
-        organizerId: userId
+        organizerId: userId,
       },
       include: [
-        'bankAccount',
+        "bankAccount",
         {
           model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
-          model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
-          model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
+          as: "address",
+          attributes: { exclude: ["id"] },
         },
-    ]})
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
     res.json(events);
-
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -205,7 +208,7 @@ const modifyEvent = async (req, res) => {
     parking,
     smoking_zone,
     pet_friendly,
-    bankAccount
+    bankAccount,
   } = req.body;
   try {
     const event = await Event.findByPk(id);
@@ -230,7 +233,7 @@ const modifyEvent = async (req, res) => {
         country,
         zip_code,
       });
-      await event.setAddress(newAddress); 
+      await event.setAddress(newAddress);
     }
 
     await event.update({
@@ -257,19 +260,21 @@ const modifyEvent = async (req, res) => {
 
     await event.reload({
       include: [
-        'bankAccount',
+        "bankAccount",
         {
           model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
           model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
           model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
+          as: "category",
+          attributes: ["name", "modality"],
         },
       ],
     });
@@ -284,8 +289,11 @@ const deleteEvent = async (req, res) => {
   const { id } = req.params;
   try {
     const eventToBeDeleted = await Event.findByPk(id);
-    await eventToBeDeleted.destroy();
-    res.send("Event removed successfully");
+    await eventToBeDeleted.destroy(); 
+    const idDeleted = await Event.findByPk(id);
+    idDeleted
+      ? res.send("Sorry! The event could not be deleted. Please, try again.")
+      : res.send("Event removed successfully");
   } catch (error) {
     res.status(404).json({ error: error.message });
   }

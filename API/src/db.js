@@ -3,7 +3,7 @@ const { Sequelize, SequelizeScopeError } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
-const moment = require('moment')
+const moment = require('moment');
 
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;

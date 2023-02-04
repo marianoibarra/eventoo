@@ -4,7 +4,7 @@ require("dotenv").config();
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
-console.log(process.env)
+
 const register = async (req, res) => {
   try {
     const {

@@ -96,7 +96,29 @@ const getCategories = async (req, res) => {
 const getEventById = async (req, res) => {
   const { id } = req.params;
   try {
-    const event = await Event.findByPk(id);
+    const event = await Event.findOne({
+      where: {
+        id,
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
     res.json(event);
   } catch (error) {
     res.status(404).json({ error: error.message });
