@@ -19,13 +19,16 @@ import Cart from "./Pages/Cart";
 //libraries
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import { setUser } from "./Slice/User/UserSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
-
+const dispatch=  useDispatch()
   useEffect(() => {
     const token = localStorage.getItem("token");
-    // const data = localStorage.getItem("data");
-    // dispatch(getDataUser(data))
+    const data = localStorage.getItem("data");
+    const object = JSON.parse(data);
+    dispatch(setUser(object))
     axios.defaults.headers.common["authorization"] = "Bearer " + token;
   }, [])
   
