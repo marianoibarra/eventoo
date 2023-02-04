@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 
-const categoriesUrl = 'https://eventoo-api.onrender.com/home/categories'
+const categoriesUrl = 'http://api.eventoo.online/home/categories'
 
 export const axiosModeCategories = createAsyncThunk(
   'categories/axiosModeCategories',
