@@ -22,6 +22,11 @@
     scrollbar-width: none;
 } */
 
+.container_inPerson,
+.container_online{
+    margin-top: 5%;
+}
+
 .carusel_cards{
     display: flex;
     flex-wrap: nowrap;
