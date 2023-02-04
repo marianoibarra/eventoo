@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   height: 90%;
+
 }
 
 .containerform {
@@ -11,6 +12,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .container_input {
@@ -41,7 +43,7 @@
   font-size: 5vw;
   line-height: 63px;
   color: var(--accent-color);
-  margin-bottom: 3vh;
+  margin-bottom: 8vh;
 }
 
 .subTitle {
@@ -79,8 +81,36 @@
   flex-direction: column;
   width: 41vw;
   align-items: center;
+  justify-content: center;
 }
 
-#btnCreate {
-  margin-bottom: 3vw;
+
+
+.or{
+  width: 10vw;
+  border-bottom: solid 2px var(--white-text);
+  position: relative;
+  bottom: 0.7vw;
+  margin:0 0.2vw 0 0.2vw ;
+}
+.or2{
+  margin: 1vw;
+  display: flex;
+  flex-direction: row;
+  font-size: 1.4vw;
+  color: var(--white-text);
+  font-weight: 100;
+}
+.or3{
+  background-position-x: 5px;
+}
+
+.errorMessage {
+  padding: 10px;
+  color: white;
+  background-color: #ff5733;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
 }
