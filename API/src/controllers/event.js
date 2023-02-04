@@ -212,21 +212,24 @@ const modifyEvent = async (req, res) => {
   } = req.body;
   const userId = req.userId;
   try {
-    const event = await Event.findByPk(id);
-
-
+    const event = await Event.findOne({
+      where: { id },
+      include: "organizer",
+    });
+   
+    if(event.organizer.id===userId) {
       if (bankAccount) {
         const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
         await event.setBankAccount(bankAccountFromDB);
       }
-
+  
       if (category) {
         const categoryFromDB = await Category.findOne({
           where: { name: category },
         });
         await event.setCategory(categoryFromDB);
       }
-
+  
       if (address_line && city && state && country && zip_code) {
         const newAddress = await Address.create({
           address_line,
@@ -235,56 +238,56 @@ const modifyEvent = async (req, res) => {
           country,
           zip_code,
         });
-        await event.setAddress(newAddress)
+        await event.setAddress(newAddress);
       }
-
-  await event.update({
-    name,
-    description,
-    start_date,
-    end_date,
-    start_time,
-    end_time,
-    isPublic,
-    category,
-    virtualURL,
-    isPremium,
-    isPaid,
-    age_range,
-    guests_capacity,
-    placeName,
-    cover_pic,
-    disability_access,
-    parking,
-    smoking_zone,
-    pet_friendly,
-  });
-
-  await event.reload({
-    include: [
-      "bankAccount",
-      {
-        model: Address,
-        as: "address",
-        attributes: { exclude: ["id"] },
-      },
-      {
-        model: User,
-        as: "organizer",
-        attributes: ["id", "name", "last_name", "profile_pic"],
-      },
-      {
-        model: Category,
-        as: "category",
-        attributes: ["name", "modality"],
-      },
-    ],
-  });
-
-  res.send({ msg: "Data updated successfully", data: event });
-
-     
-   
+  
+      await event.update({
+        name,
+        description,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        isPublic,
+        category,
+        virtualURL,
+        isPremium,
+        isPaid,
+        age_range,
+        guests_capacity,
+        placeName,
+        cover_pic,
+        disability_access,
+        parking,
+        smoking_zone,
+        pet_friendly,
+      });
+  
+      await event.reload({
+        include: [
+          "bankAccount",
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+          {
+            model: User,
+            as: "organizer",
+            attributes: ["id", "name", "last_name", "profile_pic"],
+          },
+          {
+            model: Category,
+            as: "category",
+            attributes: ["name", "modality"],
+          },
+        ],
+      });
+  
+      res.send({ msg: "Data updated successfully", data: event });
+    } else {
+      res.status(500).send("Sorry! You can not modify this event")
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
