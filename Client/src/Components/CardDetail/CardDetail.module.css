@@ -1,4 +1,4 @@
-.containergeneral {
+.containertop {
     width: 80vw;
     margin: 0 auto;
     margin-top: 70px;
@@ -6,47 +6,117 @@
 
 .containerimage {
     width: 100%;
+    height: 60vh;
     margin: 0 auto;
 }
 
 .containerimage h1 {
     color: var(--primary-color);
     font-weight: 900;
-    font-size: 3.2rem;
+    font-size: 4.2vw;
 }
 
 .image {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    object-fit: cover;
     width: 100%;
     height: 100%;
 }
 
 .containerdescription {
     display: flex;
+    justify-content: center;
     align-items: center;
+    margin-top: 8vh;
     width: 100%;
     height: 30vh;
 }
 
 .containerdescription p {
-    font-size: 1.2rem;
+    font-size: 1.5vw;
 }
 
-.containerprueba {
+.containerbottom {
+    width: 80vw;
+    margin: 0 auto;
+}
+
+.containerdate {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 15vh;
+    width: max-content;
+}
+
+.containerdate h3 {
+    margin-top: 12px;
+    margin-left: 50px;
+    font-size: 1.5vw;
+    width: max-content;
+}
+
+.containerdate img {
+    height: 40vh;
+    width: 40vw;
+    object-fit: cover;
+    margin-top: 13px;
+    margin-left: 50px;
+    border: solid 2px black;
+    border-radius: 12px;
+}
+
+.containericon {
+    display: flex;
     align-items: center;
-    background-color: #007F8050;
-    width: 100%;
-    height: 10vh;
 }
 
 .iconspan {
     color: var(--primary-color);
-    width: 5vw;
+    width: min-content;
 }
 
-.iconspan2 {
-    width: min-content;
+.iconspantext {
+    display: block;
+    margin-left: 15px;
+    width: max-content;
+    color: var(--primary-color);
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.ubicationtext {
+    margin-left: 50px;
+    font-size: 1.1vw;
+}
+
+.aboutevent {
+    margin-top: 5px;
+    margin-bottom: 10vh;
+    margin-left: 50px;
+    width: 50vw;
+    height: max-content;
+    border-radius: 12px;
+    font-size: 1.2vw;
+    background-color: var(--ligth-background-color);
+}
+
+.botondecompra {
+    border: solid 1px black;
+    border-radius: 12px;
+    margin-right: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: max-content;
+    height: max-content;
+    background-color: orange;
+    color: white;
+    font-size: 1.5vw;
+}
+
+.divcompra {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
