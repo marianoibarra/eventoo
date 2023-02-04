@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { axiosModeEvent } from "../../Slice/Event/EventSlice";
-import { fetchGetEvent } from "../../Slice/Event/EventSlice";
+import { axiosModeEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { FaMapMarkedAlt } from "react-icons/fa";
@@ -10,41 +9,37 @@ import style from './CardDetail.module.css';
 
 const CardDetail = () => {
 
-    const { event } = useSelector(state => state.event);
+    const { eventDetail } = useSelector(state => state.eventDetail);
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(fetchGetEvent());
-    // }, [dispatch]);
-
     useEffect(() => {
-        dispatch(axiosModeEvent());
+        dispatch(axiosModeEventDetail());
     }, [dispatch]);
 
     const initial_cover_pic = 'https://static6.ticketek.com.ar/cms_static/sites/default/files/images/show-header/tour960.png';
 
     return(
         <>
-            {Object.keys(event).length && <div className={style.containertop}>
+            {Object.keys(eventDetail).length > 0 && <div className={style.containertop}>
                 <div className={style.containerimage}>
                     <img className={style.image} src={initial_cover_pic} alt='cover_pic'/>
-                    <h1>{event[1].name.toUpperCase()}</h1>
+                    <h1>{eventDetail.name.toUpperCase()}</h1>
                 </div>
                 <div className={style.containerdescription}>
-                    <p>{event[1].description}</p>
+                    <p>{eventDetail.description}</p>
                 </div>
             </div>}
 
             <EventInformation/>
 
-            {Object.keys(event).length && <div className={style.containerbottom}>
+            {Object.keys(eventDetail).length > 0 && <div className={style.containerbottom}>
                 <div className={style.divcompra}>
                     <div className={style.containerdate}>
                         <div className={style.containericon}>
                             <span className={style.iconspan}> <AiTwotoneCalendar size={35}/> </span> 
                             <span className={style.iconspantext}>Fecha y Horario</span> 
                         </div>
-                        <h3>{`${event[1].start_date.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')}, ${event[1].start_time}hs`}</h3>
+                        <h3>{`${eventDetail.start_date.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')}, ${eventDetail.start_time}hs`}</h3>
                         </div>
                     <div className={style.botondecompra}>Boton de compra</div>
                 </div>
@@ -54,8 +49,8 @@ const CardDetail = () => {
                         <span className={style.iconspan}> <FaMapMarkedAlt size={35}/> </span> 
                         <span className={style.iconspantext}>Ubicacion</span> 
                     </div>
-                    <span className={style.ubicationtext}><b>{event[1].placeName.toUpperCase()}</b>{`, ${event[1].address.address_line}`}</span>
-                    <span className={style.ubicationtext}><b>{event[1].address.city}</b>{`, ${event[1].address.state} | ${event[1].address.country}`}</span>
+                    <span className={style.ubicationtext}><b>{eventDetail.placeName.toUpperCase()}</b>{`, ${eventDetail.address.address_line}`}</span>
+                    <span className={style.ubicationtext}><b>{eventDetail.address.city}</b>{`, ${eventDetail.address.state} | ${eventDetail.address.country}`}</span>
                     <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22.jpg" alt="map" />
                 </div>
 

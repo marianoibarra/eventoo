@@ -9,36 +9,36 @@ import style from './EventInformation.module.css';
 
 const EventInformation = () => {
 
-    const { event } = useSelector(state => state.event);
+    const { eventDetail } = useSelector(state => state.eventDetail);
 
     return(
         <>
-            {Object.keys(event).length && <div className={style.background}>
-                {event[1].disability_access === true && 
+            {Object.keys(eventDetail).length > 0 && <div className={style.background}>
+                {eventDetail.disability_access === true && 
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <TbDisabled size={35}/> </span> 
                         <span className={style.iconspantext}>Acceso discapacitado</span> 
                     </div>
                 }
-                {event[1].parking === true &&
+                {eventDetail.parking === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <AiFillCar size={35}/> </span> 
                         <span className={style.iconspantext}>Estacionamiento</span> 
                     </div>
                 }
-                {event[1].pet_friendly === true &&
+                {eventDetail.pet_friendly === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <MdPets size={35}/> </span> 
                         <span className={style.iconspantext}>Mascotas Permitidas</span> 
                     </div>                 
                 }
-                {event[1].smoking_zone === true &&
+                {eventDetail.smoking_zone === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <MdSmokingRooms size={35}/> </span> 
                         <span className={style.iconspantext}>Zona Fumador</span> 
                     </div>  
                 } 
-                {event[1].isPublic === true ?
+                {eventDetail.isPublic === true ?
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <BsFillPeopleFill size={35}/> </span> 
                         <span className={style.iconspantext}>Acceso Publico</span> 
