@@ -64,8 +64,8 @@ User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
 Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
 
-// User.belongsToMany(Event, { through: Review, as: 'reviews' });
-// Event.belongsToMany(User, { through: Review, as: 'reviews' });
+User.belongsToMany(Event, { through: Review, as: 'review' });
+Event.belongsToMany(User, { through: Review, as: 'review' });
 
 
 User.belongsToMany(Event, { 
@@ -80,9 +80,6 @@ Event.belongsToMany(User, {
    otherKey: 'eventId',
    as: 'transaction' 
 });
-
-Review.belongsToMany(User, {through:'review_user'});
-Review.belongsToMany(Event, {through: 'review_event'});
 
 Transaction.hasMany(Ticket, {foreignKey: 'transactionId', as: 'tickets'})
 Ticket.belongsTo(Transaction, {foreignKey: 'transactionId', as: 'transactions'})
