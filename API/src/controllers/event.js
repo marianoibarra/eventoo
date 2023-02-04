@@ -216,20 +216,20 @@ const modifyEvent = async (req, res) => {
       where: { id },
       include: "organizer",
     });
-   
-    if(event.organizer.id===userId) {
+
+    if (event.organizer.id === userId) {
       if (bankAccount) {
         const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
         await event.setBankAccount(bankAccountFromDB);
       }
-  
+
       if (category) {
         const categoryFromDB = await Category.findOne({
           where: { name: category },
         });
         await event.setCategory(categoryFromDB);
       }
-  
+
       if (address_line && city && state && country && zip_code) {
         const newAddress = await Address.create({
           address_line,
@@ -240,7 +240,7 @@ const modifyEvent = async (req, res) => {
         });
         await event.setAddress(newAddress);
       }
-  
+
       await event.update({
         name,
         description,
@@ -262,7 +262,7 @@ const modifyEvent = async (req, res) => {
         smoking_zone,
         pet_friendly,
       });
-  
+
       await event.reload({
         include: [
           "bankAccount",
@@ -283,10 +283,10 @@ const modifyEvent = async (req, res) => {
           },
         ],
       });
-  
+
       res.send({ msg: "Data updated successfully", data: event });
     } else {
-      res.status(500).send("Sorry! You can not modify this event")
+      res.status(500).send("Sorry! You can not modify this event");
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -295,13 +295,21 @@ const modifyEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   const { id } = req.params;
+  const userId = req.userId;
   try {
-    const eventToBeDeleted = await Event.findByPk(id);
-    await eventToBeDeleted.destroy();
-    const idDeleted = await Event.findByPk(id);
-    idDeleted
-      ? res.send("Sorry! The event could not be deleted. Please, try again.")
-      : res.send("Event removed successfully");
+    const event = await Event.findOne({
+      where: { id },
+      include: "organizer",
+    });
+    if (event.organizer.id === userId) {
+      await event.destroy(); //convertir en borradorLogico
+      const idDeleted = await Event.findByPk(id);
+      idDeleted
+        ? res.send("Sorry! The event could not be deleted. Please, try again.")
+        : res.send("Event removed successfully");
+    } else {
+      res.status(500).send("Sorry! You can not delete this event")
+    }
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
