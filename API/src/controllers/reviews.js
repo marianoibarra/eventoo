@@ -12,14 +12,16 @@ const addReview = async (req,res) => {
     try {
 
     // const user = await User.findByPk(userId);
-    // const event = await Event.findByPk(id);
+    const event = await Event.findByPk(id);
+
     const newReview = await Review.create({
-        id: id,
-        stars:stars ,
+        stars: stars ,
         comment: comment,
-        user: userId
+        
     })
 
+   await event.addReview(newReview);
+   return res.status(200).json({msg: 'revision added to event successfully'})
         
     } catch (error) {
         res.status(500).json({ msg: error.message })
@@ -28,7 +30,23 @@ const addReview = async (req,res) => {
 
 const getReviews =  async (req,res) => {
     
-    res.status(200).json({ message: 'Test Controller Working!' });
+    const { id }= req.params
+
+    try {
+        
+        
+        allreviews = await Event.findOne({
+            where: {
+               id: id
+        }
+        
+    })
+    
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+ 
+
 };
 
 
