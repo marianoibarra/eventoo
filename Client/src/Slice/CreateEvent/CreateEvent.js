@@ -5,29 +5,39 @@ const eventUrl = 'http://api.eventoo.online/event'
 
 export const createEvent = createAsyncThunk(
   'event/createEvent',
-  async () => {
-    const res = await axios.post(eventUrl)
-    return res.data
-})
-
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(eventUrl, formData);
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  }
+);
 
 export const eventSlice = createSlice({
   name: 'event',
   initialState: {
-    name: '',
-    description: '',
-    cover_pic: '',
-    address_line: '',
-    city: '',
-    state: '',
-    country: '',
-    start_date: '',
-    end_date: '',
-    start_time: '',
-    end_time: '',
+    name: null,
+    description: null,
+    cover_pic: null,
+    address_line: null,
+    city: null,
+    state: null,
+    country: null,
+    start_date: null,
+    end_date: null,
+    start_time: null,
+    end_time: null,
     isPublic: true,
-    virtualURL: '',
-    guests_capacity: '',
+    virtualURL: null,
+    guests_capacity: null,
+    category: null,
   },
   reducers: {
     updateName: (state, action) => {
@@ -72,21 +82,28 @@ export const eventSlice = createSlice({
     updateGuestsCapacity: (state, action) => {
       state.guests_capacity = action.payload;
     },
+    updateName: (state, action) => {
+      state.name = action.payload;
+    },
+    updateCategory: (state, action) => {
+      state.category = action.payload;
+    },
     resetForm: (state) => {
-      state.name = '';
-      state.description = '';
-      state.cover_pic = '';
-      state.address_line = '';
-      state.city = '';
-      state.state = '';
-      state.country = '';
-      state.start_date = '';
-      state.end_date = '';
-      state.start_time = '';
-      state.end_time = '';
+      state.name = null;
+      state.description = null;
+      state.cover_pic = null;
+      state.address_line = null;
+      state.city = null;
+      state.state = null;
+      state.country = null;
+      state.start_date = null;
+      state.end_date = null;
+      state.start_time = null;
+      state.end_time = null;
       state.isPublic = false;
-      state.virtualURL = '';
-      state.guests_capacity = 100;
+      state.virtualURL = null;
+      state.guests_capacity = null;
+      state.category=null;
     },
   },
   extraReducers: {
@@ -121,6 +138,7 @@ export const {
   updateVirtualURL,
   updateGuestsCapacity,
   resetForm,
+  updateCategory,
   } = eventSlice.actions;
   
   export const selectEvent = (state) => state.event;
