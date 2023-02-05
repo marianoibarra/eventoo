@@ -49,7 +49,7 @@ const LoginForm = () => {
           EVEN<b>TOO</b>
         </span>
         <h2 className={Styles.subTitle}>Sign Up</h2>
-        <form onSubmit={handleSubmit} className={Styles.containerform}>
+        {  <form onSubmit={handleSubmit} className={Styles.containerform}>
           {error && <p className={Styles.errorMessage}>{error.msg}</p>}
           <input
             className={Styles.container_input}
@@ -74,7 +74,7 @@ const LoginForm = () => {
           >
             {loading ? "Loading..." : "Login"}
           </button>
-          <Link to="/forgot-pass" className={Styles.btn} id={Styles.btnLogin}>
+          <Link to="/forgot-password" className={Styles.btn} id={Styles.btnLogin} >
             Forgot Password
           </Link>
           <div className={Styles.or2}>
@@ -93,7 +93,7 @@ const LoginForm = () => {
               Create Account
             </button>
           </Link>
-        </form>
+        </form>}
       </div>
     </div>
   );

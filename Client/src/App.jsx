@@ -15,12 +15,14 @@ import Event from "./Pages/Event";
 import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
 import Cart from "./Pages/Cart";
+import ForgotPassword from "./Pages/ForgotPassword";
 
 //libraries
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import { setUser } from "./Slice/User/UserSlice";
 import { useDispatch } from "react-redux";
+import RecoverPass from "./Pages/RecoverPass";
 
 function App() {
 const dispatch=  useDispatch()
@@ -56,6 +58,8 @@ image,
         <Route path="/login" element={<Login />}></Route>
         <Route path="/event" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+        <Route path="/reset-password/:emailtoken" element={<RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
     </div>

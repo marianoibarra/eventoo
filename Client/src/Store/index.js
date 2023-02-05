@@ -5,6 +5,9 @@ import { registerSlice } from "../Slice/CreateUse/CreateUserSlice";
 import { UserSlice } from "../Slice/User/UserSlice"
 import { eventsSlice } from "../Slice/Events/EventsSlice";
 import { eventSlice } from "../Slice/CreateEvent/CreateEvent";
+import { forgot } from "../Slice/ForgotPass/ForgotPassSlice";
+import { recover } from "../Slice/RecoverPass/RecoverPassSlice";
+import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +17,9 @@ const store = configureStore({
     user:UserSlice.reducer,
     events: eventsSlice.reducer,
     event: eventSlice.reducer,
+    forgot: forgot.reducer,
+    recover: recover.reducer,
+    eventDetail: eventDetailSlice,
   },
 });
 

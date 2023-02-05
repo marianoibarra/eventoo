@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import User from "../../../Assets/UserProfile.png";
 import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Menu = () => {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const { name, last_name, email, image } = useSelector((state) => state.user);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleClearLocalStorage = () => {
     localStorage.clear();
+    navigate('/')
+
   };
 
   return (
@@ -25,26 +27,33 @@ const Menu = () => {
           <motion.div
             className={Styles.menu}
             initial={{ height: 0 }}
-            animate={{ height: 130 }}
+            animate={{ height: 130 , width:130}}
             exit={{ height: 0 }}
             transition={{ duration: 0.5 }}
           >
             <img
-              src={image? image : User}
+              src={image ? image : User}
               alt="user photo"
               className={Styles.menuPhoto}
               onClick={() => setIsOpen(!isOpen)}
             />
 
-           {name? <div className={Styles.menuName}>{`${name} ${last_name}`}</div> : undefined}
-            {email? <p className={Styles.menuEmail}>{email}</p> : undefined}
+            {name ? (
+              <div className={Styles.menuName}>{`${name} ${last_name}`}</div>
+            ) : undefined}
+            {email ? <p className={Styles.menuEmail}>{email}</p> : undefined}
 
             <Link to="/Setting" className={Styles.menuLink}>
               Settings
             </Link>
-            <button  onClick={()=>handleSubmit()} className={Styles.menuLink}>
+           {name ? <button
+              className={Styles.menuLink}
+              onClick={handleClearLocalStorage}
+            >
               Log Out
-            </button>
+            </button> : <Link to="/login" className={Styles.menuLink}>
+              Sign In
+            </Link>}
           </motion.div>
         )}
       </AnimatePresence>
