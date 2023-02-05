@@ -44,6 +44,7 @@
   display: flex;
   gap: 15px;
   flex-direction: row;
+  margin-right: 30px;
 }
 .MenuItem:hover{
   color: var(--accent-color);
