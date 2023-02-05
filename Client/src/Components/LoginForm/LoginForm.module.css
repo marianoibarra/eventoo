@@ -6,11 +6,12 @@
 }
 
 .containerform {
-    width: 30vw;
+  width: 30vw;
   height: max-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .container_input {
@@ -29,14 +30,13 @@
   margin: 0;
 }
 
-
 .title {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
   font-size: 5vw;
   line-height: 53px;
   color: var(--accent-color);
-  margin-bottom: 3vh;
+  margin-bottom: 8vh;
 }
 
 .subTitle {
@@ -48,14 +48,14 @@
   width: 30vw;
 }
 
-.btn{
+.btn {
   background-color: transparent;
   color: var(--accent-color);
   border: 0;
   cursor: pointer;
   font-size: 1.3vw;
 }
-.btn2{
+.btn2 {
   width: 90%;
   height: 4vh;
   border-radius: 0.3vw;
@@ -69,14 +69,47 @@
   background-position: bottom;
   align-items: flex-end;
 }
-.containerItems{
-    display: flex;
-    flex-direction: column;
-        width: 41vw;
-        align-items: center;
+.containerItems {
+  display: flex;
+  flex-direction: column;
+  width: 41vw;
+  align-items: center;
 }
 
-#btnLogin{
+#btnLogin {
   margin-top: 1vw;
-  margin-bottom: 3vw;
+  margin-bottom: 0.5vw;
+}
+
+.or {
+  width: 10vw;
+  border-bottom: solid 2px var(--white-text);
+  position: relative;
+  bottom: 0.7vw;
+  margin: 0 0.3vw 0 0.3vw;
+}
+.or2 {
+  margin-bottom: 1vw;
+  display: flex;
+  flex-direction: row;
+  font-size: 1.4vw;
+  color: var(--white-text);
+  font-weight: 100;
+}
+.or3 {
+  background-position-x: 5px;
+}
+
+.btnCreate {
+  margin-top: 2vw;
+}
+
+.errorMessage {
+  padding: 10px;
+  color: white;
+  background-color: #ff5733;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
 }

@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-
-export const login = createAsyncThunk('auth/login', async (formData, { rejectWithValue }) => {
+export const createUser = createAsyncThunk('auth/register', async (formData, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://api.eventoo.online/user/login', formData)
+    const response = await axios.post('http://api.eventoo.online/user/register', formData)
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('data', JSON.stringify(response.data.data))
     return response.data
@@ -16,8 +15,8 @@ export const login = createAsyncThunk('auth/login', async (formData, { rejectWit
   }
 })
 
-export const authSlice = createSlice({
-  name: 'auth',
+export const registerSlice = createSlice({
+  name: 'register',
   initialState: {
     loading: false,
     error: null,
@@ -25,17 +24,16 @@ export const authSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [login.pending]: (state) => {
+    [createUser.pending]: (state) => {
       state.loading = true
       state.error = null
     },
-    [login.fulfilled]: (state, action) => {
+    [createUser.fulfilled]: (state, action) => {
       state.loading = false
       state.error = null
       state.user = action.payload
-      state.loginIn=true
     },
-    [login.rejected]: (state, action) => {
+    [createUser.rejected]: (state, action) => {
       state.loading = false
       state.error = action.payload
       state.user = null
@@ -44,4 +42,4 @@ export const authSlice = createSlice({
 })
 
 
-export default authSlice.reducer
+export default registerSlice.reducer
