@@ -25,6 +25,7 @@ router.post("/verify-email", verifyToken, verifyEmailCode);
 router.post("/verify-email/resend", verifyToken, resendEmailCode);
 router.put("/", verifyToken, modifyUser);
 
+
 //probar token login
 router.get("/test-token", test);
 

@@ -338,7 +338,7 @@ const modifyUser = async (req, res) => {
           model: Address,
           as: "address",
           attributes: { exclude: ["id"] },
-        }
+        },
       ],
     });
     res.json({ msg: "successful modification", data: user });
@@ -346,6 +346,23 @@ const modifyUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+const verifyAdmin = async (req, res,next) => {
+  const userId = req.userId;
+  try {
+    const user = await User.findByPk(userId);
+    const role = await RoleAdmin.findByPk(user.RoleAdminId);
+    if(role.name==='ADMIN' || role.name==='SUPERADMIN') {
+      next();
+    } else {
+      res.status(401).json({ msg: "You are not an ADMIN" }); //cambiar mensaje de error al deseado
+    }
+    
+  } catch (error) {
+    res.status(404).json({ errpr: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -357,5 +374,6 @@ module.exports = {
   changePassword,
   verifyEmailCode,
   resendEmailCode,
-  modifyUser
+  modifyUser,
+  verifyAdmin,
 };
