@@ -57,7 +57,7 @@ const getEventsPublic = async (req, res) => {
         },{
           model: User,
           as: 'organizer',
-          attributes: ["userId", "name", "last_name", "profile_pic"] 
+          // attributes: ["userId", "name", "last_name", "profile_pic"] 
         },{
           model: Category,
           as: 'category',
