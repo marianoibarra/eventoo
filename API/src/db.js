@@ -64,8 +64,8 @@ User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
 Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
 
-User.belongsToMany(Event, { through: 'Reviews', as: 'reviews' });
-Event.belongsToMany(User, { through: 'Reviews', as: 'reviews' });
+User.belongsToMany(Event, { through: Review, as: 'review' });
+Event.belongsToMany(User, { through: Review, as: 'review' });
 
 
 User.belongsToMany(Event, { 
