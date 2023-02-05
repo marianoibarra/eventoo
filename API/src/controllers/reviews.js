@@ -29,9 +29,14 @@ const getAllReviewsByEvent =  async (req,res) => {
 
     try {
         const event = await Event.findByPk(id);
-        const allReviews = await event.getReviews ({
-            include:[ User ]
-        })
+        const allReviews = await event.findAll({ 
+            include:[
+                {
+                    model: User,
+                    as: 'review',
+                    through:{attributes: ['stars','comment']}
+                }
+            ]})
         return res.json(allReviews)
     
     } catch (error) {
@@ -51,12 +56,12 @@ const getUserScore = async (req,res) => {
                 {
                     model: Event,
                     as: 'review',
-                    through:{attributes: ['stars']}
+                    through:{ attributes: ['stars'] }
                 }
             ]
         });
 
-        const result = 0
+        let result = scoreByUser[0]
 
         for (let i = 0; i < scoreByUser.length; i++){
             result += scoreByUser[i];
