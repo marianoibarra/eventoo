@@ -1,5 +1,6 @@
 import React, {useState , useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { updateCategory, updateVirtualURL } from '../../../Slice/CreateEvent/CreateEvent';
 import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import style from './Category.module.css'
 import Map from './Map';
@@ -10,7 +11,7 @@ function Category(){
   const { categories, loading, error } = useSelector(state => state.categories.categories);
   const [selectedModality, setSelectedModality] = useState(null);
   const [filteredCategories, setFilteredCategories] = useState([]);
-
+  const [category, setCategory] = useState('');
 
     useEffect(() => {
       dispatch(axiosModeCategories());
@@ -23,9 +24,21 @@ function Category(){
     }, [categories, loading, selectedModality]);
 
 
-    const handleChange = event => {
-      setSelectedModality(event.target.value);
+    const handleChange = e => {
+      e.preventDefault();
+      setSelectedModality(e.target.value);
     };
+
+    const handleCategory = e => {
+      e.preventDefault();
+      setCategory(e.target.value);
+      dispatch(updateCategory(e.target.value));
+    };
+
+    const handleUrl = e =>{
+      e.preventDefault();
+      dispatch(updateVirtualURL(e.target.value));
+    }
 
     return(
         <div className={style.info}>
@@ -33,14 +46,14 @@ function Category(){
             <p className={style.text}>It is important to select a category, as this will help in the classification and organization of your event.</p>
             <select  onChange={handleChange}>
                 <option value="">Select a kind of access</option>
-                <option value="Presential">Presential</option>
-                <option value="Virtual">Virtual</option>
+                <option name='modality' value='Presential'>Presential</option>
+                <option name='modality' value='Virtual'>Virtual</option>
             </select>
             <div>
             {filteredCategories.length > 0 && (
             <div>
              Category:
-              <select>
+              <select onChange={handleCategory}>
                 {filteredCategories.map((c) => (
                   <option key={c.id} value={c.name}>
                     {c.name}
@@ -55,7 +68,7 @@ function Category(){
                 {selectedModality === "Presential"
                ? <Map/>
                 : "URL:"}
-                <input type="text" />
+                <input type="text" onChange={handleUrl}/>
               </div>
              </div>
             )}

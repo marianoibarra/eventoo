@@ -11,13 +11,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 function Form(){
   const dispatch = useDispatch();
-  const name = useSelector(state => state.event.name);
+  const event = useSelector(state => state.event);
   const description = useSelector(state => state.event.description);
+  const category = useSelector(state => state.event.category)
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(name, description))
+    dispatch(createEvent(event))
     alert("Event created!")
+    console.log('el evento', event)
   };
 
     return(
@@ -30,9 +32,6 @@ function Form(){
           <BasicInfo/>
           <div className={style.split}></div>
           <MoreInfo/>
-          {/* <div className={style.contain_button}>
-            <button>Add</button>
-          </div> */}
           <div className={style.split}></div>
           <h1 className={style.title}>LOCATION AND DATE</h1>
           <Category/>

@@ -1,11 +1,33 @@
 import React, {useState} from 'react';
+import { useDispatch } from 'react-redux';
+import { updateGuestsCapacity, updateIsPaid, updateIsPublic } from '../../../Slice/CreateEvent/CreateEvent';
 import style  from './Tickets'
 
 
 
 function Tickets() {
-    const [isPublic, setIsPublic] = useState(false);
-    const [isPaid, setIsPaid] = useState(false)
+  const dispatch = useDispatch();
+  const [isPublic, setIsPublic] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [capacity, setCapacity] = useState('');
+
+  const handleClick = e => {
+    e.preventDefault();
+    setIsPublic(e.target.value);
+    dispatch(updateIsPublic(e.target.value));
+  }
+
+  const handlePaid = e => {
+    e.preventDefault();
+    setIsPaid(e.target.value);
+    dispatch(updateIsPaid(e.target.value));
+  }
+
+  const handleChange = e =>{
+    e.preventDefault();
+    setCapacity(e.target.value);
+    dispatch(updateGuestsCapacity(e.target.value));
+  }
 
   return (
     <div className={style.container}>
@@ -14,36 +36,38 @@ function Tickets() {
         <div className={style.options}>
             <button
             style={isPublic ?  { backgroundColor: 'ligthblue'}: { backgroundColor: "lightgray" }}
-            onClick={() => setIsPublic(true)}
+            onClick={handleClick}
+            value='true'
             >
             Public
             </button>
             <button
             style={ !isPublic ? { backgroundColor: "lightblue" } : { backgroundColor: "lightgray" }}
-            onClick={() => setIsPublic(false)}
+            onClick={handleClick}
+            value='false'
             >
             Private
             </button>
-            <p>Public: {isPublic.toString()}</p>
         </div>
         <p className={style.text}>Choose fi you wanna pay an extra for more guests or publicity</p>
         <div className={style.options}>
             <button
             style={isPaid ?  { backgroundColor: 'ligthblue'}: { backgroundColor: "lightgray" }}
-            onClick={() => setIsPaid(true)}
+            onClick={handlePaid}
+            value='true'
             >
             Paid
             </button>
             <button
             style={ !isPaid ? { backgroundColor: "lightblue" } : { backgroundColor: "lightgray" }}
-            onClick={() => setIsPaid(false)}
+            onClick={handlePaid}
+            value='false'
             >
             Free
             </button>
-            <p>It's Paid: {isPaid.toString()}</p>
         </div>
         <p>Capacity:</p>
-        <input></input>
+        <input onChange={handleChange}></input>
         <p>Price:</p>
         <input></input>
     </div>
