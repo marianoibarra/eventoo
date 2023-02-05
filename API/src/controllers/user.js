@@ -4,6 +4,33 @@ require("dotenv").config();
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
+const {OAuth2Client} = require('google-auth-library');
+
+const googleAuth = async (req, res) => {
+
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+  const { clientId } = req.body
+  console.log(req.body);
+
+  async function verify() {
+    const ticket = await client.verifyIdToken({
+        idToken: clientId,
+        audience: process.env.GOOGLE_CLIENT_ID
+
+    });
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+    res.send(userid)
+  }
+  try {
+    
+  } catch (error) {
+    console.error
+    res.status(500).send(error)
+  }
+  verify().catch(console.error);
+}
 
 const register = async (req, res) => {
   try {
@@ -277,8 +304,6 @@ const resetPassword = async (req, res) => {
       await user.update({
         password: newPassword,
       });
-
-      console.log(user);
 
       res.json({ msg: "Password changed successfully" });
     } else {
