@@ -11,13 +11,15 @@ function BasicInfo(){
     const name2 = useSelector(state => state.event.name);
 
     const handleName = (e) => {
+        e.preventDefault();
         setName(e.target.value);
-        dispatch(updateName({[e.target.name]: e.target.value}));
+        dispatch(updateName(e.target.value));
         console.log('nombre',name2);
     };
     const handleDescription = (e) => {
+        e.preventDefault();
         setDescription(e.target.value);
-        dispatch(updateDescription({[e.target.name]: e.target.value}));
+        dispatch(updateDescription(e.target.value));
         console.log('review',description2);
     };
 
