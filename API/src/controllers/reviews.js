@@ -28,7 +28,7 @@ const getAllReviewsByEvent =  async (req,res) => {
     const { id } = req.params;
 
     try {
-        // const event = await Event.findByPk(id);
+    
         const allReviews = await Event.findAll({ 
             where: {id: id},
             include:[
@@ -51,27 +51,26 @@ const getUserScore = async (req,res) => {
     const { id } = req.params;
 
     try {
-        // const organizer = await User.findByPk(id);
-        const scoreByUser = await User.findAll({ 
+       
+        const scoreByUser = await Event.findAll({ 
             where: { "$organizer.id$": id},
             include:[
                 {
-                    model: Event,
+                    model: User,
                     as: 'review',
                     through:{ attributes: ['stars'] }
-                }
-            ]
+                },
+                'organizer',
+            ],
+            raw: true
         });
 
-        let result = scoreByUser[0]
+        console.log(scoreByUser);
 
-        for (let i = 0; i < scoreByUser.length; i++){
-            result += scoreByUser[i];
-        };
+            const preResult = scoreByUser.map(a=> a.review).flat().map(s=> Number(s.stars));
+            const resultScore = preResult.reduce((acc,curr) => acc + curr)/preResult.length;       
 
-        const totalScore = result / scoreByUser.length;
-
-        return res.json( totalScore );
+        return res.json( resultScore );
 
     } catch (error) {
         res.status(500).json({ msg: error.message });

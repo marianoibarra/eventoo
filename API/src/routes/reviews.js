@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/", verifyToken, createReview); 
 router.get("/:id",  getAllReviewsByEvent);
-router.get("/", getUserScore)
+router.get("/score/:id", getUserScore)
 
 
 
