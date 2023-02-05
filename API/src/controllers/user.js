@@ -347,17 +347,16 @@ const modifyUser = async (req, res) => {
   }
 };
 
-const verifyAdmin = async (req, res,next) => {
+const verifyAdmin = async (req, res, next) => {
   const userId = req.userId;
   try {
     const user = await User.findByPk(userId);
     const role = await RoleAdmin.findByPk(user.RoleAdminId);
-    if(role.name==='ADMIN' || role.name==='SUPERADMIN') {
+    if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {
       res.status(401).json({ msg: "You are not an ADMIN" }); //cambiar mensaje de error al deseado
     }
-    
   } catch (error) {
     res.status(404).json({ errpr: error.message });
   }
