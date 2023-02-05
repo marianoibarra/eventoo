@@ -28,8 +28,9 @@ const getAllReviewsByEvent =  async (req,res) => {
     const { id } = req.params;
 
     try {
-        const event = await Event.findByPk(id);
-        const allReviews = await event.findAll({ 
+        // const event = await Event.findByPk(id);
+        const allReviews = await Event.findAll({ 
+            where: {id: id},
             include:[
                 {
                     model: User,
@@ -50,8 +51,9 @@ const getUserScore = async (req,res) => {
     const { id } = req.params;
 
     try {
-        const organizer = await User.findByPk(id);
-        const scoreByUser = await organizer.findAll({ 
+        // const organizer = await User.findByPk(id);
+        const scoreByUser = await User.findAll({ 
+            where: { "$organizer.id$": id},
             include:[
                 {
                     model: Event,
