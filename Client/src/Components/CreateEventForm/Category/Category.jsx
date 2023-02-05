@@ -1,6 +1,6 @@
 import React, {useState , useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { updateCategory } from '../../../Slice/CreateEvent/CreateEvent';
+import { updateCategory, updateVirtualURL } from '../../../Slice/CreateEvent/CreateEvent';
 import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import style from './Category.module.css'
 import Map from './Map';
@@ -33,6 +33,11 @@ function Category(){
       e.preventDefault();
       setCategory(e.target.value);
       dispatch(updateCategory(e.target.value));
+    };
+
+    const handleUrl = e =>{
+      e.preventDefault();
+      dispatch(updateVirtualURL(e.target.value));
     }
 
     return(
@@ -63,7 +68,7 @@ function Category(){
                 {selectedModality === "Presential"
                ? <Map/>
                 : "URL:"}
-                <input type="text" />
+                <input type="text" onChange={handleUrl}/>
               </div>
              </div>
             )}

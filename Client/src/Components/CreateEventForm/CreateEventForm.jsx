@@ -11,16 +11,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 function Form(){
   const dispatch = useDispatch();
-  const name = useSelector(state => state.event);
+  const event = useSelector(state => state.event);
   const description = useSelector(state => state.event.description);
   const category = useSelector(state => state.event.category)
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(name, category))
+    dispatch(createEvent(event))
     alert("Event created!")
-    console.log('el evento', name)
-    console.log('la dscrip', description)
+    console.log('el evento', event)
   };
 
     return(
