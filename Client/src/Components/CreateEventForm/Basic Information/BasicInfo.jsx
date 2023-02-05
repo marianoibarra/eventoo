@@ -14,13 +14,11 @@ function BasicInfo(){
         e.preventDefault();
         setName(e.target.value);
         dispatch(updateName(e.target.value));
-        console.log('nombre',name2);
     };
     const handleDescription = (e) => {
         e.preventDefault();
         setDescription(e.target.value);
         dispatch(updateDescription(e.target.value));
-        console.log('review',description2);
     };
 
     return(
