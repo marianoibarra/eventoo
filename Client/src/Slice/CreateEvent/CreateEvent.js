@@ -38,6 +38,8 @@ export const eventSlice = createSlice({
     virtualURL: null,
     guests_capacity: null,
     category: null,
+    isPaid:false,
+    address:{},
   },
   reducers: {
     updateName: (state, action) => {
@@ -82,11 +84,14 @@ export const eventSlice = createSlice({
     updateGuestsCapacity: (state, action) => {
       state.guests_capacity = action.payload;
     },
-    updateName: (state, action) => {
-      state.name = action.payload;
-    },
     updateCategory: (state, action) => {
       state.category = action.payload;
+    },
+    updateIsPaid: (state, action) => {
+      state.isPaid = action.payload;
+    },
+    updateAddress: (state, action) => {
+      state.address = action.payload;
     },
     resetForm: (state) => {
       state.name = null;
@@ -104,6 +109,8 @@ export const eventSlice = createSlice({
       state.virtualURL = null;
       state.guests_capacity = null;
       state.category=null;
+      state.isPaid=false;
+      state.address=null;
     },
   },
   extraReducers: {
@@ -139,6 +146,8 @@ export const {
   updateGuestsCapacity,
   resetForm,
   updateCategory,
+  updateIsPaid,
+  updateAddress,
   } = eventSlice.actions;
   
   export const selectEvent = (state) => state.event;
