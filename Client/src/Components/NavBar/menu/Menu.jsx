@@ -12,6 +12,7 @@ const Menu = () => {
   const { name, last_name, email, image } = useSelector((state) => state.user);
 
   const handleClearLocalStorage = () => {
+    window.google.accounts.id.disableAutoSelect();
     localStorage.clear();
     navigate('/')
 
