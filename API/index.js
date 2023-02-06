@@ -4,7 +4,7 @@ require("dotenv").config();
 const fillTables = require("./src/helpers/fillTables.js");
 const { createSuperAdmin } = require("./src/helpers/createSuperAdmin.js");
 const data=require('./src/mocks/superAdmin.js')
-require("./src/helpers/error-handler");
+
 
 const port = process.env.PORT || 3001;
 
