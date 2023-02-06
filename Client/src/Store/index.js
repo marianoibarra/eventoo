@@ -8,6 +8,7 @@ import { eventSlice } from "../Slice/CreateEvent/CreateEvent";
 import { forgot } from "../Slice/ForgotPass/ForgotPassSlice";
 import { recover } from "../Slice/RecoverPass/RecoverPassSlice";
 import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
+import { combinedFilterSlice } from "../Slice/Filter/combinedFilterSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     forgot: forgot.reducer,
     recover: recover.reducer,
     eventDetail: eventDetailSlice,
+    combinedFilter: combinedFilterSlice.reducer
   },
 });
 
