@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Styles from "../FormForgot.module.css";
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { RecoverPass, RecoverPassput } from "../../../Slice/RecoverPass/RecoverPassSlice";
 
 const FormRecover = () => {
   const navigate = useNavigate();
+  const {emailtoken} = useParams()
+
   const [formData, setFormData] = useState({
-    email: "",
+    newPassword: "",
+  });
+  const [confirmed, setConfirmed] = useState({
+    newPassword: "",
   });
 
   const { name } = useSelector((state) => state.user);
@@ -15,9 +20,10 @@ const FormRecover = () => {
     if (name) {
       navigate("/");
     }
-  }, [name]);
+    dispatch(RecoverPass(emailtoken));
+  }, [emailtoken,name]);
 
-  const { loading, error, loginIn } = useSelector((state) => state.auth);
+  const { loading, error, loginIn } = useSelector((state) => state.recover);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -27,19 +33,32 @@ const FormRecover = () => {
     });
   };
 
+  function validatePassword(password) {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecial = /[!@#$%^&*]/.test(password);
+    
+    return hasUppercase && hasLowercase && hasNumber && hasSpecial;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.email) {
-      alert("Email fields are required.");
+
+    if (!formData.newPassword) {
+      alert("Enter the required information")
       return;
     }
-    
+    if(validatePassword(formData.newPassword)===false){
+      alert("Remember that the password must contain: at least eight characters, a capital letter, a lower case letter, a number and a sign")
+      return
+    }
+    dispatch(RecoverPassput({...formData,changePassToken:emailtoken}));
   };
 
 
   return (
     <div className={Styles.containerhero}>
-
       <div className={Styles.containerItems}>
         <span className={Styles.title}>
           EVEN<b>TOO</b>
@@ -50,11 +69,11 @@ const FormRecover = () => {
           {loginIn  && <p className={Styles.errorMessage}></p>}
           <input
             className={Styles.container_input}
-            type="email"
-            name="email"
-            placeholder="Email"
+            type="type"
+            name="newPassword"
+            placeholder="password"
             onChange={handleChange}
-            value={formData.email}
+            value={formData.newPassword}
           />
           <button
             className={`btnprimario ${Styles.btn2}`}
@@ -63,7 +82,6 @@ const FormRecover = () => {
           >
             {loading ? "Loading..." : "Send"}
           </button>
-
         </form>}
       </div>
 

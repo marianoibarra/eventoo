@@ -56,7 +56,7 @@ image,
         <Route path="/home" element={<Home />}></Route>
         <Route path="/create-user" element={<CreateUser />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/event" element={<Event />}></Route>
+        <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route path="/reset-password/:emailtoken" element={<RecoverPass />}></Route>

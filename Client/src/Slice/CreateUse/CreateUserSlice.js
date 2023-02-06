@@ -3,6 +3,7 @@ import axios from 'axios'
 
 export const createUser = createAsyncThunk('auth/register', async (formData, { rejectWithValue }) => {
   try {
+    console.log(formData)
     const response = await axios.post('http://api.eventoo.online/user/register', formData)
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('data', JSON.stringify(response.data.data))
@@ -32,6 +33,7 @@ export const registerSlice = createSlice({
       state.loading = false
       state.error = null
       state.user = action.payload
+      state.loginIn=true
     },
     [createUser.rejected]: (state, action) => {
       state.loading = false
