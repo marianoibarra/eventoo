@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Styles from "./RegisterUser.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { createUser } from "../../Slice/CreateUse/CreateUserSlice";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const RegisterForm = () => {
 const navigate = useNavigate()
   const { name } = useSelector((state) => state.user);
-  console.log(name)
+  const googleButton = useRef()
   
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
@@ -34,6 +34,10 @@ const navigate = useNavigate()
       console.log(formData)
     dispatch(createUser(formData));
   };
+
+  useEffect(() => {
+    window.google.accounts.id.renderButton(googleButton.current, {width: 300,theme: 'outline', size: 'large', text: 'continue_with', logo_alignment: "center"})
+  }, [])
   
   useEffect(() => {
 if(name){
@@ -117,12 +121,15 @@ if(name){
             <p className={Styles.or3}>or</p>
             <div className={Styles.or}></div>
           </div>
-          <button className={`btnprimario ${Styles.btn2}`}>
+          {/* <button className={`btnprimario ${Styles.btn2}`}>
             Sign in with Google
-          </button>
-          <button className={`btnprimario ${Styles.btn2}`}>
+          </button> 
+          <button style={{marginTop: '12px'}} className={`btnprimario ${Styles.btn2}`}>
             Sign in with Facebook
-          </button>
+          </button>*/}
+          <div
+              ref={googleButton}
+          ></div>
         </form>
       </div>
     </div>
