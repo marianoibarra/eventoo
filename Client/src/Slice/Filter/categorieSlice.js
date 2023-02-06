@@ -37,6 +37,8 @@ export const categorieSlice = createSlice({
     [axiosModeCategories.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error;
+
+      console.log(state.error,'Error desde slice')
     }
   }
 }

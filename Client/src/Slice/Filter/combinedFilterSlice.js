@@ -9,24 +9,22 @@ export const axiosCombinedFilter = createAsyncThunk(
   'filter/axiosCombinedFilter',
   async (resultSuperQuery) => {
     const res = await axios.get(combinedFilterUrl + resultSuperQuery)
-    console.log(res, 'URL')
+    console.log(resultSuperQuery,"desde el slice")
     return res.data
   })
 
 export const combinedFilterSlice = createSlice({
   name: 'filter',
   initialState: {
-    query: []
+    filter: []
   },
-  reducers: {
-  },
+  reducers: { },
   extraReducers: {
     [axiosCombinedFilter.pending]: (state) => {
       state.loading = true
     },
     [axiosCombinedFilter.fulfilled]: (state, action) => {
-     
-      state.query = action.payload
+      state.filter = action.payload
       state.loading = false
       state.error = null
     },
@@ -41,3 +39,6 @@ export const combinedFilterSlice = createSlice({
 export const {
   setCombinedFilter
 } = combinedFilterSlice.actions
+
+
+export default combinedFilterSlice.reducer

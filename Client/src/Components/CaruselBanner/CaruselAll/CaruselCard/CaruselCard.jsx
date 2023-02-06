@@ -1,19 +1,17 @@
 import React from 'react'
 import Style from './CaruselCard.module.css'
 
-const CaruselCard = ({ name, start_date, category }) => {
+const CaruselCard = ({ img, name, start_date, category, id }) => {
   return (
 
-    <div className={Style.container_card}>
-
-
+    <div className={Style.container_card} style={{ backgroundImage: `url(${img})` }} >
       <div className={Style.container_details}>
-        <h1 className={Style.details_text}>{name}</h1>
-        <p>{start_date}</p>
-        <p>{category}</p>
+        <h2 className={Style.details_date} >{start_date}</h2>
+        <h3 className={Style.details_category}>{category}</h3>
+        <h2 className={Style.details_title}>{name}</h2>
         <div>
-          <a className={`btnprimario`} href='/Event'>
-            <span>MORE</span>
+          <a className={`btnprimario btnMore`} href={`/Event/${id}`}>
+            <span>INFO</span>
           </a>
         </div>
       </div>

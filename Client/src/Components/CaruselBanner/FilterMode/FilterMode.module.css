@@ -62,6 +62,15 @@
     user-select: none;
 }
 
+.select_date {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 200px;
+}
+
+
+
 .opcionSelect {
     font-size: 20px;
     color: var(--white-text);

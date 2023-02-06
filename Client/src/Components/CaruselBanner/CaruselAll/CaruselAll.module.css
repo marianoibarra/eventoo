@@ -11,6 +11,13 @@
     border-bottom: 4px solid var(--accent-color);
 }
 
+.container_resultFilter{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 3.3rem;
+    margin: 3rem 0px 2rem;
+}
+
 /* .carusel_cards{
     display: grid;
     grid-auto-flow: column;
