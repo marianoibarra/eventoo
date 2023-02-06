@@ -10,6 +10,7 @@
     height: 100% vh;
     display: flex;
     margin-top: 70px;
+    justify-content: center;
 }
   
 .title{
@@ -17,7 +18,7 @@
 }
   
 .split{
-    width: 949px;
+    width: 60%;
     height: 0px;
     border: 3px solid var(--primary-color);
     border-radius: 15px;
@@ -26,9 +27,31 @@
   
 .footerForm{
     height: 35px;
-    width: 100%;
+    width: 100vw;
     background-color: #121318;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.errorMessage {
+    padding: 10px;
+    color: white;
+    background-color: #ff5733;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1vw;
+  }
+  .sendMessage {
+    padding: 10px;
+    color: white;
+    background-color: var(--accent-color);
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1vw;
+  }
   
 /* Paleta colores{
     #121318 Negro

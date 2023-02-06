@@ -44,13 +44,13 @@ function DateTime(){
             <h2 className={style.title}>Date and Time</h2>
             <p className={style.text}>Please choose the date and time that your event will take place. It's important to select the correct hour to ensure that your guests arrive on time.</p>
             <h4 className={style.title}>Start Date</h4>
-            <input type='date' format='aaaa-mm-dd' onChange={handleStartDate}></input>
+            <input type='date' className={style.inputs} format='aaaa-mm-dd' onChange={handleStartDate}></input>
             <h4 className={style.title}>End date</h4>
-            <input type='date' format='aaaa-mm-dd' onChange={handleEndDate}></input>
+            <input type='date' className={style.inputs}  format='aaaa-mm-dd' onChange={handleEndDate}></input>
             <h4 className={style.title}>Start time</h4>
-            <input type='time' onChange={handleStartTime}></input>
+            <input type='time' className={style.inputs}  onChange={handleStartTime}></input>
             <h4 className={style.title}>End time</h4>
-            <input type='time' onChange={handleEndTime}></input>
+            <input type='time' className={style.inputs}  onChange={handleEndTime}></input>
         </div>
     )
 };
