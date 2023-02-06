@@ -11,11 +11,13 @@ const {
   verifyEmailCode,
   resendEmailCode,
   modifyUser,
+  googleAuth,
 } = require("../controllers/user");
 
 const router = Router();
 
 router.post("/register", register);
+router.post("/auth", googleAuth);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.get("/reset-password/:reset_token", checkResetToken);
