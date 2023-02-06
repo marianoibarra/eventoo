@@ -63,7 +63,7 @@ const FormRecover = () => {
         <span className={Styles.title}>
           EVEN<b>TOO</b>
         </span>
-        <h2 className={Styles.subTitle}>Forgot Password</h2>
+        <h2 className={Styles.subTitle}>Reset Password</h2>
         {  <form onSubmit={handleSubmit} className={Styles.containerform}>
           {error  && <p className={Styles.errorMessage}>{error.msg}</p>}
           {loginIn  && <p className={Styles.errorMessage}></p>}
