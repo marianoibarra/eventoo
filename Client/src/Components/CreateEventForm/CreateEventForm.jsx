@@ -17,6 +17,28 @@ function Form(){
 
   const handleSubmit = e => {
     e.preventDefault();
+    if(!event.name||
+      !event.description
+      // ||
+      // !event.cover_pic||
+      // !event.address_line||
+      // !event.city||
+      // !event.state||
+      // !event.country||
+      // !event.start_date||
+      // !event.end_date||
+      // !event.start_time||
+      // !event.end_time||
+      // !event.isPublic||
+      // !event.virtualURL||
+      // !event.guests_capacity||
+      // !event.category||
+      // !event.isPaid||
+      // !event.address
+      ){
+        event.error='There are missing fields to fullfilled';
+        return
+    }
     dispatch(createEvent(event))
     alert("Event created!")
     console.log('el evento', event)
@@ -24,14 +46,14 @@ function Form(){
 
     return(
     <div className={style.container}>
-        <Lateral/>
+        {/* <Lateral/> */}
         <form className={style.form} onSubmit={e=>handleSubmit(e)}>
           <h1 className={style.title}>EVENT INFORMATION</h1>
           <Image/>
           <div className={style.split}></div>
           <BasicInfo/>
-          <div className={style.split}></div>
-          <MoreInfo/>
+          {/* <div className={style.split}></div>
+          <MoreInfo/> */}
           <div className={style.split}></div>
           <h1 className={style.title}>LOCATION AND DATE</h1>
           <Category/>
@@ -39,9 +61,11 @@ function Form(){
           <DateTime/>
           <div className={style.split}></div>
           <Tickets/>
+          {event.error ? <p className={style.errorMessage}>Can't create event</p> :
+            event.create ? <p className={style.sendMessage}>Event created successfully</p>: undefined}
           <div className={style.footerForm}>
             <button className={style.btnprimario}>Cancel</button>
-            <button type='submit' className={style.btnprimario}>Save & Next</button>
+            <button type='submit' className={style.btnprimario} >Create</button>
           </div>
         </form>
     </div>

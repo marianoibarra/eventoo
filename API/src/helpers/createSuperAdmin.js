@@ -15,13 +15,11 @@ const createSuperAdmin = async (data) => {
     zip_code,
   } = data;
 
-  const adminExist = await User.findOne({
-    where: {
-      email: email,
-    },
-  });
 
-  if (adminExist.length === 0) {
+  const adminFromDB = await User.findOne({ where: { email } });
+
+  if (!adminFromDB) {
+
     const user = await User.create({
       email,
       password,
