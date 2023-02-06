@@ -102,6 +102,14 @@
     background-color: var(--ligth-background-color);
 }
 
+.aboutevent img {
+    height: auto;
+    width: 100%;
+    border: 0px;
+    margin-top: 15px;
+    margin-left: 0px;
+}
+
 .botondecompra {
     border: solid 1px black;
     border-radius: 12px;
