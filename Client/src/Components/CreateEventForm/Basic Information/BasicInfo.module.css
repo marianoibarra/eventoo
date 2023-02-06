@@ -23,6 +23,7 @@
     width: 150px;
     border: solid 1px #667080;
     background-color: white;
+    border-radius: 5px;
 }
 
 .description{

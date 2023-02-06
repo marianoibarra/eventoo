@@ -44,16 +44,19 @@ function Category(){
         <div className={style.info}>
             <h2 className={style.title}>Choose a category and access</h2>
             <p className={style.text}>It is important to select a category, as this will help in the classification and organization of your event.</p>
-            <select  onChange={handleChange}>
-                <option value="">Select a kind of access</option>
-                <option name='modality' value='Presential'>Presential</option>
-                <option name='modality' value='Virtual'>Virtual</option>
-            </select>
+            <div>
+              Access:
+              <select className={style.select} onChange={handleChange}>
+                <option className={style.select} value="">Select a kind of access</option>
+                <option className={style.select}  name='modality' value='Presential'>Presential</option>
+                <option className={style.select}  name='modality' value='Virtual'>Virtual</option>
+              </select>
+            </div>
             <div>
             {filteredCategories.length > 0 && (
             <div>
              Category:
-              <select onChange={handleCategory}>
+              <select className={style.select} onChange={handleCategory}>
                 {filteredCategories.map((c) => (
                   <option key={c.id} value={c.name}>
                     {c.name}
@@ -62,13 +65,12 @@ function Category(){
               </select>
             </div>
             )}
-             {selectedModality !== "" && (
+             {selectedModality  && (
            <div>
               <div>
                 {selectedModality === "Presential"
                ? <Map/>
-                : "URL:"}
-                <input type="text" onChange={handleUrl}/>
+                : <input className={style.inputs} type="text" placeholder='URL' onChange={handleUrl}/>}
               </div>
              </div>
             )}

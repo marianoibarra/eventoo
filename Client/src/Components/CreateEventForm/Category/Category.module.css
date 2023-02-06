@@ -17,3 +17,19 @@
     outline: none;
     height: 150px;
 }
+
+.select{
+    margin: 10px;
+    width: 170px;
+    border-radius: 5px;
+    height: 25px;
+}
+
+.inputs{
+    margin: 10px;
+    width: 170px;
+    border-radius: 5px;
+    height: 25px;
+    background-color: white;
+    border: 1px solid #ccc;
+}

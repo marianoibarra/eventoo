@@ -32,6 +32,9 @@
 
 .inputs{
     margin: 10px;
-    width: fit-content;
-    border: solid 1px #667080;
+    width: 170px;
+    border-radius: 5px;
+    height: 25px;
+    border: 1px solid #ccc;
+    background-color: white;
 }

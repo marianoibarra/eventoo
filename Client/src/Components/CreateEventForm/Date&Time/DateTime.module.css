@@ -13,6 +13,9 @@
     margin: 5px;
 }
 
-.input{
+.inputs{
     width: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
