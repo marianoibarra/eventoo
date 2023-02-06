@@ -4,33 +4,42 @@ require("dotenv").config();
 const sendEmail = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
-const {OAuth2Client} = require('google-auth-library');
+const { verifyGoogle } = require("../helpers/verifyGoogle");
 
 const googleAuth = async (req, res) => {
-
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-  const { clientId } = req.body
-  console.log(req.body);
-
-  async function verify() {
-    const ticket = await client.verifyIdToken({
-        idToken: clientId,
-        audience: process.env.GOOGLE_CLIENT_ID
-
-    });
-    const payload = ticket.getPayload();
-    const userid = payload['sub'];
-    res.send(userid)
-  }
   try {
-    
+    const { credential } = req.body;
+    const { email, picture, given_name, family_name, email_verified } = await verifyGoogle(credential);
+
+    const [user, created] = await User.findOrCreate({
+      where: { email },
+      defaults: {
+        name: given_name,
+        last_name: family_name,
+        profile_pic: picture,
+        email: email,
+        emailIsVerify: email_verified
+      }
+    })
+    const token = jwt.sign({ id: user.id }, process.env.SECRET, {
+      expiresIn: "90d",
+    });
+
+    res.send({
+      msg: created ? "User created successfully" : "Login successfully",
+      id: user.id,
+      token,
+      data: {
+        name: user.name,
+        last_name: user.last_name,
+        email: user.email,
+        profile_pic: user.profile_pic,
+      },
+    });
   } catch (error) {
-    console.error
-    res.status(500).send(error)
+    res.status(500).send(error.message); 
   }
-  verify().catch(console.error);
-}
+};
 
 const register = async (req, res) => {
   try {
@@ -400,4 +409,5 @@ module.exports = {
   resendEmailCode,
   modifyUser,
   verifyAdmin,
+  googleAuth,
 };
