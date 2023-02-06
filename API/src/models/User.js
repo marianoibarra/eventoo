@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const regexp_password = require('../helpers/regexps');
 
 module.exports = (sequelize) => {
-  const User = sequelize.define("User", {
+  const User = sequelize.define("user", {
         email: {
           type: DataTypes.STRING,
           allowNull: false,

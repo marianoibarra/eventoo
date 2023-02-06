@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 
 module.exports = (sequelize) => {
-    sequelize.define('RoleAdmin', {
+    sequelize.define('roleAdmin', {
         name: {
             type: DataTypes.ENUM('USER', 'ADMIN', 'SUPERADMIN'),
             allowNull: false,

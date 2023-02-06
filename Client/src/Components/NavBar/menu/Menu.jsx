@@ -1,38 +1,59 @@
 import Styles from "./Menu.module.css";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import User from "../../../Assets/UserExample.jpg";
+import User from "../../../Assets/UserProfile.png";
 import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Menu = () => {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
+  const { name, last_name, email, image } = useSelector((state) => state.user);
+
+  const handleClearLocalStorage = () => {
+    localStorage.clear();
+    navigate('/')
+
+  };
 
   return (
     <div className={Styles.menuContainer}>
       <button className={Styles.menuIcon} onClick={() => setIsOpen(!isOpen)}>
-        <FaUserCircle size={40}/>
+        <FaUserCircle size={40} />
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div
             className={Styles.menu}
             initial={{ height: 0 }}
-            animate={{ height: 130 }}
+            animate={{ height: 130 , width:130}}
             exit={{ height: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <img src={User} alt="user photo" className={Styles.menuPhoto} onClick={() => setIsOpen(!isOpen)}/>
+            <img
+              src={image ? image : User}
+              alt="user photo"
+              className={Styles.menuPhoto}
+              onClick={() => setIsOpen(!isOpen)}
+            />
 
-            <div className={Styles.menuName}>primer usuario</div>
-            <p className={Styles.menuEmail}>fede.cid.96@gmail.com</p>
+            {name ? (
+              <div className={Styles.menuName}>{`${name} ${last_name}`}</div>
+            ) : undefined}
+            {email ? <p className={Styles.menuEmail}>{email}</p> : undefined}
 
             <Link to="/Setting" className={Styles.menuLink}>
               Settings
-              </Link>
-              <button onClick={undefined} className={Styles.menuLink}>
+            </Link>
+           {name ? <button
+              className={Styles.menuLink}
+              onClick={handleClearLocalStorage}
+            >
               Log Out
-              </button>
+            </button> : <Link to="/login" className={Styles.menuLink}>
+              Sign In
+            </Link>}
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,9 +1,9 @@
 require("dotenv").config();
-const { Sequelize } = require("sequelize");
+const { Sequelize, SequelizeScopeError } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
-const moment = require('moment')
+const moment = require('moment');
 
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
@@ -63,20 +63,24 @@ const {
 User.belongsToMany(Event, { through: 'Favorites', as: 'favorites' });
 Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 
+
 User.belongsToMany(Event, { through: Review, as: 'reviews' });
 Event.belongsToMany(User, { through: Review, as: 'reviews' });
+User.hasMany(Review);
+Review.belongsTo(User);
+Event.hasMany(Review);
+Review.belongsTo(Event);
+
 
 User.belongsToMany(Event, { 
   through: Transaction,
   foreignKey: 'eventId',
-  otherKey: 'buyerId',
-  as: 'transaction' 
+  otherKey: 'buyerId'
 });
 Event.belongsToMany(User, {
    through: Transaction, 
    foreignKey: 'buyerId',
-   otherKey: 'eventId',
-   as: 'transaction' 
+   otherKey: 'eventId', 
 });
 
 Transaction.hasMany(Ticket, {foreignKey: 'transactionId', as: 'tickets'})
@@ -120,7 +124,6 @@ User.beforeCreate(async function (user) {
 
 User.beforeUpdate(async function (user) {
   if(user.password) {
-    console.log(user)
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
   }

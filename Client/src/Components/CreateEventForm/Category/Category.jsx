@@ -1,62 +1,78 @@
-import React, {useState} from 'react';
+import React, {useState , useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { updateCategory, updateVirtualURL } from '../../../Slice/CreateEvent/CreateEvent';
+import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import style from './Category.module.css'
-
-const categoriesPresencial = [
-    "Conferencia",
-    "Seminario",
-    "Taller",
-    "Exposición",
-  ];
-  
-  const categoriesOnline = [
-    "Webinar",
-    "Curso en línea",
-    "Streaming",
-  ];
-  
-//   const EventTypeSelect = () => {
+import Map from './Map';
     
 
 function Category(){
+  const dispatch = useDispatch();//                      STATE GLOBAL.REDUCER.PROPIEDADREDUCER
+  const { categories, loading, error } = useSelector(state => state.categories.categories);
+  const [selectedModality, setSelectedModality] = useState(null);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [category, setCategory] = useState('');
 
-    const [selectedType, setSelectedType] = useState("");
-    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+      dispatch(axiosModeCategories());
+    }, [dispatch]);
   
-    const handleTypeChange = (event) => {
-      setSelectedType(event.target.value);
-      if (event.target.value === "Presencial") {
-        setCategories(categoriesPresencial);
-      } else if (event.target.value === "Online") {
-        setCategories(categoriesOnline);
-      } else {
-        setCategories([]);
+    useEffect(() => {
+      if (!loading && categories) {
+        setFilteredCategories(categories.filter(c => c.modality === selectedModality));
       }
+    }, [categories, loading, selectedModality]);
+
+
+    const handleChange = e => {
+      e.preventDefault();
+      setSelectedModality(e.target.value);
     };
+
+    const handleCategory = e => {
+      e.preventDefault();
+      setCategory(e.target.value);
+      dispatch(updateCategory(e.target.value));
+    };
+
+    const handleUrl = e =>{
+      e.preventDefault();
+      dispatch(updateVirtualURL(e.target.value));
+    }
 
     return(
         <div className={style.info}>
             <h2 className={style.title}>Choose a category and access</h2>
             <p className={style.text}>It is important to select a category, as this will help in the classification and organization of your event.</p>
-            <select value={selectedType} onChange={handleTypeChange}>
+            <select  onChange={handleChange}>
                 <option value="">Select a kind of access</option>
-                <option value="Presencial">Onsite</option>
-                <option value="Online">Online</option>
+                <option name='modality' value='Presential'>Presential</option>
+                <option name='modality' value='Virtual'>Virtual</option>
             </select>
             <div>
-            {categories.length > 0 && (
-            <label>
+            {filteredCategories.length > 0 && (
+            <div>
              Category:
-             <select>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-            </select>
-            </label>
-             )}
+              <select onChange={handleCategory}>
+                {filteredCategories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
-           
+            )}
+             {selectedModality !== "" && (
+           <div>
+              <div>
+                {selectedModality === "Presential"
+               ? <Map/>
+                : "URL:"}
+                <input type="text" onChange={handleUrl}/>
+              </div>
+             </div>
+            )}
+          </div>
         </div>
     )
 };

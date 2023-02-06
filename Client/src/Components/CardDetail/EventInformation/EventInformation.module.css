@@ -1,0 +1,27 @@
+.background {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #007F8040;
+    width: 100vw;
+    height: 13vh;
+}
+
+.containericon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iconspan {
+    color: var(--primary-color);
+    margin-top: 5px;
+    width: 4vw;
+}
+
+.iconspantext {
+    display: block;
+    width: min-content;
+    color: var(--primary-color);
+    font-size: 1.4vw;
+}

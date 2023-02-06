@@ -1,7 +1,6 @@
 const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
-
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -34,7 +33,6 @@ const createEvent = async (req, res) => {
     bankAccount,
   } = req.body;
 
- 
   try {
     // if (!name ||
     //     !description ||
@@ -99,8 +97,9 @@ const createEvent = async (req, res) => {
           state,
           country,
           zip_code,
-        }
-      },{ include: ['address'] }
+        },
+      },
+      { include: ["address"] }
     );
 
     if (bankAccount) {
@@ -115,30 +114,32 @@ const createEvent = async (req, res) => {
       await event.setCategory(categoryFromDB);
     }
 
-    const organizer = await User.findByPk(req.userId)
+    const organizer = await User.findByPk(userId);
 
     await event.setOrganizer(organizer);
 
     await event.reload({
       include: [
-        'bankAccount',
+        "bankAccount",
         {
           model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
-          model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
-          model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
+          as: "address",
+          attributes: { exclude: ["id"] },
         },
-    ]});
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
 
     return res.status(201).json(event);
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -151,66 +152,30 @@ const createEvent = async (req, res) => {
 
 const getEventByUser = async ({ userId }, res) => {
   try {
-        const userEventsCreator = await User_Event.findAll({
+    const events = await Event.findAll({
       where: {
-        [Op.and]: [{ UserId: req.userId }, { role: "CREATOR" }],
+        organizerId: userId,
       },
-    });
-
-    const userEventsGuest = await User_Event.findAll({
-      where: {
-        [Op.and]: [{ UserId: req.userId }, { role: "GUEST" }],
-      },
-    });
-
-    if (userEventsCreator.length === 0 && userEventsGuest.length === 0)
-      return res.status(500).send("You do not have any events");
-
-    const allMyEvents = [];
-
-    for (let e of userEventsCreator) {
-      let eventByCreator = await Event.findOne({
-        where: {
-          id: e.EventId,
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
         },
-        include: [
-          BankAccount,
-          Address,
-          Category,
-          {
-            model: User,
-            as: "users",
-            through: {
-              attributes: ["role"],
-            },
-          },
-        ],
-      });
-
-      allMyEvents.push({ ...eventByCreator.toJSON(), role: "CREATOR" });
-    }
-
-    for (let e of userEventsGuest) {
-      let eventByGuest = await Event.findOne({
-        where: {
-          id: e.EventId,
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
         },
-        include: [
-          BankAccount,
-          Address,
-          Category,
-          {
-            model: User,
-            as: "users",
-            through: {
-              attributes: ["role"],
-            },
-          },
-        ],
-      });
-      allMyEvents.push({ ...eventByGuest.toJSON(), role: "GUEST" });
-    }
-    res.json(allMyEvents);
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+    res.json(events);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -243,76 +208,86 @@ const modifyEvent = async (req, res) => {
     parking,
     smoking_zone,
     pet_friendly,
-    bankAccount
+    bankAccount,
   } = req.body;
+  const userId = req.userId;
   try {
-    const event = await Event.findByPk(id);
-
-    if (bankAccount) {
-      const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
-      await event.setBankAccount(bankAccountFromDB);
-    }
-
-    if (category) {
-      const categoryFromDB = await Category.findOne({
-        where: { name: category },
-      });
-      await event.setCategory(categoryFromDB);
-    }
-
-    if (address_line && city && state && country && zip_code) {
-      const newAddress = await Address.create({
-        address_line,
-        city,
-        state,
-        country,
-        zip_code,
-      });
-      await event.setAddress(newAddress); 
-    }
-
-    await event.update({
-      name,
-      description,
-      start_date,
-      end_date,
-      start_time,
-      end_time,
-      isPublic,
-      category,
-      virtualURL,
-      isPremium,
-      isPaid,
-      age_range,
-      guests_capacity,
-      placeName,
-      cover_pic,
-      disability_access,
-      parking,
-      smoking_zone,
-      pet_friendly,
+    const event = await Event.findOne({
+      where: { id },
+      include: "organizer",
     });
 
-    await event.reload({
-      include: [
-        'bankAccount',
-        {
-          model: Address,
-          as: 'address',
-          attributes: { exclude: ['id'] }
-        },{
-          model: User,
-          as: 'organizer',
-          attributes: ["id", "name", "last_name", "profile_pic"] 
-        },{
-          model: Category,
-          as: 'category',
-          attributes: ["name", "modality"] 
-        },
-      ],
-    });
+    if (event.organizer.id === userId) {
+      if (bankAccount) {
+        const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
+        await event.setBankAccount(bankAccountFromDB);
+      }
 
-    res.send({ msg: "Data updated successfully", data: event });
+      if (category) {
+        const categoryFromDB = await Category.findOne({
+          where: { name: category },
+        });
+        await event.setCategory(categoryFromDB);
+      }
+
+      if (address_line && city && state && country && zip_code) {
+        const newAddress = await Address.create({
+          address_line,
+          city,
+          state,
+          country,
+          zip_code,
+        });
+        await event.setAddress(newAddress);
+      }
+
+      await event.update({
+        name,
+        description,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        isPublic,
+        category,
+        virtualURL,
+        isPremium,
+        isPaid,
+        age_range,
+        guests_capacity,
+        placeName,
+        cover_pic,
+        disability_access,
+        parking,
+        smoking_zone,
+        pet_friendly,
+      });
+
+      await event.reload({
+        include: [
+          "bankAccount",
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+          {
+            model: User,
+            as: "organizer",
+            attributes: ["id", "name", "last_name", "profile_pic"],
+          },
+          {
+            model: Category,
+            as: "category",
+            attributes: ["name", "modality"],
+          },
+        ],
+      });
+
+      res.send({ msg: "Data updated successfully", data: event });
+    } else {
+      res.status(500).send("Sorry! You can not modify this event");
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -320,10 +295,21 @@ const modifyEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   const { id } = req.params;
+  const userId = req.userId;
   try {
-    const eventToBeDeleted = await Event.findByPk(id);
-    await eventToBeDeleted.destroy();
-    res.send("Event removed successfully");
+    const event = await Event.findOne({
+      where: { id },
+      include: "organizer",
+    });
+    if (event.organizer.id === userId) {
+      await event.destroy(); //convertir en borradorLogico
+      const idDeleted = await Event.findByPk(id);
+      idDeleted
+        ? res.send("Sorry! The event could not be deleted. Please, try again.")
+        : res.send("Event removed successfully");
+    } else {
+      res.status(500).send("Sorry! You can not delete this event")
+    }
   } catch (error) {
     res.status(404).json({ error: error.message });
   }

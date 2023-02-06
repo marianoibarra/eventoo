@@ -17,9 +17,6 @@ const Navbar = () => {
         <div className={Estilo.MenuItem}>
       
             <button className={Estilo.MenuItem} onClick={()=>navigate("/create-event")}>Create Event</button>
-      
-          
-            <button className={Estilo.MenuItem} onClick={undefined}>language</button>
          
         </div>
       </nav>
