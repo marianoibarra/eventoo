@@ -27,7 +27,7 @@
   
 .footerForm{
     height: 35px;
-    width: 100%;
+    width: 100vw;
     background-color: #121318;
     display: flex;
     justify-content: center;

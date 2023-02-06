@@ -22,8 +22,13 @@
     font-size: 17px;
     border-radius: 8px;
     background: var(--primary-color);
-    opacity: 0.5;
     color: var(--white-text);
+}
+
+.btn:hover{
+    opacity: 1;
+    cursor: pointer;
+    box-shadow: 0 3px 3px 0 rgb(57 57 57 / 50%);
 }
 
 .parr{
