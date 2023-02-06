@@ -39,7 +39,7 @@ export const eventSlice = createSlice({
     guests_capacity: null,
     category: null,
     isPaid:false,
-    address:{},
+    zip_code:null,
   },
   reducers: {
     updateName: (state, action) => {
@@ -90,8 +90,8 @@ export const eventSlice = createSlice({
     updateIsPaid: (state, action) => {
       state.isPaid = action.payload;
     },
-    updateAddress: (state, action) => {
-      state.address = action.payload;
+    updateZipCode: (state, action) => {
+      state.zip_code = action.payload;
     },
     resetForm: (state) => {
       state.name = null;
@@ -110,7 +110,7 @@ export const eventSlice = createSlice({
       state.guests_capacity = null;
       state.category=null;
       state.isPaid=false;
-      state.address=null;
+      state.zip_code=null;
     },
   },
   extraReducers: {
@@ -135,7 +135,7 @@ export const {
   updateCoverPic,
   updateAddressLine,
   updateCity,
-  updatestate,
+  updateState,
   updateCountry,
   updateStartDate,
   updateEndDate,
@@ -147,9 +147,11 @@ export const {
   resetForm,
   updateCategory,
   updateIsPaid,
-  updateAddress,
+  updateZipCode,
   } = eventSlice.actions;
   
   export const selectEvent = (state) => state.event;
   
   export default eventSlice.reducer;
+
+

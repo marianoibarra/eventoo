@@ -20,9 +20,9 @@ export const categorieSlice = createSlice({
     filter: ''
   },
   reducers: {
-    selectedFilter: (state, action) => {     
+    selectedFilter: (state, action) => {
       state.filter = action.payload
-    },
+    }
   },
   extraReducers: {
     [axiosModeCategories.pending]: (state) => {

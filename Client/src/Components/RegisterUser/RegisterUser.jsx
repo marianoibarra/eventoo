@@ -11,14 +11,14 @@ const navigate = useNavigate()
   
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
+    last_name: "",
     email: "",
-    date:"",
+    born:"",
     password: "",
     confirmPassword: "",
   });
-  const { loading, error } = useSelector((state) => state.register);
+  const { loading, error,loginIn } = useSelector((state) => state.register);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -28,10 +28,10 @@ const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.firstName || !formData.lastName|| !formData.email|| !formData.date|| !formData.password|| !formData.confirmPassword||formData.confirmPassword !== formData.password ) {
-      error="One of the required fields is incorrect";
+    if (!formData.first_name || !formData.last_name|| !formData.email|| !formData.born|| !formData.password|| !formData.confirmPassword||formData.confirmPassword !== formData.password ) {
+      alert("One of the required fields is incorrect")
       return;}
-    
+      console.log(formData)
     dispatch(createUser(formData));
   };
   
@@ -49,23 +49,24 @@ if(name){
 
         <h2 className={Styles.subTitle}>Sign In</h2>
         <form onSubmit={handleSubmit} className={Styles.containerform}>
-        {error && <p className={Styles.errorMessage}>{error.msg}</p>}
+        {error ? <p className={Styles.errorMessage}>{error.msg}</p> :
+            loginIn ? <p className={Styles.sendMessage}>Email sended successfully</p>: undefined}
           <div className={Styles.Name}>
             <input
               className={Styles.container_input}
               type="text"
-              name="firstName"
-              placeholder="First Name"
+              name="name"
+              placeholder="Name"
               onChange={handleChange}
-              value={formData.firstName}
+              value={formData.name}
             />
             <input
               className={Styles.container_input}
               type="text"
-              name="lastName"
+              name="last_name"
               placeholder="Last Name"
               onChange={handleChange}
-              value={formData.lastName}
+              value={formData.last_name}
             />
           </div>
 
@@ -80,10 +81,10 @@ if(name){
           <input
             className={Styles.container_input}
             type="date"
-            name="date"
+            name="born"
             placeholder="Date"
             onChange={handleChange}
-            value={formData.date}
+            value={formData.born}
             min="1930-01-01" max="2005-01-31"
             pattern="\d{4}-\d{2}-\d{2}"
           />
