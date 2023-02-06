@@ -17,3 +17,16 @@
     outline: none;
     height: 150px;
 }
+
+.inputs{
+    margin: 10px;
+    width: 150px;
+    border: solid 1px #667080;
+    background-color: white;
+}
+
+.description{
+    border: solid 1px #667080;
+    height: 150px;
+    background-color: white;
+}

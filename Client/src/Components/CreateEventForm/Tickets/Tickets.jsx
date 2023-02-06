@@ -91,9 +91,9 @@ function Tickets() {
             </button>
         </div>
         <h4 className={style.parr}>Capacity:</h4>
-        <input onChange={handleChange}></input>
+        <input placeholder='Capacity' className={style.inputs} onChange={handleChange}></input>
         <h4 className={style.parr}>Price:</h4>
-        <input></input>
+        <input placeholder='Price' className={style.inputs}></input>
     </div>
   )
 }

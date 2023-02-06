@@ -30,3 +30,8 @@
     color: var(--primary-color);
 }
 
+.inputs{
+    margin: 10px;
+    width: fit-content;
+    border: solid 1px #667080;
+}

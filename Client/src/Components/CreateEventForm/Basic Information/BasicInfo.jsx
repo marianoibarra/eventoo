@@ -46,15 +46,15 @@ function BasicInfo(){
         <div className={style.info}>
             <h2 className={style.title}>Title</h2>
             <p className={style.text}>Pick a name for your event and tell guests why they'll love it.</p>
-            <input  type="text"  name='name' value={name} onChange={handleName} required/>
+            <input className={style.inputs} type="text"  name='name' value={name} onChange={handleName} contentEditable='true' required/>
             {/* {errors.name&&(
                             <p className="warning">{errors.name}</p>
                         )} */}
             <h2 className={style.title}>Short overview</h2>
             <p className={style.text}>Sum up in 140 characters or less why your event is unique, thrilling and worth attending."</p>
-            <input  type="text" name='description' value={description} onChange={handleDescription} required></input>
+            <textarea className={style.description} type="text" name='description'
+            value={description} onChange={handleDescription} rows='10' cols='75' required></textarea>
         </div>
     )
 };
-
 export default BasicInfo;
