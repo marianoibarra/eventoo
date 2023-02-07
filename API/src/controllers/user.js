@@ -112,7 +112,7 @@ const register = async (req, res) => {
         last_name: newUser.last_name,
         email: newUser.email,
         profile_pic: newUser.profile_pic,
-        address_line: newUser.address?.address_line,
+        address_line: newUser.address.address_line,
         city: newUser.address.city,
         state: newUser.address.state,
         country: newUser.address.country,
