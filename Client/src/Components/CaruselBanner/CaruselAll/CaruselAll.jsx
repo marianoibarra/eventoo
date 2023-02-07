@@ -10,6 +10,9 @@ const CaruselAll = () => {
   const dispatch = useDispatch()
   const { filter } = useSelector(state => state.combinedFilter)
   const [moreEvents, setMoreEvents] = useState(10)
+  const imgDefault = "https://dummyimage.com/400x600/005D5E/fff&text=Eventoo"
+
+
 
   useEffect(() => {
     dispatch(axiosCombinedFilter());
@@ -37,9 +40,9 @@ const CaruselAll = () => {
       </div>
 
       <div className={Style.container_inPerson}>
-        <div className={Style.container_text}> Event  {`(${filter.length})`} </div>
+        <div className={Style.container_text}> Event's  {`(${filter.length})`} </div>
         <div className={Style.container_resultFilter} >
-          {filter?.slice(0, moreEvents).map(event => (
+          {filter.length > 0 ? filter.slice(0, moreEvents).map(event => (
             <CaruselCard
               img={event.cover_pic?.replace('x.png', '1200')+'.png&text=cover_pic'}
               key={event.id}
@@ -48,10 +51,12 @@ const CaruselAll = () => {
               category={event.category === null ? 'N/A' : event.category.name}
               id={event.id}
             />
-          ))}
+          )) : <h2 className={Style.title_noReults}>No Results...</h2>
+
+          }
         </div>
         <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
-          <span>MORE EVENT</span>
+          <span>MORE</span>
         </a>
       </div>
     </div>
