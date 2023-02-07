@@ -10,7 +10,6 @@ export const axiosModeCategories = createAsyncThunk(
     return res.data
   })
 
-
 export const categorieSlice = createSlice({
   name: 'categories',
   initialState: {
@@ -37,8 +36,6 @@ export const categorieSlice = createSlice({
     [axiosModeCategories.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error;
-
-      console.log(state.error,'Error desde slice')
     }
   }
 }
