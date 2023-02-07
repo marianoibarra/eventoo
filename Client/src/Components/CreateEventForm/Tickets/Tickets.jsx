@@ -16,14 +16,6 @@ function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
     
   }, [isPublic]);
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    setInput({
-        ...input,
-        [e.target.name]: e.target.value
-    })
-};
-
 const handleBlur = (e) =>{
     setShowMsg({
         ...showMsg,
@@ -73,12 +65,15 @@ const handleBlur = (e) =>{
   })
   }
 
-
-  // const handleChange = e =>{
-  //   e.preventDefault();
-  //   setCapacity(e.target.value);
-  //   dispatch(updateGuestsCapacity(e.target.value));
-  // }
+  const handleChange = e =>{
+    e.preventDefault();
+    setCapacity(e.target.value);
+    dispatch(updateGuestsCapacity(e.target.value));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+  })
+  }
 
   return (
     <div className={style.container}>

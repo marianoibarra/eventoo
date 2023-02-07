@@ -6,11 +6,11 @@ import style from './Category.module.css'
 import Map from './Map';
     
 
-function Category({input,setInput,errors, showMsg, setShowMsg}){
+function Category({input,setInput,errors, showMsg, setShowMsg, selectedModality,setSelectedModality}){
   const dispatch = useDispatch();//                      STATE GLOBAL.REDUCER.PROPIEDADREDUCER
   const { categories, loading, error } = useSelector(state => state.categories.categories);
   //const {errorMsg} = useSelector(state => state.event);
-  const [selectedModality, setSelectedModality] = useState(null);
+  // const [selectedModality, setSelectedModality] = useState(null);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [category, setCategory] = useState('');
   
@@ -105,7 +105,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg}){
            <div>
               <div>
                 {selectedModality === "Presential"
-               ? <Map />
+               ? <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
                 : <div>
                   <input className={style.inputs} type="text" placeholder='URL' name='virtualURL' onChange={handleUrl}
                 onBlur={handleBlur} style={ showMsg.virtualURL && errors.virtualURL ? {border:'red 1px solid'}: {}}/>

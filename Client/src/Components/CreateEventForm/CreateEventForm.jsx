@@ -18,6 +18,7 @@ function Form(){
   const [showMsg, setShowMsg] = useState ({});
   const description = useSelector(state => state.event.description);
   const category = useSelector(state => state.event.category)
+  const [selectedModality, setSelectedModality] = useState(null);
 
   const [input, setInput] = useState({
     name:'',
@@ -47,15 +48,15 @@ function Form(){
     } else if (input.name.length > 30) {
       errors.name = "Title must have a maximum of 40 characters";
     }
-    if(!input.category) {errors.category = 'You must select a category'};
+    if(!input.category) {errors.category = 'You must select a category'}
+    // else if ( event.modality === 'Presential' 
     
-    // if (input.virtualURL.length === 0) {errors.virtualURL = "URL is required";
-      
-    // } else if (input.virtualURL.length < 10) {
-    //   errors.virtualURL = "URL must have at least 10 characters";
-    // }
-    // if(event.errorMsg===false) {errors.address_line = 'Enter an address'};
-    // if(!input.address_line) {errors.address_line = 'Address is required'};
+    if (selectedModality === 'Virtual' && input.virtualURL.length === 0) {errors.virtualURL = "URL is required";
+    } else if (selectedModality === 'Virtual' && input.virtualURL.length < 10) {
+      errors.virtualURL = "URL must have at least 10 characters";
+    }
+    if(!input.address_line && selectedModality === 'Presential') {errors.address_line = 'Address is required'};
+
     const now = new Date();
     const startDate = new Date(input.start_date);
     if(!input.start_date){errors.start_date = 'Start date is required'}
@@ -75,11 +76,18 @@ function Form(){
     if(!input.guests_capacity ){errors.guests_capacity = 'Capacity is required'
     }else if( isNaN(num) || num < 0) { errors.guests_capacity = 'Enter a valid number'};
     console.log(errors)
+    console.log('modalidad',event)
     return errors;
   }
-  const now = new Date();
+  
   useEffect(() => {
     setErrors(validate(input));
+    // setErrors({
+    //   ...errors,
+    //   virtualURL: selectedModality === 'Virtual' ? errors.virtualURL : null,
+    //   address_line: selectedModality === 'Presential'? errors.address_line : null,
+    // })
+    // console.log('modalidad',selectedModality)
   }, [input]);
 
   const handleSubmit = e => {
@@ -102,7 +110,7 @@ function Form(){
           <MoreInfo/> */}
           <div className={style.split}></div>
           <h1 className={style.title}>LOCATION AND DATE</h1>
-          <Category input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
+          <Category input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} />
           <div className={style.split}></div>
           <DateTime input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
           <div className={style.split}></div>

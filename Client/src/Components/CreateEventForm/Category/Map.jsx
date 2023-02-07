@@ -18,23 +18,23 @@ import { updateAddress, updateAddressLine, updateCity, updateCountry, updateStat
 
 const style = 'feature:all|element:labels|visibility:off&style=feature:administrative|element:geometry.fill|color:0xf5f5f5&style=feature:administrative|element:labels.text|lightness:15&style=feature:administrative.locality|element:labels.text.fill|lightness:-11&style=feature:administrative.neighborhood|element:labels|visibility:on&style=feature:administrative.land_parcel|element:all|visibility:simplified&style=feature:landscape|element:geometry.fill|color:0xf5f5f5|lightness:-1&style=feature:landscape.natural.terrain|element:geometry.fill|visibility:off&style=feature:poi|element:labels|visibility:off&style=feature:poi.business|element:all|visibility:off&style=feature:road|element:labels|lightness:20|visibility:off&style=feature:road.highway|element:geometry|visibility:simplified|color:0xffffff|lightness:15&style=feature:road.highway.controlled_access|element:geometry|visibility:simplified|hue:0xff6500|lightness:0&style=feature:road.highway.controlled_access|element:labels|visibility:off&style=feature:road.arterial|element:geometry|visibility:simplified|color:0xffffff&style=feature:road.arterial|element:labels|visibility:on&style=feature:road.local|element:geometry|visibility:on&style=feature:road.local|element:geometry.stroke|visibility:on|color:0xffffff|lightness:0&style=feature:road.local|element:labels|visibility:off|lightness:28&style=feature:transit|element:all|visibility:off|lightness:15&style=feature:water|element:all|hue:0x007bff|saturation:30|lightness:49&style=feature:water|element:geometry|color:0x39c2c9|saturation:-20|gamma:1.00|lightness:46&style=feature:water|element:labels|visibility:off'
 
-export default function App() {
+export default function App({input, setInput, errors, setShowMsg, showMsg}) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g',
     libraries: ["places"]
   });
   if (!isLoaded) return <div>Loading...</div>;
-  return <Map />;
+  return <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />;
 }
 
-function Map() {
+function Map({input, setInput, errors, setShowMsg, showMsg}) {
 
   const [selected, setSelected] = useState(null)
 
   return (
     <div className="container">
       <div className="places-container">
-        <PlacesAutocomplete setSelected={setSelected} />
+        <PlacesAutocomplete input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} setSelected={setSelected} />
       </div>
       {selected && 
       <div className="map-container">
@@ -47,7 +47,7 @@ function Map() {
   )
 }
 
-const PlacesAutocomplete = ({setSelected}) => {
+const PlacesAutocomplete = ({setSelected, input, setInput, errors, setShowMsg, showMsg}) => {
 
   const {
     ready,
@@ -56,8 +56,6 @@ const PlacesAutocomplete = ({setSelected}) => {
     suggestions: {status, data},
     clearSuggestions
   } = usePlacesAutocomplete()
-
-  const dispatch = useDispatch();
 
   const handleSelect = async (address) => {
     setValue(address, false)
@@ -93,30 +91,32 @@ const PlacesAutocomplete = ({setSelected}) => {
           break;
       }
     }
-    console.log(info)
     setSelected({ lat, lng });
-    // if(!info.address_line){
-    //   dispatch(setMesaggeError(false));
-    //   return
-    // }
-    // dispatch(setMesaggeError(true));
-    dispatch(updateAddressLine(info.address_line));
-    dispatch(updateCity(info.city));
-    dispatch(updateCountry(info.country));
-    dispatch(updateState(info.state));
-    dispatch(updateZipCode(info.zip_code));
+    setInput({
+      ...input,
+      address_line: info.address_line,
+      city: info.city,
+      country: info.country,
+      state: info.state,
+      zip_code: info.zip_code     
+    })
   }
 
 
-
   return (
-    <Combobox onSelect={handleSelect} >
-      <ComboboxInput value={value} onChange={(e) => setValue(e.target.value)}  disabled={!ready} className='combobox-input' placeholder='Address' />
+    <>
+    <Combobox onSelect={handleSelect}>
+      <ComboboxInput style={{backgroundColor: 'white', padding: '10px',margin: '10px',maxWidth: '400px',borderRadius: '5px', border: '1px solid #aaa'}} value={value} onChange={(e) => setValue(e.target.value)} disabled={!ready} className='combobox-input' placeholder='Address' />
       <ComboboxPopover>
-        <ComboboxList>
-          {status === "OK" && data.map(({place_id, description}) => <ComboboxOption key={place_id} value={description} />)}
+        <ComboboxList style={{backgroundColor: 'white', marginTop: '4px', borderRadius: '8px', overflow: 'hidden', boxShadow: '4px 4px 20px #3332'}}>
+          {status === "OK" && data.map(({place_id, description}) => <ComboboxOption style={{backgroundColor: 'white', fontSize: '0.9rem', cursor: 'pointer', minHeight: '20px', padding: '4px', listStyle: 'none'}} key={place_id} value={description} />)}
         </ComboboxList>
       </ComboboxPopover>
     </Combobox>
+    {showMsg.address_line&&(
+                            <p className={style.warning}>{errors.address_line}</p>
+                        )}
+    </>
+    
   )
 }
