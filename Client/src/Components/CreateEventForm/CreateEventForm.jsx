@@ -40,7 +40,7 @@ function Form(){
         return
     }
     dispatch(createEvent(event))
-    alert("Event created!")
+    // alert("Event created!")
     console.log('el evento', event)
   };
 
@@ -64,7 +64,7 @@ function Form(){
           {event.error ? <p className={style.errorMessage}>Can't create event</p> :
             event.create ? <p className={style.sendMessage}>Event created successfully</p>: undefined}
           <div className={style.footerForm}>
-            <button className={style.btnprimario}>Cancel</button>
+            {/* <button className={style.btnprimario}>Cancel</button> */}
             <button type='submit' className={style.btnprimario} >Create</button>
           </div>
         </form>
