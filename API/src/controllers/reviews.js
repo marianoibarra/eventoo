@@ -50,10 +50,9 @@ const getUserScore = async (req, res) => {
     });
 
     const preResult = scoreByUser.map(a => a.reviews.stars)
-    const resultScore =
-      preResult.reduce((acc, curr) => acc + curr) / preResult.length;
+    const resultScore = preResult.reduce((acc, curr) => acc + curr) / preResult.length;
 
-    return res.json({userScore: resultScore.toFixed(2)});
+    return res.json({ userScore: resultScore.toFixed(2) });
   } catch (error) {
     console.log(error)
     res.status(500).json({ msg: error.message });

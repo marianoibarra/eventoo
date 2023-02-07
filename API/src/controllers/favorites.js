@@ -16,6 +16,22 @@ try {
   const user = await User.findByPk(userId);
   const event = await Event.findByPk(id);
 
+
+  const existingEvent = await User.findOne({
+    where: { user: userId },
+    include: [{
+      model: Event,
+      where: { id: id},
+      as: "favorite",
+      attributes: [ id ],
+    }]
+    })
+
+  if (existingEvent){
+    return res.status(400).json({msg: "event already exists in favorites list"});
+  }
+
+
   await user.addFavorites(event);
 
   return res.status(200).json({msg: 'event added to favorites successfully'});
