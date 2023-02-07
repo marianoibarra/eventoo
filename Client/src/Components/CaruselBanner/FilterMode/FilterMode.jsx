@@ -22,19 +22,23 @@ const FilterMode = () => {
 
   //BLOQUE DE CODIGO PARA SUPERQUERY
   //Const para el filtro SuperQuery
-  const [city, setCity] = useState(null)
   const [category, setCategory] = useState(null)
   const [weekend, setWeekend] = useState(null)
   const [today, setToday] = useState(null)
-
+  const [city, setCity] = useState(null)
+  
 
   const handleChange = e => {
     setSelectedModality(e.target.value);
+    document.getElementById("cityInput").value = "";
+    setCity('')
   };
 
-  const handleCityChange = e => {
-    setCity(e.target.value)
-  }
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      setCity(event.target.value);
+    }
+  };
 
   const handleCategoryChange = e => {
     setCategory(e.target.value)
@@ -66,8 +70,10 @@ const FilterMode = () => {
 
   //For in que concatena el query para armar la URL
   for (let prop in query) {
-    if (query[prop] === null || query[prop].length > 1) { resultSuperQuery += `&${prop}=${query[prop]}` }
+    if (query[prop] === null || query[prop].length > 1) { resultSuperQuery += `&${prop}=${query[prop]}` }    
     dispatch(axiosCombinedFilter(resultSuperQuery));
+    resultSuperQuery = ''
+    console.log(resultSuperQuery,'me borre')
   }
 
 
@@ -83,17 +89,6 @@ const FilterMode = () => {
   }, [categories, loading, selectedModality]);
 
 
-
-
-
-
-  const handleNameEvent = (e) => {
-    const value = e.target.value
-    console.log(value, 'desde el input')
-    setValue(value)
-    setFilteredSuggestions(events.filter(e => e.name.toLowerCase().startsWith(value.toLowerCase())))
-
-  }
 
   return (
     <div className={Style.containerFilterMode}>
@@ -115,59 +110,29 @@ const FilterMode = () => {
       </div>
 
       <div className={selectedModality === 'Virtual' ? Style.noVisibility : Style.state}>
-        <h2 className={Style.titleFilter}>In</h2>
-        <input placeholder='' onChange={handleCityChange} ></input>
+        <h2 className={Style.titleFilter}>Where</h2>
+        <input className={Style.input_city} placeholder='Enter City' id='cityInput' onKeyDown={handleKeyPress} />
       </div>
-
 
       <div className={Style.search}>
-        <h2 className={Style.titleFilter}>Search</h2>
-        <input placeholder='' onChange={handleNameEvent} />
-        <ul>
-          {filteredSuggestions.map(s => {
-            <li key={s}>{s}</li>
-          })}
-        </ul>
-      </div>
+      <h2 className={Style.titleFilter}>When</h2>
+        <select className={Style.select_Looking}>
+          <option selected disabled hidden>Date</option>
+          <option value="Weekend" >Weekend</option>
+          <option value="Today" >Today</option>
+        </select>
 
-      <div className={Style.select_date}>
-        <label>
-          <input type="checkbox" checked={weekend} onChange={handleWeekendChange} /> Weekend </label>
-        <label>
-          <input type="checkbox" checked={today} onChange={handleTodayChange} />Today </label>
       </div>
-
     </div>
   );
 };
 
 export default FilterMode
 
-
-//onChange={handleSelectFilter}
-
-
-  // const handleSelectFilter = e => {
-  //   dispatch(setCombinedFilter(e.target.value));
-  // }
-
-
-
-  // const handleCity = e => {
-  //   console.log(e.target.value)
-  //   setSearchCity(e.target.value)
-  // }
-
-  // const handleSuperQuery = () => {
-  //   let query = ''
-  //   if (searchCity) {
-  //     query += 'city=' + searchCity + '&'
-  //   }
-  //   if (searchMode) {
-  //     query += 'modality=' + searchMode + '&'
-  //   }
-  //   if (searchCategory) {
-  //     query += 'categories=' + searchCategory + '&'
-  //   }
-  //   dispatch(axiosModeCategories(query))
-  // }
+{/* <h2 className={Style.titleFilter}>Search</h2>
+<input placeholder='' />
+<ul>
+  {filteredSuggestions.map(s => {
+    <li key={s}>{s}</li>
+  })}
+</ul> */}

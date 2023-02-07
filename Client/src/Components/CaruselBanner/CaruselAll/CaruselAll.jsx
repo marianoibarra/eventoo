@@ -41,7 +41,7 @@ const CaruselAll = () => {
         <div className={Style.container_resultFilter} >
           {filter?.slice(0, moreEvents).map(event => (
             <CaruselCard
-              img={event.cover_pic.replace('x.png', '1200')+'.png&text=cover_pic'}
+              img={event.cover_pic?.replace('x.png', '1200')+'.png&text=cover_pic'}
               key={event.id}
               name={event.name}
               start_date={event.start_date}
@@ -51,7 +51,7 @@ const CaruselAll = () => {
           ))}
         </div>
         <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
-          <span>MORE EVENT</span>
+          <span>MORE</span>
         </a>
       </div>
     </div>

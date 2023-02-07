@@ -44,7 +44,6 @@
 }
 
 
-
 .select_Looking {
     height: 4.8vh;
     width: 22.3vw;
@@ -69,13 +68,22 @@
     top: 200px;
 }
 
-
-
 .opcionSelect {
     font-size: 20px;
     color: var(--white-text);
     user-select: none;
 }
+.input_city{
+    width: 22.3vw;
+    background: transparent;
+    color: var(--white-text);
+    padding: 4px;
+    border-bottom: 3px solid var(--accent-color);
+    font-size: 185%;
+    margin: 0 auto;
+}
+
+::placeholder { color: rgba(253, 247, 244, 0.5); }
 
 .noVisibility {
     width: 0vw;
