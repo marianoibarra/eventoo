@@ -16,6 +16,8 @@ function Form(){
   const event = useSelector(state => state.event);
   const [errors, setErrors] = useState({});
   const [showMsg, setShowMsg] = useState ({});
+  const description = useSelector(state => state.event.description);
+  const category = useSelector(state => state.event.category)
 
   const [input, setInput] = useState({
     name:'',
@@ -69,19 +71,23 @@ function Form(){
         errors.end_time = 'End time can not be before the start time';
       }
     }
+    const num = parseInt(input.guests_capacity)
+    if(!input.guests_capacity ){errors.guests_capacity = 'Capacity is required'
+    }else if( isNaN(num) || num < 0) { errors.guests_capacity = 'Enter a valid number'};
+    console.log(errors)
     return errors;
   }
   const now = new Date();
-console.log(now)
   useEffect(() => {
     setErrors(validate(input));
   }, [input]);
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(input))
+    dispatch(createEvent(event))
     alert("Event created!")
-    console.log('el evento', event)
+    console.log('el evento', input)
+    console.log('evento global',event)
   };
 
   return(

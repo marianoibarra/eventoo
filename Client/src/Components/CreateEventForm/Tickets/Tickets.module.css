@@ -44,3 +44,8 @@
     border: 1px solid #ccc;
     background-color: white;
 }
+
+.warning {
+    color:red;
+    font-size: 0.8rem;
+}

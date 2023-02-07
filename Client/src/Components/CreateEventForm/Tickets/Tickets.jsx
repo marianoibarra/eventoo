@@ -6,7 +6,7 @@ import style  from './Tickets.module.css'
 
 
 
-function Tickets() {
+function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
   const dispatch = useDispatch();
   const [isPublic, setIsPublic] = useState(null);
   const [isPaid, setIsPaid] = useState(null);
@@ -16,10 +16,29 @@ function Tickets() {
     
   }, [isPublic]);
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    setInput({
+        ...input,
+        [e.target.name]: e.target.value
+    })
+};
+
+const handleBlur = (e) =>{
+    setShowMsg({
+        ...showMsg,
+        [e.target.name]: true,
+    })
+}
+
   const handleClick = e => {
     e.preventDefault();
     setIsPublic(true);
     dispatch(updateIsPublic(true));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+  })
     console.log('public', isPublic);
   }
 
@@ -27,6 +46,10 @@ function Tickets() {
     e.preventDefault();
     setIsPublic(false);
     dispatch(updateIsPublic(false));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+  })
     console.log('public', isPublic);
   }
 
@@ -34,20 +57,28 @@ function Tickets() {
     e.preventDefault();
     setIsPaid(true);
     dispatch(updateIsPaid(true));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+  })
   }
 
   const handle2Paid = e => {
     e.preventDefault();
     setIsPaid(false);
     dispatch(updateIsPaid(false));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+  })
   }
 
 
-  const handleChange = e =>{
-    e.preventDefault();
-    setCapacity(e.target.value);
-    dispatch(updateGuestsCapacity(e.target.value));
-  }
+  // const handleChange = e =>{
+  //   e.preventDefault();
+  //   setCapacity(e.target.value);
+  //   dispatch(updateGuestsCapacity(e.target.value));
+  // }
 
   return (
     <div className={style.container}>
@@ -59,18 +90,25 @@ function Tickets() {
             onClick={handleClick}
             value={true}
             className={style.btn}
+            name='isPublic'
+            onBlur={handleBlur}
             >
             Public
             </button>
             <button
-            style={ isPublic === false? { opacity: 1}: { opacity: 0.5 }}
+            style={isPublic === false? { opacity: 1}: { opacity: 0.5 }}
             onClick={handle2Click}
             value={false}
             className={style.btn}
+            name='isPublic'
+            onBlur={handleBlur}
             >
             Private
             </button>
         </div>
+        {showMsg.isPublic&&(
+                            <p className={style.warning}>{errors.isPublic}</p>
+                        )}
         <p className={style.text}>Choose if you wanna pay an extra for more guests or publicity</p>
         <div className={style.options}>
             <button
@@ -91,7 +129,10 @@ function Tickets() {
             </button>
         </div>
         <h4 className={style.parr}>Capacity:</h4>
-        <input placeholder='Capacity' className={style.inputs} onChange={handleChange}></input>
+        <input placeholder='Capacity' className={style.inputs} name ='guests_capacity' value={input.guests_capacity} onChange={handleChange} onBlur={handleBlur} style={ showMsg.guests_capacity && errors.guests_capacity ? {border:'red 1px solid'}: {}}/>
+        {showMsg.guests_capacity&&(
+                            <p className={style.warning}>{errors.guests_capacity}</p>
+                        )}
         <h4 className={style.parr}>Price:</h4>
         <input placeholder='Price' className={style.inputs}></input>
     </div>

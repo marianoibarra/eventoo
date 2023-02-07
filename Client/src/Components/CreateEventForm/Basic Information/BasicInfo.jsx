@@ -3,11 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectEvent, updateDescription, updateName } from '../../../Slice/CreateEvent/CreateEvent';
 import style from './BasicInfo.module.css'
 
-function BasicInfo({input,setInput,errors, showMsg, setShowMsg}){
+function BasicInfo({input,setInput,errors, showMsg, setShowMsg, event}){
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
         e.preventDefault();
+        dispatch(updateDescription(e.target.value));
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        })
+    };
+
+    const handleName = (e) => {
+        e.preventDefault();
+        dispatch(updateName(e.target.value));
         setInput({
             ...input,
             [e.target.name]: e.target.value
@@ -25,7 +35,7 @@ function BasicInfo({input,setInput,errors, showMsg, setShowMsg}){
         <div className={style.info}>
             <h2 className={style.title}>Title</h2>
             <p className={style.text}>Pick a name for your event and tell guests why they'll love it.</p>
-            <input className={style.inputs} type="text"  name='name' value={input.name} onChange={handleChange} contentEditable='true' onBlur={handleBlur} style={ showMsg.name && errors.name ? {border:'red 1px solid'}: {}} />
+            <input className={style.inputs} type="text"  name='name' value={input.name} onChange={handleName} contentEditable='true' onBlur={handleBlur} style={ showMsg.name && errors.name ? {border:'red 1px solid'}: {}} />
             {showMsg.name&&(
                             <p className={style.warning}>{errors.name}</p>
                         )}
