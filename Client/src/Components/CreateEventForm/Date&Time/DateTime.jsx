@@ -63,7 +63,7 @@ function DateTime({input,setInput,errors, showMsg, setShowMsg}){
             <h2 className={style.title}>Date and Time</h2>
             <p className={style.text}>Please choose the date and time that your event will take place. It's important to select the correct hour to ensure that your guests arrive on time.</p>
             <h4 className={style.title}>Start Date</h4>
-            <input type='date' className={style.inputs} format='aaaa-mm-dd' onChange={handleStartDate} onBlur={handleBlur}  style={ showMsg.start_date && errors.start_date ? {border:'red 1px solid'}: {}}/>
+            <input type='date' className={style.inputs} name = 'start_date'format='aaaa-mm-dd' onChange={handleStartDate} onBlur={handleBlur}  style={ showMsg.start_date && errors.start_date ? {border:'red 1px solid'}: {}}/>
             {showMsg.start_date&&(
                             <p className={style.warning}>{errors.start_date}</p>
                         )}

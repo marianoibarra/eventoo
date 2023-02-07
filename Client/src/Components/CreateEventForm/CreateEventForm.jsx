@@ -10,6 +10,7 @@ import { createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEven
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import UploadImage from './UploadImage/UploadImage';
 
 function Form(){
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ function Form(){
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(event))
+    dispatch(createEvent(input))
     alert("Event created!")
     console.log('el evento', input)
     console.log('evento global',event)
@@ -103,7 +104,7 @@ function Form(){
         {/* <Lateral/> */}
         <form className={style.form} onSubmit={e=>handleSubmit(e)}>
           <h1 className={style.title}>EVENT INFORMATION</h1>
-          <Image/>
+          <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
           <div className={style.split}></div>
           <BasicInfo input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
           {/* <div className={style.split}></div>
