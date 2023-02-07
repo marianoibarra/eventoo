@@ -40,10 +40,15 @@ export const eventSlice = createSlice({
     category: null,
     isPaid:false,
     zip_code:null,
+    errorMsg:false
   },
   reducers: {
+
     updateName: (state, action) => {
       state.name = action.payload;
+    },
+    setMesaggeError: (state, action) => {
+      state.errorMsg = action.payload;
     },
     updateDescription: (state, action) => {
       state.description = action.payload;
@@ -148,6 +153,7 @@ export const {
   updateCategory,
   updateIsPaid,
   updateZipCode,
+  setMesaggeError
   } = eventSlice.actions;
   
   export const selectEvent = (state) => state.event;

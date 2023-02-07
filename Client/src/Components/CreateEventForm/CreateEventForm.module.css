@@ -80,8 +80,15 @@
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
     box-shadow: 0 3px 5px 0 rgb(0 0 0 / 65%);
-  }
-  
+}
+
+.btnprimario[disabled],
+.btnprimario[disabled]:active,
+.btnprimario[disabled]:hover {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
 /* Paleta colores{
     #121318 Negro
     #005D5E Turquesa O

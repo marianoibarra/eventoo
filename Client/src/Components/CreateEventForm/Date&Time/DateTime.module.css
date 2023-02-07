@@ -19,3 +19,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+.warning {
+    color:red;
+    font-size: 0.8rem;
+}
