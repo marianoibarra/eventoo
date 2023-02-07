@@ -9,7 +9,6 @@ export const axiosCombinedFilter = createAsyncThunk(
   'filter/axiosCombinedFilter',
   async (resultSuperQuery) => {
     const res = await axios.get(combinedFilterUrl + resultSuperQuery)
-    console.log(resultSuperQuery,"desde el slice")
     return res.data
   })
 
