@@ -5,77 +5,83 @@ import { useSelector, useDispatch } from 'react-redux'
 import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
 import { axiosModeEvents } from '../../../Slice/Events/EventsSlice'
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Style from './FilterMode.module.css'
+import Chip from '@mui/material/Chip';
+import { BsCalendarDay } from "react-icons/bs";
 
 const FilterMode = () => {
   const dispatch = useDispatch();
   const { categories, loading } = useSelector(state => state.categories.categories);
   const { events } = useSelector(state => state.events)
-
-
   const [selectedModality, setSelectedModality] = useState(null);
   const [filteredCategories, setFilteredCategories] = useState([]);
 
-  const [value, setValue] = useState('')
-  const [filteredSuggestions, setFilteredSuggestions] = useState([])
+  //Esta constante guarda todo las city de los eventos que luego se pasan a const [city, setCity] = useState(nameCity);
+  const nameCity = [...new Set(events.filter(event => event?.address.city).map(event => event?.address.city))];
 
 
   //BLOQUE DE CODIGO PARA SUPERQUERY
   //Const para el filtro SuperQuery
   const [category, setCategory] = useState(null)
-  const [weekend, setWeekend] = useState(null)
-  const [today, setToday] = useState(null)
-  const [city, setCity] = useState(null)
-  
+  const [city, setCity] = useState(nameCity);
+  const [inputCity, setInputCity] = useState('')
+  const [isWeekend, setisWeekend] = useState(false);
+  const [isToday, setisToday] = useState(false);
+
+
+
 
   const handleChange = e => {
     setSelectedModality(e.target.value);
-    document.getElementById("cityInput").value = "";
     setCity('')
+    setCategory('')
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      setCity(event.target.value);
-    }
+  // const handleClickWeekend = () => {
+  //   setisWeekend(!isWeekend);
+  //   console.log(isWeekend,'soy el weekend')
+  // };
+
+  // const handleClicToday = () => {
+  //   setisToday(!isToday);
+  // };
+
+  const handleCityChange = e => {
+    setCity(e.target.value);
   };
 
   const handleCategoryChange = e => {
     setCategory(e.target.value)
   }
 
-  const handleWeekendChange = e => {
-    setWeekend(e.target.value)
-  }
-
-  const handleTodayChange = e => {
-    setToday(e.target.value)
-  }
 
   const filter = {
     modality: selectedModality,
     city: city,
     category: category,
-    isToday: today,
-    isNextWeekend: weekend
+    isToday: isToday,
+    isNextWeekend: isWeekend
   }
+
   let query = {}
   let resultSuperQuery = ''
+
   //For in que filtra los null del filter
   for (let prop in filter) {
     if (filter[prop] !== null) {
       query[prop] = filter[prop]
     }
   }
-
   //For in que concatena el query para armar la URL
   for (let prop in query) {
-    if (query[prop] === null || query[prop].length > 1) { resultSuperQuery += `&${prop}=${query[prop]}` }    
-    dispatch(axiosCombinedFilter(resultSuperQuery));
-    resultSuperQuery = ''
-    console.log(resultSuperQuery,'me borre')
+    if (query[prop] === null || query[prop].length > 1 || query[prop] !== false) { resultSuperQuery += `&${prop}=${query[prop]}` }
+    // console.log(resultSuperQuery, "soy la url")
+    setTimeout(() => {
+      dispatch(axiosCombinedFilter(resultSuperQuery));
+    }, 500);
   }
-
 
   useEffect(() => {
     dispatch(axiosModeCategories());
@@ -94,7 +100,7 @@ const FilterMode = () => {
     <div className={Style.containerFilterMode}>
 
       <div className={Style.looking}>
-        <h2 className={Style.titleFilter}>Looking For</h2>
+        <h2 className={Style.titleFilter_Looking}>Looking For</h2>
         <select className={Style.select_Looking} onChange={handleChange}>
           <option selected disabled hidden>Mode</option>
           <option value="Presential" >presential</option>
@@ -110,18 +116,31 @@ const FilterMode = () => {
       </div>
 
       <div className={selectedModality === 'Virtual' ? Style.noVisibility : Style.state}>
-        <h2 className={Style.titleFilter}>Where</h2>
-        <input className={Style.input_city} placeholder='Enter City' id='cityInput' onKeyDown={handleKeyPress} />
+        <h2 className={Style.titleFilter_Where}>Where</h2>
+        <div className={Style.input_city} onChange={handleCityChange}>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={nameCity}
+            sx={{ width: 419 }}
+            city={city}
+            onChange={(event, newCity) => {
+              setCity(newCity);
+            }}
+            inputCity={inputCity}
+            onInputChange={(event, newInputCity) => {
+              setInputCity(newInputCity);
+            }}
+
+            renderInput={(params) => <TextField {...params} label="City" />}
+          />
+        </div>
       </div>
 
       <div className={Style.search}>
-      <h2 className={Style.titleFilter}>When</h2>
-        <select className={Style.select_Looking}>
-          <option selected disabled hidden>Date</option>
-          <option value="Weekend" >Weekend</option>
-          <option value="Today" >Today</option>
-        </select>
-
+        <h2 className={Style.titleFilter_When}>When</h2>
+        {/* <Chip label='Weekend' icon={<BsCalendarDay />} color="success" onClick={handleClickWeekend} />
+        <Chip label='Today' icon={<BsCalendarDay />} color="success" onClick={handleClicToday} /> */}
       </div>
     </div>
   );
@@ -129,10 +148,11 @@ const FilterMode = () => {
 
 export default FilterMode
 
-{/* <h2 className={Style.titleFilter}>Search</h2>
-<input placeholder='' />
-<ul>
-  {filteredSuggestions.map(s => {
-    <li key={s}>{s}</li>
-  })}
-</ul> */}
+
+
+
+{/* <select className={Style.select_Looking}>
+<option selected disabled hidden>Date</option>
+<option value="Weekend" >Weekend</option>
+<option value="Today" >Today</option>
+</select> */}

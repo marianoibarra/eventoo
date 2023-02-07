@@ -19,7 +19,9 @@
   height: 70px;
   position: relative;
   padding: 0 20px;
-  
+  box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
+  -moz-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
 }
 
 
