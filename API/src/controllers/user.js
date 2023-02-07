@@ -108,10 +108,16 @@ const register = async (req, res) => {
       id: newUser.id,
       token,
       data: {
-        name,
-        last_name,
-        email,
-        profile_pic,
+        name: newUser.name,
+        last_name: newUser.last_name,
+        email: newUser.email,
+        profile_pic: newUser.profile_pic,
+        address_line: newUser.address?.address_line,
+        city: newUser.address?.city,
+        state: newUser.address?.state,
+        country: newUser.address?.country,
+        zip_code: newUser.address?.zip_code,
+        born: newUser.born
       },
     });
   } catch (e) {
@@ -219,6 +225,12 @@ const login = async (req, res) => {
         last_name: user.last_name,
         email: user.email,
         profile_pic: user.profile_pic,
+        address_line: user.address?.address_line,
+        city: user.address?.city,
+        state: user.address?.state,
+        country: user.address?.country,
+        zip_code: user.address?.zip_code,
+        born: user.born
       },
     });
   } catch (error) {
