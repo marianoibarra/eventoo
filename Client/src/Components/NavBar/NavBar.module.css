@@ -1,6 +1,6 @@
 .ContenedorHeader {
   width: 100%;
-  max-width: 1440px;
+
   margin: 0 auto;
   background-color: transparent;
   position: fixed;
@@ -21,8 +21,6 @@
   padding: 0 20px;
   
 }
-
-
 
 
 .scrolling {

@@ -1,4 +1,5 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const { resetPassword } = require('../controllers/user');
 require("dotenv").config();
 
 const sendEmail = (to, url, name, template) => {
@@ -256,7 +257,7 @@ const sendEmail = (to, url, name, template) => {
                                   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
                                   <div style="max-width: 500px; margin:auto" align="center">
                                     <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:46px; v-text-anchor:middle; width:374px;" arcsize="8.5%"  stroke="f" fillcolor="#bc4000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Cabin',sans-serif;"><![endif]-->
-                                    <a href="${url}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:'Cabin',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #bc4000; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:65%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+                                    <a href="${url}/reset-password${token}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:'Cabin',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #bc4000; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:65%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                       <span style="display:block;padding:14px 44px 13px;line-height:120%;"><span style="font-size: 16px; line-height: 19.2px;"><strong><span style="line-height: 19.2px; font-size: 16px;">Reset Password</span></strong>
                                       </span>
                                       </span>
