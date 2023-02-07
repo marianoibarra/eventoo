@@ -31,3 +31,8 @@
     height: 150px;
     background-color: white;
 }
+
+.warning {
+    color:red;
+    font-size: 0.8rem;
+}

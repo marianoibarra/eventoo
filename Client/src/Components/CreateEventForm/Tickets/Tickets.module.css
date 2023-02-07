@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 25px;
 }
 
 .text{
@@ -42,4 +43,9 @@
     height: 25px;
     border: 1px solid #ccc;
     background-color: white;
+}
+
+.warning {
+    color:red;
+    font-size: 0.8rem;
 }

@@ -8,7 +8,7 @@ export const createEvent = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(eventUrl, formData);
-      console.log(response)
+      console.log('response en slice',response)
       return response.data;
     } catch (error) {
       if (error.response) {
@@ -39,9 +39,10 @@ export const eventSlice = createSlice({
     guests_capacity: null,
     category: null,
     isPaid:false,
-    zip_code:null,
+    zip_code:null
   },
   reducers: {
+
     updateName: (state, action) => {
       state.name = action.payload;
     },
@@ -147,7 +148,7 @@ export const {
   resetForm,
   updateCategory,
   updateIsPaid,
-  updateZipCode,
+  updateZipCode
   } = eventSlice.actions;
   
   export const selectEvent = (state) => state.event;
