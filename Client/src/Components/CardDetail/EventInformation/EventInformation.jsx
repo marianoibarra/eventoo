@@ -22,35 +22,35 @@ const EventInformation = () => {
                 {eventDetail.disability_access === true && 
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <TbDisabled size={35}/> </span> 
-                        <span className={style.iconspantext}>Acceso discapacitado</span> 
+                        <span className={style.iconspantext}>Disability Access</span> 
                     </div>
                 }
                 {eventDetail.parking === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <AiFillCar size={35}/> </span> 
-                        <span className={style.iconspantext}>Estacionamiento</span> 
+                        <span className={style.iconspantext}>Parking</span> 
                     </div>
                 }
                 {eventDetail.pet_friendly === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <MdPets size={35}/> </span> 
-                        <span className={style.iconspantext}>Mascotas Permitidas</span> 
+                        <span className={style.iconspantext}>Pet Friendly</span> 
                     </div>                 
                 }
                 {eventDetail.smoking_zone === true &&
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <MdSmokingRooms size={35}/> </span> 
-                        <span className={style.iconspantext}>Zona Fumador</span> 
+                        <span className={style.iconspantext}>Smoking Zone</span> 
                     </div>  
                 } 
                 {eventDetail.isPublic === true ?
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <BsFillPeopleFill size={35}/> </span> 
-                        <span className={style.iconspantext}>Acceso Publico</span> 
+                        <span className={style.iconspantext}>Public Access</span> 
                     </div> :
                     <div className={style.containericon}> 
                         <span className={style.iconspan}> <RiGitRepositoryPrivateFill size={35}/> </span> 
-                        <span className={style.iconspantext}>Acceso Privado</span> 
+                        <span className={style.iconspantext}>Private Access</span> 
                     </div>              
                 }
             </div>}
