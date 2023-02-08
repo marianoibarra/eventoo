@@ -1,6 +1,6 @@
 .ContenedorHeader {
   width: 100%;
-  max-width: 1440px;
+
   margin: 0 auto;
   background-color: transparent;
   position: fixed;
@@ -23,8 +23,6 @@
   -webkit-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
   -moz-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
 }
-
-
 
 
 .scrolling {
