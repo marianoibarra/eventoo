@@ -42,11 +42,11 @@ const Menu = () => {
             {name ? (
               <div className={Styles.menuName}>{`${name} ${last_name}`}</div>
             ) : undefined}
-            {email ? <p className={Styles.menuEmail}>{email}</p> : undefined}
+            {email ?<><p className={Styles.menuEmail}>{email}</p>
 
             <Link to="/Setting" className={Styles.menuLink}>
               Settings
-            </Link>
+            </Link></>  : undefined}
            {name ? <button
               className={Styles.menuLink}
               onClick={handleClearLocalStorage}

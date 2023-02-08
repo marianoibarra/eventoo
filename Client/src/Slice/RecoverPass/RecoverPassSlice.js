@@ -36,7 +36,10 @@ export const recover = createSlice({
     error: null,
     user: null,
   },
-  reducers: {},
+  reducers: {    setMessaggeError: (state, action) =>{
+
+      state.error = action.payload
+    },},
   extraReducers: {
     [RecoverPass.pending]: (state) => {
       state.loading = true
@@ -46,6 +49,7 @@ export const recover = createSlice({
       state.loading = false
       state.error = null
       state.user = action.payload.name
+      state.loginIn = true
     },
     [RecoverPass.rejected]: (state, action) => {
       state.loading = false
@@ -60,7 +64,7 @@ export const recover = createSlice({
       state.loading = false
       state.error = null
       state.user = action.payload.name
-      state.changePass=action.payload.changePassToken
+      state.send=true
     },
     [RecoverPassput.rejected]: (state, action) => {
       state.loading = false
@@ -69,6 +73,6 @@ export const recover = createSlice({
     },
   },
 })
-
+export const { setMessaggeError } =recover.actions
 
 export default recover.reducer

@@ -1,15 +1,15 @@
 import React from 'react'
 import Style from './Fotter.module.css'
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaFacebookSquare,FaInstagram, FaTwitter  } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <footer className={Style.mainFooter}>
-      <h1 className={Style.Titulo}>
+      <Link to="/"><h1 className={Style.Titulo}>
         EVEN<b>TOO</b>
-      </h1>
+      </h1></Link>
       <div>
         <motion.ul className={Style.MenuItem}>
           <li>
