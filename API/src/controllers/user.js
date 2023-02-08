@@ -266,7 +266,7 @@ const forgotPassword = async (req, res) => {
 
     sendEmail(
       user.email,
-      `${process.env.CLIENT_URL}/reset-password/${reset_token}`,
+      `${'http://localhost:3000'}/reset-password/${reset_token}`,
       user.name,
       "resetPassword"
     );

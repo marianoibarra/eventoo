@@ -1,18 +1,102 @@
-.image{
-    color: var(--primary-color);
-    margin: 15px 0;
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    height: 300px;
+    overflow: hidden;
 }
 
-.container_image{
+.imgDropArea {
+    width: 100%;
+    height: 100%;
+    max-width: 1280px;
+}
+
+.defaultDropArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+    font-size: 0.95rem;
+    background-color: #007F8019;
+    transition: filter .3s ease-in-out, border .3s ease-in-out;
+    border: 2px dashed transparent;
+}
+
+.onDragDropArea {
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    background-color: #007F8033;
+    filter: brightness(105%);
+    transition: filter .2s ease-in-out, border .2s ease-in-out;
+    border: 2px dashed #0003;
 }
 
-.picture{
-    /* background-image: url('../Resources/Portada.jpg'); */
-    height: 250px;
-    width: 500px;
-    margin: 0;
+.imgUpload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;    
+}
+
+.uploadButton {
+    border: none;
+    outline: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 4px 6px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: .9;
+    cursor: pointer;
+    transition: filter .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.uploadButton:hover {
+    filter: brightness(103%);
+    transition: filter .2s ease-in-out;
+}
+
+.uploadButton:active {
+    filter: brightness(95%);
+    transform: scale(95%);
+    transform-origin: center center;
+    transition: filter .1s ease-in-out;
+}
+
+.dragImgElement {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+.imgPreviewWrappper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.imgPreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: previewIn .3s ease-in-out;
+    z-index: 40;
 }
 
 .imageWrapper {

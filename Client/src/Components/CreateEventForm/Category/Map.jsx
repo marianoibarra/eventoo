@@ -106,7 +106,7 @@ const PlacesAutocomplete = ({setSelected, input, setInput, errors, setShowMsg, s
   return (
     <>
     <Combobox onSelect={handleSelect}>
-      <ComboboxInput style={{backgroundColor: 'white', padding: '10px',margin: '10px',maxWidth: '400px',borderRadius: '5px', border: '1px solid #aaa'}} value={value} onChange={(e) => setValue(e.target.value)} disabled={!ready} className='combobox-input' placeholder='Address' />
+      <ComboboxInput style={{backgroundColor: 'white', padding: '10px',maxWidth: '400px',borderRadius: '4px', border: '1px solid #aaa'}} value={value} onChange={(e) => setValue(e.target.value)} disabled={!ready} className='combobox-input' placeholder='Address' />
       <ComboboxPopover>
         <ComboboxList style={{backgroundColor: 'white', marginTop: '4px', borderRadius: '8px', overflow: 'hidden', boxShadow: '4px 4px 20px #3332'}}>
           {status === "OK" && data.map(({place_id, description}) => <ComboboxOption style={{backgroundColor: 'white', fontSize: '0.9rem', cursor: 'pointer', minHeight: '20px', padding: '4px', listStyle: 'none'}} key={place_id} value={description} />)}
