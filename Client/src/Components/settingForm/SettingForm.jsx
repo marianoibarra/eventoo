@@ -1,17 +1,17 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import style from "./SettingForm.module.css";
 
 const SettingForm = () => {
-
+    const { name, last_name, email, image, born , address_line, city ,state ,country} = useSelector((state) => state.user);
     const initialInput = {
-        profile_pic: 'https://images7.alphacoders.com/714/thumb-1920-714040.jpg',
-        name: 'Nahuel',
-        last_name: 'Alesso',
-        email: 'nahuelalesso19@gmail.com',
+        profile_pic: image,
+        name: name,
+        last_name: last_name,
+        email: email,
         password: 'contrasenia',
-        adress: 'Avenida Falsa 123',
-        age: '03/10/1998',
-        phone_number: '1159051914'
+        adress: `${address_line}, ${city}, ${state}, ${country}`,
+        age: born,
     }
 
     const initialName = initialInput.name;
@@ -57,10 +57,6 @@ const SettingForm = () => {
                 <div className={style.container_input}>
                     <legend htmlFor="age">Age</legend>
                     <input type='text' name="age" value={input.age} onChange={handleOnChange}/>
-                </div>
-                <div className={style.container_input}>
-                    <legend htmlFor="phone_number">Tel/Cell Number</legend>
-                    <input type='number' name="phone_number" value={input.phone_number} onChange={handleOnChange}/>
                 </div>
             </form>
             <div className={style.divprueba}>

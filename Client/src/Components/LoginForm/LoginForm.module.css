@@ -113,3 +113,13 @@
   margin-top: 10px;
   font-size: 1vw;
 }
+
+.sendMessage {
+  padding: 10px;
+  color: white;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}

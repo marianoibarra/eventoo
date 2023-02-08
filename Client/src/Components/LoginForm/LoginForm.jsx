@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../Slice/LoginForm/LoginFormSlice";
+import { login, setMessaggeError } from "../../Slice/LoginForm/LoginFormSlice";
 import Styles from "./LoginForm.module.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
     }
   }, [name]);
 
-  const { loading, error, loginIn } = useSelector((state) => state.auth);
+  const { loading, errorMsg, loginIn } = useSelector((state) => state.auth);
   const googleButton = useRef()
   const dispatch = useDispatch();
 
@@ -32,33 +32,37 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      alert("Email and password fields are required.");
+      dispatch(setMessaggeError({msg:"Email or password fields are required."}))
       return;
     }
     dispatch(login(formData));
   };
 
   useEffect(() => {
-    if (loginIn) {
+    setTimeout(function(){
+       if (loginIn) {
       navigate("/");
     }
+    },4000)
+   
   }, [loginIn]);
 
   useEffect(() => {
     console.log(window)
-    window.google.accounts.id.renderButton(googleButton.current, {theme: 'outline', size: 'large', text: 'continue_with', logo_alignment: "center"})
-  }, [])
+    window.google.accounts.id.renderButton(googleButton.current, {theme: 'outline', size: 'large', text: 'continue_with', logo_alignment: "center", width: 300})
+  }, [errorMsg])
 
   return (
     <div className={Styles.containerhero}>
       <div className={Styles.containerItems}>
-        <span className={Styles.title}>
+        <Link to="/"><span className={Styles.title}>
           EVEN<b>TOO</b>
-        </span>
-        <h2 className={Styles.subTitle}>Sign Up</h2>
+        </span></Link>
+        <h2 className={Styles.subTitle}>Sign In</h2>
         {
           <form onSubmit={handleSubmit} className={Styles.containerform}>
-            {error && <p className={Styles.errorMessage}>{error.msg}</p>}
+            {errorMsg ? <p className={Styles.errorMessage}>{errorMsg.msg}</p> :
+            loginIn ?<p className={Styles.sendMessage}>Logged in successfully</p> : undefined}
             <input
               className={Styles.container_input}
               type="email"
