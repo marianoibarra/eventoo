@@ -54,6 +54,10 @@ module.exports = (sequelize) => {
       type: DataTypes.ENUM("ALL PUBLIC", "+13", "+16", "+18"),
       allowNull: true,
     },
+    price: {
+      type: DataTypes.REAL,
+      allowNull: true,
+    },
     guests_capacity: {
       type: DataTypes.BIGINT,
       allowNull: true,
