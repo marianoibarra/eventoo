@@ -1,0 +1,79 @@
+.containerbottomright {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 290;
+    width: 20vw;
+    height: 95%;
+}
+
+.buycontainer {
+    position: sticky;
+    z-index: 300;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    background-color: var(--white-text);
+    border: solid 1px gray;
+    border-radius: 12px;
+}
+
+.container_text_and_tickets {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 55%;
+    width: 90%;
+    border-radius: 12px;
+}
+
+.divtext {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.divtext p {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 1.4vw;
+    width: min-content;
+}
+
+.price {
+    margin-bottom: 10px;
+}
+
+.containertickets {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 14px;
+    margin-right: 5px;
+    height: 50%;
+    width: 45%;
+}
+
+.containertickets button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0px;
+    border-radius: 6px;
+    background-color: var(--primary-color);
+    color: white;
+    height: 45%;
+    width: 25%;
+}
+
+.containertickets span {
+    font-size: 1.5vw;
+}
+
+.buybutton {
+    width: 90%;
+    margin-bottom: 20px;
+}
