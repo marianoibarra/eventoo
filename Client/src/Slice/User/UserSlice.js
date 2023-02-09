@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  name: '',
-  email: '',
-  image: '',
+  name: null,
+  email: null,
+  image: null,
+  loginOk:false
 };
 
 export const UserSlice = createSlice({
@@ -15,10 +16,18 @@ export const UserSlice = createSlice({
       state.last_name = action.payload.last_name;
       state.email = action.payload.email;
       state.image = action.payload.profile_pic;
+      state.loginOk = true;
+    },
+    setUserOff: (state, action) => {
+      state.name = null;
+      state.last_name = null;
+      state.email = null;
+      state.image = null;
+      state.loginOk = action.payload;
     },
   },
 });
 
-export const { setUser } = UserSlice.actions;
+export const { setUser, setUserOff } = UserSlice.actions;
 
 export default UserSlice.reducer;
