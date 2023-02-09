@@ -16,7 +16,6 @@ const createReview = async (req, res) => {
         model: User,
         as: "organizer",
         where: { id: userId },
-        attributes: [],
       }]
     });
 
@@ -41,7 +40,7 @@ const createReview = async (req, res) => {
       through: { stars: stars, comment: comment },
     })
   
-    return res.status(200).json(newReview)
+    return res.status(200).json({newReview})
 
   } catch (error) {
     res.status(500).json({ msg: error.message });

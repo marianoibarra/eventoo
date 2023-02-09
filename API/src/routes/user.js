@@ -26,6 +26,7 @@ router.put("/change-password", verifyToken, changePassword);
 router.post("/verify-email", verifyToken, verifyEmailCode);
 router.post("/verify-email/resend", verifyToken, resendEmailCode);
 router.put("/", verifyToken, modifyUser);
+//route.get("/", veryfyToken, getprofile);
 
 
 //probar token login
