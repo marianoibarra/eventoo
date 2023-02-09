@@ -34,11 +34,11 @@ const createBankAccount = async (req, res) => {
 const getBankAccount = async (req, res) => {
   try {
     const bankAccounts = await BankAccount.findAll({
-      where: { UserId: req.userId },
+      where: { userId: req.userId },
     });
     return res.status(200).json({ bankAccounts });
   } catch (error) {
-    return res.status(500).json({ error: "Error while retrieving bank accounts" });
+    return res.status(500).json({ error: "Error while retrieving bank accounts"});
   }
 };
 
