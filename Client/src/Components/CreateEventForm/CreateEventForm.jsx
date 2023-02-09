@@ -15,29 +15,46 @@ import UploadImage from './UploadImage/UploadImage';
 function Form(){
   const dispatch = useDispatch();
   const event = useSelector(state => state.event);
+  const description = useSelector(state => state.event.description);
+  const category = useSelector(state => state.event.category);
+  const [selectedModality, setSelectedModality] = useState('Presential');
+
+
+  const initialState = {
+    address_line:null,
+    adversiting_end:null,
+    advertisingTime_start:null,
+    age_range:null,
+    bankAccount:null,
+    category:null,
+    city:null,
+    country:null,
+    cover_pic:null,
+    description:null,
+    disability_access:null,
+    end_date:"2023-02-12",
+    end_time:"02:06",
+    guests_capacity:"645156",
+    isPaid:null,
+    isPremium:null,
+    isPublic:null,
+    name:'',
+    parking:null,
+    pet_friendly:null,
+    placeName:null,
+    price:null,
+    smoking_zone:null,
+    start_date:"2023-02-11",
+    start_time:"05:07",
+    state:null,
+    virtualURL:'',
+    zip_code:null,
+  }
+  
+
+  const [input, setInput] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [showMsg, setShowMsg] = useState ({});
-  const description = useSelector(state => state.event.description);
-  const category = useSelector(state => state.event.category)
-  const [selectedModality, setSelectedModality] = useState(null);
-
-  const [input, setInput] = useState({
-    name:'',
-    description:'',
-    address_line:'',
-    city:'',
-    state:'',
-    country:'',
-    start_date:'',
-    end_date:'',
-    category:'',
-    start_time:'',
-    end_time:'',
-    isPublic:null,
-    isPaid:null,
-    virtualURL:'',
-    guests_capacity:'',
-  })
 
   function validate(input) {
     let errors={}
@@ -50,9 +67,8 @@ function Form(){
       errors.name = "Title must have a maximum of 40 characters";
     }
     if(!input.category) {errors.category = 'You must select a category'}
-    // else if ( event.modality === 'Presential' 
     
-    if (selectedModality === 'Virtual' && input.virtualURL.length === 0) {errors.virtualURL = "URL is required";
+    if (selectedModality === 'Virtual' && (input.virtualURL === null || input.virtualURL.length === 0)) {errors.virtualURL = "URL is required";
     } else if (selectedModality === 'Virtual' && input.virtualURL.length < 10) {
       errors.virtualURL = "URL must have at least 10 characters";
     }
@@ -60,8 +76,9 @@ function Form(){
 
     const now = new Date();
     const startDate = new Date(input.start_date);
+
     if(!input.start_date){errors.start_date = 'Start date is required'}
-    if (startDate <= now - 1){errors.start_date = 'Start date cannot be in the past'}
+    if (startDate < now ){errors.start_date = 'Start date cannot be in the past'}
     if(!input.end_date){errors.end_date = 'End date is required'
     } else if (input.end_date < input.start_date) {errors.end_date = 'End date can not be before the start date'}
     if(!input.start_time){errors.start_time = 'Start time is required'}
@@ -77,18 +94,11 @@ function Form(){
     if(!input.guests_capacity ){errors.guests_capacity = 'Capacity is required'
     }else if( isNaN(num) || num < 0) { errors.guests_capacity = 'Enter a valid number'};
     console.log(errors)
-    console.log('modalidad',event)
     return errors;
   }
   
   useEffect(() => {
     setErrors(validate(input));
-    // setErrors({
-    //   ...errors,
-    //   virtualURL: selectedModality === 'Virtual' ? errors.virtualURL : null,
-    //   address_line: selectedModality === 'Presential'? errors.address_line : null,
-    // })
-    // console.log('modalidad',selectedModality)
   }, [input]);
 
   const handleSubmit = e => {
@@ -96,7 +106,6 @@ function Form(){
     dispatch(createEvent(input))
     alert("Event created!")
     console.log('el evento', input)
-    console.log('evento global',event)
   };
 
   return(
@@ -110,7 +119,7 @@ function Form(){
           {/* <div className={style.split}></div>
           <MoreInfo/> */}
           <div className={style.split}></div>
-          <h1 className={style.title}>LOCATION AND DATE</h1>
+          <h1 className={style.title}>LOCATION AND CATEGORY</h1>
           <Category input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} />
           <div className={style.split}></div>
           <DateTime input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
