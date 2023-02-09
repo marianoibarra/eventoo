@@ -71,10 +71,21 @@ Review.belongsTo(User);
 Event.hasMany(Review);
 Review.belongsTo(Event);
 
-User.belongsToMany(Event, { through: 'Transaction',foreignKey: 'eventId',otherKey: 'buyerId',  as: 'transaction' }); //
-Event.belongsToMany(User, { through: 'Transaction',foreignKey: 'buyerId',otherKey: 'eventId',  as: 'transaction' });  //
-User.hasMany(Transaction);
-Transaction.belongsTo(User);
+
+User.belongsToMany(Event, { 
+  through: Transaction,
+  foreignKey: 'buyerId',
+  otherKey: 'eventId',
+  as: 'transactions'
+});
+Event.belongsToMany(User, {
+   through: Transaction, 
+   foreignKey: 'eventId',
+   otherKey: 'buyerId', 
+  as: 'transactions'  
+});
+User.hasMany(Transaction, {foreignKey: 'buyerId'});
+Transaction.belongsTo(User, {foreignKey: 'buyerId'});
 Event.hasMany(Transaction);
 Transaction.belongsTo(Event);
 

@@ -10,11 +10,11 @@ module.exports = (sequelize) => {
             defaultValue: DataTypes.UUIDV4,
           },  //PENDING COMPLETED FAILED CANCELED INWAITING
           status: {
-            type: DataTypes.ENUM('PENDING', 'COMPLETED', 'FAILED', 'CANCELED', 'INWAITING'  ),
+            type: DataTypes.ENUM( 'PENDING', 'COMPLETED', 'FAILED', 'CANCELED', 'INWAITING'  ),
             allowNull: false,
             defaultValue: 'PENDING'
         },      
-        isPaid: {
+        isPaid: {   
             type: DataTypes.BOOLEAN,
             allowNull: true,
         },
