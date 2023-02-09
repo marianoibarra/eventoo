@@ -304,13 +304,20 @@ const deleteEvent = async (req, res) => {
       include: "organizer",
     });
     if (event.organizer.id === userId) {
-      await event.destroy(); //convertir en borradorLogico
-      const idDeleted = await Event.findByPk(id);
-      idDeleted
+      await event.update({
+        isActive: false,
+      });
+      const idDeleted = await Event.findOne({
+        where: {
+          id,
+          isActive: false,
+        },
+      });
+      !idDeleted
         ? res.send("Sorry! The event could not be deleted. Please, try again.")
         : res.send("Event removed successfully");
     } else {
-      res.status(500).send("Sorry! You can not delete this event")
+      res.status(500).send("Sorry! You can not delete this event");
     }
   } catch (error) {
     res.status(404).json({ error: error.message });
