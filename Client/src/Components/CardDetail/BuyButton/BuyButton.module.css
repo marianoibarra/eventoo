@@ -58,15 +58,17 @@
 }
 
 .containertickets button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: 0px;
     border-radius: 6px;
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white-text);
     height: 45%;
     width: 25%;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: gray;
 }
 
 .containertickets span {

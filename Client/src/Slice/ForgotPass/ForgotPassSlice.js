@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const forgotPass = createAsyncThunk('auth/forgot', async (formData, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://api.eventoo.online/user/forgot-password', formData)
+    const response = await axios.post('https://api.eventoo.com.ar/user/forgot-password', formData)
     console.log(response)
     return response.data
   } catch (error) {

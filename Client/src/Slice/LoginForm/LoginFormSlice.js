@@ -6,7 +6,7 @@ export const login = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://api.eventoo.online/user/login",
+        "https://api.eventoo.com.ar/user/login",
         formData
       );
       console.log(response);

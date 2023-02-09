@@ -5,6 +5,7 @@ import { axiosModeEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import BuyButton from "./BuyButton/BuyButton";
+import covers from "../../imgs/covers";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { RiTicket2Fill } from "react-icons/ri";
 import style from './CardDetail.module.css';
@@ -19,14 +20,14 @@ const CardDetail = () => {
         dispatch(axiosModeEventDetail(id));
     }, [dispatch]);
 
-    const initial_cover_pic = 'https://dummyimage.com/1200/005D5E/ffffff.png&text=Eventoo';
-
     return(
         <>
             {Object.keys(eventDetail).length > 0 && 
                 <div className={style.containertop}>
-                    <div className={style.containerimage}>
-                        <img src={eventDetail.cover_pic ? eventDetail.cover_pic.replace('x.png', '1200')+'.png&text=cover_pic' : initial_cover_pic} alt='cover_pic'/>
+                    <div className={style.container_img_and_h1}>
+                        <div className={style.containerimg}>
+                            <img src={eventDetail.cover_pic ? eventDetail.cover_pic : covers[eventDetail.category.name]} alt='cover_pic'/>
+                        </div>
                         <h1>{eventDetail.name.toUpperCase()}</h1>
                     </div>
                     <div className={style.containerdescription}>
@@ -63,8 +64,8 @@ const CardDetail = () => {
                         </div>
                     </div> 
 
-                    {/* {eventDetail.isPaid === true && <BuyButton/>}   */}
-                    <BuyButton/>
+                    {eventDetail.isPaid === true && <BuyButton/>}
+
                 </div>
             }
         </>
