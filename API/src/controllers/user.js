@@ -299,6 +299,10 @@ const checkResetToken = async (req, res) => {
   }
 };
 
+const getProfile = async (req,res) => {
+
+}
+
 const resetPassword = async (req, res) => {
   const { changePassToken, newPassword } = req.body;
 
@@ -411,4 +415,5 @@ module.exports = {
   modifyUser,
   verifyAdmin,
   googleAuth,
+  getProfile,
 };
