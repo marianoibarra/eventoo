@@ -32,20 +32,20 @@ function Form(){
     cover_pic:null,
     description:null,
     disability_access:null,
-    end_date:"2023-02-12",
-    end_time:"02:06",
-    guests_capacity:"645156",
-    isPaid:null,
+    end_date:'',
+    end_time:'',
+    guests_capacity:"",
+    isPaid:true,
     isPremium:null,
-    isPublic:null,
+    isPublic:true,
     name:'',
     parking:null,
     pet_friendly:null,
     placeName:null,
     price:null,
     smoking_zone:null,
-    start_date:"2023-02-11",
-    start_time:"05:07",
+    start_date:'',
+    start_time:'',
     state:null,
     virtualURL:'',
     zip_code:null,
@@ -63,7 +63,7 @@ function Form(){
       errors.name = "Title is required";
     } else if (input.name.length < 4) {
       errors.name = "Title must have at least 4 characters";
-    } else if (input.name.length > 30) {
+    } else if (input.name.length > 40) {
       errors.name = "Title must have a maximum of 40 characters";
     }
     if(!input.category) {errors.category = 'You must select a category'}

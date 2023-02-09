@@ -9,60 +9,18 @@ import style  from './Tickets.module.css'
 
 function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
   const dispatch = useDispatch();
-  const [isPublic, setIsPublic] = useState(null);
-  const [isPaid, setIsPaid] = useState(null);
+  const [isPublic, setIsPublic] = useState(true);
+  const [isPaid, setIsPaid] = useState(true);
 
   useEffect(() => {
     
   }, [isPublic]);
 
-const handleBlur = (e) =>{
+  const handleBlur = (e) =>{
     setShowMsg({
         ...showMsg,
         [e.target.name]: true,
     })
-}
-
-  const handleClick = e => {
-    e.preventDefault();
-    setIsPublic(true);
-    dispatch(updateIsPublic(true));
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-  })
-    console.log('public', isPublic);
-  }
-
-  const handle2Click = e => {
-    e.preventDefault();
-    setIsPublic(false);
-    dispatch(updateIsPublic(false));
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-  })
-    console.log('public', isPublic);
-  }
-
-  const handlePaid = e => {
-    e.preventDefault();
-    setIsPaid(true);
-    dispatch(updateIsPaid(true));
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-  })
-  }
-
-  const handle2Paid = e => {
-    e.preventDefault();
-    setIsPaid(false);
-    dispatch(updateIsPaid(false));
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-  })
   }
 
   const handleChange = e =>{
@@ -97,28 +55,6 @@ const handleBlur = (e) =>{
           buttons={["Public", "Private"]}
           handleGroup={handleGroupPublic}
         />
-        {/* <div className={style.options}>
-            <button
-            style={isPublic === true?  { opacity: 1}: { opacity: 0.5 }}
-            onClick={handleClick}
-            value={true}
-            className={style.btn}
-            name='isPublic'
-            onBlur={handleBlur}
-            >
-            Public
-            </button>
-            <button
-            style={isPublic === false? { opacity: 1}: { opacity: 0.5 }}
-            onClick={handle2Click}
-            value={false}
-            className={style.btn}
-            name='isPublic'
-            onBlur={handleBlur}
-            >
-            Private
-            </button>
-        </div> */}
         {showMsg.isPublic&&(
                             <p className={style.warning}>{errors.isPublic}</p>
                         )}
@@ -129,24 +65,6 @@ const handleBlur = (e) =>{
           buttons={["Paid", "Free"]}
           handleGroup={handleGroupPrice}
         />
-        {/* <div className={style.options}>
-            <button
-            style={isPaid === true?  { opacity: 1}: { opacity: 0.5 }}
-            onClick={handlePaid}
-            value='true'
-            className={style.btn}
-            >
-            Paid
-            </button>
-            <button
-            style={ isPaid === false? { opacity: 1}: { opacity: 0.5 }}
-            onClick={handle2Paid}
-            value='false'
-            className={style.btn}
-            >
-            Free
-            </button>
-        </div> */}
         <h4 className={style.parr}>Capacity:</h4>
         <input
         placeholder='Capacity'

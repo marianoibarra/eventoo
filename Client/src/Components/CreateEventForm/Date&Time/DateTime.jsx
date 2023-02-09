@@ -70,7 +70,6 @@ function DateTime({input,setInput,errors, showMsg, setShowMsg}){
             className={style.inputs}
             value={input.start_date}
             name = 'start_date'
-            pattern="\d{4}-\d{2}-\d{2}"
             onChange={handleChange}
             onBlur={handleBlur} 
             style={ showMsg.start_date && errors.start_date ? {border:'red 1px solid'}: {}}/>
@@ -92,7 +91,6 @@ function DateTime({input,setInput,errors, showMsg, setShowMsg}){
             <input
             type='date'
             className={style.inputs}
-            pattern="\d{4}-\d{2}-\d{2}"
             name='end_date'
             onChange={handleChange}
             onBlur={handleBlur}
