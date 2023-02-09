@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 window.handleGoogleLogin = function({credential}) {
 
-  axios.post('http://api.eventoo.online/user/auth', {credential})
+  axios.post('https://api.eventoo.com.ar/user/auth', {credential})
     .then(response => {
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('data', JSON.stringify(response.data.data))

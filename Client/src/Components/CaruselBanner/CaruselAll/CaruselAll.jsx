@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Slider from "react-slick";
 import Style from './CaruselAll.module.css'
 import CaruselCard from './CaruselCard/CaruselCard'
+import covers from '../../../imgs/covers/';
 import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
 
 
@@ -33,18 +34,18 @@ const CaruselAll = () => {
 
   return (
     <div className={Style.container_carusel}>
-      <div className={Style.container_selectFilter}>
+      {/* <div className={Style.container_selectFilter}>
         <div className={Style.container_text}>Favorite</div>
         <Slider {...settings}>
         </Slider>
-      </div>
+      </div> */}
 
       <div className={Style.container_inPerson}>
-        <div className={Style.container_text}> Event's  {`(${filter.length})`} </div>
+        <div className={Style.container_text}> Events  {`(${filter.length})`} </div>
         <div className={Style.container_resultFilter} >
           {filter.length > 0 ? filter.slice(0, moreEvents).map(event => (
             <CaruselCard
-              img={event.cover_pic?.replace('x.png', '1200')+'.png&text=cover_pic'}
+              img={event.cover_pic ? event.cover_pic.replace('x.png', '1200') + '.png&text=cover_pic' : covers[event.category?.name]}
               key={event.id}
               name={event.name}
               start_date={event.start_date}

@@ -5,7 +5,7 @@ import axios from 'axios'
 export const RecoverPass = createAsyncThunk('auth/recover', async (formData, { rejectWithValue }) => {
 
   try {
-    const response = await axios.get(`http://api.eventoo.online/user/reset-password/${formData}` )
+    const response = await axios.get(`https://api.eventoo.com.ar/user/reset-password/${formData}` )
     return response.data
   } catch (error) {
     if (error.response) {
@@ -17,7 +17,7 @@ export const RecoverPass = createAsyncThunk('auth/recover', async (formData, { r
 export const RecoverPassput = createAsyncThunk('auth/recoverPut', async (formData, { rejectWithValue }) => {
 console.log(formData)
   try {
-    const response = await axios.put(`http://api.eventoo.online/user/reset-password/`,formData )
+    const response = await axios.put(`https://api.eventoo.com.ar/user/reset-password/`,formData )
     console.log(response)
     return response.data
   } catch (error) {
