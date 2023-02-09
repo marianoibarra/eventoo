@@ -48,6 +48,11 @@ const getEventsPublic = async (req, res) => {
 
     searchParams.isPublic = true;
 
+    let {limit, page} = req.query
+    limit = Number(limit)
+    page = Number(page)
+    const offset = (page - 1) * limit
+
     const publicEvents = await Event.findAll({
       where: searchParams,
       include: [
@@ -68,6 +73,8 @@ const getEventsPublic = async (req, res) => {
           attributes: ["name", "modality"],
         },
       ],
+      limit: limit && !Number.isNaN(Number(limit)) ? Number(limit) : null,
+      offset: offset && !Number.isNaN(Number(offset)) ? Number(offset) : null,
     });
 
     res.json(publicEvents);

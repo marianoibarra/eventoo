@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 
-const categoriesUrl = 'http://api.eventoo.online/home/categories'
+const categoriesUrl = 'https://api.eventoo.com.ar/home/categories'
 
 export const axiosModeCategories = createAsyncThunk(
   'categories/axiosModeCategories',
@@ -9,7 +9,6 @@ export const axiosModeCategories = createAsyncThunk(
     const res = await axios.get(categoriesUrl)    
     return res.data
   })
-
 
 export const categorieSlice = createSlice({
   name: 'categories',

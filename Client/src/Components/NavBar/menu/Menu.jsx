@@ -12,6 +12,7 @@ const Menu = () => {
   const { name, last_name, email, image } = useSelector((state) => state.user);
 
   const handleClearLocalStorage = () => {
+    window.google.accounts.id.disableAutoSelect();
     localStorage.clear();
     navigate('/')
 
@@ -41,11 +42,11 @@ const Menu = () => {
             {name ? (
               <div className={Styles.menuName}>{`${name} ${last_name}`}</div>
             ) : undefined}
-            {email ? <p className={Styles.menuEmail}>{email}</p> : undefined}
+            {email ?<><p className={Styles.menuEmail}>{email}</p>
 
             <Link to="/Setting" className={Styles.menuLink}>
               Settings
-            </Link>
+            </Link></>  : undefined}
            {name ? <button
               className={Styles.menuLink}
               onClick={handleClearLocalStorage}

@@ -5,10 +5,22 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from "react-redux";
 import store from './Store';
+import axios from 'axios';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+window.handleGoogleLogin = function({credential}) {
+
+  axios.post('https://api.eventoo.com.ar/user/auth', {credential})
+    .then(response => {
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('data', JSON.stringify(response.data.data))
+      window.location.href = 'http://localhost:3000/home'
+    })
+    .catch(err => console.log(err))
+}
 
 root.render(
   <Provider store={store}>

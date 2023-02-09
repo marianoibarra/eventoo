@@ -5,7 +5,7 @@ import axios from 'axios'
 export const RecoverPass = createAsyncThunk('auth/recover', async (formData, { rejectWithValue }) => {
 
   try {
-    const response = await axios.get(`http://api.eventoo.online/user/reset-password/${formData}` )
+    const response = await axios.get(`https://api.eventoo.com.ar/user/reset-password/${formData}` )
     return response.data
   } catch (error) {
     if (error.response) {
@@ -17,7 +17,7 @@ export const RecoverPass = createAsyncThunk('auth/recover', async (formData, { r
 export const RecoverPassput = createAsyncThunk('auth/recoverPut', async (formData, { rejectWithValue }) => {
 console.log(formData)
   try {
-    const response = await axios.put(`http://api.eventoo.online/user/reset-password/`,formData )
+    const response = await axios.put(`https://api.eventoo.com.ar/user/reset-password/`,formData )
     console.log(response)
     return response.data
   } catch (error) {
@@ -36,7 +36,10 @@ export const recover = createSlice({
     error: null,
     user: null,
   },
-  reducers: {},
+  reducers: {    setMessaggeError: (state, action) =>{
+
+      state.error = action.payload
+    },},
   extraReducers: {
     [RecoverPass.pending]: (state) => {
       state.loading = true
@@ -46,6 +49,7 @@ export const recover = createSlice({
       state.loading = false
       state.error = null
       state.user = action.payload.name
+      state.loginIn = true
     },
     [RecoverPass.rejected]: (state, action) => {
       state.loading = false
@@ -60,7 +64,7 @@ export const recover = createSlice({
       state.loading = false
       state.error = null
       state.user = action.payload.name
-      state.changePass=action.payload.changePassToken
+      state.send=true
     },
     [RecoverPassput.rejected]: (state, action) => {
       state.loading = false
@@ -69,6 +73,6 @@ export const recover = createSlice({
     },
   },
 })
-
+export const { setMessaggeError } =recover.actions
 
 export default recover.reducer

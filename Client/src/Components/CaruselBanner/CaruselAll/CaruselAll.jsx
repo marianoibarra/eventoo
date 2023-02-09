@@ -3,25 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import Slider from "react-slick";
 import Style from './CaruselAll.module.css'
 import CaruselCard from './CaruselCard/CaruselCard'
-import { axiosModeEvents } from '../../../Slice/Events/EventsSlice';
+import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
 
 
 const CaruselAll = () => {
   const dispatch = useDispatch()
-  const { filter } = useSelector(state => state.categories)
-  const { events } = useSelector(state => state.events)
-  const [filteredEvents, setFilteredEvents] = useState([])
-  const [presentialEvents, setpresentialEvents] = useState([])
+  const { filter } = useSelector(state => state.combinedFilter)
+  const [moreEvents, setMoreEvents] = useState(10)
+  const imgDefault = "https://dummyimage.com/400x600/005D5E/fff&text=Eventoo"
 
-  useEffect(() => {
-    setFilteredEvents(events?.filter(e => e.category && e.category.name === filter))
-    setpresentialEvents(events?.filter(e => e.category && e.category.modality === 'Presential'))
-  }, [filter, events]);
 
 
   useEffect(() => {
-    dispatch(axiosModeEvents());
+    dispatch(axiosCombinedFilter());
   }, [dispatch]);
+
+  const handleMoreEvents = () => {
+    setMoreEvents(moreEvents + 10)
+  }
+
 
   const settings = {
     className: "center",
@@ -35,80 +35,32 @@ const CaruselAll = () => {
     <div className={Style.container_carusel}>
       <div className={Style.container_selectFilter}>
         <div className={Style.container_text}>Favorite</div>
-        <Slider {...settings}>         
+        <Slider {...settings}>
         </Slider>
       </div>
 
       <div className={Style.container_inPerson}>
-        <div className={Style.container_text}>Presencial {`(${filteredEvents.length}`})</div>
-        <Slider {...settings}>
-          {filteredEvents?.slice(0, 9).map(event => (
+        <div className={Style.container_text}> Event's  {`(${filter.length})`} </div>
+        <div className={Style.container_resultFilter} >
+          {filter.length > 0 ? filter.slice(0, moreEvents).map(event => (
             <CaruselCard
+              img={event.cover_pic?.replace('x.png', '1200')+'.png&text=cover_pic'}
               key={event.id}
               name={event.name}
               start_date={event.start_date}
               category={event.category === null ? 'N/A' : event.category.name}
+              id={event.id}
             />
-          ))}
-        </Slider>
+          )) : <h2 className={Style.title_noReults}>No Results...</h2>
+
+          }
+        </div>
+        <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
+          <span>MORE</span>
+        </a>
       </div>
     </div>
   )
 }
 
 export default CaruselAll
-
-
-
-{/* <div className={Style.container_carusel}>
-<div className={Style.container_selectFilter}>
-  <div className={Style.container_text}>{filter ? filter : 'All events'}</div>
-  {console.log(filteredEvents.length, events.length)}
-  <Slider {...settings}>
-    {filteredEvents.length !== 0 ? filteredEvents.map(event => (
-      <CaruselCard
-        key={event.id}
-        name={event.name}
-        start_date={event.start_date}
-        category={event.category.name}
-      />
-    )) : events && events.slice(0,9).map(event => (
-        <CaruselCard
-          key={event.id}
-          name={event.name}
-          start_date={event.start_date}
-          category={event.category === null ? 'N/A' : event.category.name}
-        />
-      ))}
-  </Slider>
-</div>
-
-<div className={Style.container_inPerson}>
-  <div className={Style.container_text}>Presencial</div>
-  <Slider {...settings}>
-    {presentialEvents?.slice(0, 9).map(event => (
-      <CaruselCard
-        key={event.id}
-        name={event.name}
-        start_date={event.start_date}
-        category={event.category === null ? 'N/A' : event.category.name}
-      />
-    ))}
-  </Slider>
-</div>
-
-<div className={Style.container_online}>
-  <div className={Style.container_text}>Online</div>
-  <Slider {...settings}>
-    {onlineEvents?.slice(10, 21).map(event => (
-      <CaruselCard
-        key={event.id}
-        name={event.name}
-        start_date={event.start_date}
-        category={event.category === null ? 'N/A' : event.category.name}
-      />
-    ))}
-  </Slider>
-</div>
-
-</div> */}

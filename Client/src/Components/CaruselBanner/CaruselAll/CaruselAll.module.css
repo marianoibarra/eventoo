@@ -11,16 +11,18 @@
     border-bottom: 4px solid var(--accent-color);
 }
 
-/* .carusel_cards{
+.container_resultFilter{
     display: grid;
-    grid-auto-flow: column;
-    scroll-behavior: auto;
-    gap: 1.2rem;
-    overflow-y: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-} */
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 3.3rem;
+    margin: 3rem 0px 2rem;
+}
+
+.title_noReults{
+    width: 83.33vw;
+    text-align: center;
+    color: var(--dark-text);
+}
 
 .container_inPerson,
 .container_online{
