@@ -10,8 +10,13 @@ module.exports = (sequelize) => {
         CBU:{
             type: DataTypes.STRING,
             allowNull: true,
-        }              
-    }, {
+        },
+        hasAnEvent: {
+            type: DataTypes.BOOLEAN,
+            defaultValue:true
+        }            
+    }, 
+    {
         timestamps: false
     })
 };
