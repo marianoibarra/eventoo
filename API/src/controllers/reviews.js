@@ -1,20 +1,50 @@
 const { Event, User, Review } = require("../db");
 
 const createReview = async (req, res) => {
+
   const userId = req.userId;
   const { id, stars, comment } = req.body;
+
+
   try {
     const user = await User.findByPk(userId);
     const event = await Event.findByPk(id);
 
+    let existingReview = await User.findOne({
+      where: { id: userId },
+      include: [{
+        model: Event,
+        as: "reviews",
+        where: { id: id },
+        attributes: [ ],
+      }]
+    });
+
+    let reviewNotAllowed = await Event.findOne({
+      where:{ id : id},
+      include: [{
+        model: User,
+        as: "organizer",
+        where: { id: userId },
+        attributes: [],
+      }]
+    });
+
+    if (existingReview) {
+      return res.status(400).json({msg: " the event already has a review ..." })
+    }
+    if (reviewNotAllowed) {
+      return res.status(400).json({msg: " Cannot add a review to your own created event" })
+    } 
+    if (!existingReview && !reviewNotAllowed) {
     const newReview = await event.addReview(user, {
       through: { stars: stars, comment: comment },
     });
-
-    return res.status(200).json(newReview);
+    return res.status(200).json(newReview)}
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
+
 };
 
 const getAllReviewsByEvent = async (req, res) => {
