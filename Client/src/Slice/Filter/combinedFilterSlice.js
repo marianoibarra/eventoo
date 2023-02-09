@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 
 const combinedFilterUrl = 'https://api.eventoo.com.ar/home/events?'
+const urlLocal = 'http://localhost:3001/home/events?'
+
 
 //https://api.eventoo.com.ar/home/events?&modality=Virtual&category=Talks&inWeekend=true&
 
