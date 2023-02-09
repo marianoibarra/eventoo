@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 
-const eventUrl = 'http://api.eventoo.online/event'
+const eventUrl = 'https://api.eventoo.com.ar/event'
+const urlLocal = 'http://localhost:3001/event'
 
 export const createEvent = createAsyncThunk(
   'event/createEvent',
