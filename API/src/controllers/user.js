@@ -299,6 +299,25 @@ const checkResetToken = async (req, res) => {
   }
 };
 
+const getProfile = async ({userId},res) => {
+ 
+try {
+
+  const profileUser = await User.findByPk(userId, {
+    attributes: { exclude: ["password"] },
+    include: [{
+      model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] }
+  }]
+  });
+  res.status(200).json(profileUser);
+  
+} catch (error) {
+  res.status(500).json({ msg: error.message });
+}
+};
+
 const resetPassword = async (req, res) => {
   const { changePassToken, newPassword } = req.body;
 
@@ -411,4 +430,5 @@ module.exports = {
   modifyUser,
   verifyAdmin,
   googleAuth,
+  getProfile,
 };
