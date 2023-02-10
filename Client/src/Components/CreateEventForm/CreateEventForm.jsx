@@ -1,6 +1,5 @@
 import style from './CreateEventForm.module.css'
 import Lateral from './Lateral/Lateral';
-import Image from './UploadImage/UploadImage';
 import BasicInfo from './Basic Information/BasicInfo'
 import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
