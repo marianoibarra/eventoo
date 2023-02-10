@@ -15,8 +15,9 @@ window.handleGoogleLogin = function({credential}) {
 
   axios.post('https://api.eventoo.com.ar/user/auth', {credential})
     .then(response => {
+      const data = {...response.data.data,id:response.data.id} 
       localStorage.setItem('token', response.data.token)
-      localStorage.setItem('data', JSON.stringify(response.data.data))
+      localStorage.setItem('data', JSON.stringify(data))
       window.location.href = `${window.location.href}`
     })
     .catch(err => console.log(err))
