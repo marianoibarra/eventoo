@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// const urlLocal = `http://localhost:3001/home/events/${id}`
 export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {

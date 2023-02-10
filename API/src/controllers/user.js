@@ -10,7 +10,8 @@ const { verifyGoogle } = require("../helpers/verifyGoogle");
 const googleAuth = async (req, res) => {
   try {
     const { credential } = req.body;
-    const { email, picture, given_name, family_name, email_verified } = await verifyGoogle(credential);
+    const { email, picture, given_name, family_name, email_verified } =
+      await verifyGoogle(credential);
 
     const [user, created] = await User.findOrCreate({
       where: { email },
@@ -19,9 +20,9 @@ const googleAuth = async (req, res) => {
         last_name: family_name,
         profile_pic: picture,
         email: email,
-        emailIsVerify: email_verified
-      }
-    })
+        emailIsVerify: email_verified,
+      },
+    });
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "90d",
     });
@@ -38,7 +39,7 @@ const googleAuth = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).send(error.message); 
+    res.status(500).send(error.message);
   }
 };
 
@@ -86,11 +87,11 @@ const register = async (req, res) => {
           country,
           zip_code,
         },
-        EmailCode: {
+        emailCode: {
           code: code,
           expiration: expiration,
         },
-        RoleAdmin: {},
+        roleAdmin: {},
       },
       {
         include: ["address", EmailCode, RoleAdmin],
@@ -108,16 +109,10 @@ const register = async (req, res) => {
       id: newUser.id,
       token,
       data: {
-        name: newUser.name,
-        last_name: newUser.last_name,
-        email: newUser.email,
-        profile_pic: newUser.profile_pic,
-        address_line: newUser.address.address_line,
-        city: newUser.address.city,
-        state: newUser.address.state,
-        country: newUser.address.country,
-        zip_code: newUser.address.zip_code,
-        born: newUser.born
+        name,
+        last_name,
+        email,
+        profile_pic,
       },
     });
   } catch (e) {
@@ -225,12 +220,6 @@ const login = async (req, res) => {
         last_name: user.last_name,
         email: user.email,
         profile_pic: user.profile_pic,
-        address_line: user.address.address_line,
-        city: user.address.city,
-        state: user.address.state,
-        country: user.address.country,
-        zip_code: user.address.zip_code,
-        born: user.born
       },
     });
   } catch (error) {
@@ -275,10 +264,10 @@ const forgotPassword = async (req, res) => {
     const reset_token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "1h",
     });
-    const url = process.env.CLIENT_URL + '/reset-password/' + reset_token
+
     sendEmail(
       user.email,
-      url,
+      `${process.env.CLIENT_URL}/reset-password/${reset_token}`,
       user.name,
       "resetPassword"
     );
@@ -309,6 +298,25 @@ const checkResetToken = async (req, res) => {
   } catch (error) {
     res.status(401).json({ msg: "This token is invalid or expired" });
   }
+};
+
+const getProfile = async ({userId},res) => {
+ 
+try {
+
+  const profileUser = await User.findByPk(userId, {
+    attributes: { exclude: ["password"] },
+    include: [{
+      model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] }
+  }]
+  });
+  res.status(200).json(profileUser);
+  
+} catch (error) {
+  res.status(500).json({ msg: error.message });
+}
 };
 
 const resetPassword = async (req, res) => {
@@ -394,18 +402,47 @@ const modifyUser = async (req, res) => {
   }
 };
 
-const verifyAdmin = async (req, res, next) => {
+const verifyAdmins = async (req, res, next) => {
   const userId = req.userId;
   try {
     const user = await User.findByPk(userId);
-    const role = await RoleAdmin.findByPk(user.RoleAdminId);
+    const role = await RoleAdmin.findByPk(user.roleAdminId);
     if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {
-      res.status(401).json({ msg: "You are not an ADMIN" }); //cambiar mensaje de error al deseado
+      res.status(401).json({ msg: "You are not an ADMIN" }); 
     }
   } catch (error) {
-    res.status(404).json({ errpr: error.message });
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const verifySuperAdmin = async (req, res, next) => {
+  const userId = req.userId;
+  try {
+    const user = await User.findByPk(userId);
+    const role = await RoleAdmin.findByPk(user.roleAdminId);
+    if (role.name === "SUPERADMIN") {
+      next();
+    } else {
+      res.status(401).json({ msg: "You are not the SUPERADMIN" });
+    }
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const changeRole = async (req, res) => {
+  const { id } = req.params;
+  const userId= Number(id)
+  try {
+    const user = await User.findByPk(userId);
+    const roleId = user.roleAdminId;
+    const role = await RoleAdmin.findByPk(roleId);
+    await role.update({ name: "ADMIN" });
+    res.send("Successful update");
+  } catch (error) {
+    res.status(404).json({ error: error.message });
   }
 };
 
@@ -421,6 +458,9 @@ module.exports = {
   verifyEmailCode,
   resendEmailCode,
   modifyUser,
-  verifyAdmin,
+  verifyAdmins,
+  verifySuperAdmin,
+  changeRole,
   googleAuth,
+  getProfile,
 };

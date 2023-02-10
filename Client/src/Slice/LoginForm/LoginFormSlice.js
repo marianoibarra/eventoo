@@ -9,9 +9,10 @@ export const login = createAsyncThunk(
         "https://api.eventoo.com.ar/user/login",
         formData
       );
-      console.log(response);
+       const data = {...response.data.data,id:response.data.id} 
+
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("data", JSON.stringify(response.data.data));
+      localStorage.setItem("data", JSON.stringify(data));
       return response.data;
     } catch (error) {
       console.log(error)

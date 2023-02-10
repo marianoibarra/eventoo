@@ -1,0 +1,41 @@
+.containerlocation {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 15vh;
+    width: max-content;
+}
+
+.containerlocation img {
+    height: 40vh;
+    width: 40vw;
+    object-fit: cover;
+    margin-top: 13px;
+    margin-left: 50px;
+    border: solid 2px gray;
+    border-radius: 12px;
+}
+
+.containericon {
+    display: flex;
+    align-items: center;
+}
+
+.iconspan {
+    color: var(--primary-color);
+    width: min-content;
+}
+
+.iconspantext {
+    display: block;
+    margin-left: 15px;
+    width: max-content;
+    color: var(--primary-color);
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.ubicationtext {
+    margin-left: 50px;
+    font-size: 1.1vw;
+}

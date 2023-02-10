@@ -16,7 +16,6 @@ const createEvent = async (req, res) => {
     isPremium,
     isPaid,
     age_range,
-    price,
     guests_capacity,
     placeName,
     advertisingTime_start,
@@ -26,6 +25,7 @@ const createEvent = async (req, res) => {
     city,
     state,
     country,
+    price,
     zip_code,
     disability_access,
     parking,
@@ -88,11 +88,11 @@ const createEvent = async (req, res) => {
         advertisingTime_start,
         adversiting_end,
         cover_pic,
-        price,
         disability_access,
         parking,
         smoking_zone,
         pet_friendly,
+        price,
         address: {
           address_line,
           city,
@@ -106,6 +106,7 @@ const createEvent = async (req, res) => {
 
     if (bankAccount) {
       const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
+      await bankAccountFromDB.update({ hasAnEvent: true });
       await event.setBankAccount(bankAccountFromDB);
     }
 
@@ -304,13 +305,20 @@ const deleteEvent = async (req, res) => {
       include: "organizer",
     });
     if (event.organizer.id === userId) {
-      await event.destroy(); //convertir en borradorLogico
-      const idDeleted = await Event.findByPk(id);
-      idDeleted
+      await event.update({
+        isActive: false,
+      });
+      const idDeleted = await Event.findOne({
+        where: {
+          id,
+          isActive: false,
+        },
+      });
+      !idDeleted
         ? res.send("Sorry! The event could not be deleted. Please, try again.")
         : res.send("Event removed successfully");
     } else {
-      res.status(500).send("Sorry! You can not delete this event")
+      res.status(500).send("Sorry! You can not delete this event");
     }
   } catch (error) {
     res.status(404).json({ error: error.message });

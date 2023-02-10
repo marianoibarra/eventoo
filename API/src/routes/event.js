@@ -6,7 +6,7 @@ const {
   getEventByUser,  
 } = require("../controllers/event");
 
-const { verifyToken } = require("../controllers/user");
+const { verifyToken} = require("../controllers/user");
 
 const router = Router();
 
