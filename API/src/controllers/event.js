@@ -106,6 +106,7 @@ const createEvent = async (req, res) => {
 
     if (bankAccount) {
       const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
+      await bankAccountFromDB.update({ hasAnEvent: true });
       await event.setBankAccount(bankAccountFromDB);
     }
 

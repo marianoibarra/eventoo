@@ -1,6 +1,5 @@
 const { BankAccount, Event } = require("../db");
 
-
 const createBankAccount = async (req, res) => {
   try {
     const { name, CBU } = req.body;
@@ -78,12 +77,13 @@ const deleteBankAccount = async (req, res) => {
     if (!bankAccount) {
       return res.status(404).json({ error: "bank account not found" });
     }
-    const event = await Event.findOne({
+    const event = await Event.findAll({
       where: {
-        organizerId: userId, bankAccountId: id },
-    
+        organizerId: userId,
+        bankAccountId: id,
+      },
     });
-    event.isActive
+    event.some((e) => e.isActive)
       ? res.send("Sorry, this bank account is associated with an active event")
       : await bankAccount.update({
           hasAnEvent: false,

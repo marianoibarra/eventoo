@@ -391,7 +391,7 @@ const verifyAdmins = async (req, res, next) => {
     if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {
-      res.status(401).json({ msg: "You are not an ADMIN" }); //cambiar mensaje de error al deseado
+      res.status(401).json({ msg: "You are not an ADMIN" }); 
     }
   } catch (error) {
     res.status(404).json({ error: error.message });

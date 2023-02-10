@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
         },
         hasAnEvent: {
             type: DataTypes.BOOLEAN,
-            defaultValue:true
+            defaultValue:false
         }            
     }, 
     {
