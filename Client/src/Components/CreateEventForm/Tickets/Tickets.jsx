@@ -59,7 +59,7 @@ function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
                             <p className={style.warning}>{errors.isPublic}</p>
                         )}
         <p className={style.text}>
-          Choose if you wanna pay an extra for more guests or publicity.
+          Choose if your guests will pay for asist to the event.
         </p>
         <ButtonGroup
           buttons={["Paid", "Free"]}
