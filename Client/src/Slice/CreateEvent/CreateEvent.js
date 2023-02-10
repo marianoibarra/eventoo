@@ -4,6 +4,7 @@ import axios from 'axios'
 const eventUrl = 'https://api.eventoo.com.ar/event'
 const urlLocal = 'http://localhost:3001/event'
 
+
 export const createEvent = createAsyncThunk(
   'event/createEvent',
   async (formData, { rejectWithValue }) => {
