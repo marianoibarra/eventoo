@@ -17,7 +17,7 @@ window.handleGoogleLogin = function({credential}) {
     .then(response => {
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('data', JSON.stringify(response.data.data))
-      window.location.href = 'http://localhost:3000/home'
+      window.location.href = `${window.location.href}`
     })
     .catch(err => console.log(err))
 }
