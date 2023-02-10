@@ -4,17 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import User from "../../../Assets/UserProfile.png";
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserOff } from "../../../Slice/User/UserSlice";
 
 const Menu = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const { name, last_name, email, image } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
 
   const handleClearLocalStorage = () => {
     window.google.accounts.id.disableAutoSelect();
     localStorage.clear();
     navigate('/')
+    dispatch(setUserOff(false))
 
   };
 

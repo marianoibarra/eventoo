@@ -18,7 +18,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   return (
     <header className={Styles.ContenedorHeader}>
-      <nav className={`${Styles.ContenedorNavbar} ${Styles.navbar} ${scrollHeight > 10 ? Styles.scrolling : null}`}>
+      <nav className={`${Styles.ContenedorNavbar} ${Styles.navbar} ${scrollHeight > 1 ? Styles.scrolling : null}`}>
         <Link to="/">
           {" "}
           <span className={Styles.Titulo}>

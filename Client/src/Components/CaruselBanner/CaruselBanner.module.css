@@ -1,17 +1,18 @@
 .container_carusel {
     width: 1800px;
-    height: 800px;
+    height: 500px;
 }
 
   .carusel_text{
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
     z-index: 2;
     width: 100vw;
-    height: 50vh;
-    color: var(--white-text);   
+    top: 15%;
+    height: 10vh;
+    color: var(--white-text);
 } *
 
 
@@ -19,9 +20,9 @@
 .carusel_two,
 .carusel_three,
 .carusel_four {
-    margin-top: 0.5%;
+    margin-top: 0.8%;
     width: 90%;
-    height: 47.3vh;
+    height: 40vh;
     position: absolute;
     overflow: hidden;
     top: 60px;

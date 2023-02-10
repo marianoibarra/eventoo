@@ -7,6 +7,19 @@
     height: 13vh;
 }
 
+.containercategory {
+    border-radius: 12px;
+    background-color: var(--primary-color);
+    width: max-content;
+}
+
+.containercategory span {
+    color: var(--white-text);
+    margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .containericon {
     display: flex;
     justify-content: space-between;
@@ -16,7 +29,7 @@
 .iconspan {
     color: var(--primary-color);
     margin-top: 5px;
-    width: 4vw;
+    width: min-content;
 }
 
 .iconspantext {
@@ -24,4 +37,5 @@
     width: min-content;
     color: var(--primary-color);
     font-size: 1.4vw;
+    margin-left: 1vw;
 }
