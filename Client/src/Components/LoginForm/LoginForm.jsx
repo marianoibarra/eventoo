@@ -38,14 +38,14 @@ const LoginForm = () => {
     dispatch(login(formData));
   };
 
-  useEffect(() => {
-    setTimeout(function(){
-       if (loginIn) {
-      navigate("/");
-    }
-    },4000)
+  // useEffect(() => {
+  //   setTimeout(function(){
+  //      if (loginIn) {
+  //     navigate("/");
+  //   }
+  //   },4000)
    
-  }, [loginIn]);
+  // }, [loginIn]);
 
   useEffect(() => {
     console.log(window)
