@@ -5,30 +5,57 @@
 //   ticketCount: ticketCount || null
 // };
 
-const { Transaction, User, Event } = require("../db");
+const { Transaction, User, Event, Ticket } = require("../db");
 
 const createTransactions = async (req, res) => {
   try {
     const buyerId = req.userId;
-    const { isPaid, payment_proof, eventId, status, ticketCount } = req.body;
+    const { isPaid, payment_proof, eventId, status, ticketCount, tickets } =
+      req.body;
+
+    ticketsArray = tickets;
 
     const event = await Event.findByPk(eventId);
     const user = await User.findByPk(buyerId);
-
     const newTransaction = await event.addTransactions(user, {
       through: {
         isPaid: isPaid,
         payment_proof: payment_proof,
-        status: status,
+        status: status === undefined || status === null ? 'PENDING' : status,
         ticketCount: ticketCount,
       },
     });
 
-    // const response = await newTransaction.reload({include: ['user', 'event']})
+    for (let i = 0; i < ticketCount; i++) {
+      const ticket = await Ticket.create({
+        name: tickets[i].name,
+        gmail: tickets[i].gmail,
+        last_name: tickets[i].last_name,
+        transactionId: newTransaction[newTransaction.length - 1].id,
+      });
+    }
+
+    // console.log("Transaction ID:", newTransaction[newTransaction.length - 1].id, tickets);
+
+    const createdTickets = await Ticket.findAll({
+      where: {
+        transactionId: newTransaction[newTransaction.length - 1].id,
+      },
+      attributes: [
+        "id",
+        "name",
+        "gmail",
+        "last_name",
+        "createdAt",
+        "updatedAt",
+        "transactionId",
+      ],
+    });
 
     return res.status(201).json({
-      message: "Transaction created successfully",
+      message: "Transaction and tickets created successfully",
       newTransaction,
+      tickets: createdTickets,
     });
   } catch (error) {
     return res.status(500).json({
@@ -36,6 +63,48 @@ const createTransactions = async (req, res) => {
     });
   }
 };
+// ----------------------------------------------------------------------------------
+// const createTransactions = async (req, res) => {
+//   try {
+//     const buyerId = req.userId;
+//     const { isPaid, payment_proof, eventId, status, ticketCount, tickets } = req.body;
+
+//     const event = await Event.findByPk(eventId);
+//     const user = await User.findByPk(buyerId);
+
+//     const transaction = await Transaction.create({
+//       isPaid: isPaid,
+//       payment_proof: payment_proof,
+//       status: status,
+//       ticketCount: ticketCount,
+//       eventId: event.id,
+//       buyerId: user.id,
+//     });
+
+//     const createdTickets = [];
+//     for (let i = 0; i < ticketCount; i++) {
+//       const ticket = await Ticket.create({
+//         name: tickets[i].name,
+//         gmail: tickets[i].gmail,
+//         last_name: tickets[i].last_name,
+//         transactionId: transaction.id,
+//       });
+//       createdTickets.push(ticket);
+//     }
+
+//     return res.status(201).json({
+//       message: "Transaction and tickets created successfully",
+//       newTransaction: transaction,
+//       tickets: createdTickets,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: error.message,
+//     });
+//   }
+// };
+// ----------------------------------------------------------------------------------
+
 
 const getTransactionsByUser = async (req, res) => {
   try {
@@ -45,7 +114,17 @@ const getTransactionsByUser = async (req, res) => {
         {
           model: Transaction,
           as: "transactions",
-          include: ["event"],
+          include: [
+            {
+              model: Event,
+              as: "event",
+              attributes: ['id', 'name', 'bankAccountId', 'organizerId']
+            },
+            {
+              model: Ticket,
+              as: "tickets",
+            },
+          ],
         },
       ],
     });
@@ -66,7 +145,7 @@ const getTransactionsByUser = async (req, res) => {
 
 const getTransactionsByEvent = async (req, res) => {
   try {
-    const { eventId } = req.body;
+    const eventId = req.params.id
     const event = await Event.findByPk(eventId, {
       include: [
         {
@@ -93,7 +172,7 @@ const getTransactionsByEvent = async (req, res) => {
 
 const getTransactionsByEventOrganizer = async (req, res) => {
   try {
-    const organizerId = req.userId
+    const organizerId = req.params.id;
     const events = await Event.findAll({
       where: {
         organizerId: organizerId,
@@ -139,10 +218,40 @@ const updateTransaction = async (req, res) => {
   }
 };
 
+const showTicketsByTransactionId = async (req, res) => {
+  try {
+    const { transactionId } = req.body;
+
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: [
+        {
+          model: Ticket,
+          as: "tickets",
+        },
+      ],
+    });
+
+    if (!transaction) {
+      return res.status(404).json({
+        error: "Transaction not found",
+      });
+    }
+
+    return res.status(200).json({
+      tickets: transaction.tickets,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createTransactions,
   getTransactionsByUser,
   getTransactionsByEvent,
   getTransactionsByEventOrganizer,
   updateTransaction,
+  showTicketsByTransactionId,
 };
