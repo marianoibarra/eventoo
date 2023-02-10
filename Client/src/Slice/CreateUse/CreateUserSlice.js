@@ -3,6 +3,8 @@ import axios from 'axios'
 
 export const createUser = createAsyncThunk('auth/register', async (formData, { rejectWithValue }) => {
   try {
+    console.log(formData)
+
     const response = await axios.post('https://api.eventoo.com.ar/user/register', formData)
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('data', JSON.stringify(response.data.data))
