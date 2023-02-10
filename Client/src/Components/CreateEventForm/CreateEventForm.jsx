@@ -8,9 +8,13 @@ import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
 import { createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
+import SessionModal from '../Modal/ModalSession/ModalSessionContainer';
+import { SessionContext } from '../../App';
+
+
 
 function Form(){
   const dispatch = useDispatch();
@@ -18,7 +22,7 @@ function Form(){
   const description = useSelector(state => state.event.description);
   const category = useSelector(state => state.event.category);
   const [selectedModality, setSelectedModality] = useState('Presential');
-
+  const { setShowSessionModal } = useContext(SessionContext)
 
   const initialState = {
     address_line:null,
@@ -55,6 +59,7 @@ function Form(){
   const [input, setInput] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [showMsg, setShowMsg] = useState ({});
+  const [showModal, setShowModal] = useState (false);
 
   function validate(input) {
     let errors={}
@@ -130,6 +135,7 @@ function Form(){
           <div className={style.footerForm}>
             {/* <button className={style.btnprimario}>Cancel</button> */}
             <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
+            <button type='button' className={style.btnprimario} onClick={() => setShowSessionModal('login')} >Abrir modal</button>
           </div>
         </form>
     </div>

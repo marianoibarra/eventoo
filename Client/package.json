@@ -8,6 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "@mui/styled-engine-sc": "^5.11.0",
     "@reach/combobox": "^0.18.0",
