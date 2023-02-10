@@ -2,7 +2,7 @@ const date = new Date();
 
 const data = {
   email: "superadmin@eventoo.com",
-  password: "Eventoo8",
+  password: "Eventoo8.",
   name: "Super",
   last_name: "Admin",
   profile_pic: null,
