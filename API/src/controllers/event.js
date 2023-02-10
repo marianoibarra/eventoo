@@ -25,6 +25,7 @@ const createEvent = async (req, res) => {
     city,
     state,
     country,
+    price,
     zip_code,
     disability_access,
     parking,
@@ -91,6 +92,7 @@ const createEvent = async (req, res) => {
         parking,
         smoking_zone,
         pet_friendly,
+        price,
         address: {
           address_line,
           city,
