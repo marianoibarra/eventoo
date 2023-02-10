@@ -12,7 +12,7 @@
   top: 90px;
   right: 60px;
   width: max-content;
-  height: max-content;
+  height: max-content + 5px;
   box-shadow: 0 2px 4px var(--primary-color);
   border-radius: 5px;
   overflow: hidden;
@@ -27,9 +27,12 @@
   border: none;
   position: fixed;
   right: 20px;
-  top: 20px;
+  top: 0.5vw;
   cursor: pointer;
   background: transparent;
+  border-radius: 50%;
+  width: 5vw;
+  height: 9vh;
 }
 
 .menuPhoto {
