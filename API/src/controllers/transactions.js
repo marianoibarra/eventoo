@@ -1,9 +1,3 @@
-// const transactionData = {
-//   status: status || "PENDING",
-//   isPaid: isPaid || false,
-//   payment_proof: payment_proof || null,
-//   ticketCount: ticketCount || null
-// };
 
 const { Transaction, User, Event, Ticket } = require("../db");
 
@@ -14,7 +8,6 @@ const createTransactions = async (req, res) => {
       req.body;
 
     ticketsArray = tickets;
-
     const event = await Event.findByPk(eventId);
     const user = await User.findByPk(buyerId);
     const newTransaction = await event.addTransactions(user, {
@@ -65,43 +58,43 @@ const createTransactions = async (req, res) => {
 };
 // ----------------------------------------------------------------------------------
 // const createTransactions = async (req, res) => {
-//   try {
-//     const buyerId = req.userId;
-//     const { isPaid, payment_proof, eventId, status, ticketCount, tickets } = req.body;
+  // try {
+  //   const buyerId = req.userId;
+  //   const { isPaid, payment_proof, eventId, status, ticketCount, tickets } = req.body;
 
-//     const event = await Event.findByPk(eventId);
-//     const user = await User.findByPk(buyerId);
+  //   const event = await Event.findByPk(eventId);
+  //   const user = await User.findByPk(buyerId);
 
-//     const transaction = await Transaction.create({
-//       isPaid: isPaid,
-//       payment_proof: payment_proof,
-//       status: status,
-//       ticketCount: ticketCount,
-//       eventId: event.id,
-//       buyerId: user.id,
-//     });
+  //   const transaction = await Transaction.create({
+  //     isPaid: isPaid,
+  //     payment_proof: payment_proof,
+  //     status: status,
+  //     ticketCount: ticketCount,
+  //     eventId: event.id,
+  //     buyerId: user.id,
+  //   });
 
-//     const createdTickets = [];
-//     for (let i = 0; i < ticketCount; i++) {
-//       const ticket = await Ticket.create({
-//         name: tickets[i].name,
-//         gmail: tickets[i].gmail,
-//         last_name: tickets[i].last_name,
-//         transactionId: transaction.id,
-//       });
-//       createdTickets.push(ticket);
-//     }
+  //   const createdTickets = [];
+  //   for (let i = 0; i < ticketCount; i++) {
+  //     const ticket = await Ticket.create({
+  //       name: tickets[i].name,
+  //       gmail: tickets[i].gmail,
+  //       last_name: tickets[i].last_name,
+  //       transactionId: transaction.id,
+  //     });
+  //     createdTickets.push(ticket);
+  //   }
 
-//     return res.status(201).json({
-//       message: "Transaction and tickets created successfully",
-//       newTransaction: transaction,
-//       tickets: createdTickets,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: error.message,
-//     });
-//   }
+  //   return res.status(201).json({
+  //     message: "Transaction and tickets created successfully",
+  //     newTransaction: transaction,
+  //     tickets: createdTickets,
+  //   });
+  // } catch (error) {
+  //   return res.status(500).json({
+  //     error: error.message,
+  //   });
+  // }
 // };
 // ----------------------------------------------------------------------------------
 
@@ -151,7 +144,11 @@ const getTransactionsByEvent = async (req, res) => {
         {
           model: Transaction,
           as: "transactions",
-          include: ["user"],
+          include: [
+            {model:User,
+              as:"user",
+              attributes: ["name"]}
+          ],
         },
       ],
     });
@@ -181,7 +178,11 @@ const getTransactionsByEventOrganizer = async (req, res) => {
         {
           model: Transaction,
           as: "transactions",
-          include: ["user"],
+          include: [
+            {model:User,
+              as:"user",
+              attributes: ["name"]}
+          ],
         },
       ],
     });

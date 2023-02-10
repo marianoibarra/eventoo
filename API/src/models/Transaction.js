@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             unique: true,
             defaultValue: DataTypes.UUIDV4,
-          },  //PENDING COMPLETED FAILED CANCELED INWAITING
+          },
           status: {
             type: DataTypes.ENUM( 'PENDING', 'COMPLETED', 'FAILED', 'CANCELED', 'INWAITING'  ),
             allowNull: false,
