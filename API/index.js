@@ -18,4 +18,5 @@ conn.sync({ alter: true })
   .then(()=> createSuperAdmin(data))
   .then(() =>
     app.listen(port, () => console.log(`Listening on port ${port}!`))
-  );
+  )
+  .catch((e) => console.log(e));
