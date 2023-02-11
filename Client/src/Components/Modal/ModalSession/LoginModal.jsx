@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { SessionContext } from "../../../App";
 import { useSelector, useDispatch } from "react-redux";
-import styles from "./LoginModal.module.css";
 import { login, setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
 import Textfield from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import { AiFillEyeInvisible, AiFillEye, AiOutlineClose } from "react-icons/ai";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Spinner } from "../Spinner/Spinner";
+import styles from "./LoginModal.module.css";
 
 const LoginModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -91,12 +91,12 @@ const LoginModal = () => {
       <main className={styles.main}>
         <h3>Log in to Eventoo</h3>
         <div className={styles.google}>
-          <div ref={googleButton} />
           <div className={styles.or2}>
             <div className={styles.or}></div>
             <p className={styles.or3}>or</p>
             <div className={styles.or}></div>
           </div>
+          <div ref={googleButton} />
         </div>
         <form onSubmit={handleSubmit}>
           <Textfield

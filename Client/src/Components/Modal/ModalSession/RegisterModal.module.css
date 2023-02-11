@@ -1,5 +1,5 @@
 .loginWrapper {
-  width: 100%;
+  width: calc(100%/3);
   height: auto;
   padding-bottom: 56px;
 }
@@ -104,7 +104,17 @@
   filter: brightness(95%);
   transform: scale(98%);
   transition: filter 0ms ease-in-out;
+}
 
+.right {
+  margin: 20px 30%;
+  width: 40%;
+}
+
+.namesWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .or {
@@ -155,4 +165,29 @@
   text-align: center;
   margin: 28px 0 -12px;
   width: 100%;
+}
+
+.scrollBox {
+  display: flex;
+  width: 300%;
+}
+
+.s1, .s2, .s3 {
+  transition: transform 400ms ease-in-out;
+}
+
+.s1 {
+  transform: translateX(0);
+}
+
+.s2 {
+  transform: translateX(calc(-100%/3));
+}
+
+.s3 {
+  transform: translateX(calc(-100%/3*2));
+}
+.step2 {
+  background-color: red;
+  width: calc(100%/3);
 }

@@ -34,17 +34,6 @@ export const SessionContext = createContext()
 function App() {
   
   const [showSessionModal, setShowSessionModal] = useState(null);
-  const [anim, setAnim] = useState(true);
-
-  useEffect(() => {
-    if(showSessionModal === null) return setAnim(true)
-
-    if(anim) {
-      setTimeout(() => {
-        setAnim(false)
-      }, 400);
-    }
-  }, [showSessionModal])
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -82,7 +71,7 @@ function App() {
 
   return (
     <div>
-      <SessionContext.Provider value={{showSessionModal, setShowSessionModal, anim, setAnim}}>
+      <SessionContext.Provider value={{showSessionModal, setShowSessionModal}}>
         {showSessionModal !== null && <SessionModal />}
         <Routes>
           <Route exact path="/" element={<Landing />} />
