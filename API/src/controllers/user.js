@@ -432,19 +432,7 @@ const verifySuperAdmin = async (req, res, next) => {
   }
 };
 
-const changeRole = async (req, res) => {
-  const { id } = req.params;
-  const userId= Number(id)
-  try {
-    const user = await User.findByPk(userId);
-    const roleId = user.roleAdminId;
-    const role = await RoleAdmin.findByPk(roleId);
-    await role.update({ name: "ADMIN" });
-    res.send("Successful update");
-  } catch (error) {
-    res.status(404).json({ error: error.message });
-  }
-};
+
 
 module.exports = {
   register,
@@ -460,7 +448,6 @@ module.exports = {
   modifyUser,
   verifyAdmins,
   verifySuperAdmin,
-  changeRole,
   googleAuth,
   getProfile,
 };
