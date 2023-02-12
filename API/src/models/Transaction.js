@@ -28,21 +28,9 @@ module.exports = (sequelize) => {
         },
       },
     },
-    isPaid: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
     payment_proof: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    // eventId: {
-    //     type: DataTypes.STRING,
-    //     allowNull:false
-    // },
-    ticketCount: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
     },
   });
 };
