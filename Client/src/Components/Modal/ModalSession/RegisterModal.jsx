@@ -11,7 +11,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMaps from "./MapRegister";
-import { register, update } from "../../../Slice/User/UserSlice";
+import { clearErrors, register, update } from "../../../Slice/User/UserSlice";
 
 const RegisterModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -33,6 +33,7 @@ const RegisterModal = () => {
 
   const validate = (input) => {
     const regexp_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const regexp_pass =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const errors = {};
 
     if (input.email.length === 0) {
@@ -43,6 +44,8 @@ const RegisterModal = () => {
 
     if (input.password.length === 0) {
       errors.password = "Password is required";
+    } else if(!regexp_pass.test(input.password)){
+      errors.password = "Use 8 or more characters with a combination of letters, numbers, and symbols";
     }
 
     if (input.name.length === 0) {
@@ -112,6 +115,7 @@ const RegisterModal = () => {
           className={styles.closeBtn}
           onClick={() => {
             setShowSessionModal(null);
+            dispatch(clearErrors())
           }}
         >
           🗙
@@ -195,7 +199,7 @@ const RegisterModal = () => {
                   marginTop: "4px",
                   marginBottom:
                     showErr.password && errors.password
-                      ? "20px"
+                      ? input.password.length === 0 ? "20px" : '0px'
                       : showErr.password
                       ? "42px"
                       : "0px",

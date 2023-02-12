@@ -144,6 +144,8 @@ export const UserSlice = createSlice({
     logOut: (state, action) => {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
+      window.google.accounts.id.disableAutoSelect();
+      axios.defaults.headers.common["authorization"] = null;
       return initialState
     },
     clearErrors: (state, action) => {
