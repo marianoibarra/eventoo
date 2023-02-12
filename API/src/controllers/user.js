@@ -28,7 +28,7 @@ const googleAuth = async (req, res) => {
     });
 
     res.send({
-      msg: created ? "User created successfully" : "Login successfully",
+      newAccount: created,
       id: user.id,
       token,
       data: {
