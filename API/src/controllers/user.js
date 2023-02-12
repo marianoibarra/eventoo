@@ -30,9 +30,14 @@ const googleAuth = async (req, res) => {
         profile_pic: picture,
         email: email,
         emailIsVerify: email_verified,
-        roleAdmin: {}
       },
     });
+
+    if(created) {
+      const role = await RoleAdmin.findByPk(3)
+      await newUser.setRoleAdmin(role)
+    }
+
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "90d",
     });
@@ -100,13 +105,15 @@ const register = async (req, res) => {
         emailCode: {
           code: code,
           expiration: expiration,
-        },
-        roleAdmin: {},
+        }
       },
       {
-        include: ["address", EmailCode, RoleAdmin],
+        include: ["address", EmailCode],
       }
     );
+
+    const role = await RoleAdmin.findByPk(3)
+    await newUser.setRoleAdmin(role)
 
     const response = await User.findByPk(newUser.id, {
       attributes: { exclude: ["password", "addressId", "roleAdminId"] },
