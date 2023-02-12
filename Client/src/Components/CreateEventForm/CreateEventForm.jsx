@@ -12,7 +12,7 @@ import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
 import SessionModal from '../Modal/ModalSession/ModalSessionContainer';
-import { SessionContext } from '../../App';
+import { SessionContext } from '../../';
 
 
 

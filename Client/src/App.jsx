@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
+import { BrowserRouter } from 'react-router-dom';
 //pages
 import CreateEvent from "./Pages/CreateEvent";
 import Landing from "./Pages/Landing";
@@ -26,16 +27,16 @@ import RecoverPass from "./Pages/RecoverPass";
 import { fetchLocation } from "./Slice/Location/LocationSlice";
 import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
-
-export const SessionContext = createContext()
+import { SessionContext } from ".";
 
 
 
 function App() {
   
-  const [showSessionModal, setShowSessionModal] = useState(null);
-
+  const { showSessionModal } = useContext(SessionContext)
   const dispatch = useDispatch();
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const data = localStorage.getItem("data");
@@ -70,28 +71,28 @@ function App() {
 
 
   return (
-    <div>
-      <SessionContext.Provider value={{showSessionModal, setShowSessionModal}}>
-        {showSessionModal !== null && <SessionModal />}
-        <Routes>
-          <Route exact path="/" element={<Landing />} />
-          <Route path="/create-event" element={<CreateEvent />} />
-          <Route path="/setting" element={!loginOk ? <Navigate to='/'/> : <Setting />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/Help" element={<Help />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/home" element={<Home />}></Route>
-          <Route path="/create-user" element={loginOk ? <Navigate to='/'/> : <CreateUser />}></Route>
-          <Route path="/login" element={loginOk ? <Navigate to='/'/> : <Login />}></Route>
-          <Route path="/event/:id" element={<Event />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
-          <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
-          <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>
-          <Route path="*" element={<Error />}></Route>
-        </Routes>
-      </SessionContext.Provider>
-    </div>
+
+    <BrowserRouter>
+      {showSessionModal !== null && <SessionModal />}
+      <Routes>
+        <Route exact path="/" element={<Landing />} />
+        <Route path="/create-event" element={<CreateEvent />} />
+        <Route path="/setting" element={!loginOk ? <Navigate to='/'/> : <Setting />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/Help" element={<Help />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/home" element={<Home />}></Route>
+        <Route path="/create-user" element={loginOk ? <Navigate to='/'/> : <CreateUser />}></Route>
+        <Route path="/login" element={loginOk ? <Navigate to='/'/> : <Login />}></Route>
+        <Route path="/event/:id" element={<Event />}></Route>
+        <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
+        <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>
+        <Route path="*" element={<Error />}></Route>
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 

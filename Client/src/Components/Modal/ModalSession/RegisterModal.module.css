@@ -37,7 +37,22 @@
   height: 100%;
   width: 65%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
+form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1; 
 }
 
 .main h3 {
@@ -107,8 +122,29 @@
 }
 
 .right {
-  margin: 20px 30%;
+  margin: -4px 30% 20px;
   width: 40%;
+}
+
+.prev, .next {
+  width: 45%;
+  margin: 20px 0;
+}
+
+.prev {
+  background-color: transparent;
+  color: var(--primary-color);
+  width: auto;
+  padding: 0 24px;
+  margin-left: 12px;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
 }
 
 .namesWrapper {

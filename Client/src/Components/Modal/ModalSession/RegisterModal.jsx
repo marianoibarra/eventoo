@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { SessionContext } from "../../../App";
+import { SessionContext } from "../../../";
 import { useSelector, useDispatch } from "react-redux";
 import {
   login,
@@ -11,10 +11,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./RegisterModal.module.css";
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMaps from "./MapRegister";
+import { createUser } from "../../../Slice/CreateUse/CreateUserSlice";
 
 
 const RegisterModal = () => {
@@ -48,7 +49,17 @@ const RegisterModal = () => {
     if (input.password.length === 0) {
       errors.password = "Password is required";
     }
+
+    if (input.name.length === 0) {
+      errors.name = "First name is required";
+    }
+
+    if (input.last_name.length === 0) {
+      errors.last_name = "Last name is required";
+    }
     return errors;
+
+
   };
 
   const [input, setInput] = useState(initialState);
@@ -61,7 +72,6 @@ const RegisterModal = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
-    if (errorMsg.msg.length > 0) dispatch(setMessaggeError({ msg: "" }));
   };
 
   useEffect(() => {
@@ -75,11 +85,11 @@ const RegisterModal = () => {
     });
   };
 
-  const { loading, errorMsg, loginIn } = useSelector((state) => state.auth);
+  const { loading, error, loginIn } = useSelector((state) => state.register);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(input));
+    dispatch(createUser({input, setShowSessionModal}));
   };
 
   useEffect(() => {
@@ -99,7 +109,7 @@ const RegisterModal = () => {
         <div
           className={styles.closeBtn}
           onClick={() => {
-            dispatch(setMessaggeError({ msg: "" }));
+
             setShowSessionModal(null);
           }}
         >
@@ -118,7 +128,7 @@ const RegisterModal = () => {
               </div>
               <div ref={googleButton} />
             </div>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className={styles.namesWrapper}>
                 <Textfield
                   name="name"
@@ -130,6 +140,7 @@ const RegisterModal = () => {
                   error={showErr.name && errors.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  style={{marginBottom: showErr.name && errors.name ? '0px' : '22px'}}
                 />
                 <Textfield
                   name="last_name"
@@ -139,6 +150,7 @@ const RegisterModal = () => {
                   margin="dense"
                   helperText={showErr.last_name ? errors.last_name : ""}
                   error={showErr.last_name && errors.last_name}
+                  style={{marginBottom: showErr.last_name && errors.last_name ? '0px' : '22px'}}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -151,6 +163,7 @@ const RegisterModal = () => {
                 margin="dense"
                 helperText={showErr.email ? errors.email : ""}
                 error={showErr.email && errors.email}
+                style={{marginTop: '4px', marginBottom: showErr.email && errors.email ? '0px' : '22px'}}
                 onChange={handleChange}
                 fullWidth
                 onBlur={handleBlur}
@@ -163,8 +176,9 @@ const RegisterModal = () => {
                 onChange={handleChange}
                 margin="dense"
                 fullWidth
-                helperText={showErr.password ? errors.password : ""}
+                helperText={showErr.password ? errors.password : "Use 8 or more characters with a combination of letters, numbers, and symbols"}
                 error={showErr.password && errors.password}
+                style={{marginTop: '4px', marginBottom: showErr.password && errors.password ?  '20px' : showErr.password ? '42px' : '0px'}}
                 type={showPassword ? "text" : "password"}
                 onBlur={handleBlur}
                 endAdornment={
@@ -179,15 +193,13 @@ const RegisterModal = () => {
                   </InputAdornment>
                 }
               />
-
-              {errorMsg && (
-                <span className={styles.errorMsg}>{errorMsg.msg}</span>
-              )}
+            
 
               <button
                 className={`${styles.submit} ${styles.right}`}
                 type="button"
                 onClick={() => setStep(styles.s2)}
+                disabled={loading || Object.keys(errors).length > 0}
               >
                 {loading ? <Spinner /> : "Next"}
               </button>
@@ -203,43 +215,45 @@ const RegisterModal = () => {
         </section>
         <div className={styles.loginWrapper}>
           <main className={styles.main}>
-            <h3>Paso 2</h3>
-            <form onSubmit={handleSubmit}>
-              
+            <h3>Tell us more about yourself</h3>
+            <form>
+            <div className={styles.inputs}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
                   id="date"
                   name="born"
                   label="Birthday"
+                  variant="standard"
                   openTo="year"
-                  views={['year', 'month', 'day']}
+                  views={["year", "month", "day"]}
                   value={input.born}
-                  onChange={(value) => {setInput({...input, born: value?._d ? value._d : value}); console.log(input.born)}}
-                  renderInput={(params) => <Textfield {...params} error={false} fullWidth/>}
-                  />
+                  onChange={(value) => {
+                    setInput({ ...input, born: value?._d ? value._d : value });
+                  }}
+                  renderInput={(params) => (
+                    <Textfield {...params} error={false} fullWidth />
+                  )}
+                />
               </LocalizationProvider>
-              <GoogleMaps input={input} setInput={setInput}/>
-
-              <button
-                className={styles.submit}
-                type="button"
-                onClick={() => setStep(styles.s1)}
-              >
-                {loading ? <Spinner /> : "Prev"}
-              </button>
-              <button
-                className={styles.submit}
-                type="button"
-                onClick={() => setStep(styles.s3)}
-              >
-                {loading ? <Spinner /> : "Next"}
-              </button>
-              <span className={styles.registerLink}>
-                Got an account already?
-                <span onClick={() => setShowSessionModal("login")}>
-                  {"\u00A0 Log in"}
-                </span>
-              </span>
+              <GoogleMaps input={input} setInput={setInput} />
+              </div>
+              <div className={styles.buttons}>
+                <button
+                  className={`${styles.submit} ${styles.prev}`}
+                  type="button"
+                  onClick={() => setStep(styles.s1)}
+                >
+                  Back
+                </button>
+                <button
+                  className={`${styles.submit} ${styles.next}`}
+                  type="submit"
+                  onClick={handleSubmit}
+                  disabled={loading || input.born?.length < 8 || input.born === null || input.address_line.length === 0}
+                >
+                  {loading ? <Spinner/> : 'Sign up'}
+                </button>
+              </div>
             </form>
           </main>
         </div>
@@ -284,11 +298,6 @@ const RegisterModal = () => {
                   </InputAdornment>
                 }
               />
-
-              {errorMsg && (
-                <span className={styles.errorMsg}>{errorMsg.msg}</span>
-              )}
-
               <button
                 className={styles.submit}
                 type="button"

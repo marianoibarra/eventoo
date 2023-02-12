@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { SessionContext } from "../../../App";
+import { SessionContext } from "../../../";
 import { useSelector, useDispatch } from "react-redux";
 import { login, setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
 import Textfield from "@mui/material/TextField";
@@ -63,7 +63,7 @@ const LoginModal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(input));
+    dispatch(login({input,setShowSessionModal}));
   };
 
   useEffect(() => {
@@ -110,6 +110,7 @@ const LoginModal = () => {
             onChange={handleChange}
             fullWidth
             onBlur={handleBlur}
+            style={{marginBottom: showErr.email && errors.email ? '0px' : '23px'}}
           />
           <Textfield
             name="password"
@@ -122,6 +123,7 @@ const LoginModal = () => {
             helperText={showErr.password ? errors.password : ""}
             error={showErr.password && errors.password}
             type={showPassword ? "text" : "password"}
+            style={{marginBottom: showErr.password && errors.password ? '0px' : '23px'}}
             onBlur={handleBlur}
             endAdornment={
               <InputAdornment position="end">

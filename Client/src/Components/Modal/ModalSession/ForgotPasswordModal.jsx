@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { SessionContext } from '../../../App'
+import { SessionContext } from '../../../'
 
 const ForgotPasswordModal = () => {
   const {setShowSessionModal} = useContext(SessionContext)

@@ -4,7 +4,7 @@ import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Portal from "../../Portal/Portal";
-import { SessionContext } from "../../../App";
+import { SessionContext } from "../../../";
 import { useDispatch } from "react-redux";
 import { setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
 

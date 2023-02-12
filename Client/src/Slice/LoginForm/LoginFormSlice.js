@@ -3,16 +3,17 @@ import axios from "axios";
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (formData, { rejectWithValue }) => {
+  async ({input, setShowSessionModal}, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://api.eventoo.com.ar/user/login",
-        formData
+        input
       );
        const data = {...response.data.data,id:response.data.id} 
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("data", JSON.stringify(data));
+      setShowSessionModal(null)
       return response.data;
     } catch (error) {
       console.log(error)

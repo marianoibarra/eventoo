@@ -1,18 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { useContext } from 'react'
+import { SessionContext } from '../..'
 
-export const createUser = createAsyncThunk('auth/register', async (formData, { rejectWithValue }) => {
+export const createUser = createAsyncThunk('auth/register', async (args, { rejectWithValue }) => {
   try {
-    console.log(formData)
-
-    const response = await axios.post('https://api.eventoo.com.ar/user/register', formData)
+    console.log(args)
+    const {input, setShowSessionModal} = args
+    const response = await axios.post('https://api.eventoo.com.ar/user/register', input)
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('data', JSON.stringify(response.data.data))
+    setShowSessionModal(null)
     return response.data
   } catch (error) {
-    console.log(error.response, 'hola aca estoy soy un error')
+    console.log(error)
     if (error.response) {
-
       return rejectWithValue(error.response.data)
     }
     throw error
