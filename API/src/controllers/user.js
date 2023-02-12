@@ -15,28 +15,38 @@ const googleAuth = async (req, res) => {
 
     const [user, created] = await User.findOrCreate({
       where: { email },
+      attributes: { exclude: ["addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+      ],
       defaults: {
         name: given_name,
         last_name: family_name,
         profile_pic: picture,
         email: email,
         emailIsVerify: email_verified,
+        roleAdmin: {}
       },
     });
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "90d",
     });
 
+    const response = await user.toJSON()  
+    
+     response.roleAdmin = response.roleAdmin.name;
+     delete response.password
+
     res.send({
-      msg: created ? "User created successfully" : "Login successfully",
+      isNewUser: created,
       id: user.id,
       token,
-      data: {
-        name: user.name,
-        last_name: user.last_name,
-        email: user.email,
-        profile_pic: user.profile_pic,
-      },
+      data: response,
     });
   } catch (error) {
     res.status(500).send(error.message);
