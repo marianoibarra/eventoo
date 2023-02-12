@@ -5,7 +5,8 @@ import User from "../../../Assets/UserProfile.png";
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserOff } from "../../../Slice/User/UserSlice";
+import { logOut } from "../../../Slice/User/UserSlice";
+
 
 const Menu = () => {
   const navigate = useNavigate()
@@ -15,9 +16,8 @@ const Menu = () => {
 
   const handleClearLocalStorage = () => {
     window.google.accounts.id.disableAutoSelect();
-    localStorage.clear();
-    navigate('/')
-    dispatch(setUserOff(false))
+    navigate('/home')
+    dispatch(logOut(false))
 
   };
 

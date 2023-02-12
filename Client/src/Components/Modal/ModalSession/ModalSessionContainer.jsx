@@ -6,7 +6,8 @@ import ForgotPasswordModal from "./ForgotPasswordModal";
 import Portal from "../../Portal/Portal";
 import { SessionContext } from "../../../";
 import { useDispatch } from "react-redux";
-import { setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
+import { clearErrors } from "../../../Slice/User/UserSlice";
+
 
 
 const SessionModal = ({}) => {
@@ -19,17 +20,17 @@ const SessionModal = ({}) => {
     const acMap = document.getElementsByClassName('MuiAutocomplete-popper')[0]
     if(cal) {
       if (refModal.current && !refModal.current.contains(event.target) && !cal.contains(event.target)) {
-        dispatch(setMessaggeError({msg:""}))
+        dispatch(clearErrors())
         setShowSessionModal(null);
       }
     } else if(acMap) {
       if (refModal.current && !refModal.current.contains(event.target) && !acMap.contains(event.target)) {
-        dispatch(setMessaggeError({msg:""}))
+        dispatch(clearErrors())
         setShowSessionModal(null);
       }
     } else {
       if (refModal.current && !refModal.current.contains(event.target)) {
-        dispatch(setMessaggeError({msg:""}))
+        dispatch(clearErrors())
         setShowSessionModal(null);
       }
     }

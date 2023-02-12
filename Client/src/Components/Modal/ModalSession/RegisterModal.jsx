@@ -1,10 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { SessionContext } from "../../../";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  login,
-  setMessaggeError,
-} from "../../../Slice/LoginForm/LoginFormSlice";
 import Textfield from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -15,7 +11,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMaps from "./MapRegister";
-import { createUser } from "../../../Slice/CreateUse/CreateUserSlice";
+import { register } from "../../../Slice/User/UserSlice";
 
 
 const RegisterModal = () => {
@@ -85,11 +81,11 @@ const RegisterModal = () => {
     });
   };
 
-  const { loading, error, loginIn } = useSelector((state) => state.register);
+  const { loading, error } = useSelector((state) => state.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createUser({input, setShowSessionModal}));
+    dispatch(register({input, setShowSessionModal}));
   };
 
   useEffect(() => {

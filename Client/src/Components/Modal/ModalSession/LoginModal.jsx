@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { SessionContext } from "../../../";
 import { useSelector, useDispatch } from "react-redux";
-import { login, setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
+// import { login, setMessaggeError } from "../../../Slice/LoginForm/LoginFormSlice";
 import Textfield from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./LoginModal.module.css";
+import { clearErrors, login } from "../../../Slice/User/UserSlice";
 
 const LoginModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -45,7 +46,7 @@ const LoginModal = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
-    if(errorMsg.msg.length > 0) dispatch(setMessaggeError({msg:""}));
+    if(error.msg.length > 0) dispatch(clearErrors());
   };
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const LoginModal = () => {
     });
   };
 
-  const { loading, errorMsg, loginIn } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +82,7 @@ const LoginModal = () => {
         <div
           className={styles.closeBtn}
           onClick={() => {
-            dispatch(setMessaggeError({msg:""}))
+            dispatch(clearErrors())
             setShowSessionModal(null);
           }}
         >
@@ -145,7 +146,7 @@ const LoginModal = () => {
             >
             Forgot your password?
           </span>
-          {errorMsg && <span className={styles.errorMsg}>{errorMsg.msg}</span>}
+          {error && <span className={styles.errorMsg}>{error.msg}</span>}
 
           <button disabled={loading || Object.keys(errors).length > 0} className={styles.submit} type="submit">
               {loading ? <Spinner/> : 'Log in with Email'}
