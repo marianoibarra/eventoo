@@ -27,14 +27,17 @@ import { fetchLocation } from "./Slice/Location/LocationSlice";
 import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
 import { SessionContext } from ".";
-import { getUserData } from "./Slice/User/UserSlice";
-
-
+import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 
 function App() {
   
-  const { showSessionModal } = useContext(SessionContext)
+  const { showSessionModal, setShowSessionModal } = useContext(SessionContext)
+  const { newUser, setNewUser } = useContext(SessionContext)
   const dispatch = useDispatch();
+
+  window.handleGoogleLogin = function ({ credential }) {
+    dispatch(googleLogin({credential, setShowSessionModal, newUser, setNewUser }))
+  };
 
 
   useEffect(() => {

@@ -4,28 +4,16 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./Store";
-import axios from "axios";
+
 
 export const SessionContext = createContext()
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+
 const Index = () => {
 
   const [showSessionModal, setShowSessionModal] = useState(null);
-
-  window.handleGoogleLogin = function ({ credential }) {
-    axios
-      .post("https://api.eventoo.com.ar/user/auth", { credential })
-      .then((response) => {
-        const data = { ...response.data.data, id: response.data.id };
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("data", JSON.stringify(data));
-        if(!data.newAccount) setShowSessionModal(null);
-        console.log(data)
-      })
-      .catch((err) => console.log(err));
-  };
 
   return (
     <SessionContext.Provider value={{ showSessionModal, setShowSessionModal }}>

@@ -5,6 +5,7 @@ const initialState = {
   isLogged: false,
   id: null,
   name: null,
+  isNewUser: null,
   last_name: null,
   email: null,
   profile_pic: null,
@@ -33,6 +34,7 @@ export const register = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
+      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -54,6 +56,60 @@ export const login = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
+      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      setShowSessionModal(null);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  }
+);
+
+export const googleLogin = createAsyncThunk(
+  "user/googleLogin",
+  async ({credential, setShowSessionModal}, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "https://api.eventoo.com.ar/user/auth",
+        { credential }
+      );
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("id", response.data.id);
+      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      console.log(response.data)
+      if(!response.data.isNewUser) {
+        setShowSessionModal(null)
+      } else {
+        setShowSessionModal("register")
+      }
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  }
+);
+
+export const update = createAsyncThunk(
+  "user/update",
+  async ({ input, setShowSessionModal }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        "https://api.eventoo.com.ar/user/",
+        {
+          born: input.born,
+          address_line: input.address_line,
+          city: input.city,
+          state: input.state,
+          country: input.country,
+          zip_code: input.zip_code
+        }
+      );
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -142,6 +198,42 @@ export const UserSlice = createSlice({
       };
     },
     [getUserData.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.data = null;
+    },
+    [googleLogin.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [googleLogin.fulfilled]: (state, action) => {
+      return {
+        ...action.payload.data,
+        isLogged: true,
+        isNewUser: action.payload.isNewUser,
+        loading: false,
+        error: null,
+      };
+    },
+    [googleLogin.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.data = null;
+    },
+    [update.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [update.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        address: action.payload.data.address,
+        born: action.payload.data.born,
+        loading: false,
+        error: null,
+      };
+    },
+    [update.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.data = null;

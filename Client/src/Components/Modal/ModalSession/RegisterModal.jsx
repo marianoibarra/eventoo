@@ -11,8 +11,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMaps from "./MapRegister";
-import { register } from "../../../Slice/User/UserSlice";
-
+import { register, update } from "../../../Slice/User/UserSlice";
 
 const RegisterModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -54,14 +53,13 @@ const RegisterModal = () => {
       errors.last_name = "Last name is required";
     }
     return errors;
-
-
   };
 
   const [input, setInput] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [showErr, setShowErr] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const { loading, isNewUser, error } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     setInput({
@@ -81,11 +79,19 @@ const RegisterModal = () => {
     });
   };
 
-  const { loading, error } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (isNewUser) {
+      setStep(styles.s2);
+    }
+  }, [isNewUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(register({input, setShowSessionModal}));
+    if(isNewUser) {
+      dispatch(update({ input, setShowSessionModal }));
+    }else {
+      dispatch(register({ input, setShowSessionModal }));
+    }
   };
 
   useEffect(() => {
@@ -97,7 +103,7 @@ const RegisterModal = () => {
     });
   }, []);
 
-  const [step, setStep] = useState(styles.s1);
+  const [step, setStep] = useState(isNewUser ? styles.s2: styles.s1);
 
   return (
     <>
@@ -105,7 +111,6 @@ const RegisterModal = () => {
         <div
           className={styles.closeBtn}
           onClick={() => {
-
             setShowSessionModal(null);
           }}
         >
@@ -136,7 +141,9 @@ const RegisterModal = () => {
                   error={showErr.name && errors.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  style={{marginBottom: showErr.name && errors.name ? '0px' : '22px'}}
+                  style={{
+                    marginBottom: showErr.name && errors.name ? "0px" : "22px",
+                  }}
                 />
                 <Textfield
                   name="last_name"
@@ -146,7 +153,10 @@ const RegisterModal = () => {
                   margin="dense"
                   helperText={showErr.last_name ? errors.last_name : ""}
                   error={showErr.last_name && errors.last_name}
-                  style={{marginBottom: showErr.last_name && errors.last_name ? '0px' : '22px'}}
+                  style={{
+                    marginBottom:
+                      showErr.last_name && errors.last_name ? "0px" : "22px",
+                  }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -159,7 +169,10 @@ const RegisterModal = () => {
                 margin="dense"
                 helperText={showErr.email ? errors.email : ""}
                 error={showErr.email && errors.email}
-                style={{marginTop: '4px', marginBottom: showErr.email && errors.email ? '0px' : '22px'}}
+                style={{
+                  marginTop: "4px",
+                  marginBottom: showErr.email && errors.email ? "0px" : "22px",
+                }}
                 onChange={handleChange}
                 fullWidth
                 onBlur={handleBlur}
@@ -172,9 +185,21 @@ const RegisterModal = () => {
                 onChange={handleChange}
                 margin="dense"
                 fullWidth
-                helperText={showErr.password ? errors.password : "Use 8 or more characters with a combination of letters, numbers, and symbols"}
+                helperText={
+                  showErr.password
+                    ? errors.password
+                    : "Use 8 or more characters with a combination of letters, numbers, and symbols"
+                }
                 error={showErr.password && errors.password}
-                style={{marginTop: '4px', marginBottom: showErr.password && errors.password ?  '20px' : showErr.password ? '42px' : '0px'}}
+                style={{
+                  marginTop: "4px",
+                  marginBottom:
+                    showErr.password && errors.password
+                      ? "20px"
+                      : showErr.password
+                      ? "42px"
+                      : "0px",
+                }}
                 type={showPassword ? "text" : "password"}
                 onBlur={handleBlur}
                 endAdornment={
@@ -189,7 +214,6 @@ const RegisterModal = () => {
                   </InputAdornment>
                 }
               />
-            
 
               <button
                 className={`${styles.submit} ${styles.right}`}
@@ -213,41 +237,54 @@ const RegisterModal = () => {
           <main className={styles.main}>
             <h3>Tell us more about yourself</h3>
             <form>
-            <div className={styles.inputs}>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
-                <DatePicker
-                  id="date"
-                  name="born"
-                  label="Birthday"
-                  variant="standard"
-                  openTo="year"
-                  views={["year", "month", "day"]}
-                  value={input.born}
-                  onChange={(value) => {
-                    setInput({ ...input, born: value?._d ? value._d : value });
-                  }}
-                  renderInput={(params) => (
-                    <Textfield {...params} error={false} fullWidth />
-                  )}
-                />
-              </LocalizationProvider>
-              <GoogleMaps input={input} setInput={setInput} />
+              <div className={styles.inputs}>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DatePicker
+                    id="date"
+                    name="born"
+                    label="Birthday"
+                    variant="standard"
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                    value={input.born}
+                    onChange={(value) => {
+                      setInput({
+                        ...input,
+                        born: value?._d ? value._d : value,
+                      });
+                    }}
+                    renderInput={(params) => (
+                      <Textfield {...params} error={false} fullWidth />
+                    )}
+                  />
+                </LocalizationProvider>
+                <GoogleMaps input={input} setInput={setInput} />
               </div>
-              <div className={styles.buttons}>
-                <button
-                  className={`${styles.submit} ${styles.prev}`}
-                  type="button"
-                  onClick={() => setStep(styles.s1)}
-                >
-                  Back
-                </button>
+              <div
+                style={isNewUser ? { justifyContent: "center" } : {}}
+                className={styles.buttons}
+              >
+                {!isNewUser && (
+                  <button
+                    className={`${styles.submit} ${styles.prev}`}
+                    type="button"
+                    onClick={() => setStep(styles.s1)}
+                  >
+                    Back
+                  </button>
+                )}
                 <button
                   className={`${styles.submit} ${styles.next}`}
                   type="submit"
                   onClick={handleSubmit}
-                  disabled={loading || input.born?.length < 8 || input.born === null || input.address_line.length === 0}
+                  disabled={
+                    loading ||
+                    input.born?.length < 8 ||
+                    input.born === null ||
+                    input.address_line.length === 0
+                  }
                 >
-                  {loading ? <Spinner/> : 'Sign up'}
+                  {loading ? <Spinner /> : isNewUser ? "Continue" : "Sign up" }
                 </button>
               </div>
             </form>
