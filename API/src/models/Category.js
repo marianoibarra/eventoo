@@ -10,6 +10,9 @@ module.exports = (sequelize) => {
         modality:{
             type: DataTypes.ENUM('Presential', 'Virtual')
         },
+        isActive:{
+            type: DataTypes.BOOLEAN
+        }
     }, {
         timestamps: false
     })
