@@ -6,20 +6,12 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    gmail: {
+    email: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     last_name: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    transactionId: {
-      type: DataTypes.UUID,
-      references: {
-        model: 'transactions',
-        key: 'id'
-      },
       allowNull: true,
     },
   });
