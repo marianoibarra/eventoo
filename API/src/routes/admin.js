@@ -5,6 +5,7 @@ const {
   getCategories,
   changeRole,
   changeStatusEvent,
+  getEvents
 } = require("../controllers/admin");
 const {
   verifyToken,
@@ -19,5 +20,6 @@ router.put("/users/ban/:id", verifyToken, verifyAdmins, changeBan);
 router.put("/users/change/:id", verifyToken, verifySuperAdmin, changeRole);
 router.put("/categories/:id", verifyToken, verifyAdmins, getCategories);
 router.put("/events/:id", verifyToken, verifyAdmins, changeStatusEvent);
+router.get("/events", verifyToken, verifyAdmins, getEvents);
 
 module.exports = router;
