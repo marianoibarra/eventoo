@@ -160,6 +160,7 @@ export default function GoogleMaps({ input, setInput }) {
         options={options}
         autoComplete
         includeInputInList
+        InputProps={{ inputProps: { tabIndex: -1 } }}
         filterSelectedOptions
         value={value}
         noOptionsText="No locations"
@@ -171,7 +172,7 @@ export default function GoogleMaps({ input, setInput }) {
           setInputValue(newInputValue);
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Add your location" fullWidth />
+          <TextField {...params} inputProps={{ ...params.inputProps, tabIndex: 1 }}  label="Add your location" fullWidth />
         )}
         renderOption={(props, option) => {
           const matches =

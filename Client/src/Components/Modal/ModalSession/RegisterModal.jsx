@@ -240,13 +240,16 @@ const RegisterModal = () => {
               <div className={styles.inputs}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DatePicker
+                    tabIndex={-1}
                     id="date"
                     name="born"
+                    InputProps={{ inputProps: { tabIndex: -1 } }}
                     label="Birthday"
                     variant="standard"
                     openTo="year"
                     views={["year", "month", "day"]}
                     value={input.born}
+                    OpenPickerButtonProps={{tabIndex: -1}}
                     onChange={(value) => {
                       setInput({
                         ...input,
@@ -254,7 +257,7 @@ const RegisterModal = () => {
                       });
                     }}
                     renderInput={(params) => (
-                      <Textfield {...params} error={false} fullWidth />
+                      <Textfield InputProps={{ inputProps: { tabIndex: -1 } }} {...params} error={false} fullWidth />
                     )}
                   />
                 </LocalizationProvider>
@@ -266,6 +269,7 @@ const RegisterModal = () => {
               >
                 {!isNewUser && (
                   <button
+                    tabIndex={-1}
                     className={`${styles.submit} ${styles.prev}`}
                     type="button"
                     onClick={() => setStep(styles.s1)}
@@ -276,6 +280,7 @@ const RegisterModal = () => {
                 <button
                   className={`${styles.submit} ${styles.next}`}
                   type="submit"
+                  tabIndex={-1}
                   onClick={handleSubmit}
                   disabled={
                     loading ||
@@ -294,57 +299,7 @@ const RegisterModal = () => {
           <main className={styles.main}>
             <h3>Paso 3</h3>
 
-            <form onSubmit={handleSubmit}>
-              <Textfield
-                name="email"
-                variant="standard"
-                label="Email"
-                value={input.email}
-                margin="dense"
-                helperText={showErr.email ? errors.email : ""}
-                error={showErr.email && errors.email}
-                onChange={handleChange}
-                fullWidth
-                onBlur={handleBlur}
-              />
-              <Textfield
-                name="password"
-                variant="standard"
-                label="Password"
-                value={input.password}
-                onChange={handleChange}
-                margin="dense"
-                fullWidth
-                helperText={showErr.password ? errors.password : ""}
-                error={showErr.password && errors.password}
-                type={showPassword ? "text" : "password"}
-                onBlur={handleBlur}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-              <button
-                className={styles.submit}
-                type="button"
-                onClick={() => setStep(styles.s2)}
-              >
-                {loading ? <Spinner /> : "Prev"}
-              </button>
-              <span className={styles.registerLink}>
-                Got an account already?
-                <span onClick={() => setShowSessionModal("login")}>
-                  {"\u00A0 Log in"}
-                </span>
-              </span>
-            </form>
+            
           </main>
         </div>
       </div>
