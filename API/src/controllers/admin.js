@@ -1,4 +1,4 @@
-const { Category, User, Address, RoleAdmin } = require("../db");
+const { Category, User, Address, RoleAdmin, Event } = require("../db");
 
 const getUsers = async (req, res) => {
   try {
@@ -52,13 +52,29 @@ const getCategories = async (req, res) => {
 const changeRole = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id);
-    const roleId = user.roleAdminId;
-    let role = await RoleAdmin.findByPk(roleId);
-    role.name =
-      role.name === "ADMIN" ? (role.name = "USER") : (role.name = "ADMIN");
-    await role.update({ name: role.name });
-    res.send("Successful update");
+    const user = await User.findOne({
+      where: { id },
+      include: [{ model: RoleAdmin }],
+    });
+    user.roleAdmin.name =
+      user.roleAdmin.name === "ADMIN"
+        ? (user.roleAdmin.name = "USER")
+        : (user.roleAdmin.name = "ADMIN");
+    await user.roleAdmin.update({ name: user.roleAdmin.name });
+    res.send(user.roleAdmin);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const changeStatusEvent = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = Event.findByPk(id);
+    await event.update({
+      isActive: !event.isActive,
+    });
+    res.json(event.isActive);
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
@@ -69,4 +85,5 @@ module.exports = {
   changeBan,
   getCategories,
   changeRole,
+  changeStatusEvent,
 };
