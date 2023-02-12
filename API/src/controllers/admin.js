@@ -20,6 +20,19 @@ const getUsers = async (req, res) => {
   }
 };
 
+const changeBan = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    await user.update({
+        isBanned: !user.isBanned,
+    });
+    res.json(user);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
 const getCategories = async (req, res) => {
   const { id } = req.params;
   const { name, modality, image } = req.body;
@@ -37,6 +50,7 @@ const getCategories = async (req, res) => {
 };
 
 module.exports = {
-  getCategories,
   getUsers,
+  changeBan,
+  getCategories,
 };
