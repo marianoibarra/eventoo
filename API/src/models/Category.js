@@ -9,7 +9,16 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       modality: {
-        type: DataTypes.ENUM("Presential", "Virtual"),
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums = ["Presential", "Virtual"];
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       image: {
         type: DataTypes.STRING,
