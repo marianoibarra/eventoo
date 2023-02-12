@@ -58,6 +58,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BIGINT,
       allowNull: true,
     },
+    privateEvent_pasword: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     placeName: {
       type: DataTypes.STRING,
       allowNull: true,
