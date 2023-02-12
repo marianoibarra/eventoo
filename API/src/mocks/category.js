@@ -1,31 +1,149 @@
 const categoryMock = [
-  { name: "Concerts", modality: "Presential", isActive: true },
-  { name: "Fairs", modality: "Presential", isActive: true },
-  { name: "Festivals", modality: "Presential", isActive: true },
-  { name: "Business meetings", modality: "Presential", isActive: true },
-  { name: "Exhibitions", modality: "Presential", isActive: true },
-  { name: "Congresses", modality: "Presential", isActive: true },
-  { name: "Conventions", modality: "Presential", isActive: true },
-  { name: "Workshops", modality: "Presential", isActive: true },
-  { name: "Sports", modality: "Presential", isActive: true },
-  { name: "Birthday celebration", modality: "Presential", isActive: true },
-  { name: "Weddings celebration", modality: "Presential", isActive: true },
-  { name: "Religious celebration", modality: "Presential", isActive: true },
-  { name: "Parties", modality: "Presential", isActive: true },
-  { name: "Plays", modality: "Presential", isActive: true },
-  { name: "Fashion shows", modality: "Presential", isActive: true },
-  { name: "Infantiles", modality: "Presential", isActive: true },
+  {
+    name: "Concerts",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Concerts.jpg",
+  },
+  {
+    name: "Fairs",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Fairs.jpg",
+  },
+  {
+    name: "Festivals",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Festivals.jpg",
+  },
+  {
+    name: "Business meetings",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Business_Meetings.jpg",
+  },
+  {
+    name: "Exhibitions",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Exhibitions.jpg",
+  },
+  {
+    name: "Congresses",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Congresses.jpg",
+  },
+  {
+    name: "Conventions",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Congresses.jpg",
+  },
+  {
+    name: "Workshops",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Workshops.jpg",
+  },
+  {
+    name: "Sports",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Sports.jpg",
+  },
+  {
+    name: "Birthday celebration",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Birthday_Celebration.jpg",
+  },
+  {
+    name: "Weddings celebration",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Wedding_Celebration.jpg",
+  },
+  {
+    name: "Religious celebration",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Religious_Celebration.jpg",
+  },
+  {
+    name: "Parties",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Parties.jpg",
+  },
+  {
+    name: "Plays",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Plays.jpg",
+  },
+  {
+    name: "Fashion shows",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Fashion_Shows.jpg",
+  },
+  {
+    name: "Infantiles",
+    modality: "Presential",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Infantiles.jpg",
+  },
 
-  { name: "Seminars", modality: "Virtual", isActive: true },
-  { name: "Conferences", modality: "Virtual", isActive: true },
-  { name: "Congresses", modality: "Virtual", isActive: true },
-  { name: "Talks", modality: "Virtual", isActive: true },
-  { name: "Online games", modality: "Virtual", isActive: true },
-  { name: "Streaming sessions", modality: "Virtual", isActive: true },
-  { name: "Video transmissions", modality: "Virtual", isActive: true },
-  { name: "Online workshops", modality: "Virtual", isActive: true },
-  { name: "Online courses", modality: "Virtual", isActive: true },
-  { name: "Art samples", modality: "Virtual", isActive: true },
+  {
+    name: "Seminars",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Seminars.jpg",
+  },
+  {
+    name: "Conferences",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Conferences.jpg",
+  },
+  {
+    name: "Congresses",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Congresses.jpg",
+  },
+  {
+    name: "Talks",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Talks.jpg",
+  },
+  {
+    name: "Online games",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Online_Games.jpg",
+  },
+  {
+    name: "Online workshops",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Online_Workshops.jpg",
+  },
+  {
+    name: "Online courses",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Online_Courses.jpg",
+  },
+  {
+    name: "Art samples",
+    modality: "Virtual",
+    image:
+      "https://raw.githubusercontent.com/MarianoIT1/PG-Eventoo/dev/Client/src/imgs/covers/Art_Samples.jpg",
+  },
 ];
 
 module.exports = categoryMock;
