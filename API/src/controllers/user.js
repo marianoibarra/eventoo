@@ -344,7 +344,7 @@ const getProfile = async ({ userId }, res) => {
       ],
     }).then((r) => r.toJSON());
 
-    profileUser.roleAdmin = profileUser.roleAdmin.name;
+    if(profileUser.roleAdmin.name) profileUser.roleAdmin = profileUser.roleAdmin.name;
     res.status(200).json(profileUser);
   } catch (error) {
     res.status(500).json({ msg: error.message });
