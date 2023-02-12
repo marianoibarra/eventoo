@@ -39,7 +39,7 @@ const googleAuth = async (req, res) => {
 
     const response = await user.toJSON()  
     
-     response.roleAdmin = response.roleAdmin.name;
+    if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
      delete response.password
 
     res.send({
@@ -120,7 +120,7 @@ const register = async (req, res) => {
       ],
     }).then((r) => r.toJSON());
 
-    response.roleAdmin = response.roleAdmin.name;
+    if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
 
     sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 
@@ -241,7 +241,7 @@ const login = async (req, res) => {
 
      const response = await user.toJSON()  
     
-     response.roleAdmin = response.roleAdmin.name;
+     if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
      delete response.password
 
     return res.send({
