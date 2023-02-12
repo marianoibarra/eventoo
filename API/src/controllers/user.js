@@ -15,15 +15,6 @@ const googleAuth = async (req, res) => {
 
     const [user, created] = await User.findOrCreate({
       where: { email },
-      attributes: { exclude: ["addressId", "roleAdminId"] },
-      include: [
-        "roleAdmin",
-        {
-          model: Address,
-          as: "address",
-          attributes: { exclude: ["id"] },
-        },
-      ],
       defaults: {
         name: given_name,
         last_name: family_name,
@@ -38,13 +29,25 @@ const googleAuth = async (req, res) => {
       await newUser.setRoleAdmin(role)
     }
 
+    await user.reload({
+      attributes: { exclude: ["addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+      ],
+    })
+
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "90d",
     });
 
     const response = await user.toJSON()  
     
-    if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
+    if(response.roleAdmin) response.roleAdmin = response.roleAdmin.name;
      delete response.password
 
     res.send({
