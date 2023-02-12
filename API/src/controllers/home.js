@@ -72,7 +72,7 @@ const getEventsPublic = async (req, res) => {
         {
           model: Category,
           as: "category",
-          attributes: ["name", "modality"],
+          attributes: ["name", "modality", "image"],
         },
       ],
       limit: limit && !Number.isNaN(Number(limit)) ? Number(limit) : null,
