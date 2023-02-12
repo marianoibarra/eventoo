@@ -502,7 +502,6 @@ module.exports = {
   modifyUser,
   verifyAdmins,
   verifySuperAdmin,
-  changeRole,
   googleAuth,
   getProfile,
 };
