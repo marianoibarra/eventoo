@@ -5,7 +5,7 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
+import { clearState, createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
@@ -14,6 +14,8 @@ import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 import { SessionContext } from '../..';
+import {useNavigate} from 'react-router-dom'
+
 
 function Form(){
   const dispatch = useDispatch();
@@ -45,6 +47,7 @@ function Form(){
     end_date:'',
     end_time:'',
     guests_capacity:"",
+    modality: '',
     isPaid:true,
     isPremium:null,
     isPublic:true,
@@ -65,6 +68,8 @@ function Form(){
   const [input, setInput] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [showMsg, setShowMsg] = useState ({});
+
+  const navigate = useNavigate()
 
   function validate(input) {
     let errors={}
@@ -137,6 +142,7 @@ function Form(){
     }
   }, [confirm])
 
+
   const handleSubmit = e => {
     e.preventDefault();
     if(isLogged){
@@ -146,6 +152,8 @@ function Form(){
       alert('Please Log in');
       setShowSessionModal('login');
     };
+
+
   };
 
   return(

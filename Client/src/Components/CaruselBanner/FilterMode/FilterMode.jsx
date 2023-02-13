@@ -75,12 +75,10 @@ const FilterMode = () => {
     <div className={Style.containerFilterMode}>
 
       <div className={Style.Filter}>
-        <div className={Style.container_btns_Filter}>
-          <h2 className={Style.title_filter}>Filter by</h2>
+          <div className={Style.title_filter}>Filter by: </div>
           <button onClick={handleClearFilter} className={Style.btnFilter}>
-             <MdOutlineTune />
+             <MdOutlineTune size={20} />
           </button>
-        </div>
       </div>
 
       <div className={Style.modality}>
@@ -128,7 +126,7 @@ const FilterMode = () => {
       <div className={Style.clearFilter}>
         <div className={Style.container_btns_clearFilter}>
           <button onClick={handleClearFilter} className={Style.btnClearFilter}>
-            <MdDelete />
+            <MdDelete size={20} />
           </button>
         </div>
       </div>

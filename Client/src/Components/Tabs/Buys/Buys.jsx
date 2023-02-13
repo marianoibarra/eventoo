@@ -7,6 +7,8 @@ import Styles from '../Create/Create.module.css';
 function Buys() {
   const { events } = useSelector(state => state.eventsBuysSlice)
 
+  console.log(events)
+
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(axiosModeEventsBuys());
@@ -14,15 +16,16 @@ function Buys() {
 
   return (
     <div className={Styles.container}>
-      {events.length > 0 ? events.map(event => (
-        <div className={Styles.eventCard} key={event.name}>
-          <Link to={`/event/${event.id}`}><h3 className={Styles.eventCardTitle}>Nombre: {event.name}</h3></Link>
-          <p>Fecha de Inicio: {event.start_date}</p>
-          <p>Fecha de Finalización: {event.end_time}</p>
-          <p>pagado: {event.isPaid ? 'Sí' : 'No'}</p>
-          <p>Rango de Edad: {event.age_range}</p>
+      {Array.isArray(events) && events.length !== 0 && events.map(event => (
+        <div className={Styles.eventCard} key={event?.name}>
+          <Link to={`/event/${event?.id}`}><h3 className={Styles.eventCardTitle}>Name: {event?.name}</h3></Link>
+          <p>Start date: {event?.start_date}</p>
+          <p>End date: {event?.end_date}</p>
+          <p>Category: {event.category?.name}</p>
+          <p>Age range: {event?.age_range}</p>
+          <p>Status: {event?.status}</p>
         </div>
-      )) : undefined}
+      ))}
     </div>
   )
 }

@@ -7,12 +7,12 @@ import FilterMode from './FilterMode/FilterMode'
 const CaruselBanner = () => {
     return (
         <div>
-            <FilterMode />
+            
             <div className={Style.container_carusel} >
                  <div className={Style.carusel_text}>
-                    <p>
+                    {/* <p>
                         Hola este es un mensaje de prueba del carusel ONE
-                    </p>
+                    </p> */}
                 </div>
 
                 <div className={Style.carusel_one}>
@@ -39,6 +39,7 @@ const CaruselBanner = () => {
                     </div>
                 </div>
             </div>
+            <FilterMode />
             <CaruselAll />
         </div>
     )

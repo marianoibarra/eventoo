@@ -1,53 +1,52 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
-
+const querystring = require('querystring');
 
 export const axiosPostTicket = createAsyncThunk(
-  'transaction/axiosPostTicket',
+  "transaction/axiosPostTicket",
   async (object, { rejectWithValue }) => {
-    console.log(object, 'desde el slice')
+    console.log(object, "desde el slice");
     try {
-      const res = await API.post('/transaction', object)
-      console.log(res.data)
-      localStorage.setItem('idTransaction', JSON.stringify(res.data))
-      return res.data
+      const res = await API.post("/transaction", object);
+      console.log(res.data);
+      localStorage.setItem("idTransaction", JSON.stringify(res.data));
+      return res.data;
     } catch (error) {
       if (error.res) {
-        console.log(error.res.data)
-        return rejectWithValue(error.res.data)
+        console.log(error.res.data);
+        return rejectWithValue(error.res.data);
       }
-      throw error
+      throw error;
     }
-  })
-
-
+  }
+);
 
 export const transactionSlice = createSlice({
-  name: 'transaction',
+  name: "transaction",
   initialState: {
     transaction: null,
     loading: false,
-    error: null
-  }, 
+    error: null,
+  },
   reducers: {},
   extraReducers: {
     [axiosPostTicket.pending]: (state) => {
       state.loading = true;
-      state.error = null
+      state.error = null;
     },
     [axiosPostTicket.fulfilled]: (state, action) => {
-      state.loading = false
-      state.error = null
-      state.transaction = action.payload
+      state.loading = false;
+      state.error = null;
+      state.transaction = action.payload;
     },
     [axiosPostTicket.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error
-    }
-  }
-})
+      state.error = action.error;
+    },
+  },
+});
 
-export default transactionSlice.reducer
+export default transactionSlice.reducer;
 
 // export const createBankAccount = createAsyncThunk(
 //   'bankAccounts/createBankAccount',

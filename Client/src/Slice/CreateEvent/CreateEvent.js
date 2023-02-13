@@ -7,7 +7,9 @@ export const createEvent = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await API.post('/event', formData);
-      console.log('response en slice',response)
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
+      
       return response.data;
     } catch (error) {
       if (error.response) {
@@ -45,6 +47,7 @@ export const eventSlice = createSlice({
     updateName: (state, action) => {
       state.name = action.payload;
     },
+    
     updateDescription: (state, action) => {
       state.description = action.payload;
     },
@@ -118,6 +121,7 @@ export const eventSlice = createSlice({
       state.loading = true;
     },
     [createEvent.fulfilled]: (state, action) => {
+
       state.event = action.payload     
       state.loading=false;
       state.error=null;

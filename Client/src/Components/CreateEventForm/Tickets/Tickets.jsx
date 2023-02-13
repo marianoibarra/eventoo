@@ -9,6 +9,7 @@ import style from './Tickets.module.css'
 
 
 
+
 function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
   const dispatch = useDispatch();
   const [isPublic, setIsPublic] = useState(true);
@@ -22,6 +23,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
 
   useEffect(() => {
   }, [isPublic]);
+
 
   const handleBlur = (e) => {
     setShowMsg({
@@ -54,27 +56,29 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
 
   return (
     <div className={style.container}>
-      {showModal && <ModalBank setShowModal={setShowModal} input={input} setInput={setInput} />}
-      <h1 className={style.title}>Tickets</h1>
-      <p className={style.text}>
-        Please choose if the event will be public or private.
-      </p>
-      <ButtonGroup
-        buttons={["Public", "Private"]}
-        handleGroup={handleGroupPublic}
-      />
-      {showMsg.isPublic && (
-        <p className={style.warning}>{errors.isPublic}</p>
-      )}
-      <p className={style.text}>
-        Choose if your guests will pay for asist to the event.
-      </p>
-      <ButtonGroup
-        buttons={["Paid", "Free"]}
-        handleGroup={handleGroupPrice}
-      />
-      <h4 className={style.parr}>Capacity:</h4>
-      <input
+       { showModal &&  <ModalBank setShowModal={setShowModal} input={input} setInput={setInput}/>}
+        <h1 className={style.title}>Tickets</h1>
+        <p className={style.text}>
+          Please choose if the event will be public or private.
+        </p>
+        <ButtonGroup
+          buttons={["Public", "Private"]}
+          handleGroup={handleGroupPublic}
+          input={input}
+        />
+        {showMsg.isPublic&&(
+                            <p className={style.warning}>{errors.isPublic}</p>
+                        )}
+        <p className={style.text}>
+          Choose if your guests will pay for asist to the event.
+        </p>
+        <ButtonGroup
+          buttons={["Paid", "Free"]}
+          handleGroup={handleGroupPrice}
+          input={input}
+        />
+        <h4 className={style.parr}>Capacity:</h4>
+        <input
         placeholder='Capacity'
         className={style.inputs}
         name='guests_capacity'

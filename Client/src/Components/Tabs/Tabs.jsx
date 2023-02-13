@@ -50,7 +50,7 @@ function TabsComponent() {
         centered
       >
         <Tab className={classes.tab} label="Buys events" />
-        <Tab className={classes.tab} label="Cretate Events" />
+        <Tab className={classes.tab} label="Create Events" />
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>
