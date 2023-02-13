@@ -114,9 +114,9 @@ Event.hasMany(Review)
 Review.belongsTo(Event)
 
 
+//PASSWORD USER
 
-
-// Encripta la contraseña antes de crear y de actualizar el usuario
+// Encripta la contraseña antes de crear y de actualizar el usuario.
 User.beforeCreate(async function (user) { //event
   if(user.password) { // el event.privatepassword osea el atributo ligado al objeto. 
     const salt = await bcrypt.genSalt(10);
@@ -131,10 +131,35 @@ User.beforeUpdate(async function (user) {
   }
 });
 
-// Funcion que se va a usar en el logeo, para verificar que sea la contraseña
+// Funcion que se va a usar en el logeo, para verificar que sea la contraseña.
 User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
+//PASSWORD EVENT PRIVATE
+
+
+Event.beforeCreate(async function (event) { 
+  if(event.privateEvent_pasword) { 
+    const salt = await bcrypt.genSalt(10);
+    event.privateEvent_pasword = await bcrypt.hash(event.privateEvent_pasword, salt);
+  }
+});
+
+
+Event.beforeUpdate(async function (event) {
+  if(event.privateEvent_pasword) {
+    const salt = await bcrypt.genSalt(10);
+    event.privateEvent_pasword = await bcrypt.hash(event.privateEvent_pasword, salt);
+  }
+});
+
+Event.prototype.validPassword = async function (privateEvent_pasword) {
+  return await bcrypt.compare(privateEvent_pasword, this.privateEvent_pasword);
+};
+
+
+///
 
 
 Event.beforeFind((options) => {
