@@ -36,7 +36,7 @@ const createEvent = async (req, res) => {
   } = req.body;
   let privateEvent_passwordValue = null;
 
-  if(!isPublic) {
+  if(isPublic === false) {
     if(!privateEvent_password) {
       return res.status(400).json({
         errors: [
