@@ -6,14 +6,8 @@
     width: max-content;
 }
 
-.containerlocation img {
-    height: 40vh;
-    width: 40vw;
-    object-fit: cover;
-    margin-top: 13px;
-    margin-left: 50px;
-    border: solid 2px gray;
-    border-radius: 12px;
+.containerlocation b {
+    margin-bottom: 5px;
 }
 
 .containericon {
@@ -38,4 +32,11 @@
 .ubicationtext {
     margin-left: 50px;
     font-size: 1.1vw;
+}
+
+.containermap {
+    border: solid 1px var(--primary-color);
+    height: min-content;
+    margin-top: 5px;
+    margin-left: 50px;
 }

@@ -34,7 +34,7 @@ function Form(){
     address_line:null,
     adversiting_end:null,
     advertisingTime_start:null,
-    age_range:'',
+    age_range:'ALL PUBLIC',
     bankAccount:'',
     category:null,
     city:null,
