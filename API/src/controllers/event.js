@@ -170,6 +170,12 @@ const createEvent = async (req, res) => {
     });
   }
 };
+
+const checkPrivatePassword = async (req, res) => {
+
+};
+
+
 // CONSULTAR PORQUE AQUI DEBERIA TRAER TODOS LOS EVENTOS DE ESE USUARIO INDISTINTAMENTE SI ES PUBLICO O PRIVADO
 const getEventByUser = async ({ userId }, res) => { 
   try {
@@ -338,6 +344,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
   createEvent,
+  checkPrivatePassword,
   getEventByUser,
   modifyEvent,
   deleteEvent,

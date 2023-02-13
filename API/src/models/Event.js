@@ -38,6 +38,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
+    privateEvent_pasword: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     virtualURL: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -56,10 +60,6 @@ module.exports = (sequelize) => {
     },
     guests_capacity: {
       type: DataTypes.BIGINT,
-      allowNull: true,
-    },
-    privateEvent_pasword: {
-      type: DataTypes.STRING,
       allowNull: true,
     },
     placeName: {
