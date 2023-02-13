@@ -3,7 +3,7 @@ import { API } from "../../App";
 
 
 export const axiosModeEventsCreateForUser = createAsyncThunk(
-  'events/axiosModeEventsCreateForUser',
+  'CreateForUser/axiosModeEventsCreateForUser',
   async () => {
     const res = await API.get('/event')
     return res.data

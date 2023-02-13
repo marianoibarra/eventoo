@@ -27,8 +27,8 @@ const ModalTransaction = ({ setShowModal, tickets }) => {
   const {transaction} = useSelector(state => state.transaction)
 
   const checkLoad = () => {
-    const { last_name, name, gmail } = dataTicket;
-    if (last_name && name && gmail && loadTicket.length < tickets) {
+    const { last_name, name, email } = dataTicket;
+    if (last_name && name && email && loadTicket.length < tickets) {
       setBtnLoad(false);
     } else {
       setBtnLoad(true);
@@ -59,18 +59,19 @@ const ModalTransaction = ({ setShowModal, tickets }) => {
     setDataTicket({
       last_name: '',
       name: '',
-      gmail: ''
+      email: ''
     });
   }
 
 
+
   const handleAxiosTicket = () => {
     const object = {
-      isPaid: true,
       eventId: eventDetail.id,
       tickets: loadTicket
     }
-    dispatch(axiosPostTicket({object}))
+    console.log(object)
+    dispatch(axiosPostTicket(object))
   }
 
 
@@ -97,14 +98,14 @@ const ModalTransaction = ({ setShowModal, tickets }) => {
       <input
         className={Style.input_email}
         type='email'
-        name='gmail'
-        value={dataTicket.gmail}
+        name='email'
+        value={dataTicket.email}
         placeholder='Ingrese email'
         onChange={handleDataTicket}
       />
       {loadTicket?.map(d => (
         <Tickets
-          email={d.gmail}
+          email={d.email}
           last_name={d.last_name}
           name={d.name}
         />

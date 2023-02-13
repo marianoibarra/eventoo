@@ -31,13 +31,20 @@ import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
+import NewHome from "./Pages/NewHome";
 
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
   headers: {
-    'authorization': 'Bearer ' + localStorage.getItem("token"),
+    common: {
+      'authorization': 'Bearer ' + localStorage.getItem("token"),
+    }
   }
 });
+
+console.log(API)
+console.log(API.defaults)
+console.log(API.defaultConfig)
 
 function App() {
   
@@ -90,6 +97,7 @@ function App() {
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/setting" element={!isLogged ? <Navigate to='/'/> : <Setting />} />
         <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/newhome" element={<NewHome />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/Help" element={<Help />} />
         <Route path="/contact" element={<Contact />} />

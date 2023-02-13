@@ -9,7 +9,6 @@
 .container{
     height: 100% vh;
     display: flex;
-    margin-top: 70px;
     justify-content: center;
 }
   

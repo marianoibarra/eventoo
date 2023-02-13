@@ -11,7 +11,7 @@ import { SessionContext } from "../../..";
 const Menu = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { name, last_name, email, image, isLogged } = useSelector(
+  const { name, last_name, email, profile_pic, isLogged } = useSelector(
     (state) => state.user
   );
   const dispatch = useDispatch();
@@ -32,15 +32,15 @@ const Menu = () => {
   };
 
   return (
-    <div className={Styles.menuContainer}>
-      <button className={Styles.menuIcon} onClick={handleClick}>
-       {image ? <img
-              src={image ? image : User}
+    <div className={Styles.menuContainer} >
+      <div className={Styles.menuIcon} onClick={handleClick} >
+       {profile_pic ? <img
+              src={profile_pic ? profile_pic : User}
               alt="user photo"
               className={Styles.menuIcon}
               onClick={() => setIsOpen(!isOpen)}
-            /> : <FaUserCircle size={40} />}
-      </button>
+            /> : <FaUserCircle color="#fff9" size={34} />}
+      </div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -51,7 +51,7 @@ const Menu = () => {
             transition={{ duration: 0.5 }}
           >
             <img
-              src={image ? image : User}
+              src={profile_pic ? profile_pic : User}
               alt="user photo"
               className={Styles.menuPhoto}
               onClick={() => setIsOpen(!isOpen)}
@@ -69,7 +69,7 @@ const Menu = () => {
                 </Link>
               </>
             ) : undefined}
-            {name ? (
+            {isLogged ? (
               <button
                 className={Styles.menuLink}
                 onClick={handleClearLocalStorage}

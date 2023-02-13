@@ -4,12 +4,10 @@ import style from './CheckBox.module.css';
 const Checkbox = ({input, setInput}) => {
 
   const handleChange = (e) => {
-    //e.preventDefault();
     setInput({
         ...input,
         [e.target.name]: e.target.checked
     })
-    console.log(input)
 };
 
   return (

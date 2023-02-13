@@ -8,14 +8,9 @@ import style  from './Tickets.module.css'
 
 
 function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
-  const dispatch = useDispatch();
-  const [isPublic, setIsPublic] = useState(true);
-  const [isPaid, setIsPaid] = useState(true);
+  
   const[showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    
-  }, [isPublic]);
 
   const handleBlur = (e) =>{
     setShowMsg({
@@ -56,6 +51,7 @@ function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
         <ButtonGroup
           buttons={["Public", "Private"]}
           handleGroup={handleGroupPublic}
+          input={input}
         />
         {showMsg.isPublic&&(
                             <p className={style.warning}>{errors.isPublic}</p>
@@ -66,6 +62,7 @@ function Tickets({input,setInput,errors, showMsg, setShowMsg}) {
         <ButtonGroup
           buttons={["Paid", "Free"]}
           handleGroup={handleGroupPrice}
+          input={input}
         />
         <h4 className={style.parr}>Capacity:</h4>
         <input

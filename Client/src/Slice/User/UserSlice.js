@@ -34,7 +34,7 @@ export const register = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -56,7 +56,7 @@ export const login = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -78,7 +78,7 @@ export const googleLogin = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       console.log(response.data)
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
@@ -144,7 +144,7 @@ export const UserSlice = createSlice({
       localStorage.removeItem("token");
       localStorage.removeItem("id");
       window.google.accounts.id.disableAutoSelect();
-      API.defaults.headers.common["authorization"] = null;
+       API.defaults.headers.common["authorization"] = null;
       return initialState
     },
     clearErrors: (state, action) => {

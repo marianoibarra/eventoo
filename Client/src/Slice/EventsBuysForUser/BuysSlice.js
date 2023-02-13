@@ -3,15 +3,16 @@ import { API } from "../../App";
 
 
 export const axiosModeEventsBuys = createAsyncThunk(
-  'events/axiosModeEventsBuys',
+  'eventsBuysSlice/axiosModeEventsBuys',
   async () => {
-    const res = await API.get('/transaction/seller')
+    const res = await API.get('/transaction/buyer')
+    console.log(res)
     return res.data
   }
 )
 
 export const eventsBuysSlice = createSlice({
-  name: 'events',
+  name: 'eventsBuysSlice',
   initialState: {
     events: [],
     loading: false,
@@ -23,7 +24,7 @@ export const eventsBuysSlice = createSlice({
       state.loading = true
     },
     [axiosModeEventsBuys.fulfilled]: (state, action) => {
-      state.events = action.payload;
+      state.events = action.payload.map(t => {return {...t.event, status: t.status}}).filter(e => e !== null);
       state.loading = false;
       state.error = null;
 

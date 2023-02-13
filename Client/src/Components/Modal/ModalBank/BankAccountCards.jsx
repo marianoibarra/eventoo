@@ -16,7 +16,7 @@ const BankAccountCards = ({ buttons, setInput, input }) => {
 
   return (
     <div className={style.groupcont}>
-      {buttons.map((buttonLabel, i) => (
+      {buttons && Array.isArray(buttons) && buttons.length > 0 && buttons.map((buttonLabel, i) => (
         <div
             type="button"
           key={i}
