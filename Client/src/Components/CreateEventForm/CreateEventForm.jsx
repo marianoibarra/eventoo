@@ -171,7 +171,7 @@ function Form(){
             event.create ? <p className={style.sendMessage}>Event created successfully</p>: undefined}
           {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
           <div className={style.footerForm}>
-            <button type='button' >Save changes</button>
+            {/* <button type='button' >Save changes</button> */}
             <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
           </div>
         </form>
