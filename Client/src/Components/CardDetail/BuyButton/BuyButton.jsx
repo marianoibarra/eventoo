@@ -4,7 +4,7 @@ import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 
 
 
-const BuyButton = () => {
+const BuyButton = ({id}) => {
   const price = 150;
   const [tickets, setTickets] = useState(1);
   const totalPrice = price * tickets;
@@ -26,6 +26,7 @@ const BuyButton = () => {
   return (
     
     <div className={style.containerbottomright}>
+     
       <div className={style.buycontainer}>
         <div className={style.container_text_and_tickets}>
           <div className={style.divtext}>
@@ -41,10 +42,8 @@ const BuyButton = () => {
           </div>
         </div>
         <div>
-          <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>{`Buy by $${totalPrice}`}</button>
-          {showModal && <ModalTransaction 
-          setShowModal={setShowModal}
-          tickets={tickets}/> }
+          <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>{`Buy by $${totalPrice}`}</button>         
+          {showModal && <ModalTransaction setShowModal={setShowModal} tickets={tickets} id={id}/> }
         </div>
       </div>
     </div>

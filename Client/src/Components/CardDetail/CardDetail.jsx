@@ -64,7 +64,7 @@ const CardDetail = () => {
                         </div>
                     </div> 
 
-                    {eventDetail.isPaid === true && <BuyButton/>}
+                    {eventDetail.isPaid === true && <BuyButton id={id}/>}
 
                 </div>
             }
