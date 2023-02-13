@@ -35,6 +35,11 @@ export const register = createAsyncThunk(
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
       axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      axios.interceptors.request.use(function (config) {
+        config.headers.Authorization =  response.data.token;
+         
+        return config;
+    });
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -57,6 +62,11 @@ export const login = createAsyncThunk(
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
       axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      axios.interceptors.request.use(function (config) {
+        config.headers.Authorization =  response.data.token;
+         
+        return config;
+    });
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -79,6 +89,11 @@ export const googleLogin = createAsyncThunk(
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
       axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      axios.interceptors.request.use(function (config) {
+        config.headers.Authorization =  response.data.token;
+         
+        return config;
+    });
       console.log(response.data)
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
@@ -146,6 +161,11 @@ export const UserSlice = createSlice({
       localStorage.removeItem("id");
       window.google.accounts.id.disableAutoSelect();
       axios.defaults.headers.common["authorization"] = null;
+      axios.interceptors.request.use(function (config) {
+        config.headers.Authorization =  null;
+         
+        return config;
+    });
       return initialState
     },
     clearErrors: (state, action) => {

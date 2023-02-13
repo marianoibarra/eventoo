@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const eventUrl = 'https://api.eventoo.com.ar/transaction/user'
+const eventUrl = 'https://api.eventoo.com.ar/transaction/seller'
 
 
 export const axiosModeEventsBuys = createAsyncThunk(
@@ -13,7 +13,7 @@ export const axiosModeEventsBuys = createAsyncThunk(
 )
 
 export const eventsBuysSlice = createSlice({
-  name: 'Buys',
+  name: 'events',
   initialState: {
     events: [],
     loading: false,

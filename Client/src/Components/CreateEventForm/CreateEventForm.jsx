@@ -169,7 +169,6 @@ function Form(){
           <div className={style.footerForm}>
             <button type='button' >Save changes</button>
             <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
-            <button type='button' className={style.btnprimario} onClick={() => setShowSessionModal('login')} >Abrir modal</button>
           </div>
         </form>
     </div>

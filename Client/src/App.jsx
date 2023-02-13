@@ -29,6 +29,8 @@ import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer"
 import { SessionContext } from ".";
 import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
+import Cart from "./Pages/UserEvents";
+import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 
 function App() {
   
@@ -41,11 +43,18 @@ function App() {
   };
 
 
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common["authorization"] = "Bearer " + token;
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization =  token;
+       
+      return config;
+  });
     if (token) {
       dispatch(getUserData());
+      dispatch(getBankAccounts());
     }
   }, []);
 
@@ -89,10 +98,10 @@ function App() {
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/modal-voucher" element={<ModalVoucher />}></Route>
+        <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route>
         <Route path="/user-event" element={<UserEvent />}></Route>
-        <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
-        <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>
+        <Route path="/forgot-password" element={isLogged ? <Navigate to='/'/> : <ForgotPassword />}></Route>
+        <Route path="/reset-password/:emailtoken" element={isLogged ? <Navigate to='/'/> : <RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
     </BrowserRouter>

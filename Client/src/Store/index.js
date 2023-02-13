@@ -29,7 +29,7 @@ const store = configureStore({
     combinedFilter: combinedFilterSlice.reducer,
     locationSlice: locationSlice.reducer,
     transaction: transactionSlice.reducer,
-    transactionVoucher: TransactionVoucher.reducer
+    transactionVoucher: TransactionVoucher.reducer,
     locationIpSlice:locationIpSlice.reducer,
     bankAccounts: bankAccountSlice.reducer,
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
