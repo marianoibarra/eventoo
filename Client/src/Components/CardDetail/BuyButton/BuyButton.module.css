@@ -15,7 +15,7 @@
     width: 100%;
     height: max-content;
     background-color: var(--white-text);
-    border: solid 1px gray;
+    border: solid 1px var(--primary-color);
     border-radius: 12px;
 }
 

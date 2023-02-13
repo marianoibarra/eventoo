@@ -17,6 +17,7 @@ export const UserSlice = createSlice({
       state.email = action.payload.email;
       state.image = action.payload.profile_pic;
       state.loginOk = true;
+      state.id = action.payload.id;
     },
     setUserOff: (state, action) => {
       state.name = null;
