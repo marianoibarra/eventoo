@@ -1,14 +1,25 @@
-const { DataTypes } = require('sequelize');
-
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define('roleAdmin', {
-        name: {
-            type: DataTypes.ENUM('USER', 'ADMIN', 'SUPERADMIN'),
-            allowNull: false,
-            defaultValue: 'USER'
-        },          
-    },{
-        timestamps: false
-    })
+  sequelize.define(
+    "roleAdmin",
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "USER",
+        validate: {
+          customValidator: (value) => {
+            const enums = ["USER", "ADMIN", "SUPERADMIN"];
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
+      },
+    },
+    {
+      timestamps: false,
+    }
+  );
 };

@@ -1,23 +1,36 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define('transaction',{
-        id: {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            allowNull: false,
-            unique: true,
-            defaultValue: DataTypes.UUIDV4,
-          },
-        isPaid: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
+  sequelize.define("transaction", {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "PENDING",
+      validate: {
+        customValidator: (value) => {
+          const enums = [
+            "PENDING",
+            "COMPLETED",
+            "FAILED",
+            "CANCELED",
+            "INWAITING",
+          ];
+          if (!enums.includes(value)) {
+            throw new Error("not a valid option");
+          }
         },
-        payment_proof: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },       
-    })
+      },
+    },
+    payment_proof: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  });
 };
-
-

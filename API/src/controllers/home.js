@@ -47,6 +47,7 @@ const getEventsPublic = async (req, res) => {
     }
 
     searchParams.isPublic = true;
+    searchParams.isActive = true;
 
     let {limit, page} = req.query
     limit = Number(limit)
