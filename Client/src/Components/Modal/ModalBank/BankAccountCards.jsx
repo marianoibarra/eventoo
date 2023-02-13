@@ -24,9 +24,8 @@ const BankAccountCards = ({ buttons, setInput, input }) => {
           onClick={(e) => handleClick(e, i)}
           className={i === clickedId ? style.active : style.customButton}
         >
-          <h6>{buttonLabel.name}</h6>
+          <h5>{buttonLabel.name}</h5>
           <p>{buttonLabel.CBU}</p>
-          <p>{buttonLabel.id}</p>
         </div>
       ))}
     </div>

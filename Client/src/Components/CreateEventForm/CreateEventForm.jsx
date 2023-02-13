@@ -13,7 +13,9 @@ import UploadImage from './UploadImage/UploadImage';
 import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
+import { SessionContext } from '../..';
 import {useNavigate} from 'react-router-dom'
+
 
 function Form(){
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ function Form(){
   const {isLogged} = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const[showModal, setShowModal] = useState(false);
+  const { setShowSessionModal } = useContext(SessionContext);
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -139,18 +142,18 @@ function Form(){
     }
   }, [confirm])
 
-  // useEffect(() => {
-  //   if(id) {
-  //     alert('Event created successfully!')
-  //     navigate(`/Event/${id}`)
-  //   }
-  // }, [id])
-  
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(input))
-    alert('Event created!')
+    if(isLogged){
+      dispatch(createEvent(input))
+      alert("Event created!")
+    } else {
+      alert('Please Log in');
+      setShowSessionModal('login');
+    };
+
+
   };
 
   return(
@@ -176,7 +179,7 @@ function Form(){
             event.create ? <p className={style.sendMessage}>Event created successfully</p>: undefined}
           {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
           <div className={style.footerForm}>
-            <button type='button' >Save changes</button>
+            {/* <button type='button' >Save changes</button> */}
             <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
           </div>
         </form>
