@@ -37,7 +37,8 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
       selectRef.current.value = ''
       setInput({
         ...input,
-        category: null
+        category: null,
+        modality: typeof e.target.name === 'string' ? e.target.name : ''
       })
     };
 
@@ -53,6 +54,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
             <p className={style.text}>Select the modality and category of your event.</p>
             <div>
               <ButtonGroup
+                input={input}
                 buttons={["Presential", "Virtual"]}
                 handleGroup={handleGroup}
               />
@@ -61,7 +63,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
               {filteredCategories.length > 0 && (
               <div>
               Category:
-              <select ref={selectRef} name="category" className={style.select} onChange={handleChanges}>
+              <select ref={selectRef} name="category" className={style.select} value={input.category} onChange={handleChanges}>
                <option value="" selected disabled hidden>Choose here</option>
                 {filteredCategories.map((c) => (
                   <option key={c.id} value={c.name}>

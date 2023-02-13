@@ -32,7 +32,7 @@ const ModalBank = ({setShowModal, input, setInput}) => {
     <Modal setShowModal={setShowModal}>
       <div className={style.modal}>
       <h2>Select your bank account</h2>
-      <BankAccountCards buttons={bankAccount} input = {input} setInput={setInput} />
+      <BankAccountCards buttons={bankAccount} input={input} setInput={setInput} />
       <div>
         <h2>Create a new bank account</h2>
         <input type="text" value={input.bankAcount} placeholder='Name' onChange={(e) => setName(e.target.value)} />

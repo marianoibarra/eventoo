@@ -5,6 +5,7 @@ export const getBankAccounts = createAsyncThunk(
   'bankAccounts/getBankAccounts',
   async () =>
   {try {
+    console.log(API.defaults.headers)
     const res = await API('/bank-account');
     return res.data.bankAccounts
   } catch (error) {

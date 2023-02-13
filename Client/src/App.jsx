@@ -36,9 +36,15 @@ import NewHome from "./Pages/NewHome";
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
   headers: {
-    'authorization': 'Bearer ' + localStorage.getItem("token"),
+    common: {
+      'authorization': 'Bearer ' + localStorage.getItem("token"),
+    }
   }
 });
+
+console.log(API)
+console.log(API.defaults)
+console.log(API.defaultConfig)
 
 function App() {
   

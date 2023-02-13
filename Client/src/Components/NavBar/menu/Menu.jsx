@@ -69,7 +69,7 @@ const Menu = () => {
                 </Link>
               </>
             ) : undefined}
-            {name ? (
+            {isLogged ? (
               <button
                 className={Styles.menuLink}
                 onClick={handleClearLocalStorage}

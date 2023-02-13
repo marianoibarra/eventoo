@@ -5,7 +5,7 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
+import { clearState, createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
@@ -13,6 +13,7 @@ import UploadImage from './UploadImage/UploadImage';
 import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
+import {useNavigate} from 'react-router-dom'
 
 function Form(){
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function Form(){
     end_date:'',
     end_time:'',
     guests_capacity:"",
+    modality: '',
     isPaid:true,
     isPremium:null,
     isPublic:true,
@@ -63,6 +65,8 @@ function Form(){
   const [input, setInput] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [showMsg, setShowMsg] = useState ({});
+
+  const navigate = useNavigate()
 
   function validate(input) {
     let errors={}
@@ -135,14 +139,18 @@ function Form(){
     }
   }, [confirm])
 
-
+  // useEffect(() => {
+  //   if(id) {
+  //     alert('Event created successfully!')
+  //     navigate(`/Event/${id}`)
+  //   }
+  // }, [id])
   
 
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(createEvent(input))
-    alert("Event created!")
-    console.log('el evento', input)
+    alert('Event created!')
   };
 
   return(
