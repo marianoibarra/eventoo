@@ -19,7 +19,7 @@ const ModalVoucher = () => {
       setError(false)
       try {
         console.log(API.defaults.headers.common)
-        const res = await API.get('https://api.eventoo.com.ar/transaction/bf74b477-88fd-48bb-99ac-5805e623833d')
+        const res = await API.get(`/transaction/${id}`)
         console.log(res.config.headers)
         setLoading(false)
         setData(res.data)

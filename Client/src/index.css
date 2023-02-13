@@ -34,7 +34,6 @@ body {
   color: var(--dark-text);
   overflow-x: hidden;
   padding-top: 60px;
-  margin-bottom: 80px;
 }
 html{
   min-height: 100%;
