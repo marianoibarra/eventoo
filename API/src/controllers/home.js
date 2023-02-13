@@ -1,6 +1,6 @@
 const { Event, Address, Category, User } = require("../db");
 
-const getEventsPublic = async (req, res) => {
+const getEventsPublic = async (req, res) => { //modificque excluyendo el privateevent_password en el finone del model event.
   try {
     const queryParams = req.query;
 
@@ -50,6 +50,7 @@ const getEventsPublic = async (req, res) => {
 
     const publicEvents = await Event.findAll({
       where: searchParams,
+      attributes:  { exclude: ["privateEvent_password"] },
       include: [
         "bankAccount",
         {
@@ -86,19 +87,19 @@ const getCategories = async (req, res) => {
         ? await Category.findAll({ where: { modality: "Presential" } })
         : await Category.findAll();
     return res.status(200).json({ categories });
-  } catch (err) {
+  } catch (error) {
     return res
       .status(500)
       .json({ error: "An error occurred while getting the categories" });
   }
 };
 
-const getEventById = async (req, res) => {
+const getEventById = async (req, res) => { //aqui agregue el condicional 
   const { id } = req.params;
   try {
     const event = await Event.findOne({
       where: {
-        id,
+        id
       },
       include: [
         "bankAccount",
@@ -119,14 +120,23 @@ const getEventById = async (req, res) => {
         },
       ],
     });
-    res.json(event);
-  } catch (error) {
+    if (event.isPublic) {
+      res.json({  isPublic: true , event })
+    } else {
+      res.json ({ isPublic: false, event: { id: id, name:event.name , start_date: event.start_date, start_time: event.start_time }})
+    } 
+} catch (error) {
     res.status(404).json({ error: error.message });
   }
+};
+
+const checkEventPassword = async (req, res) => {
+
 };
 
 module.exports = {
   getCategories,
   getEventsPublic,
   getEventById,
+  checkEventPassword
 };

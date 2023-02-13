@@ -1,6 +1,7 @@
 const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
+//MODIFIQUE con el privateeventpassword
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -11,6 +12,7 @@ const createEvent = async (req, res) => {
     start_time,
     end_time,
     isPublic,
+    privateEvent_password,
     virtualURL,
     category,
     isPremium,
@@ -32,6 +34,23 @@ const createEvent = async (req, res) => {
     pet_friendly,
     bankAccount,
   } = req.body;
+  let privateEvent_passwordValue = null;
+
+  if(!isPublic) {
+    if(!privateEvent_password) {
+      return res.status(400).json({
+        errors: [
+          {
+            message: "private event must have a password"
+          
+          }
+        ]
+        
+      });
+    } else {
+      privateEvent_passwordValue = privateEvent_password;
+    }
+  };
 
   try {
     // if (!name ||
@@ -41,6 +60,7 @@ const createEvent = async (req, res) => {
     //     !start_time ||
     //     !end_time ||
     //     !isPublic ||
+    //     !privateEvent_password||
     //     !virtualURL ||
     //     !isPremium ||
     //     !isPaid ||
@@ -78,6 +98,7 @@ const createEvent = async (req, res) => {
         start_time,
         end_time,
         isPublic,
+        privateEvent_password: privateEvent_passwordValue,
         virtualURL,
         isPremium,
         isPaid,
@@ -100,7 +121,7 @@ const createEvent = async (req, res) => {
         },
       },
       { include: ["address"] }
-    );
+    ); 
 
     if (bankAccount) {
       const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
@@ -149,8 +170,8 @@ const createEvent = async (req, res) => {
     });
   }
 };
-
-const getEventByUser = async ({ userId }, res) => {
+// CONSULTAR PORQUE AQUI DEBERIA TRAER TODOS LOS EVENTOS DE ESE USUARIO INDISTINTAMENTE SI ES PUBLICO O PRIVADO
+const getEventByUser = async ({ userId }, res) => { 
   try {
     const events = await Event.findAll({
       where: {

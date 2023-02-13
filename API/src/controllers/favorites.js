@@ -6,7 +6,7 @@ const {
   BankAccount } 
   = require("../db");
 
-
+// CONSULTAR AQUI TOQUE EL MODEL EVENT EXCLUYENDO DE LOS ATRIBUTOS EL PRIVATEEVENT_PASSWORD
 const addFavorite = async (req, res) => {
 
   const { id } = req.body;
@@ -14,7 +14,10 @@ const addFavorite = async (req, res) => {
 
 try {
   const user = await User.findByPk(userId);
-  const event = await Event.findByPk(id);
+  const event = await Event.findByPk(id, {
+    where:{ isPublic: true },
+    attributes:  { exclude: ["privateEvent_password"] }
+  });
 
 
   const existingEvent = await User.findOne({
@@ -23,7 +26,7 @@ try {
       model: Event,
       as: "favorites",
       where: { id: id },
-      attributes: [ ],
+      attributes:  { exclude: ["privateEvent_password"] },//CONSULTAR
     }]
     });
 
@@ -59,7 +62,7 @@ const getFavorites = async (req, res) => {
    }
 };
  
-
+//modifique
 const deleteFavorite = async (req, res) => {
 
   try {
@@ -67,7 +70,10 @@ const deleteFavorite = async (req, res) => {
    const userId  = req.userId;
 
    const user = await User.findByPk(userId);
-   const event = await Event.findByPk(id);
+   const event = await Event.findByPk(id, {
+    where:{ isPublic: true },
+    attributes:  { exclude: ["privateEvent_password"] }
+  });
 
    await user.removeFavorites(event);
 

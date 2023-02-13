@@ -1,5 +1,6 @@
 const { Event, User, Review } = require("../db");
 
+//aqui modifique para que solo se permita agregar review es eventos publicos
 const createReview = async (req, res) => {
 
   const userId = req.userId;
@@ -8,10 +9,16 @@ const createReview = async (req, res) => {
 
   try {
     const user = await User.findByPk(userId);
-    const event = await Event.findByPk(id);
+    const event = await Event.findByPk(id, {
+      where:{ isPublic: true },
+      attributes: { exclude: ["privateEvent_password"] }
+    });;
 
-    const  reviewNotAllowed = await Event.findOne({
-      where:{ id : id},
+    const reviewNotAllowed = await Event.findOne({
+      where: { id : id,
+               isPublic: true 
+              },
+      attributes: { exclude: ["privateEvent_password"] },
       include: [{
         model: User,
         as: "organizer",
@@ -25,7 +32,8 @@ const createReview = async (req, res) => {
 
     const existingReview = await Review.findOne({
   
-      where: { eventId: id },
+      where: { eventId: id,
+               isPublic: true  },
       include: [{
         model: User,
         where: { id: userId  },
