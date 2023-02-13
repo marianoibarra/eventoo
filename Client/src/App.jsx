@@ -42,18 +42,13 @@ export const API = axios.create({
   }
 });
 
-console.log(API)
-console.log(API.defaults)
-console.log(API.defaultConfig)
-
 function App() {
   
   const { showSessionModal, setShowSessionModal } = useContext(SessionContext)
-  const { newUser, setNewUser } = useContext(SessionContext)
   const dispatch = useDispatch();
 
   window.handleGoogleLogin = function ({ credential }) {
-    dispatch(googleLogin({credential, setShowSessionModal, newUser, setNewUser }))
+    dispatch(googleLogin({credential, setShowSessionModal }))
   };
 
 
