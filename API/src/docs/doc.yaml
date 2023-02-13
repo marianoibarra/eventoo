@@ -1,29 +1,57 @@
 openapi: 3.0.3
 info:
   title: Eventoo API
-  description: 
+  description: |-
     This is the Eventoo API documentation based on the OpenAPI 3.0 specification. **Version: 29/01/2023**
   version: 29-ENE
 servers:
   - url: "http://localhost:3001/"
 tags:
-  - name: /home
-    description: Requiere toda la informacion publica para mostrar en la home
   - name: /user
     description: Operar sobre el usuario
   - name: /event
     description: Operar sobre los eventos del usuario logueado
   - name: /bank-account
     description: Operar sobre las cuentas bancarias
+  - name: /home
+    description: Requiere toda la informacion publica para mostrar en la home
   - name: /favorites
     description: EN PRUEBAS
   - name: /transaction
-    description: EN CONSTRUCCION
+    description: Operar sobre las transacciones entre los usuarios y los eventos
   - name: /reviews
     description: EN CONSTRUCCION
 
   
 paths:
+  /user:
+    get:
+      tags:
+        - /user
+      summary: Devuelve informacion del usuario logueado
+      description: ""
+      operationId: getUser
+      responses:
+        201:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: "User created successfully"
+                  id:
+                    type: string
+                    format: uuid
+                    example: "7aec1b42-7b5c-4c8d-9e5f-9b9c11b8f2b1"
+                  token: 
+                    type: string
+                    format: uuid
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        400: 
+          $ref: '#/components/responses/BadRequest'
   /user/register:
     post:
       tags:
@@ -923,6 +951,640 @@ paths:
           description: Internal Error
       security:
         - bearerAuth: []
+  /transaction:
+    post:
+      tags:
+        - /transaction
+      summary: Crea una nueva transaccion
+      description: ""
+      operationId: asd
+      requestBody:
+        description: Recibe el ID del evento por body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId: 
+                  type: string
+                  example: 123e4567-e89b-12d3-a456-42s4d8e7t5d11d2
+                tickets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      last_name: 
+                        type: string
+                      email: 
+                        type: string
+                  example:
+                  - name: Mario
+                    last_name: Pereyra
+                    email: mario@outlook.com
+                  - name: Juan
+                    last_name: Perez
+                    email: juan@outlook.com
+                  - name: Pedro
+                    last_name: Gonzalez
+                    email: pedroo@outlook.com
+                  
+                  
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Faltan datos obligatorios
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/{transactionId}:
+    get:
+      tags:
+        - /transaction
+      summary: Devuelve la transaccion del id recibido por params
+      description: ""
+      operationId: getTrbyid
+      parameters: 
+        - name: transactionId
+          in: path
+          description: ID de transaction
+          required: true
+          example: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+          schema:        
+            type: string
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Transaction'
+                example:
+                  id: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                  status: PENDING
+                  payment_proof: null
+                  createdAt: 2023-02-12T14:06:40.023Z
+                  updatedAt: 2023-02-12T14:06:40.048Z
+                  buyerId: 54
+                  eventId: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                  tickets:
+                    - id: 3
+                      name: Mariano
+                      last_name: Ibarra
+                      email: mariano@outlook.com
+                      createdAt: 2023-02-12T14:06:40.036Z
+                      updatedAt: 2023-02-12T14:06:40.036Z
+                      transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    - id: 4
+                      name: Fede
+                      last_name: Cid
+                      email: fede@outlook.com
+                      createdAt: 2023-02-12T14:06:40.036Z
+                      updatedAt: 2023-02-12T14:06:40.036Z
+                      transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                  buyer:
+                    id: 54
+                    name: null
+                    last_name: null
+                    email: pedrito2@outlook.com
+                  event:
+                    id: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                    name: Evento
+                    description: descripcion del eventocasdasdasdasdpisdhgfiusagfikuhsfiukhsdf
+                    start_date: 2023-02-05
+                    end_date: 2023-01-31
+                    start_time: null
+                    end_time: null
+                    isPublic: null
+                    virtualURL: null
+                    isPremium: null
+                    isPaid: null
+                    age_range: ALL PUBLIC
+                    price: null
+                    guests_capacity: null
+                    placeName: null
+                    advertisingTime_start: 2023-01-31T00:00:00.000Z
+                    adversiting_end: 2023-01-31T00:00:00.000Z
+                    cover_pic: null
+                    disability_access: null
+                    parking: null
+                    smoking_zone: null
+                    pet_friendly: null
+                    isToday: false
+                    isNextWeekend: false
+                    isActive: true
+                    createdAt: 2023-02-12T13:31:44.273Z
+                    updatedAt: 2023-02-12T13:31:44.286Z
+                    organizerId: 28
+                    categoryId: 20
+                    bankAccountId: 3
+                    addressId: 252
+                    bankAccount:
+                      id: 3
+                      name: Santander
+                      CBU: 1234567891236987458965
+                      hasAnEvent: true
+                      userId: 28
+                    address:
+                      address_line: San Martin 1234
+                      city: Rosario
+                      state: null
+                      country: null
+                      zip_code: null
+                    organizer:
+                      id: 28
+                      name: Mariano
+                      last_name: null
+                      profile_pic: null
+                    category:
+                      name: Talks
+                      modality: Virtual
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/seller:
+    get:
+      tags:
+        - /transaction
+      summary: Devuelve las transacciones del usuario logueado donde su rol es el de vendedor
+      description: ""
+      operationId: getTrbySeller
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Transaction'
+                example:
+                  - id: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    status: PENDING
+                    payment_proof: null
+                    createdAt: 2023-02-12T14:06:40.023Z
+                    updatedAt: 2023-02-12T14:06:40.048Z
+                    buyerId: 54
+                    eventId: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                    tickets:
+                      - id: 3
+                        name: Mariano
+                        last_name: Ibarra
+                        email: mariano@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                      - id: 4
+                        name: Fede
+                        last_name: Cid
+                        email: fede@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    buyer:
+                      id: 54
+                      name: null
+                      last_name: null
+                      email: pedrito2@outlook.com
+                    event:
+                      id: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                      name: Evento
+                      description: descripcion del eventocasdasdasdasdpisdhgfiusagfikuhsfiukhsdf
+                      start_date: 2023-02-05
+                      end_date: 2023-01-31
+                      start_time: null
+                      end_time: null
+                      isPublic: null
+                      virtualURL: null
+                      isPremium: null
+                      isPaid: null
+                      age_range: ALL PUBLIC
+                      price: null
+                      guests_capacity: null
+                      placeName: null
+                      advertisingTime_start: 2023-01-31T00:00:00.000Z
+                      adversiting_end: 2023-01-31T00:00:00.000Z
+                      cover_pic: null
+                      disability_access: null
+                      parking: null
+                      smoking_zone: null
+                      pet_friendly: null
+                      isToday: false
+                      isNextWeekend: false
+                      isActive: true
+                      createdAt: 2023-02-12T13:31:44.273Z
+                      updatedAt: 2023-02-12T13:31:44.286Z
+                      organizerId: 28
+                      categoryId: 20
+                      bankAccountId: 3
+                      addressId: 252
+                      bankAccount:
+                        id: 3
+                        name: Santander
+                        CBU: 1234567891236987458965
+                        hasAnEvent: true
+                        userId: 28
+                      address:
+                        address_line: San Martin 1234
+                        city: Rosario
+                        state: null
+                        country: null
+                        zip_code: null
+                      organizer:
+                        id: 28
+                        name: Mariano
+                        last_name: null
+                        profile_pic: null
+                      category:
+                        name: Talks
+                        modality: Virtual
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/buyer:
+    get:
+      tags:
+        - /transaction
+      summary: Devuelve las transacciones del usuario logueado donde su rol es el de comprador
+      description: ""
+      operationId: getTrbyBuyer
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Transaction'
+                example:
+                  - id: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    status: PENDING
+                    payment_proof: null
+                    createdAt: 2023-02-12T14:06:40.023Z
+                    updatedAt: 2023-02-12T14:06:40.048Z
+                    buyerId: 54
+                    eventId: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                    tickets:
+                      - id: 3
+                        name: Mariano
+                        last_name: Ibarra
+                        email: mariano@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                      - id: 4
+                        name: Fede
+                        last_name: Cid
+                        email: fede@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    buyer:
+                      id: 54
+                      name: null
+                      last_name: null
+                      email: pedrito2@outlook.com
+                    event:
+                      id: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                      name: Evento
+                      description: descripcion del eventocasdasdasdasdpisdhgfiusagfikuhsfiukhsdf
+                      start_date: 2023-02-05
+                      end_date: 2023-01-31
+                      start_time: null
+                      end_time: null
+                      isPublic: null
+                      virtualURL: null
+                      isPremium: null
+                      isPaid: null
+                      age_range: ALL PUBLIC
+                      price: null
+                      guests_capacity: null
+                      placeName: null
+                      advertisingTime_start: 2023-01-31T00:00:00.000Z
+                      adversiting_end: 2023-01-31T00:00:00.000Z
+                      cover_pic: null
+                      disability_access: null
+                      parking: null
+                      smoking_zone: null
+                      pet_friendly: null
+                      isToday: false
+                      isNextWeekend: false
+                      isActive: true
+                      createdAt: 2023-02-12T13:31:44.273Z
+                      updatedAt: 2023-02-12T13:31:44.286Z
+                      organizerId: 28
+                      categoryId: 20
+                      bankAccountId: 3
+                      addressId: 252
+                      bankAccount:
+                        id: 3
+                        name: Santander
+                        CBU: 1234567891236987458965
+                        hasAnEvent: true
+                        userId: 28
+                      address:
+                        address_line: San Martin 1234
+                        city: Rosario
+                        state: null
+                        country: null
+                        zip_code: null
+                      organizer:
+                        id: 28
+                        name: Mariano
+                        last_name: null
+                        profile_pic: null
+                      category:
+                        name: Talks
+                        modality: Virtual
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/event/{eventId}:
+    get:
+      tags:
+        - /transaction
+      summary: Devuelve las transacciones del evento recibido por params
+      description: ""
+      operationId: getTrbyevent
+      parameters: 
+        - name: eventId
+          in: path
+          description: ID de evento
+          required: true
+          example: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+          schema:        
+            type: string
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Transaction'
+                example:
+                  - id: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    status: PENDING
+                    payment_proof: null
+                    createdAt: 2023-02-12T14:06:40.023Z
+                    updatedAt: 2023-02-12T14:06:40.048Z
+                    buyerId: 54
+                    eventId: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                    tickets:
+                      - id: 3
+                        name: Mariano
+                        last_name: Ibarra
+                        email: mariano@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                      - id: 4
+                        name: Fede
+                        last_name: Cid
+                        email: fede@outlook.com
+                        createdAt: 2023-02-12T14:06:40.036Z
+                        updatedAt: 2023-02-12T14:06:40.036Z
+                        transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    buyer:
+                      id: 54
+                      name: null
+                      last_name: null
+                      email: pedrito2@outlook.com
+                    event:
+                      id: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                      name: Evento
+                      description: descripcion del eventocasdasdasdasdpisdhgfiusagfikuhsfiukhsdf
+                      start_date: 2023-02-05
+                      end_date: 2023-01-31
+                      start_time: null
+                      end_time: null
+                      isPublic: null
+                      virtualURL: null
+                      isPremium: null
+                      isPaid: null
+                      age_range: ALL PUBLIC
+                      price: null
+                      guests_capacity: null
+                      placeName: null
+                      advertisingTime_start: 2023-01-31T00:00:00.000Z
+                      adversiting_end: 2023-01-31T00:00:00.000Z
+                      cover_pic: null
+                      disability_access: null
+                      parking: null
+                      smoking_zone: null
+                      pet_friendly: null
+                      isToday: false
+                      isNextWeekend: false
+                      isActive: true
+                      createdAt: 2023-02-12T13:31:44.273Z
+                      updatedAt: 2023-02-12T13:31:44.286Z
+                      organizerId: 28
+                      categoryId: 20
+                      bankAccountId: 3
+                      addressId: 252
+                      bankAccount:
+                        id: 3
+                        name: Santander
+                        CBU: 1234567891236987458965
+                        hasAnEvent: true
+                        userId: 28
+                      address:
+                        address_line: San Martin 1234
+                        city: Rosario
+                        state: null
+                        country: null
+                        zip_code: null
+                      organizer:
+                        id: 28
+                        name: Mariano
+                        last_name: null
+                        profile_pic: null
+                      category:
+                        name: Talks
+                        modality: Virtual
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/complete/{transactionId}:
+    put:
+      tags:
+        - /transaction
+      summary: Se completa la transaccion adjuntando el comprobante de transferencia
+      description: ""
+      operationId: putComplete
+      parameters: 
+        - name: transactionId
+          in: path
+          description: ID de transaction
+          required: true
+          example: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+          schema:        
+            type: string
+      requestBody:
+        description: Recibe payment_proof por body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payment_proof: 
+                  type: string
+                  example: http://www.comprobante.com/
+            
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Transaction'
+                example:
+                  id: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                  status: COMPLETED
+                  payment_proof: http://www.comprobante.com/
+                  createdAt: 2023-02-12T14:06:40.023Z
+                  updatedAt: 2023-02-12T14:06:40.048Z
+                  buyerId: 54
+                  eventId: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                  tickets:
+                    - id: 3
+                      name: Mariano
+                      last_name: Ibarra
+                      email: mariano@outlook.com
+                      createdAt: 2023-02-12T14:06:40.036Z
+                      updatedAt: 2023-02-12T14:06:40.036Z
+                      transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                    - id: 4
+                      name: Fede
+                      last_name: Cid
+                      email: fede@outlook.com
+                      createdAt: 2023-02-12T14:06:40.036Z
+                      updatedAt: 2023-02-12T14:06:40.036Z
+                      transactionId: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+                  buyer:
+                    id: 54
+                    name: null
+                    last_name: null
+                    email: pedrito2@outlook.com
+                  event:
+                    id: f76ad0f6-769c-4ed5-9776-fdcaf72469db
+                    name: Evento
+                    description: descripcion del eventocasdasdasdasdpisdhgfiusagfikuhsfiukhsdf
+                    start_date: 2023-02-05
+                    end_date: 2023-01-31
+                    start_time: null
+                    end_time: null
+                    isPublic: null
+                    virtualURL: null
+                    isPremium: null
+                    isPaid: null
+                    age_range: ALL PUBLIC
+                    price: null
+                    guests_capacity: null
+                    placeName: null
+                    advertisingTime_start: 2023-01-31T00:00:00.000Z
+                    adversiting_end: 2023-01-31T00:00:00.000Z
+                    cover_pic: null
+                    disability_access: null
+                    parking: null
+                    smoking_zone: null
+                    pet_friendly: null
+                    isToday: false
+                    isNextWeekend: false
+                    isActive: true
+                    createdAt: 2023-02-12T13:31:44.273Z
+                    updatedAt: 2023-02-12T13:31:44.286Z
+                    organizerId: 28
+                    categoryId: 20
+                    bankAccountId: 3
+                    addressId: 252
+                    bankAccount:
+                      id: 3
+                      name: Santander
+                      CBU: 1234567891236987458965
+                      hasAnEvent: true
+                      userId: 28
+                    address:
+                      address_line: San Martin 1234
+                      city: Rosario
+                      state: null
+                      country: null
+                      zip_code: null
+                    organizer:
+                      id: 28
+                      name: Mariano
+                      last_name: null
+                      profile_pic: null
+                    category:
+                      name: Talks
+                      modality: Virtual
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
+  /transaction/cancel/{transactionId}:
+    put:
+      tags:
+        - /transaction
+      summary: Cancela la transaccion
+      description: ""
+      operationId: putCancel
+      parameters: 
+        - name: transactionId
+          in: path
+          description: ID de transaction
+          required: true
+          example: 3f5dd255-02ce-43a3-a418-98f2060d42a8
+          schema:        
+            type: string
+      responses:
+        '201':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                    example: Transaction 3f5dd255-02ce-43a3-a418-98f2060d42a8 canceled successfully
+
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+        '500':
+          description: Internal Error
+      security:
+        - bearerAuth: []
   /home/categories:
     get:
       tags:
@@ -1236,6 +1898,134 @@ components:
           example: S2000
       xml:
         name: address
+    Transaction:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "Fiesta de cumpleaños"
+              description: Nombre del evento
+            status:
+              type: string
+              example: "PENDING"
+              description: Descripción del evento
+            payment_proof:
+              type: string
+              format: uri
+              example: "https://www.comprobante.com/"
+            createdAt:
+              type: string
+              format: date
+            tickets:
+              type: object
+              properties:
+                name: 
+                  type: string
+                last_name: 
+                  type: string
+                email: 
+                  type: string
+            buyer:
+              type: object
+              properties:
+                id: 
+                  type: string
+                name: 
+                  type: string
+                last_name: 
+                  type: string
+                email: 
+                  type: string
+              example:
+              - name: Mario
+                last_name: Pereyra
+                email: mario@outlook.com
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          required:
+            - start_date
+            - start_time
+            - isPublic
+            - age_range
+            - guests_capacity
+            - placeName
+          properties:
+            start_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de inicio del evento
+            end_date:
+              type: string
+              format: date
+              example: "2022-07-15"
+              description: Fecha de fin del evento
+            start_time:
+              type: string
+              format: time
+              example: "20:00"
+              description: Hora de inicio del evento
+            end_time:
+              type: string
+              format: time
+              example: "22:00"
+              description: Hora de fin del evento
+            isPublic:
+              type: boolean
+              example: true
+              description: Indica si el evento es público o privado
+            virtualURL:
+              type: string
+              example: "https://example.com/evento123"
+              description: URL virtual del evento
+            isPremium:
+              type: boolean
+              example: false
+              description: Indica si el evento es premium
+            isPaid:
+              type: boolean
+              example: true
+              description: Indica si el evento es de pago
+            age_range:
+              type: string
+              enum:
+                - "ALL PUBLIC"
+                - "+13"
+                - "+16"
+                - "+18"
+              example: "+18"
+              description: Rango de edad permitido en el evento
+            guests_capacity:
+              type: integer
+              example: 100
+              description: Capacidad de invitados del evento
+            placeName:
+              type: string
+              example: "Sala de fiestas Los Pinos"
+              description: Lugar donde se llevará a cabo el evento
+            disability_access:
+              type: boolean
+              example: true
+              description: Si cuenta con acceso adaptados para personas con discapacidad
+            parking:
+              type: boolean
+              example: true
+              description: Si cuenta con estacionamiento
+            smoking_zone:
+              type: boolean
+              example: true
+              description: Si cuenta con sector fumadores
+            pet_friendly:
+              type: boolean
+              example: true
+              description: Si se permite asistir acompañado de mascotas
+            bankAccountId:
+              type: string
+              format: uuid
+              example: "d0043047-06a1-4659-91f5-c441e4d2e281"
+      xml:
+        name: event
     Event:
       allOf:
         - type: object

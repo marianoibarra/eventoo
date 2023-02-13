@@ -1,105 +1,75 @@
-
-const { Transaction, User, Event, Ticket } = require("../db");
+const {
+  Transaction,
+  User,
+  Event,
+  Ticket,
+  Category,
+  Address,
+} = require("../db");
 
 const createTransactions = async (req, res) => {
   try {
     const buyerId = req.userId;
-    const { isPaid, payment_proof, eventId, status, ticketCount, tickets } =
-      req.body;
+    const { eventId, tickets } = req.body;
 
-    ticketsArray = tickets;
     const event = await Event.findByPk(eventId);
     const user = await User.findByPk(buyerId);
-    const newTransaction = await event.addTransactions(user, {
-      through: {
-        isPaid: isPaid,
-        payment_proof: payment_proof,
-        status: status === undefined || status === null ? 'PENDING' : status,
-        ticketCount: ticketCount,
+
+    const newTransaction = await Transaction.create(
+      {
+        tickets: tickets,
       },
-    });
+      {
+        include: ["tickets"],
+      }
+    );
 
-    for (let i = 0; i < ticketCount; i++) {
-      const ticket = await Ticket.create({
-        name: tickets[i].name,
-        gmail: tickets[i].gmail,
-        last_name: tickets[i].last_name,
-        transactionId: newTransaction[newTransaction.length - 1].id,
-      });
-    }
+    await newTransaction.setBuyer(user);
+    await newTransaction.setEvent(event);
 
-    // console.log("Transaction ID:", newTransaction[newTransaction.length - 1].id, tickets);
-
-    const createdTickets = await Ticket.findAll({
-      where: {
-        transactionId: newTransaction[newTransaction.length - 1].id,
-      },
-      attributes: [
-        "id",
-        "name",
-        "gmail",
-        "last_name",
-        "createdAt",
-        "updatedAt",
-        "transactionId",
+    await newTransaction.reload({
+      include: [
+        "tickets",
+        {
+          model: User,
+          as: "buyer",
+          attributes: ["id", "name", "last_name", "email"],
+        },
+        {
+          model: Event,
+          as: "event",
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality"],
+            },
+          ],
+        },
       ],
     });
-
-    return res.status(201).json({
-      message: "Transaction and tickets created successfully",
+    return res.status(201).json(
       newTransaction,
-      tickets: createdTickets,
-    });
+    );
   } catch (error) {
     return res.status(500).json({
       error: error.message,
     });
   }
 };
-// ----------------------------------------------------------------------------------
-// const createTransactions = async (req, res) => {
-  // try {
-  //   const buyerId = req.userId;
-  //   const { isPaid, payment_proof, eventId, status, ticketCount, tickets } = req.body;
 
-  //   const event = await Event.findByPk(eventId);
-  //   const user = await User.findByPk(buyerId);
-
-  //   const transaction = await Transaction.create({
-  //     isPaid: isPaid,
-  //     payment_proof: payment_proof,
-  //     status: status,
-  //     ticketCount: ticketCount,
-  //     eventId: event.id,
-  //     buyerId: user.id,
-  //   });
-
-  //   const createdTickets = [];
-  //   for (let i = 0; i < ticketCount; i++) {
-  //     const ticket = await Ticket.create({
-  //       name: tickets[i].name,
-  //       gmail: tickets[i].gmail,
-  //       last_name: tickets[i].last_name,
-  //       transactionId: transaction.id,
-  //     });
-  //     createdTickets.push(ticket);
-  //   }
-
-  //   return res.status(201).json({
-  //     message: "Transaction and tickets created successfully",
-  //     newTransaction: transaction,
-  //     tickets: createdTickets,
-  //   });
-  // } catch (error) {
-  //   return res.status(500).json({
-  //     error: error.message,
-  //   });
-  // }
-// };
-// ----------------------------------------------------------------------------------
-
-
-const getTransactionsByUser = async (req, res) => {
+const getTransactionsByUserBuyer = async (req, res) => {
   try {
     const userId = req.userId;
     const user = await User.findByPk(userId, {
@@ -108,27 +78,80 @@ const getTransactionsByUser = async (req, res) => {
           model: Transaction,
           as: "transactions",
           include: [
+            "tickets",
             {
               model: Event,
               as: "event",
-              attributes: ['id', 'name', 'bankAccountId', 'organizerId']
-            },
-            {
-              model: Ticket,
-              as: "tickets",
+              include: [
+                "bankAccount",
+                {
+                  model: Address,
+                  as: "address",
+                  attributes: { exclude: ["id"] },
+                },
+                {
+                  model: User,
+                  as: "organizer",
+                  attributes: ["id", "name", "last_name", "profile_pic"],
+                },
+                {
+                  model: Category,
+                  as: "category",
+                  attributes: ["name", "modality"],
+                },
+              ],
             },
           ],
         },
       ],
     });
-    if (!user) {
-      return res.status(404).json({
-        error: "User not found",
-      });
-    }
-    return res.status(200).json({
-      transactions: user.transactions,
+    return res.status(200).json(user.transactions);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
     });
+  }
+};
+
+const getTransactionsByUserSeller = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const transactions = await Transaction.findAll({
+      where: {
+        "$event.organizer.id$": userId
+      },
+      include: [
+        "tickets",
+        {
+          model: User,
+          as: "buyer",
+          attributes: ["id", "name", "last_name", "email"],
+        },
+        {
+          model: Event,
+          as: "event",
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality"],
+            },
+          ],
+        },
+      ],
+    });
+    return res.status(200).json(transactions);
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -138,16 +161,19 @@ const getTransactionsByUser = async (req, res) => {
 
 const getTransactionsByEvent = async (req, res) => {
   try {
-    const eventId = req.params.id
+    const eventId = req.params.id;
     const event = await Event.findByPk(eventId, {
       include: [
         {
           model: Transaction,
           as: "transactions",
           include: [
-            {model:User,
-              as:"user",
-              attributes: ["name"]}
+            "tickets",
+            {
+              model: User,
+              as: "buyer",
+              attributes: ["id", "name", "last_name", "email"],
+            },
           ],
         },
       ],
@@ -157,9 +183,50 @@ const getTransactionsByEvent = async (req, res) => {
         error: "Event not found",
       });
     }
-    return res.status(200).json({
-      transactions: event.transactions,
+    return res.status(200).json(event.transactions);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
     });
+  }
+};
+
+const getTransactionById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await Transaction.findByPk(id, {
+      include: [
+        "tickets",
+        {
+          model: User,
+          as: "buyer",
+          attributes: ["id", "name", "last_name", "email"],
+        },
+        {
+          model: Event,
+          as: "event",
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality"],
+            },
+          ],
+        },
+      ],
+    });
+    return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -178,11 +245,7 @@ const getTransactionsByEventOrganizer = async (req, res) => {
         {
           model: Transaction,
           as: "transactions",
-          include: [
-            {model:User,
-              as:"user",
-              attributes: ["name"]}
-          ],
+          include: [{ model: User, as: "user", attributes: ["name"] }],
         },
       ],
     });
@@ -198,7 +261,6 @@ const getTransactionsByEventOrganizer = async (req, res) => {
 
 const updateTransaction = async (req, res) => {
   try {
-    // const transactionId = req.params.id;
     const { payment_proof, status, transactionId } = req.body;
     const transaction = await Transaction.findByPk(transactionId);
 
@@ -210,6 +272,52 @@ const updateTransaction = async (req, res) => {
     await transaction.update({ payment_proof, status });
     return res.status(200).json({
       message: "Transaction updated successfully",
+      transaction,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+const completeTransaction = async (req, res) => {
+  try {
+    const { payment_proof } = req.body;
+    const { transactionId } = req.params;
+    const transaction = await Transaction.findByPk(transactionId);
+
+    if (!transaction) {
+      return res.status(404).json({
+        error: "Transaction not found",
+      });
+    }
+    await transaction.update({ payment_proof, status: "COMPLETED" });
+    return res.status(200).json({
+      msg: "Transaction completed successfully",
+      transaction,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+const cancelTransaction = async (req, res) => {
+  try {
+    const { payment_proof } = req.body;
+    const { transactionId } = req.params;
+    const transaction = await Transaction.findByPk(transactionId);
+
+    if (!transaction) {
+      return res.status(404).json({
+        error: "Transaction not found",
+      });
+    }
+    await transaction.update({ payment_proof, status: "CANCELED" });
+    return res.status(200).json({
+      msg: "Transaction completed successfully",
       transaction,
     });
   } catch (error) {
@@ -250,9 +358,13 @@ const showTicketsByTransactionId = async (req, res) => {
 
 module.exports = {
   createTransactions,
-  getTransactionsByUser,
+  getTransactionsByUserBuyer,
   getTransactionsByEvent,
   getTransactionsByEventOrganizer,
   updateTransaction,
   showTicketsByTransactionId,
+  completeTransaction,
+  cancelTransaction,
+  getTransactionById,
+  getTransactionsByUserSeller
 };

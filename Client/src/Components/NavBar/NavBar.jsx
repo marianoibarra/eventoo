@@ -29,6 +29,7 @@ const Navbar = () => {
       
             <button className={Styles.MenuItem} onClick={()=>navigate("/create-event")}>Create Event</button>
             <button className={Styles.MenuItem} onClick={()=>navigate("/home")}>Events</button>
+            <button className={Styles.MenuItem} onClick={()=>navigate("/user-event")}>My Events</button>
          
         </div>
       </nav>

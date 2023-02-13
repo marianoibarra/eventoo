@@ -6,6 +6,7 @@ export const createUser = createAsyncThunk('auth/register', async (formData, { r
     console.log(formData)
 
     const response = await axios.post('https://api.eventoo.com.ar/user/register', formData)
+    axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('data', JSON.stringify(response.data.data))
     return response.data

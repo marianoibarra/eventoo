@@ -121,7 +121,7 @@ export const eventSlice = createSlice({
       state.loading = true;
     },
     [createEvent.fulfilled]: (state, action) => {
-      state.categories = action.payload     
+      state.event = action.payload     
       state.loading=false;
       state.error=null;
     },

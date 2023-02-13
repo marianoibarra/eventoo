@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const moment = require("moment");
+
 
 module.exports = (sequelize) => {
   sequelize.define("event", {
@@ -51,8 +51,17 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     age_range: {
-      type: DataTypes.ENUM("ALL PUBLIC", "+13", "+16", "+18"),
-      allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "ALL PUBLIC",
+      validate: {
+        customValidator: (value) => {
+          const enums = ["ALL PUBLIC", "+13", "+16", "+18"];
+          if (!enums.includes(value)) {
+            throw new Error("not a valid option");
+          }
+        },
+      },
     },
     price: {
       type: DataTypes.REAL,
@@ -97,16 +106,16 @@ module.exports = (sequelize) => {
     isToday: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     isNextWeekend: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
-    isActive:{
+    isActive: {
       type: DataTypes.BOOLEAN,
-      defaultValue:true,
-    }
+      defaultValue: true,
+    },
   });
 };

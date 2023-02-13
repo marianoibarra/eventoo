@@ -1,6 +1,5 @@
 import style from './CreateEventForm.module.css'
 import Lateral from './Lateral/Lateral';
-import Image from './UploadImage/UploadImage';
 import BasicInfo from './Basic Information/BasicInfo'
 import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
@@ -11,6 +10,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
+import ModalBank from '../Modal/ModalBank/ModalBank';
+import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
+import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 
 function Form(){
   const dispatch = useDispatch();
@@ -18,6 +20,14 @@ function Form(){
   const description = useSelector(state => state.event.description);
   const category = useSelector(state => state.event.category);
   const [selectedModality, setSelectedModality] = useState('Presential');
+  const[showModal, setShowModal] = useState(false);
+  const {bankAccount} = useSelector(state => state.bankAccounts);
+
+  const stgData = JSON.parse(localStorage.getItem("formEvent"))
+
+  useEffect(() => {
+    dispatch(getBankAccounts());
+  }, []);
 
 
   const initialState = {
@@ -25,7 +35,7 @@ function Form(){
     adversiting_end:null,
     advertisingTime_start:null,
     age_range:'ALL PUBLIC',
-    bankAccount:null,
+    bankAccount:'',
     category:null,
     city:null,
     country:null,
@@ -97,9 +107,38 @@ function Form(){
     return errors;
   }
   
+  const [confirm, setConfirm] = useState(null)
+
   useEffect(() => {
     setErrors(validate(input));
+    if(confirm !== null) {
+      localStorage.setItem("formEvent" , JSON.stringify(input));
+      localStorage.setItem("lastTime" , new Date());
+    }
   }, [input]);
+
+
+
+  useEffect(() => {
+    if(stgData && stgData.name !== null & stgData.name.length > 0) {
+      setShowModal(true)
+    } else {
+      setConfirm(false)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if(confirm === true) {
+      setInput(stgData)
+    } else if(confirm === false) {
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
+    }
+  }, [confirm])
+
+
+  
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -110,7 +149,9 @@ function Form(){
 
   return(
     <div className={style.container}>
+        { showModal &&  <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal}/>}
         {/* <Lateral/> */}
+        
         <form className={style.form} onSubmit={e=>handleSubmit(e)}>
           <h1 className={style.title}>EVENT INFORMATION</h1>
           <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
@@ -127,8 +168,9 @@ function Form(){
           <Tickets input = {input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg}/>
           {event.error ? <p className={style.errorMessage}>Can't create event</p> :
             event.create ? <p className={style.sendMessage}>Event created successfully</p>: undefined}
+          {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
           <div className={style.footerForm}>
-            {/* <button className={style.btnprimario}>Cancel</button> */}
+            <button type='button' >Save changes</button>
             <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
           </div>
         </form>

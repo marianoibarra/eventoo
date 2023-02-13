@@ -11,8 +11,6 @@ const {
   verifyEmailCode,
   resendEmailCode,
   modifyUser,
-  verifySuperAdmin,
-  changeRole,
   googleAuth,
   getProfile,
 } = require("../controllers/user");
@@ -30,7 +28,6 @@ router.put("/change-password", verifyToken, changePassword);
 router.post("/verify-email", verifyToken, verifyEmailCode);
 router.post("/verify-email/resend", verifyToken, resendEmailCode);
 router.put("/", verifyToken, modifyUser);
-router.put("/:id", verifyToken, verifySuperAdmin, changeRole)
 
 
 

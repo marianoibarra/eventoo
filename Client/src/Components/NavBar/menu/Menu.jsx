@@ -24,7 +24,12 @@ const Menu = () => {
   return (
     <div className={Styles.menuContainer}>
       <button className={Styles.menuIcon} onClick={() => setIsOpen(!isOpen)}>
-        <FaUserCircle size={40} />
+       {image ? <img
+              src={image ? image : User}
+              alt="user photo"
+              className={Styles.menuIcon}
+              onClick={() => setIsOpen(!isOpen)}
+            /> : <FaUserCircle size={40} />}
       </button>
       <AnimatePresence>
         {isOpen && (
