@@ -103,11 +103,12 @@ const ModalTransaction = ({ setShowModal, tickets }) => {
         placeholder='Ingrese email'
         onChange={handleDataTicket}
       />
-      {loadTicket?.map(d => (
+      {loadTicket?.map((d, i) => (
         <Tickets
           email={d.email}
           last_name={d.last_name}
           name={d.name}
+          id={i}
         />
       ))
       }
