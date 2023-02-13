@@ -26,12 +26,12 @@
 }
 
 .inputs{
-    margin: 10px;
-    width: 170px;
-    border-radius: 5px;
-    height: 25px;
     background-color: white;
-    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    max-width: 400px;
+    border-radius: 5px;
+    border: 1px solid rgb(170, 170, 170);
 }
 
 .warning {
