@@ -14,7 +14,7 @@ import style from './CardDetail.module.css';
 const CardDetail = () => {
 
     // const [assistant, setAssistant] = useState(false);
-    const userId = useSelector(state => state.user.id);
+    const user = useSelector(state => state.user);
     const { eventDetail } = useSelector(state => state.eventDetail);
     const [organizer, setOrganizer] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -56,7 +56,7 @@ const CardDetail = () => {
 
     useEffect(() => {
         if(eventDetail.organizer){
-            if(userId === eventDetail.organizer.id){
+            if(user.id === eventDetail.organizer.id){
                 setOrganizer(true);
                 setEditedEvent({
                     ...editedEvent,
@@ -65,7 +65,7 @@ const CardDetail = () => {
                 });
             }
         }
-    }, [eventDetail]);
+    }, [eventDetail, user]);
 
     return(
         <>

@@ -7,7 +7,7 @@ import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
 import { createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
 import ModalBank from '../Modal/ModalBank/ModalBank';
@@ -17,11 +17,8 @@ import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 function Form(){
   const dispatch = useDispatch();
   const event = useSelector(state => state.event);
-  const description = useSelector(state => state.event.description);
-  const category = useSelector(state => state.event.category);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const[showModal, setShowModal] = useState(false);
-  const {bankAccount} = useSelector(state => state.bankAccounts);
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 

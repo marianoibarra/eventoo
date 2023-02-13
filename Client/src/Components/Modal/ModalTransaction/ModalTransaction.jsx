@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Style from './ModalTransition.module.css'
 import Tickets from '../../Tickets/Tickets'
 import Modal from '../Modal'
@@ -7,7 +7,7 @@ import { axiosPostTicket } from '../../../Slice/transaction/TransactionSlice'
 import { Link } from 'react-router-dom'
 
 
-const ModalTransaction = ({ setShowModal, tickets, id }) => {
+const ModalTransaction = ({ setShowModal, tickets }) => {
 
   const dispatch = useDispatch()
   //const [showModal, setShowModal] = useState(false)
@@ -15,7 +15,7 @@ const ModalTransaction = ({ setShowModal, tickets, id }) => {
   const [loadTicket, setloadTicket] = useState([])
   const [btnLoad, setBtnLoad] = useState(true)
   const [btnSend, setBtnSend] = useState(true)
-  const eventId = id
+  const { eventDetail } = useSelector(state => state.eventDetail);
 
   const handleDataTicket = t => {
     setDataTicket({
@@ -23,6 +23,8 @@ const ModalTransaction = ({ setShowModal, tickets, id }) => {
       [t.target.name]: t.target.value
     });
   }
+
+  const {transaction} = useSelector(state => state.transaction)
 
   const checkLoad = () => {
     const { last_name, name, gmail } = dataTicket;
@@ -41,7 +43,6 @@ const ModalTransaction = ({ setShowModal, tickets, id }) => {
     }
   }
 
-  // console.log(eventId, loadTicket)
 
   useEffect(() => {
     checkLoad();
@@ -66,12 +67,10 @@ const ModalTransaction = ({ setShowModal, tickets, id }) => {
   const handleAxiosTicket = () => {
     const object = {
       isPaid: true,
-      payment_proof: 'hola',
-      eventId: eventId,
-      ticketCount: loadTicket.length,
+      eventId: eventDetail.id,
       tickets: loadTicket
     }
-    dispatch(axiosPostTicket(object))
+    dispatch(axiosPostTicket({object}))
   }
 
 
@@ -115,11 +114,11 @@ const ModalTransaction = ({ setShowModal, tickets, id }) => {
 
       <button onClick={handleAxiosTicket} disabled={btnSend} > Enviar TICKETS</button>
 
-
-      <Link to="/modal-voucher">
+      {transaction &&
+      <Link to={`/modal-voucher/${transaction.id}`}>
         <button> Prueba Voucher</button>
       </Link>
-
+      }
 
 
 

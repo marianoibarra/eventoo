@@ -27,11 +27,12 @@ export const axiosPostTicket = createAsyncThunk(
 export const transactionSlice = createSlice({
   name: 'transaction',
   initialState: {
-    transaction: [],
+    transaction: null,
     loading: false,
     error: null
-  }, reducers: {},
-  extrareducer: {
+  }, 
+  reducers: {},
+  extraReducers: {
     [axiosPostTicket.pending]: (state) => {
       state.loading = true;
       state.error = null

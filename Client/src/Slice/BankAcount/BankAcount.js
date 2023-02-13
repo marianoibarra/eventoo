@@ -10,7 +10,7 @@ export const getBankAccounts = createAsyncThunk(
   async () =>
   {try {
     const res = await axios(bankApi);
-    //console.log(res.data.bankAccounts);
+    console.log('aca', res.data)
     return res.data.bankAccounts
   } catch (error) {
     console.log(error)
