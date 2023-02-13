@@ -1,0 +1,40 @@
+.body {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.categoryBar {
+  width: 100%;
+  height: 110px;
+  display: flex;
+  background-color: aqua;
+}
+
+.filterBar {
+  width: 100%;
+  height: 40px;
+  background-color: aquamarine;
+}
+
+.main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.favoritesBar {
+  width: 100%;
+  height: 140px;
+  background-color: blueviolet;
+}
+
+.cardsWrapper {
+  width: 100%;
+  height: 100%;
+  background-color: cadetblue;
+  flex-grow: 1;
+}

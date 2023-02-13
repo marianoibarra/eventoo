@@ -1,21 +1,28 @@
 .container_carusel{
-    width:  83.33vw;
-    height: 68.18vh;
+    width:  100%;
     margin: 0 auto;
     margin-bottom: 10%;
+    padding: 0 3%;
 }
 
 .container_text{
-    font-size: 250%;
+    font-size: 1.7rem;
     color: var(--dark-text);
-    border-bottom: 4px solid var(--accent-color);
+    border-bottom: 2px solid #0003;
+    padding: 12px 0 12px 6px;
+
+    position: sticky;
+    top: 60px;
+    z-index: 20;
 }
 
 .container_resultFilter{
+    padding-top: 16px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    margin-bottom: 24px;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 3.3rem;
-    margin: 3rem 0px 2rem;
 }
 
 .title_noReults{
@@ -26,7 +33,7 @@
 
 .container_inPerson,
 .container_online{
-    margin-top: 5%;
+    
 }
 
 .carusel_cards{
