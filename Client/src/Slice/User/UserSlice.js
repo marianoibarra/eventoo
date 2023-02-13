@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from "axios";
+import { API } from '../../App';
 
 const initialState = {
   isLogged: false,
@@ -28,18 +28,13 @@ export const register = createAsyncThunk(
   "user/register",
   async ({ input, setShowSessionModal }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://api.eventoo.com.ar/user/register",
+      const response = await API.post(
+        "/user/register",
         input
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
-      axios.interceptors.request.use(function (config) {
-        config.headers.Authorization =  response.data.token;
-         
-        return config;
-    });
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -55,18 +50,13 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ input, setShowSessionModal }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://api.eventoo.com.ar/user/login",
+      const response = await API.post(
+        "/user/login",
         input
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
-      axios.interceptors.request.use(function (config) {
-        config.headers.Authorization =  response.data.token;
-         
-        return config;
-    });
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -82,18 +72,13 @@ export const googleLogin = createAsyncThunk(
   "user/googleLogin",
   async ({credential, setShowSessionModal}, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://api.eventoo.com.ar/user/auth",
+      const response = await API.post(
+        "/user/auth",
         { credential }
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
-      axios.interceptors.request.use(function (config) {
-        config.headers.Authorization =  response.data.token;
-         
-        return config;
-    });
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       console.log(response.data)
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
@@ -114,8 +99,8 @@ export const update = createAsyncThunk(
   "user/update",
   async ({ input, setShowSessionModal }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        "https://api.eventoo.com.ar/user/",
+      const response = await API.put(
+        "/user/",
         {
           born: input.born,
           address_line: input.address_line,
@@ -140,10 +125,9 @@ export const getUserData = createAsyncThunk(
   "user/getUserData",
   async (undefined, { rejectWithValue }) => {
     try {
-      const response = await axios("https://api.eventoo.com.ar/user");
+      const response = await API.get("/user");
       return response.data;
     } catch (error) {
-      console.log(error);
       if (error.response) {
         return rejectWithValue(error.response.data);
       }
@@ -160,12 +144,7 @@ export const UserSlice = createSlice({
       localStorage.removeItem("token");
       localStorage.removeItem("id");
       window.google.accounts.id.disableAutoSelect();
-      axios.defaults.headers.common["authorization"] = null;
-      axios.interceptors.request.use(function (config) {
-        config.headers.Authorization =  null;
-         
-        return config;
-    });
+      API.defaults.headers.common["authorization"] = null;
       return initialState
     },
     clearErrors: (state, action) => {

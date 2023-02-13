@@ -1,16 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const bankApi = 'https://api.eventoo.com.ar/bank-account'
-const urlLocal = 'http://localhost:3001/bankAccount'
-
+import { API } from "../../App";
 
 export const getBankAccounts = createAsyncThunk(
   'bankAccounts/getBankAccounts',
   async () =>
   {try {
-    const res = await axios(bankApi);
-    console.log('aca', res.data)
+    const res = await API('/bank-account');
     return res.data.bankAccounts
   } catch (error) {
     console.log(error)
@@ -22,7 +17,7 @@ export const createBankAccount = createAsyncThunk(
   'bankAccounts/createBankAccount',
   async (formData, { rejectWithValue }) => {
   try {
-  const response = await axios.post('https://api.eventoo.com.ar/bank-account', formData);
+  const response = await API.post('/bank-account', formData);
   return response.data
 } catch (error) {
   if (error.response) {

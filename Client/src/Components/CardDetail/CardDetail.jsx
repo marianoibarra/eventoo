@@ -76,7 +76,7 @@ const CardDetail = () => {
                             <img src={eventDetail.cover_pic ? eventDetail.cover_pic : covers[eventDetail.category.name]} alt='cover_pic'/>
                         </div>
                         {edit === false ? 
-                            <h1>{eventDetail.name.toUpperCase()} {organizer === true && <a onClick={editButton}><AiFillEdit size={35}/></a>}</h1> :
+                            <h1>{eventDetail.name?.toUpperCase()} {organizer === true && <a onClick={editButton}><AiFillEdit size={35}/></a>}</h1> :
                             <div className={style.organizerdiv}>
                                 <input className={style.organizerinput} type="text" name="name" value={editedEvent.name} onChange={handleOnChange}/>
                                 {organizer === true && <a className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}

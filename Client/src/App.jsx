@@ -32,6 +32,13 @@ import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 
+export const API = axios.create({
+  baseURL: 'https://api.eventoo.com.ar',
+  headers: {
+    'authorization': 'Bearer ' + localStorage.getItem("token"),
+  }
+});
+
 function App() {
   
   const { showSessionModal, setShowSessionModal } = useContext(SessionContext)
@@ -43,15 +50,8 @@ function App() {
   };
 
 
-
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.defaults.headers.common["authorization"] = "Bearer " + token;
-    axios.interceptors.request.use(function (config) {
-      config.headers.Authorization =  token;
-       
-      return config;
-  });
     if (token) {
       dispatch(getUserData());
       dispatch(getBankAccounts());

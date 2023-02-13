@@ -4,6 +4,7 @@ import Textfield from "@mui/material/TextField";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./ForgotPasswordModal.module.css";
 import axios from "axios";
+import { API } from "../../../App";
 
 const ForgotPasswordModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -41,8 +42,8 @@ const ForgotPasswordModal = () => {
     setIsSuccess(null);
     const submit = async () => {
       try {
-        const res = await axios.post(
-          "https://api.eventoo.com.ar/user/forgot-password",
+        const res = await API.post(
+          "/user/forgot-password",
           { email: input }
           );
         setLoading(false);

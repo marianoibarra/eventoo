@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const eventUrl = 'https://api.eventoo.com.ar/event'
+import { API } from "../../App";
 
 
 export const axiosModeEventsCreateForUser = createAsyncThunk(
   'events/axiosModeEventsCreateForUser',
   async () => {
-    const res = await axios.get(eventUrl)
+    const res = await API.get('/event')
     return res.data
   }
 )

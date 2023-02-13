@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const transactionURL = 'https://api.eventoo.com.ar/transaction'
+import { API } from "../../App";
 
 
 export const axiosPostTicket = createAsyncThunk(
@@ -9,7 +7,7 @@ export const axiosPostTicket = createAsyncThunk(
   async (object, { rejectWithValue }) => {
     console.log(object, 'desde el slice')
     try {
-      const res = await axios.post(transactionURL, object)
+      const res = await API.post('/transaction', object)
       console.log(res.data)
       localStorage.setItem('idTransaction', JSON.stringify(res.data))
       return res.data

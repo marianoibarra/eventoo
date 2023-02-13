@@ -17,13 +17,14 @@ import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 function Form(){
   const dispatch = useDispatch();
   const event = useSelector(state => state.event);
+  const {isLogged} = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const[showModal, setShowModal] = useState(false);
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
   useEffect(() => {
-    dispatch(getBankAccounts());
+    isLogged && dispatch(getBankAccounts());
   }, []);
 
 

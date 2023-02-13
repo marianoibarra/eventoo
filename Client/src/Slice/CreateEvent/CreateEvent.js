@@ -1,15 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios'
-
-const eventUrl = 'https://api.eventoo.com.ar/event'
-const urlLocal = 'http://localhost:3001/event'
+import { API } from "../../App";
 
 
 export const createEvent = createAsyncThunk(
   'event/createEvent',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(eventUrl, formData);
+      const response = await API.post('/event', formData);
       console.log('response en slice',response)
       return response.data;
     } catch (error) {

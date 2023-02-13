@@ -1,13 +1,13 @@
-import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API } from "../../App";
 
-const api = "https://api.eventoo.com.ar";
+
 
 
 export const getAllEvents = createAsyncThunk(
   "admin/events",
   async ( thunkAPI) => {
-    const response = await axios.get(`${api}/admin/events`);
+    const response = await API.get(`/admin/events`);
     return response.data;
   }
 );
@@ -15,21 +15,21 @@ export const getAllEvents = createAsyncThunk(
 export const getAllCategories = createAsyncThunk(
   'admin/DesactivedAndActivedCategories',
   async (CategoryId,formData, thunkAPI) => {
-    const response = await axios.get(`${api}/admin/categories/${CategoryId}`, formData)    
+    const response = await API.get(`/admin/categories/${CategoryId}`, formData)    
     return response.data
   })
 
   export const getUsers = createAsyncThunk(
     'admin/getUsers',
   async (thunkAPI) => {
-    const response = await axios.get(`${api}/admin/users`)    
+    const response = await API.get(`/admin/users`)    
     return response.data
   })
 
   export const changeUserRole = createAsyncThunk(
     "admin/changeUserRole",
     async (userId, thunkAPI) => {
-      const response = await api.put(`${api}/admin/users/change/${userId}`);
+      const response = await API.put(`/admin/users/change/${userId}`);
       return response.data;
     }
   );
@@ -37,7 +37,7 @@ export const getAllCategories = createAsyncThunk(
 export const changeStateEvent = createAsyncThunk(
   "admin/changeStateEvent",
   async (eventId, thunkAPI) => {
-    const response = await axios.put(`${api}/admin/events/${eventId}`);
+    const response = await API.put(`/admin/events/${eventId}`);
     return response.data;
   }
 );
@@ -46,7 +46,7 @@ export const changeStateEvent = createAsyncThunk(
 export const disableUser = createAsyncThunk(
   "admin/disableUser",
   async (userId, thunkAPI) => {
-    const response = await axios.put(`${api}/admin/users/ban/${userId}`);
+    const response = await API.put(`/admin/users/ban/${userId}`);
     return response.data;
   }
 );
@@ -64,7 +64,6 @@ export const adminSlice = createSlice({
   name: "admin",
   initialState: {
     events: [],
-    users: [],
     users: [],
     categories: [],
     comments: [],

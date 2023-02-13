@@ -28,6 +28,14 @@
       });
     };
   </script>
+  <script>
+    window.initMap = function () {
+      console.log('Map loaded')
+    }
+  </script>
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g&v=weekly&libraries=places&callback=initMap">
+  </script>
   <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/

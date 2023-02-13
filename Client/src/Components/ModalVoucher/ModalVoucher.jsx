@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { API } from '../../App';
 import { setTransaction } from '../../Slice/transaction/TransactionVoucher';
 import Style from './ModalVoucher.module.css'
 
@@ -17,8 +18,9 @@ const ModalVoucher = () => {
       setLoading(true)
       setError(false)
       try {
-        console.log(axios.defaults.headers.common)
-        const res = await axios.get('https://api.eventoo.com.ar/transaction/bf74b477-88fd-48bb-99ac-5805e623833d')
+        console.log(API.defaults.headers.common)
+        const res = await API.get('https://api.eventoo.com.ar/transaction/bf74b477-88fd-48bb-99ac-5805e623833d')
+        console.log(res.config.headers)
         setLoading(false)
         setData(res.data)
       } catch (error) {
@@ -40,8 +42,8 @@ const ModalVoucher = () => {
     <div>
       <p>{data.id}</p>
       <p>{data.status}</p>
-      <p>{data.event.name}</p>
-      <p>{data.buyer.name}</p>
+      <p>{data.event?.name}</p>
+      <p>{data.buyer?.name}</p>
     </div>
   )
 }

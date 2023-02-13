@@ -11,19 +11,6 @@ import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { StaticGoogleMap, Marker } from "react-static-google-map";
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g";
-
-function loadScript(src, position, id) {
-  if (!position) {
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.setAttribute("async", "");
-  script.setAttribute("id", id);
-  script.src = src;
-  position.appendChild(script);
-}
 
 const autocompleteService = { current: null };
 
@@ -35,19 +22,6 @@ export default function GoogleMaps({ input, setInput }) {
   const [inputValue, setInputValue] = React.useState("");
   const [coord, setCoord] = React.useState(null);
   const [options, setOptions] = React.useState([]);
-  const loaded = React.useRef(false);
-
-  if (typeof window !== "undefined" && !loaded.current) {
-    if (!document.querySelector("#google-maps")) {
-      loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-        document.querySelector("head"),
-        "google-maps"
-      );
-    }
-
-    loaded.current = true;
-  }
 
   const fetch = React.useMemo(
     () =>
