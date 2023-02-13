@@ -3,14 +3,14 @@ import { useSelector } from "react-redux";
 import style from "./SettingForm.module.css";
 
 const SettingForm = () => {
-    const { name, last_name, email, image, born , address_line, city ,state ,country} = useSelector((state) => state.user);
+    const { name, last_name, email, image, born , address} = useSelector((state) => state.user);
     const initialInput = {
         profile_pic: image,
         name: name,
         last_name: last_name,
         email: email,
         password: 'contrasenia',
-        adress: `${address_line}, ${city}, ${state}, ${country}`,
+        adress: `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`,
         age: born,
     }
 
