@@ -13,6 +13,7 @@ import UploadImage from './UploadImage/UploadImage';
 import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
+import { SessionContext } from '../..';
 
 function Form(){
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function Form(){
   const {isLogged} = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const[showModal, setShowModal] = useState(false);
+  const { setShowSessionModal } = useContext(SessionContext);
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -135,14 +137,15 @@ function Form(){
     }
   }, [confirm])
 
-
-  
-
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createEvent(input))
-    alert("Event created!")
-    console.log('el evento', input)
+    if(isLogged){
+      dispatch(createEvent(input))
+      alert("Event created!")
+    } else {
+      alert('Please Log in');
+      setShowSessionModal('login');
+    };
   };
 
   return(
