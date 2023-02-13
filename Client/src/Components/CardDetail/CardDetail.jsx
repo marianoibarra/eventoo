@@ -119,7 +119,7 @@ const CardDetail = () => {
                     </div> 
 
                     {organizer === false && <BuyButton/>}
-
+                    
                     {organizer === true && 
                         <div className={style.organizerbutton}>
                             <a className={`btnprimario ${editedEvent.edited === false && style.organizerbutton_disabled}`} href="" onClick={handleOnClick}>
@@ -127,7 +127,6 @@ const CardDetail = () => {
                             </a>
                         </div>
                     }
-
                 </div>
             }
         </>

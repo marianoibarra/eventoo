@@ -11,6 +11,8 @@ import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
 import { combinedFilterSlice } from "../Slice/Filter/combinedFilterSlice";
 import { locationSlice } from "../Slice/Location/LocationSlice";
 import { locationIpSlice } from "../Slice/Location/locationIpSlice";
+import { transactionSlice } from "../Slice/transaction/TransactionSlice";
+import { TransactionVoucher } from "../Slice/transaction/TransactionVoucher";
 import { bankAccountSlice } from "../Slice/BankAcount/BankAcount";
 import { eventsCreateForUserSlice } from "../Slice/EventsCreateForUser/CreateForUserSlice";
 import { eventsBuysSlice } from "../Slice/EventsBuysForUser/BuysSlice";
@@ -30,6 +32,8 @@ const store = configureStore({
     eventDetail: eventDetailSlice,
     combinedFilter: combinedFilterSlice.reducer,
     locationSlice: locationSlice.reducer,
+    transaction: transactionSlice.reducer,
+    transactionVoucher: TransactionVoucher.reducer
     locationIpSlice:locationIpSlice.reducer,
     bankAccounts: bankAccountSlice.reducer,
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,

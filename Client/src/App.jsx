@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import RecoverPass from "./Pages/RecoverPass";
 import { fetchLocation } from "./Slice/Location/LocationSlice";
 import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
+import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 
 function App() {
   
@@ -74,6 +75,8 @@ function App() {
         <Route path="/create-user" element={loginOk ? <Navigate to='/'/> : <CreateUser />}></Route>
         <Route path="/login" element={loginOk ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
+        <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/modal-voucher" element={<ModalVoucher />}></Route>
         <Route path="/user-event" element={<UserEvent />}></Route>
         <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
         <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>

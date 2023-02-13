@@ -38,3 +38,4 @@ const Modal = ({ setShowModal, children, width, height, backgroundColor }) => {
 };
 
 export default Modal;
+
