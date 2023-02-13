@@ -1,24 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { axiosModeEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
+import { axiosModeEventDetail, axiosModeEditEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import BuyButton from "./BuyButton/BuyButton";
 import covers from "../../imgs/covers";
-import { AiTwotoneCalendar } from "react-icons/ai";
+import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
 import { RiTicket2Fill } from "react-icons/ri";
 import style from './CardDetail.module.css';
 
+
 const CardDetail = () => {
 
+    // const [assistant, setAssistant] = useState(false);
+    const userId = useSelector(state => state.user.id);
     const { eventDetail } = useSelector(state => state.eventDetail);
+    const [organizer, setOrganizer] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [editedEvent, setEditedEvent] = useState({
+        name: '',
+        description: '',
+        edited: false
+    });
     const dispatch = useDispatch();
-    const {id} = useParams();
+    const { id } = useParams(); 
+ 
+    function handleOnChange(event){
+        const object = {
+            ...editedEvent,
+            [event.target.name]: event.target.value,
+            edited: true
+        }
+        setEditedEvent(object);
+    }
+
+    async function handleOnClick(event) {
+        event.preventDefault();
+        if(editedEvent.edited === true){
+            await dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
+            window.location.reload()
+        }
+    }
+
+    function editButton(event) {
+        event.preventDefault();
+        console.log(event.target.id);
+        setEdit(true);
+    }
 
     useEffect(() => {
         dispatch(axiosModeEventDetail(id));
+        return () => dispatch(axiosModeEventDetail());
     }, [dispatch]);
+
+    useEffect(() => {
+        if(eventDetail.organizer){
+            if(userId === eventDetail.organizer.id){
+                setOrganizer(true);
+                setEditedEvent({
+                    ...editedEvent,
+                    name: eventDetail.name,
+                    description: eventDetail.description
+                });
+            }
+        }
+    }, [eventDetail]);
 
     return(
         <>
@@ -28,10 +75,17 @@ const CardDetail = () => {
                         <div className={style.containerimg}>
                             <img src={eventDetail.cover_pic ? eventDetail.cover_pic : covers[eventDetail.category.name]} alt='cover_pic'/>
                         </div>
-                        <h1>{eventDetail.name.toUpperCase()}</h1>
-                    </div>
-                    <div className={style.containerdescription}>
-                        <p>{eventDetail.description}</p>
+                        {edit === false ? 
+                            <h1>{eventDetail.name.toUpperCase()} {organizer === true && <a onClick={editButton}><AiFillEdit size={35}/></a>}</h1> :
+                            <div className={style.organizerdiv}>
+                                <input className={style.organizerinput} type="text" name="name" value={editedEvent.name} onChange={handleOnChange}/>
+                                {organizer === true && <a className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}
+                            </div>
+                        }
+                    </div> 
+                    <div className={style.containerdescription}> 
+                        {edit === false ? <p>{eventDetail.description}</p> : <textarea name="description" value={editedEvent.description} onChange={handleOnChange}/>}
+                        {organizer === true && <a className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}
                     </div>
                 </div>
             }
@@ -48,7 +102,7 @@ const CardDetail = () => {
                         <h3>{eventDetail.start_date && `${eventDetail.start_date.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')}, ${eventDetail.start_time}hs`}</h3>
                     </div>
 
-                    {eventDetail.category.modality === 'Presential' && <EventLocation/>}
+                    {eventDetail.category?.modality === 'Presential' && <EventLocation/>}
 
                     <div className={style.containerdate}>
                         <div className={style.containericon}>
@@ -64,8 +118,15 @@ const CardDetail = () => {
                         </div>
                     </div> 
 
-                    {eventDetail.isPaid === true && <BuyButton/>}
-
+                    {organizer === false && <BuyButton/>}
+                    
+                    {organizer === true && 
+                        <div className={style.organizerbutton}>
+                            <a className={`btnprimario ${editedEvent.edited === false && style.organizerbutton_disabled}`} href="" onClick={handleOnClick}>
+                                <span>Save Changes</span>
+                            </a>
+                        </div>
+                    }
                 </div>
             }
         </>

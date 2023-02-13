@@ -9,6 +9,13 @@ import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
 import { combinedFilterSlice } from "../Slice/Filter/combinedFilterSlice";
 import { locationSlice } from "../Slice/Location/LocationSlice";
 import { locationIpSlice } from "../Slice/Location/locationIpSlice";
+import { transactionSlice } from "../Slice/transaction/TransactionSlice";
+import { TransactionVoucher } from "../Slice/transaction/TransactionVoucher";
+import { bankAccountSlice } from "../Slice/BankAcount/BankAcount";
+import { eventsCreateForUserSlice } from "../Slice/EventsCreateForUser/CreateForUserSlice";
+import { eventsBuysSlice } from "../Slice/EventsBuysForUser/BuysSlice";
+import { adminSlice } from "../Slice/Admin/AdminSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -21,7 +28,13 @@ const store = configureStore({
     eventDetail: eventDetailSlice,
     combinedFilter: combinedFilterSlice.reducer,
     locationSlice: locationSlice.reducer,
-    locationIpSlice:locationIpSlice.reducer
+    transaction: transactionSlice.reducer,
+    transactionVoucher: TransactionVoucher.reducer
+    locationIpSlice:locationIpSlice.reducer,
+    bankAccounts: bankAccountSlice.reducer,
+    eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
+    eventsBuysSlice:eventsBuysSlice.reducer,
+    adminSlice:adminSlice.reducer,
   },
 });
 

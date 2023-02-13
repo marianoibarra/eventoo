@@ -23,20 +23,38 @@ const googleAuth = async (req, res) => {
         emailIsVerify: email_verified,
       },
     });
+
+    if(created) {
+      const role = await RoleAdmin.findByPk(3)
+      await newUser.setRoleAdmin(role)
+    }
+
+    await user.reload({
+      attributes: { exclude: ["addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+      ],
+    })
+
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "90d",
     });
 
+    const response = await user.toJSON()  
+    
+    if(response.roleAdmin) response.roleAdmin = response.roleAdmin.name;
+     delete response.password
+
     res.send({
-      newAccount: created,
+      isNewUser: created,
       id: user.id,
       token,
-      data: {
-        name: user.name,
-        last_name: user.last_name,
-        email: user.email,
-        profile_pic: user.profile_pic,
-      },
+      data: response,
     });
   } catch (error) {
     res.status(500).send(error.message);
@@ -90,13 +108,29 @@ const register = async (req, res) => {
         emailCode: {
           code: code,
           expiration: expiration,
-        },
-        roleAdmin: {},
+        }
       },
       {
-        include: ["address", EmailCode, RoleAdmin],
+        include: ["address", EmailCode],
       }
     );
+
+    const role = await RoleAdmin.findByPk(3)
+    await newUser.setRoleAdmin(role)
+
+    const response = await User.findByPk(newUser.id, {
+      attributes: { exclude: ["password", "addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+      ],
+    }).then((r) => r.toJSON());
+
+    if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
 
     sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 
@@ -108,12 +142,7 @@ const register = async (req, res) => {
       msg: "User created successfully",
       id: newUser.id,
       token,
-      data: {
-        name,
-        last_name,
-        email,
-        profile_pic,
-      },
+      data: response,
     });
   } catch (e) {
     console.log(e);
@@ -196,8 +225,17 @@ const login = async (req, res) => {
 
     const user = await User.findOne({
       where: { email },
-      include: "address",
+      attributes: { exclude: ["addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+      ],
     });
+
     if (!user) {
       return res.status(401).send({ msg: "Email or password is incorrect" });
     }
@@ -211,18 +249,19 @@ const login = async (req, res) => {
       expiresIn: "90d",
     });
 
+     const response = await user.toJSON()  
+    
+     if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
+     delete response.password
+
     return res.send({
       msg: "Logged in successfully",
       id: user.id,
       token,
-      data: {
-        name: user.name,
-        last_name: user.last_name,
-        email: user.email,
-        profile_pic: user.profile_pic,
-      },
+      data: response,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).send({ msg: "Internal server error" });
   }
 };
@@ -300,23 +339,26 @@ const checkResetToken = async (req, res) => {
   }
 };
 
-const getProfile = async ({userId},res) => {
- 
-try {
-
-  const profileUser = await User.findByPk(userId, {
-    attributes: { exclude: ["password"] },
-    include: [{
-      model: Address,
+const getProfile = async ({ userId }, res) => {
+  console.log(userId);
+  try {
+    const profileUser = await User.findByPk(userId, {
+      attributes: { exclude: ["password", "addressId", "roleAdminId"] },
+      include: [
+        "roleAdmin",
+        {
+          model: Address,
           as: "address",
-          attributes: { exclude: ["id"] }
-  }]
-  });
-  res.status(200).json(profileUser);
-  
-} catch (error) {
-  res.status(500).json({ msg: error.message });
-}
+          attributes: { exclude: ["id"] },
+        },
+      ],
+    }).then((r) => r.toJSON());
+
+    if(profileUser.roleAdmin.name) profileUser.roleAdmin = profileUser.roleAdmin.name;
+    res.status(200).json(profileUser);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 };
 
 const resetPassword = async (req, res) => {
@@ -410,7 +452,7 @@ const verifyAdmins = async (req, res, next) => {
     if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {
-      res.status(401).json({ msg: "You are not an ADMIN" }); 
+      res.status(401).json({ msg: "You are not an ADMIN" });
     }
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -434,7 +476,7 @@ const verifySuperAdmin = async (req, res, next) => {
 
 const changeRole = async (req, res) => {
   const { id } = req.params;
-  const userId= Number(id)
+  const userId = Number(id);
   try {
     const user = await User.findByPk(userId);
     const roleId = user.roleAdminId;
@@ -460,7 +502,6 @@ module.exports = {
   modifyUser,
   verifyAdmins,
   verifySuperAdmin,
-  changeRole,
   googleAuth,
   getProfile,
 };

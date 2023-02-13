@@ -15,7 +15,7 @@ import Home from "./Pages/Home";
 import Event from "./Pages/Event";
 import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
-import Cart from "./Pages/Cart";
+import UserEvent from "./Pages/UserEvents";
 import ForgotPassword from "./Pages/ForgotPassword";
 
 //libraries
@@ -28,6 +28,7 @@ import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
 import { SessionContext } from ".";
 import { getUserData, googleLogin} from "./Slice/User/UserSlice";
+import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 
 function App() {
   
@@ -88,8 +89,10 @@ function App() {
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/forgot-password" element={isLogged ? <Navigate to='/'/> : <ForgotPassword />}></Route>
-        <Route path="/reset-password/:emailtoken" element={isLogged ? <Navigate to='/'/> : <RecoverPass />}></Route>
+        <Route path="/modal-voucher" element={<ModalVoucher />}></Route>
+        <Route path="/user-event" element={<UserEvent />}></Route>
+        <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
+        <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
     </BrowserRouter>
