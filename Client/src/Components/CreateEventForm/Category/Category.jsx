@@ -5,6 +5,7 @@ import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import style from './Category.module.css'
 import Map from './Map';
 import ButtonGroup from "./ButtonGroup";
+import Checkbox from './CheckBox';
     
 
 function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, setSelectedModality}){
@@ -23,16 +24,6 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
         setFilteredCategories(categories.filter(c => c.modality === selectedModality));
       }
     }, [categories, loading, selectedModality]);
-    
-    // const handleCategory = e => {
-    //   e.preventDefault();
-    //   setCategory(e.target.value);
-    //   dispatch(updateCategory(e.target.value));
-    //   setInput({
-    //     ...input,
-    //     [e.target.name]: e.target.value
-    // })
-    // };
 
     const handleChanges = (e) => {
       setInput({
@@ -50,16 +41,6 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
       })
     };
 
-    // const handleUrl = e =>{
-    //   e.preventDefault();
-    //   dispatch(updateVirtualURL(e.target.value));
-    //   setInput({
-    //     ...input,
-    //     [e.target.name]: e.target.value
-    //   })
-    //   console.log(input)
-    // }
-
     const handleBlur = (e) =>{
       setShowMsg({
           ...showMsg,
@@ -67,18 +48,9 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
       })
     }
 
-  //   function handleSelect(e){
-  //     e.preventDefault();
-  //     setSelectedModality(e.target.value);
-  //     setInput({
-  //         ...input,
-  //         [e.target.name]: e.target.value
-  //     })
-  // };
-
     return(
         <div className={style.info}>
-            <p className={style.text}>Help locate your event and make sure attendees know where to go.</p>
+            <p className={style.text}>Select the modality and category of your event.</p>
             <div>
               <ButtonGroup
                 buttons={["Presential", "Virtual"]}
@@ -103,8 +75,14 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
               <div>
               <div>
                 {selectedModality === "Presential"
-               ? <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+               ? <>
+                <p className={style.text}>Help locate your event and make sure attendees know where to go.</p>
+                <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+                <p className={style.text}>Select the facilities the place has.</p>
+                <Checkbox input={input} setInput={setInput}/>
+                </>
                 : <div>
+                  <p>Add the Link to the virtual event.This is only going to be for your guests and sended the day of the event</p>
                   <input
                   className={style.inputs}
                   type="text"

@@ -13,6 +13,8 @@ export const login = createAsyncThunk(
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("data", JSON.stringify(data));
+      console.log(response.data.token);
+      axios.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       return response.data;
     } catch (error) {
       console.log(error)

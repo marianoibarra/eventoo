@@ -10,4 +10,3 @@ const ModalEjemplo = ({setShowModal}) => {
   )
 }
 
-export default ModalEjemplo

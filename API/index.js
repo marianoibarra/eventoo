@@ -13,9 +13,10 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-conn.sync({ force: true })
+conn.sync({ alter: true })
   .then(() => fillTables())
   .then(()=> createSuperAdmin(data))
   .then(() =>
     app.listen(port, () => console.log(`Listening on port ${port}!`))
-  );
+  )
+  .catch((e) => console.log(e));

@@ -14,7 +14,7 @@ import Home from "./Pages/Home";
 import Event from "./Pages/Event";
 import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
-import Cart from "./Pages/Cart";
+import UserEvent from "./Pages/UserEvents";
 import ForgotPassword from "./Pages/ForgotPassword";
 
 //libraries
@@ -77,6 +77,7 @@ function App() {
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/modal-voucher" element={<ModalVoucher />}></Route>
+        <Route path="/user-event" element={<UserEvent />}></Route>
         <Route path="/forgot-password" element={loginOk ? <Navigate to='/'/> : <ForgotPassword />}></Route>
         <Route path="/reset-password/:emailtoken" element={loginOk ? <Navigate to='/'/> : <RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>
