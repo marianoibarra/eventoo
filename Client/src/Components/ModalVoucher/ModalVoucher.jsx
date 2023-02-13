@@ -29,8 +29,7 @@ const ModalVoucher = () => {
       setLoading(true)
       setError(false)
       try {
-        console.log(axios.defaults.headers.common)
-        const res = await API.get('/transaction/' + `${id}`)
+        const res = await API.get(`/transaction/${id}`)
         setLoading(false)
         setData(res.data)
       } catch (error) {
