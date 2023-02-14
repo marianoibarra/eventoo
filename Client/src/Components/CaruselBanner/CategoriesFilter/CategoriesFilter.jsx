@@ -28,15 +28,19 @@ const CategoriesFilter = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [mouseDownTime, setMouseDownTime] = useState(null);
+  // const [timeDiff, setTimeDiff] = useState(null);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
+    setMouseDownTime(new Date().getTime());
     setStartX(e.pageX - containerRef.current.offsetLeft);
     setScrollLeft(containerRef.current.scrollLeft);
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+  
   };
 
   const handleMouseMove = (e) => {
@@ -48,10 +52,14 @@ const CategoriesFilter = () => {
   };
 
   function handleClick(id) {
-    if(id === filter.category) {
-      dispatch(setFilter({category: null}))
-    } else {
-      dispatch(setFilter({category: id}))
+    const mouseUpTime = new Date().getTime();
+    const timeDiff = (mouseUpTime - mouseDownTime)
+    if(timeDiff < 200) {   
+      if(id === filter.category) {
+        dispatch(setFilter({category: null}))
+      } else {
+        dispatch(setFilter({category: id}))
+      }
     }
   }
 
