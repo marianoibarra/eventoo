@@ -5,6 +5,7 @@ import { MdEventSeat, MdDesktopMac, MdHistory, MdDateRange, MdDelete,MdOutlineTu
 import { clearFilter, setFilter } from '../../../Slice/newFilter/newFilterSlice';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import ModalFiltersHome from '../../Modal/ModalFiltersHome/ModalFiltersHome';
 
 // MdEventSeat
 
@@ -13,7 +14,8 @@ const FilterMode = () => {
   const dispatch = useDispatch()
   const filter = useSelector(state => state.newFilter)
   const [someActive, setSomeActive] = useState(false)
-  
+  const [showModal, setShowModal] = useState(false)
+
   useEffect(() => {
     if(filter.modality || filter.isToday || filter.isNextWeekend) {
       setSomeActive(true)
@@ -23,7 +25,8 @@ const FilterMode = () => {
   }, [filter])
 
   const handleClick = (e) => {
-    if(e.target.name === 'clear') return dispatch(clearFilter())
+    if(e.target.name === 'clear') return dispatch(clearFilter());
+    if(e.target.name === 'modal') return setShowModal(true);
     if(filter[e.target.name] === e.target.value) {
       dispatch(setFilter({[e.target.name]: null}))
     } else {
@@ -36,6 +39,7 @@ const FilterMode = () => {
 
   return (
     <div className={Style.containerFilterMode}>
+      {showModal && <ModalFiltersHome setShowModal={setShowModal} />}
       {someActive && 
         <button name='clear' onClick={handleClick} className={Style.clearFilter}>
             <MdDelete style={{pointerEvents: 'none'}} size={20} />
@@ -82,7 +86,7 @@ const FilterMode = () => {
           </button>
         </div>
       </div>
-      <button name='clear' onClick={handleClick} className={Style.clearFilter}>
+      <button name='modal' onClick={handleClick} className={Style.clearFilter}>
           <MdOutlineTune style={{pointerEvents: 'none'}} size={20} />
       </button>
     </div>
