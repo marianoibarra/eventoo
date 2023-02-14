@@ -304,6 +304,36 @@ const completeTransaction = async (req, res) => {
   }
 };
 
+const ApprovePayment = async (req, res) => {
+  try {
+    const { isApproved } = req.body;
+    const { transactionId } = req.params;
+    const transaction = await Transaction.findByPk(transactionId);
+
+    if (!transaction) {
+      return res.status(404).json({
+        error: "Transaction not found",
+      });
+    }
+
+    const status = isApproved ? "APPROVED" : "DENIED";
+    await transaction.update({ status });
+
+    return res.status(200).json({
+      msg: `Transaction status updated to ${status}`,
+      transaction,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+
+
+
+
 const cancelTransaction = async (req, res) => {
   try {
     const { payment_proof } = req.body;
@@ -364,7 +394,8 @@ module.exports = {
   updateTransaction,
   showTicketsByTransactionId,
   completeTransaction,
+  ApprovePayment,
   cancelTransaction,
   getTransactionById,
-  getTransactionsByUserSeller
+  getTransactionsByUserSeller,
 };
