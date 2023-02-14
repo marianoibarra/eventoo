@@ -14,7 +14,7 @@
     left: 0;
     width: 100%;
     height: max-content;
-    background-color: var(--white-text);
+    background-color: var(--ligth-background-color);
     border: solid 1px var(--primary-color);
     border-radius: 12px;
 }
@@ -61,7 +61,7 @@
     border: 0px;
     border-radius: 6px;
     background-color: var(--primary-color);
-    color: var(--white-text);
+    color: white;
     height: 45%;
     width: 25%;
 }
@@ -78,4 +78,28 @@ button:disabled {
 .buybutton {
     width: 90%;
     margin-bottom: 20px;
+}
+
+.container_buyer_pending {
+    position: sticky;
+    z-index: 300;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    background-color: var(--white-text);
+}
+
+.buyer_pending {
+    border: solid 1px orange;
+    border-radius: 12px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.buyer_pending p {
+    font-size: 1.3vw;
+    color: orange;
+    font-weight: bold;
+    margin: 20px;
 }
