@@ -40,6 +40,7 @@ export const changeStateEvent = createAsyncThunk(
   async (eventId, thunkAPI) => {
     console.log(eventId)
     const response = await API.put(`/admin/events/${eventId}`);
+    
     return response.data;
   }
 );
