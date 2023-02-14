@@ -82,6 +82,7 @@ const getEventsPublic = async (req, res) => {
 
     res.json(publicEvents);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ msg: error.message });
   }
 };
