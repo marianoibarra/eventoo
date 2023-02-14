@@ -76,6 +76,7 @@ const ModalBank = ({setShowModal, input, setInput}) => {
         name='cbu'
         onChange={(e) => setCBU(e.target.value)}
         onBlur={handleBlur}
+        maxLength='22'
         style={showMsg.cbu && errors.cbu ? { border: 'red 1px solid' } : {}}
         /> <p>{cbuNums}/22</p>
         {errors.cbu&&(
