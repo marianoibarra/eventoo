@@ -108,6 +108,7 @@ function Form(){
     const num = parseInt(input.guests_capacity)
     if(!input.guests_capacity ){errors.guests_capacity = 'Capacity is required'
     }else if( isNaN(num) || num < 0) { errors.guests_capacity = 'Enter a valid number'};
+
     console.log(errors)
     return errors;
   }
@@ -152,8 +153,6 @@ function Form(){
       alert('Please Log in');
       setShowSessionModal('login');
     };
-
-
   };
 
   return(

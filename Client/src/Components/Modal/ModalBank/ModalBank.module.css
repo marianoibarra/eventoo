@@ -3,3 +3,8 @@
     align-items: center;
     flex-direction: column;
 }
+
+.warning {
+    color:red;
+    font-size: 0.8rem;
+}
