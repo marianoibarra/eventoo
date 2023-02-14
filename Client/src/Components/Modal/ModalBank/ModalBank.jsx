@@ -27,9 +27,11 @@ const ModalBank = ({setShowModal, input, setInput}) => {
 
     return errors;
   }
+  const cbuNums = CBU.length;
 
   useEffect((name,cbu) => {
-    console.log('cbu',CBU, 'name', name, errors)
+    const cbuNums = CBU.length;
+    console.log('cbu',CBU, 'name', name, cbuNums)
   },[name, CBU]);
 
   const handleBlur = (e) => {
@@ -75,7 +77,7 @@ const ModalBank = ({setShowModal, input, setInput}) => {
         onChange={(e) => setCBU(e.target.value)}
         onBlur={handleBlur}
         style={showMsg.cbu && errors.cbu ? { border: 'red 1px solid' } : {}}
-        />
+        /> <p>{cbuNums}/22</p>
         {errors.cbu&&(
                             <p className={style.warning}>{errors.cbu}</p>
                         )}
