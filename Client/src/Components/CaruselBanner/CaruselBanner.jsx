@@ -1,6 +1,7 @@
 import React from 'react'
 import CaruselAll from './CaruselAll/CaruselAll'
 import Style from './CaruselBanner.module.css'
+import CategoriesFilter from './CategoriesFilter/CategoriesFilter'
 import FilterMode from './FilterMode/FilterMode'
 
 
@@ -8,11 +9,11 @@ const CaruselBanner = () => {
     return (
         <div>
             
-            <div className={Style.container_carusel} >
+            {/* <div className={Style.container_carusel} >
                  <div className={Style.carusel_text}>
-                    {/* <p>
+                    <p>
                         Hola este es un mensaje de prueba del carusel ONE
-                    </p> */}
+                    </p>
                 </div>
 
                 <div className={Style.carusel_one}>
@@ -38,7 +39,8 @@ const CaruselBanner = () => {
 
                     </div>
                 </div>
-            </div>
+            </div> */}
+            <CategoriesFilter />
             <FilterMode />
             <CaruselAll />
         </div>

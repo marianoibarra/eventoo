@@ -28,7 +28,7 @@ import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
 import { SessionContext } from ".";
 import { getUserData, googleLogin} from "./Slice/User/UserSlice";
-import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
+// import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 import NewHome from "./Pages/NewHome";
@@ -89,22 +89,22 @@ function App() {
     <BrowserRouter>
       {showSessionModal !== null && <SessionModal />}
       <Routes>
-        <Route exact path="/" element={<Landing />} />
+        {/* <Route exact path="/" element={<Landing />} /> */}
+        <Route exact path="/" element={<Home />}></Route>
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/setting" element={!isLogged ? <Navigate to='/'/> : <Setting />} />
         <Route path="/admin" element={isLogged && roleAdmin  && roleAdmin !== "USER" ? <Admin /> : <Navigate to='/'/> }/>
         <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/newhome" element={<NewHome />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/Help" element={<Help />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/home" element={<Home />}></Route>
         <Route path="/create-user" element={isLogged ? <Navigate to='/'/> : <CreateUser />}></Route>
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route>
-        <Route path="/user-event" element={!isLogged ? <Navigate to='/'/> :<UserEvent />}></Route>
+        <Route path="/user-event" element={!isLogged ? <Navigate to='/' /> :<UserEvent />}></Route>
+        {/* <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route> */}
+        <Route path="/user-event" element={<UserEvent />}></Route>
         <Route path="/forgot-password" element={isLogged ? <Navigate to='/'/> : <ForgotPassword />}></Route>
         <Route path="/reset-password/:emailtoken" element={isLogged ? <Navigate to='/'/> : <RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>

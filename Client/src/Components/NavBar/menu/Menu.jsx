@@ -19,7 +19,7 @@ const Menu = () => {
 
   const handleClearLocalStorage = () => {
     dispatch(logOut());
-    navigate("/home");
+    navigate("/");
     setIsOpen(false);
   };
 
@@ -46,7 +46,7 @@ const Menu = () => {
           <motion.div
             className={Styles.menu}
             initial={{ height: 0 }}
-            animate={{ height: 130, width: 130 }}
+            animate={{ height: 160, width: 130 }}
             exit={{ height: 0 }}
             transition={{ duration: 0.5 }}
           >
@@ -64,6 +64,9 @@ const Menu = () => {
               <>
                 <p className={Styles.menuEmail}>{email}</p>
 
+                <Link to="/user-event" className={Styles.menuLink}>
+                  My events
+                </Link>
                 <Link to="/Setting" className={Styles.menuLink}>
                   Settings
                 </Link>
@@ -77,12 +80,14 @@ const Menu = () => {
               </>
             ) : undefined}
             {isLogged ? (
+            <>
               <button
-                className={Styles.menuLink}
-                onClick={handleClearLocalStorage}
-              >
-                Log Out
-              </button>
+              className={Styles.menuLink}
+              onClick={handleClearLocalStorage}
+            >
+              Log Out
+            </button>
+            </>
             ) : (
               <Link to="/login" className={Styles.menuLink}>
                 Sign In

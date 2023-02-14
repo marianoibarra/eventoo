@@ -31,19 +31,6 @@ const RegisterModal = () => {
     zip_code: "",
   };
 
-  function padLeft(n){
-    return ("00" + n).slice(-2);
-  }
-
-  function formatDate(d){        
-
-      let dformat = [ padLeft(d.getMonth()),
-                    padLeft(d.getDate()+1),
-                    d.getFullYear()
-                    ].join('-');
-     return dformat
-  }
-
   const validate = (input) => {
     const regexp_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const regexp_pass =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -264,7 +251,6 @@ const RegisterModal = () => {
                     tabIndex={-1}
                     id="date"
                     name="born"
-                    InputProps={{ inputProps: { tabIndex: -1 , value: formatDate(input.born)} }}
                     label="Birthday"
                     variant="standard"
                     openTo="year"

@@ -1,12 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
+
 export const axiosModeCategories = createAsyncThunk(
   'categories/axiosModeCategories',
   async () => {
-    const res = await API.get('/home/categories')    
+    const res = await API.get('/home/categories')  
+    // res.data.categories.sort(function (a, b) {
+    //   if (a.name > b.name) {
+    //     return 1;
+    //   }
+    //   if (a.name < b.name) {
+    //     return -1;
+    //   }
+    //   return 0;
+    // }); 
+
     return res.data
-  })
+  }) 
+
 
 export const categorieSlice = createSlice({
   name: 'categories',

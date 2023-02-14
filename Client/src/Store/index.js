@@ -15,6 +15,7 @@ import { bankAccountSlice } from "../Slice/BankAcount/BankAcount";
 import { eventsCreateForUserSlice } from "../Slice/EventsCreateForUser/CreateForUserSlice";
 import { eventsBuysSlice } from "../Slice/EventsBuysForUser/BuysSlice";
 import { adminSlice } from "../Slice/Admin/AdminSlice";
+import {newFilterSlice} from "../Slice/newFilter/newFilterSlice";
 
 
 const store = configureStore({
@@ -35,6 +36,7 @@ const store = configureStore({
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
     eventsBuysSlice:eventsBuysSlice.reducer,
     admin:adminSlice.reducer,
+    newFilter: newFilterSlice.reducer
   },
 });
 

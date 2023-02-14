@@ -12,7 +12,7 @@
   top: 90px;
   right: 60px;
   width: max-content;
-  height: max-content + 5px;
+  height: max-content;
   box-shadow: 0 2px 4px var(--primary-color);
   border-radius: 5px;
   overflow: hidden;
