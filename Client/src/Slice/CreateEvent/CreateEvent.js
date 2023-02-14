@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isFulfilled } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
 
@@ -121,10 +121,12 @@ export const eventSlice = createSlice({
       state.loading = true;
     },
     [createEvent.fulfilled]: (state, action) => {
-
       state.event = action.payload     
       state.loading=false;
       state.error=null;
+      const eventId = action.payload.id;
+        const redirectUrl = `event/${eventId}`;
+        window.location.href = redirectUrl;
     },
     [createEvent.rejected]: (state, action)=>{
       state.loading=false;
