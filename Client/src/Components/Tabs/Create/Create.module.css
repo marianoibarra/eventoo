@@ -14,27 +14,84 @@
   gap: 16px 24px;
   height: calc(100% - 42px);
   padding-bottom: 82px;
-  }
-  
-  .eventCard {
-    width: 300px;
-    height: 300px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px #ddd;
-    text-align: center;
-    padding: 30px;
-    background-color: white;
-  }
-  
-  .eventCardTitle {
-    font-size: 22px;
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
-  
-  .eventCard p {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: gray;
-  }
+}
+
+.eventCard {
+  width: 300px;
+  height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #ddd;
+  text-align: center;
+  padding: 30px;
+  background-color: #a0a0a067;
+  transition: all 0.3s ease;
+}
+
+.eventCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 5px 15px 20px #ddd;
+  cursor: pointer;
+}
+
+.eventCardTitle {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #4c4c4c;
+  text-decoration: none;
+}
+
+.eventCard p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+
+.eventCard {
+  width: 300px;
+  height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #ddd;
+  text-align: center;
+  padding: 30px;
+  background-color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.eventCardTitle {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.eventCard p {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+
+}
+
+.public{
+  padding: 10px;
+  color: white;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}
+
+.private{
+  padding: 10px;
+  color: white;
+  background-color: var( --secondary-color);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}

@@ -104,7 +104,7 @@ function App() {
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route>
-        <Route path="/user-event" element={<UserEvent />}></Route>
+        <Route path="/user-event" element={!isLogged ? <Navigate to='/'/> :<UserEvent />}></Route>
         <Route path="/forgot-password" element={isLogged ? <Navigate to='/'/> : <ForgotPassword />}></Route>
         <Route path="/reset-password/:emailtoken" element={isLogged ? <Navigate to='/'/> : <RecoverPass />}></Route>
         <Route path="*" element={<Error />}></Route>

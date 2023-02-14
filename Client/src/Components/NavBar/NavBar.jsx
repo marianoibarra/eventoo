@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { BiChevronDown } from "react-icons/bi";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
@@ -13,7 +14,7 @@ const Navbar = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
   }
-  
+  const { isLogged } = useSelector((state) => state.user);
   useEffect(()=> {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])
@@ -42,7 +43,7 @@ const Navbar = () => {
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
             <Link className={Styles.MenuLink} to={"/home"}>Events</Link>
-            <Link className={Styles.MenuLink} to={"/user-event"}>My Events</Link>
+           {isLogged ? <Link className={Styles.MenuLink} to={"/user-event"}>My Events</Link> : undefined}
             <Menu />
         </div>
       </nav>

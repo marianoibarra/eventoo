@@ -23,7 +23,8 @@ function Buys() {
           <p>End date: {event?.end_date}</p>
           <p>Category: {event.category?.name}</p>
           <p>Age range: {event?.age_range}</p>
-          <p>Status: {event?.status}</p>
+          <p id={event?.status}>Status: {event?.status}</p>
+
         </div>
       ))}
     </div>
