@@ -9,11 +9,8 @@ import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
 
 const CaruselAll = () => {
   const dispatch = useDispatch()
-  const { filter } = useSelector(state => state.combinedFilter)
+  const { events } = useSelector(state => state.events)
   const [moreEvents, setMoreEvents] = useState(10)
-  const imgDefault = "https://dummyimage.com/400x600/005D5E/fff&text=Eventoo"
-
-
 
   useEffect(() => {
     dispatch(axiosCombinedFilter());
@@ -23,27 +20,12 @@ const CaruselAll = () => {
     setMoreEvents(moreEvents + 10)
   }
 
-
-  const settings = {
-    className: "center",
-    infinite: true,
-    centerPadding: "60px",
-    slidesToShow: 4,
-    swipeToSlide: true,
-  }
-
   return (
     <div className={Style.container_carusel}>
-      {/* <div className={Style.container_selectFilter}>
-        <div className={Style.container_text}>Favorite</div>
-        <Slider {...settings}>
-        </Slider>
-      </div> */}
-
       <div className={Style.container_inPerson}>
-        <div className={Style.container_text}> Events  {`(${filter.length})`} </div>
+        <div className={Style.container_text}> Events  {`(${events.length})`} </div>
         <div className={Style.container_resultFilter} >
-          {filter.length > 0 ? filter.slice(0, moreEvents).map(event => (
+          {events.length > 0 ? events.slice(0, moreEvents).map(event => (
             <CaruselCard
               img={event.cover_pic ? event.cover_pic : covers[event.category?.name]}
               key={event.id}

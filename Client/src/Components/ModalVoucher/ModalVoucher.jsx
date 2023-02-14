@@ -143,7 +143,7 @@ const ModalVoucher = () => {
             : <div className={Style.imgPreviewWrappper}>
               <img className={Style.imgPreview} />
 
-              <Link to='/home'>
+              <Link to='/'>
                 <button
                   type='button'
                   className={'btnprimario'}

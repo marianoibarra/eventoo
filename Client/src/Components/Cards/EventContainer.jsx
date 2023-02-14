@@ -49,7 +49,7 @@ const EventContainer = ({ details }) => {
       <h3>{details.explore}</h3>
       <p>{details.descripcion2}</p>
       <div>
-        <a className={`btnprimario`} href='/home'>
+        <a className={`btnprimario`} href='/'>
           <span>LET'S GO!</span>
         </a>
       </div>

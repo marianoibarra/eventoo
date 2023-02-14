@@ -88,7 +88,8 @@ function App() {
     <BrowserRouter>
       {showSessionModal !== null && <SessionModal />}
       <Routes>
-        <Route exact path="/" element={<Landing />} />
+        {/* <Route exact path="/" element={<Landing />} /> */}
+        <Route exact path="/" element={<Home />}></Route>
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/setting" element={!isLogged ? <Navigate to='/'/> : <Setting />} />
         <Route path="/about-us" element={<AboutUs />} />
@@ -96,7 +97,6 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/Help" element={<Help />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/home" element={<Home />}></Route>
         <Route path="/create-user" element={isLogged ? <Navigate to='/'/> : <CreateUser />}></Route>
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
