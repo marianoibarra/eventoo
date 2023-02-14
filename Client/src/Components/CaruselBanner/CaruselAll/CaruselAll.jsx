@@ -53,7 +53,7 @@ const CaruselAll = () => {
           }
         </div>
         {
-          events.length > 0  && !loading && 
+          events.length > 0 && moreEvents < events.length && !loading && 
             <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
               <span>MORE</span>
             </a>

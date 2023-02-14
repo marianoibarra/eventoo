@@ -9,8 +9,9 @@ import { setFilter } from '../../Slice/newFilter/newFilterSlice'
 
 const SearchBar = () => {
 
-    const [input, setInput] = useState('')
-    const [showSearchClear, setShowSearchClear] = useState(false)
+    const filter = useSelector(state => state.newFilter)
+    const [input, setInput] = useState(filter.name ? filter.name : '')
+    const [showSearchClear, setShowSearchClear] = useState(filter.name ? true : false)
     const [searchActive, setSearchActive] = useState(false)
     const inputRef = useRef()
     const dispatch = useDispatch()
