@@ -112,3 +112,33 @@ footer {
   bottom: 0;
   width: 100%;
 }
+
+#COMPLETED{
+  padding: 10px;
+  color: white;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}
+
+#PENDING{
+  padding: 10px;
+  color: white;
+  background-color: var( --secondary-color);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}
+
+#CANCELED{
+  padding: 10px;
+  color: white;
+  background-color: #ff5733;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}
