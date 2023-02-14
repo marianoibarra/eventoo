@@ -155,7 +155,7 @@ Event.beforeFind((options) => {
         {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
         {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
       ]
-    };[Op.iLike]
+    }
   }
 
   if (options.where.isToday) {
