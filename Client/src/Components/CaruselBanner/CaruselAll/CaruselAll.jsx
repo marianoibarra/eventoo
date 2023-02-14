@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import Slider from "react-slick";
 import Style from './CaruselAll.module.css'
 import CaruselCard from './CaruselCard/CaruselCard'
 import covers from '../../../imgs/covers/';
 import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 
 
 const CaruselAll = () => {
   const dispatch = useDispatch()
-  const { events } = useSelector(state => state.events)
+  const { events, loading } = useSelector(state => state.events)
   const [moreEvents, setMoreEvents] = useState(10)
+
 
   useEffect(() => {
     dispatch(axiosCombinedFilter());
@@ -22,25 +24,41 @@ const CaruselAll = () => {
 
   return (
     <div className={Style.container_carusel}>
+      
       <div className={Style.container_inPerson}>
         <div className={Style.container_text}> Events  {`(${events.length})`} </div>
         <div className={Style.container_resultFilter} >
-          {events.length > 0 ? events.slice(0, moreEvents).map(event => (
-            <CaruselCard
-              img={event.cover_pic ? event.cover_pic : covers[event.category?.name]}
-              key={event.id}
-              name={event.name}
-              start_date={event.start_date}
-              category={event.category === null ? 'N/A' : event.category.name}
-              id={event.id}
-            />
-          )) : <h2 className={Style.title_noReults}>No Results...</h2>
-
+          {
+            loading
+              ?  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
+              : events.length > 0
+                  ? events.slice(0, moreEvents).map(event => (
+                      <CaruselCard
+                        img={event.cover_pic ? event.cover_pic : covers[event.category?.name]}
+                        key={event.id}
+                        name={event.name}
+                        start_date={event.start_date}
+                        start_time={event.start_time}
+                        isPaid={event.isPaid}
+                        price={event.price}
+                        category={event.category === null ? 'N/A' : event.category.name}
+                        id={event.id}
+                      />
+                    )) 
+                  : <div className={Style.notFoundWrapper}>
+                      <FontAwesomeIcon icon={faHeartBroken} size="6x" />
+                      <h4>No results found</h4>
+                      <p>Please try with anothers keywords or filters</p>
+                    </div>
           }
         </div>
-        <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
-          <span>MORE</span>
-        </a>
+        {
+          events.length > 0  && !loading && 
+            <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
+              <span>MORE</span>
+            </a>
+        }
+       
       </div>
     </div>
   )

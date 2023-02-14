@@ -63,7 +63,7 @@ const CategoriesFilter = () => {
       onMouseMove={handleMouseMove} 
       className={styles.categoriesWrapper}
     >
-      {categories && filter && categories.map((cat, i) => 
+      {categories && filter && categories.filter(c => filter.modality ? c.modality === filter.modality : true).map((cat, i) => 
         <div key={i} className={styles.categoryCard} onClick={() => handleClick(cat.id)} >
           <div className={styles.imgWrapper}>
             <div className={filter.category === cat.id ? styles.selected : styles.hidden}>

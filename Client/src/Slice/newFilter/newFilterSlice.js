@@ -38,6 +38,7 @@ export const newFilterSlice = createSlice({
     setFilter(state,action) {
       if(action.payload.isToday === 'true') action.payload.isNextWeekend = null;
       if(action.payload.isNextWeekend === 'true') action.payload.isToday = null;
+      if(state.category !== null && state.category.modality !== action.payload.modality) action.payload.category = null;
       return {
         ...state,
         ...action.payload
