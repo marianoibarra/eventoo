@@ -5,7 +5,7 @@ import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 
 
 
-const BuyButton = ({id}) => {
+const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
@@ -27,7 +27,7 @@ const BuyButton = ({id}) => {
   return (
     
     <div className={style.containerbottomright}>
-      {showModal && <ModalTransaction setShowModal={setShowModal} tickets={tickets}/> }
+      {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
      
       {isPaid === true ? 
         <div className={style.buycontainer}>
