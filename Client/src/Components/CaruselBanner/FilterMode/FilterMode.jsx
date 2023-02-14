@@ -1,12 +1,10 @@
 import React from 'react'
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
-import { getEvents } from '../../../Slice/Events/EventsSlice'
 import Style from './FilterMode.module.css'
 import { MdEventSeat, MdDesktopMac, MdHistory, MdDateRange, MdDelete,MdOutlineTune } from "react-icons/md";
-import { setFilter } from '../../../Slice/newFilter/newFilterSlice';
+import { clearFilter, setFilter } from '../../../Slice/newFilter/newFilterSlice';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 // MdEventSeat
 
@@ -14,9 +12,18 @@ const FilterMode = () => {
 
   const dispatch = useDispatch()
   const filter = useSelector(state => state.newFilter)
+  const [someActive, setSomeActive] = useState(false)
+  
+  useEffect(() => {
+    if(filter.modality || filter.isToday || filter.isNextWeekend) {
+      setSomeActive(true)
+    } else {
+      setSomeActive(false)
+    }
+  }, [filter])
 
   const handleClick = (e) => {
-    if(e.target.name === 'clear') return console.log('clear')
+    if(e.target.name === 'clear') return dispatch(clearFilter())
     if(filter[e.target.name] === e.target.value) {
       dispatch(setFilter({[e.target.name]: null}))
     } else {
@@ -29,15 +36,12 @@ const FilterMode = () => {
 
   return (
     <div className={Style.containerFilterMode}>
-
-      <div className={Style.Filter}>
-          <div className={Style.title_filter}>Filter by: </div>
-          <button onClick={handleClick} className={Style.btnFilter}>
-             <MdOutlineTune size={20} />
-          </button>
-      </div>
-
-      <div className={Style.modality}>
+      {someActive && 
+        <button name='clear' onClick={handleClick} className={Style.clearFilter}>
+            <MdDelete style={{pointerEvents: 'none'}} size={20} />
+        </button>
+      }
+      <div className={`${Style.modality} ${someActive ? Style.border : ''}`}>
         <div className={Style.container_btns_modality}>
           <button
             style={filter.modality === 'Presential' ? { opacity: 1 } : { opacity: 0.6 }}
@@ -45,7 +49,7 @@ const FilterMode = () => {
             value='Presential'
             className={Style.btn}
             name='modality'>
-            <MdEventSeat /> Presential
+            <MdEventSeat style={{pointerEvents: 'none'}} /> Presential
           </button>
           <button
             style={filter.modality === 'Virtual' ? { opacity: 1 } : { opacity: 0.6 }}
@@ -53,7 +57,7 @@ const FilterMode = () => {
             value='Virtual'
             className={Style.btn}
             name='modality'>
-            <MdDesktopMac /> Virtual
+            <MdDesktopMac style={{pointerEvents: 'none'}} /> Virtual
           </button>
         </div>
       </div>
@@ -66,7 +70,7 @@ const FilterMode = () => {
             value={'true'}
             className={Style.btn}
             name='isNextWeekend'>
-            <MdDateRange />Weekend
+            <MdDateRange style={{pointerEvents: 'none'}} />Next weekend
           </button>
           <button
             style={filter.isToday == 'true' ? { opacity: 1 } : { opacity: 0.6 }}
@@ -74,19 +78,13 @@ const FilterMode = () => {
             value={'true'}
             className={Style.btn}
             name='isToday'>
-            <MdHistory /> Today
+            <MdHistory style={{pointerEvents: 'none'}} /> Today
           </button>
         </div>
       </div>
-
-      <div className={Style.clearFilter}>
-        <div className={Style.container_btns_clearFilter}>
-          <button name='clear' onClick={handleClick} className={Style.btnClearFilter}>
-            <MdDelete size={20} />
-          </button>
-        </div>
-      </div>
-
+      <button name='clear' onClick={handleClick} className={Style.clearFilter}>
+          <MdOutlineTune style={{pointerEvents: 'none'}} size={20} />
+      </button>
     </div>
   );
 };

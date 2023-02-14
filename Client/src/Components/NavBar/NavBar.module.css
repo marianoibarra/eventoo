@@ -60,17 +60,23 @@
   height: 100%;
   align-items: center;
   display: flex;
-  gap: 32px;
+  gap: 24px;
   margin-bottom: 4px;
 }
 
 .MenuLink{
+  background-color: var(--secondary-color);
+  padding: 8px 12px;
+  width: auto;
+  border-radius: 10px;
   color: white;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-size: 16px;
+  transition: filter 300ms ease-in-out
 }
 
 .MenuLink:hover{
-  color: #fffc;
+  filter: brightness(105%);
+  transition: filter 200ms ease-in-out
 }

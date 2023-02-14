@@ -19,7 +19,7 @@ const Menu = () => {
 
   const handleClearLocalStorage = () => {
     dispatch(logOut());
-    navigate("/home");
+    navigate("/");
     setIsOpen(false);
   };
 

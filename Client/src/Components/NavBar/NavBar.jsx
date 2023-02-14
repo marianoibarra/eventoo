@@ -41,8 +41,6 @@ const Navbar = () => {
         </div>
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
-            <Link className={Styles.MenuLink} to={"/home"}>Events</Link>
-            <Link className={Styles.MenuLink} to={"/user-event"}>My Events</Link>
             <Menu />
         </div>
       </nav>

@@ -8,6 +8,11 @@
   overflow-x: hidden;
 }
 
+.categoriesWrapper:active {
+  cursor: grabbing;
+}
+
+
 .categoryCard {
   position: relative;
   cursor: pointer;
@@ -24,6 +29,11 @@
   transform: scale(105%);
   transition: transform 00ms ease-in-out
 }
+
+.categoryCard:active {
+  cursor: grabbing;
+}
+
 
 .imgWrapper {
   height: 60px;
