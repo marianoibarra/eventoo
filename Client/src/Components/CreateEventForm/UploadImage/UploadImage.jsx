@@ -45,7 +45,7 @@ function UploadImage({input, setInput}) {
         reader.onload = function (e) { 
         var rawLog = reader.result.split(',')[1];
         var dataSend = { dataReq: { data: rawLog, name: file.name, type: file.type }, fname: "uploadFilesToGoogleDrive" }; //preapre info to send to API
-        setPreview(URL.createObjectURL(file))
+        // setPreview(URL.createObjectURL(file))
         setImgIsFetching(true)
         fetch('https://script.google.com/macros/s/AKfycbyWX3EdWONKc_LefdFUP2aGTRx82xEBE0kiaCMb-Tmos8kUHuNs1vcpzKioYpXOQuDV/exec', //your AppsScript URL
             { method: "POST", body: JSON.stringify(dataSend)})

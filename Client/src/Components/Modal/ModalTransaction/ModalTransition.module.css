@@ -1,0 +1,174 @@
+.containerBuyTickets{
+    display: none;
+    position: relative
+}
+
+.container_tickets {
+    overflow: scroll;
+    margin-left: 7%;
+    margin-top: 4%;
+    height: 450px;
+}
+
+
+.container_dataTicket {
+    /* background-color: cornflowerblue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 150px;
+    width: 40%;
+    /* margin: 0 auto; */
+    /* margin-left: 2%; */
+    margin-top: 1%;
+}
+
+.dataTicket_title {
+    font-size: 26px;
+}
+
+.dataTicket_subTitle {
+    margin: 0;
+    margin-right: 0%;
+    font-weight: 500;
+    font-size: 20px;
+    width: 100%;
+}
+
+.dataTicket_user {
+    display: flex;
+    margin-top: 0.4%;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.dataTicket_user>p {
+    color: var(--primary-color);
+    margin-left: 0.5%;
+}
+
+.input_name {
+    height: 40px;
+    margin-right: 51.2%;
+    padding-left: 10px;
+    margin-top: 2.1%;
+    border-radius: 4px;
+    width: 190px;
+    background-color: var(--ligth-background-color);
+    border: 1px solid #b4b4b4;
+}
+
+.input_lastName {
+    padding-left: 10px;
+    height: 40px;
+    margin-left: 52%;
+    margin-top: -9.8%;
+    border-radius: 4px;
+    width: 190px;
+    background-color: var(--ligth-background-color);
+    border: 1px solid #b4b4b4;
+}
+
+.input_email {
+    /* position: absolute; */
+    width: 400px;
+    background-color: var(--ligth-background-color);
+    height: 40px;
+    margin-top: 3.5%;
+    border-radius: 4px;
+    padding-left: 10px;
+    border: 1px solid #b4b4b4;
+}
+.modify{
+position: relative;
+    z-index: 9999;
+    top: 60px;
+    display: flex;
+    width: 100%;
+}
+
+.modify>button {
+    font-size: 19px;
+}
+
+.container_detailEvent {
+    margin-left: 26.1%;
+    margin-top: -28.3%;;
+    position: absolute;
+    display: flex;
+    justify-content: end;
+    width: 600px;
+    height: 79.6%;
+    border-radius: 0 22px 22px 0;
+}
+
+.detailEvent_img {
+    height: 35%;
+    width: 70%;
+    /* margin-top: 0%; */
+    margin-left: -6.5%;
+    border-radius: 0 22px 0 0;
+}
+
+.detail {
+position: relative;
+    left: 62%;
+    bottom: 32%;
+    display: flex;
+    flex-direction: column;
+    width: 38%;
+    gap: 22px;
+}
+
+.detailEvent_resume {
+    font-size: 14px;
+}
+
+.detailEvent_tickets {
+}
+
+.detailEvent_subTotal {
+    position: relative;
+    bottom: 24%;
+    left: 84%;
+    font-weight: 700;
+}
+
+.detailEvent_total {
+}
+
+.detailEvent_price {
+    position: absolute;
+    top: 70%;
+    left: 75%;
+    font-weight: 700;
+    font-size: 30px;
+
+}
+
+.detailBankAccount{
+display: flex;
+    position: relative;
+    bottom: 84px;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+    background-color: var(--primary-color);
+    color: var(--white-text);
+    margin: 0 auto;
+    padding: 1% 0;
+}
+
+.detailBankAccount_CBU_name{
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.container_voucer{
+    width: 100%;
+    height: 100%;
+   
+}

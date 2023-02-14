@@ -1,0 +1,270 @@
+.containerVoucher_tittle {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+.containerVoucher_aceptar>button {
+    position: absolute;
+    bottom: 6%;
+    left: 55%;
+}
+
+.containerVoucher_cancelar>button {
+    position: absolute;
+    bottom: 6%;
+    right: 50%;
+}
+
+.containerVoucher_subTittle {
+    display: flex;
+    margin-top: 1.4%;
+    font-size: 15px;
+    font-weight: 400;
+    width: 100%;
+    justify-content: center;
+    letter-spacing: 2px;
+    color: var(--primary-color);
+}
+
+.image {
+    color: var(--primary-color);
+    margin: 15px 0;
+}
+
+.container_image {
+    display: flex;
+    justify-content: center;
+}
+
+.picture {
+    /* background-image: url('../Resources/Portada.jpg'); */
+    height: 250px;
+    width: 500px;
+    margin: 0;
+}
+
+.imageWrapper {
+    position: relative;
+    /* display: flex; */
+    width: 100%;
+    max-width: 1280px;
+    height: 600px;
+    overflow: hidden;
+    margin: 3% auto;
+}
+
+.imgDropArea {
+    width: 50%;
+    height: 50%;
+    margin-left: 5%;
+    max-width: 1280px;
+}
+
+.defaultDropArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+    font-size: 0.95rem;
+    background-color: #007F8019;
+    transition: filter .3s ease-in-out, border .3s ease-in-out;
+    border: 2px dashed transparent;
+}
+
+.onDragDropArea {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007F8033;
+    filter: brightness(105%);
+    transition: filter .2s ease-in-out, border .2s ease-in-out;
+    border: 2px dashed #0003;
+}
+
+.imgUpload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.uploadButton {
+    border: none;
+    outline: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 4px 6px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: .9;
+    cursor: pointer;
+    transition: filter .2s ease-in-out, transform .2s ease-in-out;
+}
+
+.uploadButton:hover {
+    filter: brightness(103%);
+    transition: filter .2s ease-in-out;
+}
+
+.uploadButton:active {
+    filter: brightness(95%);
+    transform: scale(95%);
+    transform-origin: center center;
+    transition: filter .1s ease-in-out;
+}
+
+.dragImgElement {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+.imgPreviewWrappper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.imgPreview {
+    width: 366px;
+    height: 600px;
+    background-image: url('../../../../Assets/successfullyImgPDF.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: previewIn .3s ease-in-out;
+    z-index: 40;
+    margin-bottom: 2%;
+}
+
+.deleteImg {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: none;
+    outline: none;
+    border: none;
+    background-color: #0005;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+.fetching {
+    pointer-events: none !important;
+    cursor: default !important;
+    opacity: .6;
+}
+
+@keyframes previewIn {
+    from {
+        transform: scale(110%);
+        filter: blur(6px) brightness(85%);
+    }
+
+    to {
+        transform: scale(100%);
+        filter: none
+    }
+}
+
+.imgPreviewFetching {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imgFetchingWrapper {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    transform: scale(110%);
+
+}
+
+.uploadMsg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    font-size: 1.2rem;
+    background-color: #0005;
+    color: white;
+}
+
+@media screen and (max-width: 940px) {
+
+    .imageWrapper,
+    .defaultDropArea {
+        border-radius: 48px 48px 0 0;
+    }
+
+    .statsWrapper {
+        min-height: auto;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+
+    .imageWrapper {
+        width: 100vw;
+        height: 50vw;
+        margin: 18px auto;
+        flex-grow: 1;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .defaultDropArea {
+        border-radius: 0;
+    }
+
+    .defaultDropArea p {
+        display: none;
+
+    }
+
+    .uploadButton {
+        border-radius: 50%;
+        width: 50vw;
+        height: 50vw;
+        padding: 12px;
+        background-color: transparent;
+        font-size: 1.2rem;
+    }
+
+    .deleteImg {
+        bottom: 12px;
+        top: unset
+    }
+
+
+}

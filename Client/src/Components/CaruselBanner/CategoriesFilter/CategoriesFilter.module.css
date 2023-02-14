@@ -1,0 +1,99 @@
+.categoriesWrapper {
+  height: 120px;
+  padding: 10px 3%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: hidden;
+}
+
+.categoriesWrapper:active {
+  cursor: grabbing;
+}
+
+
+.categoryCard {
+  position: relative;
+  cursor: pointer;
+  height: 95%;
+  gap: 6px;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 300ms ease-in-out
+}
+
+.categoryCard:hover {
+  transform: scale(105%);
+  transition: transform 00ms ease-in-out
+}
+
+.categoryCard:active {
+  cursor: grabbing;
+}
+
+
+.imgWrapper {
+  height: 60px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+.selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  background-color: #fffc;
+  animation: fadeIn 200ms ease-in-out;
+  border: var(--primary-color) 1px solid;
+  border-radius: 8px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: .8;
+  }
+}
+
+
+.categoryCard img {
+  height: 60px;
+  width: 100%;
+  object-fit: cover;
+  object-position: right;
+}
+
+.categoryName  {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #333;
+  width: 80px;
+  flex-grow: 1;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
+.textSel {
+  font-weight: 600;
+  color: var(--primary-color);
+}

@@ -49,3 +49,37 @@
     color:red;
     font-size: 0.8rem;
 }
+
+.priceContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bankAcc{
+    width: 130px;
+    height: 40px;
+    letter-spacing: 0.5px;
+    color: var(--primary-color);
+    font-size: 1rem;
+    border: 1.5px solid var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.bankAcc:hover{
+    background-color: var(--primary-color);
+    color: white;
+    width: 150px;
+    height: 42px;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    border: 1.5px solid var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.accountSelected{
+    margin: 15px;
+}

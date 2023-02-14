@@ -1,16 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios'
-
-const eventUrl = 'https://api.eventoo.com.ar/event'
-const urlLocal = 'http://localhost:3001/event'
+import { createSlice, createAsyncThunk, isFulfilled } from "@reduxjs/toolkit";
+import { API } from "../../App";
 
 
 export const createEvent = createAsyncThunk(
   'event/createEvent',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(eventUrl, formData);
-      console.log('response en slice',response)
+      const response = await API.post('/event', formData);
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
+      
       return response.data;
     } catch (error) {
       if (error.response) {
@@ -48,6 +47,7 @@ export const eventSlice = createSlice({
     updateName: (state, action) => {
       state.name = action.payload;
     },
+    
     updateDescription: (state, action) => {
       state.description = action.payload;
     },
@@ -108,7 +108,7 @@ export const eventSlice = createSlice({
       state.end_date = null;
       state.start_time = null;
       state.end_time = null;
-      state.isPublic = false;
+      state.isPublic = true;
       state.virtualURL = null;
       state.guests_capacity = null;
       state.category=null;
@@ -121,9 +121,12 @@ export const eventSlice = createSlice({
       state.loading = true;
     },
     [createEvent.fulfilled]: (state, action) => {
-      state.categories = action.payload     
+      state.event = action.payload     
       state.loading=false;
       state.error=null;
+      const eventId = action.payload.id;
+        const redirectUrl = `event/${eventId}`;
+        window.location.href = redirectUrl;
     },
     [createEvent.rejected]: (state, action)=>{
       state.loading=false;

@@ -1,7 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { categorieSlice } from "../Slice/Filter/categorieSlice";
-import { authSlice } from "../Slice/LoginForm/LoginFormSlice";
-import { registerSlice } from "../Slice/CreateUse/CreateUserSlice";
 import { UserSlice } from "../Slice/User/UserSlice";
 import { eventsSlice } from "../Slice/Events/EventsSlice";
 import { eventSlice } from "../Slice/CreateEvent/CreateEvent";
@@ -11,12 +9,18 @@ import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
 import { combinedFilterSlice } from "../Slice/Filter/combinedFilterSlice";
 import { locationSlice } from "../Slice/Location/LocationSlice";
 import { locationIpSlice } from "../Slice/Location/locationIpSlice";
+import { transactionSlice } from "../Slice/transaction/TransactionSlice";
+import { TransactionVoucher } from "../Slice/transaction/TransactionVoucher";
+import { bankAccountSlice } from "../Slice/BankAcount/BankAcount";
+import { eventsCreateForUserSlice } from "../Slice/EventsCreateForUser/CreateForUserSlice";
+import { eventsBuysSlice } from "../Slice/EventsBuysForUser/BuysSlice";
+import { adminSlice } from "../Slice/Admin/AdminSlice";
+import {newFilterSlice} from "../Slice/newFilter/newFilterSlice";
+
 
 const store = configureStore({
   reducer: {
     categories: categorieSlice.reducer,
-    auth: authSlice.reducer,
-    register: registerSlice.reducer,
     user: UserSlice.reducer,
     events: eventsSlice.reducer,
     event: eventSlice.reducer,
@@ -25,7 +29,14 @@ const store = configureStore({
     eventDetail: eventDetailSlice,
     combinedFilter: combinedFilterSlice.reducer,
     locationSlice: locationSlice.reducer,
-    locationIpSlice:locationIpSlice.reducer
+    transaction: transactionSlice.reducer,
+    transactionVoucher: TransactionVoucher.reducer,
+    locationIpSlice:locationIpSlice.reducer,
+    bankAccounts: bankAccountSlice.reducer,
+    eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
+    eventsBuysSlice:eventsBuysSlice.reducer,
+    adminSlice:adminSlice.reducer,
+    newFilter: newFilterSlice.reducer
   },
 });
 

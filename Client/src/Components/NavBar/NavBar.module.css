@@ -1,14 +1,9 @@
 .ContenedorHeader {
   width: 100%;
-
-  margin: 0 auto;
-  background-color: transparent;
   position: fixed;
+  top: 0;
   z-index: 300;
-
-  transform: translate(-50%, -50%);
-  top: 35px;
-  left: 50%;
+  background-color: var(--primary-color);
 }
 
 .ContenedorNavbar {
@@ -16,57 +11,72 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 70px;
+  height: 60px;
   position: relative;
-  padding: 0 20px;
-  box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
-  -webkit-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
-  -moz-box-shadow: -1px 18px 15px -20px rgba(0,0,0,0.75);
-}
-
-
-.scrolling {
-  background-color:var(--ligth-background-color);
-  transition: all 0.5 ease;
-
+  margin: 0 auto;
+  padding: 0 2%;
 }
 
 .Titulo {
   font-family: "Roboto", sans-serif;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 32px;
-  line-height: 33px;
-  color: var(--accent-color);
-  position: fixed;
-  left: 15px;
-  top: 15px;
+  color: white;
 }
-.MenuItem{
-  color: var(  --text-color);
+
+.searchbarOpen, .searchbarClose {
+    min-width: 360px;
+    width: 25vw;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 14px;
+  border-right: #fff3 1px solid;
+  border-left: #fff3 1px solid;
+  height: 36px;
+  gap: 6px;
+  font-family: 'Roboto';
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+
+.bold {
+  font-weight: 500;
+}
+
+.MenuItems {
+  height: 100%;
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  margin-bottom: 4px;
+}
+
+.MenuLink{
+  background-color: var(--secondary-color);
+  padding: 8px 12px;
+  width: auto;
+  border-radius: 10px;
+  color: white;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 33px;
-  text-decoration: none;
-  background-color: transparent;
-  border: 0;
-  display: flex;
-  gap: 15px;
-  flex-direction: row;
-  margin-right: 30px;
-}
-.MenuItem:hover{
-  color: var(--accent-color);
+  font-size: 16px;
+  transition: filter 300ms ease-in-out
 }
 
-@media (min-width: 768px) {
-  .ContenedorNavbar svg {
-    display: none;
-  }
-}
-
-@media (min-width: 1200px) {
-  .ContenedorNavbar {
-    padding: 0 100px;
-  }
+.MenuLink:hover{
+  filter: brightness(105%);
+  transition: filter 200ms ease-in-out
 }

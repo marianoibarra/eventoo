@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px;
 }
 .createEvent{
     text-align: center;
@@ -9,7 +10,6 @@
 .container{
     height: 100% vh;
     display: flex;
-    margin-top: 70px;
     justify-content: center;
 }
   
@@ -87,6 +87,20 @@
 .btnprimario[disabled]:hover {
     opacity: .5;
     cursor: not-allowed;
+}
+
+.containerimg{
+    margin: 20px;
+}
+
+.img{
+    border-radius: 30px;
+    max-width: 100%;
+    height: 100%;
+}
+
+.subtitle{
+    color:var(--primary-color);
 }
 
 /* Paleta colores{

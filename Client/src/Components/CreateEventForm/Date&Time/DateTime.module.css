@@ -24,3 +24,9 @@
     color:red;
     font-size: 0.8rem;
 }
+
+.datetime{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

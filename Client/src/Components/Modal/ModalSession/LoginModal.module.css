@@ -1,0 +1,158 @@
+.loginWrapper {
+  width: 100%;
+  height: auto;
+  padding-bottom: 56px;
+}
+
+.header {
+  height: 72px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.closeBtn {
+  margin-right: 24px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: #777;
+  transition: color 200ms ease-in-out;
+}
+
+.closeBtn:hover {
+  color: #555;
+  transition: color 200ms ease-in-out;
+}
+
+.closeBtn:active {
+  transform: scale(90%);
+  color: #555;
+}
+
+.main {
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-y: auto;
+  height: 100%;
+  width: 65%;
+  margin: 0 auto;
+
+}
+
+.main h3 {
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: .2px;
+  margin-bottom: 36px;
+}
+
+.registerLink {
+  color: #777;
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.1px;
+  font-family: 'Lato', sans-serif;;
+  width: 100%;
+  text-align: center;
+}
+
+.registerLink span {
+  color: var(--primary-color);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.forgotLink {
+  margin-top: 0px;
+  color: var(--primary-color);
+  font-weight: 900;
+  cursor: pointer;
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.1px;
+  font-family: 'Lato', sans-serif;;
+  width: 100%;
+  text-align: right;
+}
+
+.submit {
+  outline: none;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1.05rem;
+  width: 80%;
+  height: 42px;
+  border-radius: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 20px 10%;
+  transition: filter 200ms ease-in-out;
+
+}
+
+.submit:hover {
+  filter: brightness(110%);
+  transition: filter 200ms ease-in-out;
+
+}
+
+.submit:active {
+  filter: brightness(95%);
+  transform: scale(98%);
+  transition: filter 0ms ease-in-out;
+
+}
+
+.or {
+  width: 108px;
+  border-bottom: solid 1px #aaa;
+  position: relative;
+  bottom: 0.4rem;
+  margin: 0 6px 0 6px;
+}
+.or2 {
+  margin: 28px auto 0px;
+  display: flex;
+  flex-direction: row;
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+}
+.or3 {
+  background-position-x: 5px;
+}
+
+.google {
+  width: 100%;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.submit[disabled],
+.submit[disabled]:active,
+.submit[disabled]:hover {
+  outline: none;
+  border: none;
+  padding: 0;
+  background-color: var(--primary-color);
+  opacity: .5;
+  cursor: not-allowed;
+  color: white;
+  filter: none;
+  transform: none;
+}
+
+.errorMsg {
+  display: block;
+  color: rgb(216, 2, 2);
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 28px 0 -12px;
+  width: 100%;
+}

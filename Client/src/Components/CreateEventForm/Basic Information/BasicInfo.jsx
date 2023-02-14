@@ -14,15 +14,6 @@ function BasicInfo({input,setInput,errors, showMsg, setShowMsg, event}){
         })
     };
 
-    // const handleName = (e) => {
-    //     e.preventDefault();
-    //     dispatch(updateName(e.target.value));
-    //     setInput({
-    //         ...input,
-    //         [e.target.name]: e.target.value
-    //     })
-    // };
-
     const handleBlur = (e) =>{
         setShowMsg({
             ...showMsg,
