@@ -23,7 +23,7 @@ const BuyButton = () => {
   return (
     
     <div className={style.containerbottomright}>
-      {showModal && <ModalTransaction setShowModal={setShowModal} tickets={tickets}/> }
+      {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
 
       {isPaid === true && !events.find(element => element.status === 'PENDING') && 
         <div className={style.buycontainer}>
