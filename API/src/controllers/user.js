@@ -130,7 +130,7 @@ const register = async (req, res) => {
       ],
     }).then((r) => r.toJSON());
 
-    if(response.roleAdmin?.name) response.roleAdmin = response.roleAdmin.name;
+    if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
 
     sendEmail(newUser.email, code, newUser.name, "confirmEmail");
 
