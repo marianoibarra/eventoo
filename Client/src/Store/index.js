@@ -34,7 +34,7 @@ const store = configureStore({
     bankAccounts: bankAccountSlice.reducer,
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
     eventsBuysSlice:eventsBuysSlice.reducer,
-    adminSlice:adminSlice.reducer,
+    admin:adminSlice.reducer,
   },
 });
 
