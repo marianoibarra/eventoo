@@ -49,8 +49,15 @@ const createEvent = async (req, res) => {
       });
     } else {
       privateEvent_passwordValue = privateEvent_password;
-    }
-  };
+    } 
+  // if  (isPublic === true && privateEvent_password !== null) {
+  //     return res.status(400).json({
+  //       errors: [{
+  //         message: "Public event cannot have a private event password"
+  //       }]
+  //     });
+  //   }
+  }
 
   try {
     // if (!name ||
@@ -173,12 +180,13 @@ const createEvent = async (req, res) => {
 
 const checkPrivatePassword = async (req, res) => {
 
-const { id , privateEvent_password } = req.body;
-try {
-  if (!id || !privateEvent_password)
-    return res
-    .status(500)
-    .send({msg : "You must enter an id and a privateEvent_password" })
+  const { id , privateEvent_password } = req.body;
+
+  try {
+    if (!id || !privateEvent_password)
+      return res
+        .status(500)
+        .send({msg : "You must enter an id and a privateEvent_password" })
 
     const event = await Event.findOne({
       where: {
@@ -214,7 +222,12 @@ try {
     }
     return res.status(200).json(event);
 } catch (error) {
-  return  res.status(404).json({ error: error.message });
+  console.log(error);
+  return res.status(500).json({
+    error: {
+      message: error.message,
+    },
+  });
 }
 };
 
