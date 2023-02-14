@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosModeEventDetail, axiosModeEditEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
+import { axiosModeEventsBuys } from "../../Slice/EventsBuysForUser/BuysSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import BuyButton from "./BuyButton/BuyButton";
@@ -14,18 +15,39 @@ import style from './CardDetail.module.css';
 const CardDetail = () => {
 
     // const [assistant, setAssistant] = useState(false);
-    const user = useSelector(state => state.user);
+    
     const { eventDetail } = useSelector(state => state.eventDetail);
+    const dispatch = useDispatch();
+    const { id } = useParams();
+
+    // estados para usuario organizador
+    const user = useSelector(state => state.user);
     const [organizer, setOrganizer] = useState(false);
-    const [edit, setEdit] = useState(false);
+    const [edit, setEdit] = useState({
+        name: false,
+        description: false
+    });
     const [editedEvent, setEditedEvent] = useState({
         name: '',
         description: '',
         edited: false
     });
-    const dispatch = useDispatch();
-    const { id } = useParams(); 
- 
+    const [errors, setErrors] = useState({});
+    
+    //funciones de usuario organizador
+    function validate(input){
+        let errors={};
+        if(!input.description.length) {errors.description = 'Description is required'};
+        if (input.name.length === 0) {
+          errors.name = "Title is required";
+        } else if (input.name.length < 4) {
+          errors.name = "Title must have at least 4 characters";
+        } else if (input.name.length > 40) {
+          errors.name = "Title must have a maximum of 40 characters";
+        }
+        return errors;
+    }
+
     function handleOnChange(event){
         const object = {
             ...editedEvent,
@@ -33,6 +55,7 @@ const CardDetail = () => {
             edited: true
         }
         setEditedEvent(object);
+        setErrors(validate(object));
     }
 
     async function handleOnClick(event) {
@@ -45,12 +68,15 @@ const CardDetail = () => {
 
     function editButton(event) {
         event.preventDefault();
-        console.log(event.target.id);
-        setEdit(true);
+        setEdit({
+            ...edit,
+            [event.currentTarget.id]: true
+        });
     }
 
     useEffect(() => {
         dispatch(axiosModeEventDetail(id));
+        dispatch(axiosModeEventsBuys());
         return () => dispatch(axiosModeEventDetail());
     }, [dispatch]);
 
@@ -75,18 +101,20 @@ const CardDetail = () => {
                         <div className={style.containerimg}>
                             <img src={eventDetail.cover_pic ? eventDetail.cover_pic : covers[eventDetail.category.name]} alt='cover_pic'/>
                         </div>
-                        {edit === false ? 
-                            <h1>{eventDetail.name?.toUpperCase()} {organizer === true && <a onClick={editButton}><AiFillEdit size={35}/></a>}</h1> :
+                        {edit.name === false ? 
+                            <h1>{eventDetail.name?.toUpperCase()} {organizer === true && <a id="name" onClick={editButton}><AiFillEdit size={35}/></a>}</h1> :
                             <div className={style.organizerdiv}>
-                                <input className={style.organizerinput} type="text" name="name" value={editedEvent.name} onChange={handleOnChange}/>
+                                <input className={errors.name ? style.organizerinput_error : style.organizerinput} type="text" name="name" value={editedEvent.name} onChange={handleOnChange}/>
                                 {organizer === true && <a className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}
+                                {organizer === true && errors.name && <p>{errors.name}</p>}
                             </div>
                         }
                     </div> 
                     <div className={style.containerdescription}> 
-                        {edit === false ? <p>{eventDetail.description}</p> : <textarea name="description" value={editedEvent.description} onChange={handleOnChange}/>}
-                        {organizer === true && <a className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}
+                        {edit.description === false ? <p>{eventDetail.description}</p> : <textarea className={errors.description ? style.textarea_error : style.textarea_border} name="description" value={editedEvent.description} onChange={handleOnChange}/>}
+                        {organizer === true && <a id="description" className={style.organizericon} onClick={editButton}><AiFillEdit size={35}/></a>}
                     </div>
+                    {organizer === true && errors.description && <p className={style.textdescription_error}>{errors.description}</p>}
                 </div>
             }
 
@@ -118,14 +146,18 @@ const CardDetail = () => {
                         </div>
                     </div> 
 
-                    {organizer === false && <BuyButton/>}
+                    {organizer === false && <BuyButton organizer={organizer} edited={editedEvent.edited}/>}
                     
-                    {organizer === true && 
-                        <div className={style.organizerbutton}>
-                            <a className={`btnprimario ${editedEvent.edited === false && style.organizerbutton_disabled}`} href="" onClick={handleOnClick}>
-                                <span>Save Changes</span>
-                            </a>
-                        </div>
+                    {organizer === true &&
+                        <div className={style.container_organizerbutton}>
+                            <div className={style.organizerbutton_div}>
+                              <div className={style.organizerbutton}>
+                                <a className={`btnprimario ${editedEvent.edited === false || Object.keys(errors).length > 0 ? style.organizerbutton_disabled : null}`} href="" onClick={handleOnClick}>
+                                  <span>Save Changes</span>
+                                </a>
+                              </div>
+                            </div>
+                        </div> 
                     }
                 </div>
             }

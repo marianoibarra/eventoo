@@ -5,13 +5,13 @@ import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 
 
 
-const BuyButton = ({id}) => {
+const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
+  const { events } = useSelector(state => state.eventsBuysSlice);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
-  
   function handleButtonSubtraction() {
     setTickets(tickets - 1);
   }
@@ -20,16 +20,12 @@ const BuyButton = ({id}) => {
     setTickets(tickets + 1);
   }
 
-  function handleOnClick(event) {
-    event.preventDefault();
-  }
-
   return (
     
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} tickets={tickets}/> }
-     
-      {isPaid === true ? 
+
+      {isPaid === true && !events.find(element => element.status === 'PENDING') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -49,8 +45,10 @@ const BuyButton = ({id}) => {
           <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>{`Buy by $${totalPrice}`}</button>         
         </div>
           </div>
-        </div> 
-        : 
+        </div>
+      }
+
+      {isPaid === false && !events.find(element => element.status === 'PENDING') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -69,6 +67,17 @@ const BuyButton = ({id}) => {
             <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>Book a place</button>  
           </div>
         </div>      
+      }
+
+      {events.length > 0 && events.find(element => element.status === 'PENDING') ? 
+        <div className={style.container_buyer_pending}>
+          <div className={style.buyer_pending}>
+              <p>
+                Sorry! you have a pending transaction, please finalize the transaction before buying another ticket.
+              </p>
+          </div>
+        </div>
+        : null
       }
     </div>
   );
