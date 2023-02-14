@@ -16,7 +16,6 @@ try {
   const user = await User.findByPk(userId);
   const event = await Event.findByPk(id, {
     where:{ isPublic: true },
-    attributes:  { exclude: ["privateEvent_password"] }
   });
 
 
@@ -25,8 +24,9 @@ try {
     include: [{
       model: Event,
       as: "favorites",
-      where: { id: id },
-      attributes:  { exclude: ["privateEvent_password"] },
+      where: { id: id,
+              isPublic: true
+            },
     }]
     });
 
@@ -70,10 +70,7 @@ const deleteFavorite = async (req, res) => {
    const userId  = req.userId;
 
    const user = await User.findByPk(userId);
-   const event = await Event.findByPk(id, {
-    where:{ isPublic: true },
-    attributes: { exclude: ["privateEvent_password"] }
-  });
+   const event = await Event.findByPk(id);
 
    await user.removeFavorites(event);
 
