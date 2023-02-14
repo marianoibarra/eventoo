@@ -140,22 +140,22 @@ User.prototype.validPassword = async function (password) {
 
 
 Event.beforeCreate(async function (event) { 
-  if(event.privateEvent_pasword) { 
+  if(event.privateEvent_password) { 
     const salt = await bcrypt.genSalt(10);
-    event.privateEvent_pasword = await bcrypt.hash(event.privateEvent_pasword, salt);
+    event.privateEvent_password = await bcrypt.hash(event.privateEvent_password, salt);
   }
 });
 
 
 Event.beforeUpdate(async function (event) {
-  if(event.privateEvent_pasword) {
+  if(event.privateEvent_password) {
     const salt = await bcrypt.genSalt(10);
-    event.privateEvent_pasword = await bcrypt.hash(event.privateEvent_pasword, salt);
+    event.privateEvent_password = await bcrypt.hash(event.privateEvent_password, salt);
   }
 });
 
-Event.prototype.validPassword = async function (privateEvent_pasword) {
-  return await bcrypt.compare(privateEvent_pasword, this.privateEvent_pasword);
+Event.prototype.validPassword = async function (privateEvent_password) {
+  return await bcrypt.compare(privateEvent_password, this.privateEvent_password);
 };
 
 

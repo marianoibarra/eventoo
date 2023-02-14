@@ -173,10 +173,51 @@ const createEvent = async (req, res) => {
 
 const checkPrivatePassword = async (req, res) => {
 
+const { id , privateEvent_password } = req.body;
+try {
+  if (!id || !privateEvent_password)
+    return res
+    .status(500)
+    .send({msg : "You must enter an id and a privateEvent_password" })
+
+    const event = await Event.findOne({
+      where: {
+        id
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+
+  if (!event) {
+    return res.status(401).send({ msg: " id and privateEvent_password is incorrect" });
+  };
+
+  const matchPassword = await event.validPassword(privateEvent_password);
+    if (!matchPassword) {
+      return res.status(401).send({ msg: "privateEvent_password is incorrect" });
+    }
+    return res.status(200).json(event);
+} catch (error) {
+  return  res.status(404).json({ error: error.message });
+}
 };
 
-
-// CONSULTAR PORQUE AQUI DEBERIA TRAER TODOS LOS EVENTOS DE ESE USUARIO INDISTINTAMENTE SI ES PUBLICO O PRIVADO
 const getEventByUser = async ({ userId }, res) => { 
   try {
     const events = await Event.findAll({
