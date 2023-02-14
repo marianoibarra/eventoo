@@ -199,7 +199,13 @@ const login = async (req, res) => {
       include: "address",
     });
     if (!user) {
-      return res.status(401).send({ msg: "Email or password is incorrect" });
+      return res.status(401).send({ msg: "Email is incorrect" });
+    }
+
+    if (!user.password) {
+      return res.status(401).send({
+        msg: "your account is connected with google. use the google button to log in",
+      });
     }
 
     const matchPassword = await user.validPassword(password);
@@ -300,23 +306,22 @@ const checkResetToken = async (req, res) => {
   }
 };
 
-const getProfile = async ({userId},res) => {
- 
-try {
-
-  const profileUser = await User.findByPk(userId, {
-    attributes: { exclude: ["password"] },
-    include: [{
-      model: Address,
+const getProfile = async ({ userId }, res) => {
+  try {
+    const profileUser = await User.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: Address,
           as: "address",
-          attributes: { exclude: ["id"] }
-  }]
-  });
-  res.status(200).json(profileUser);
-  
-} catch (error) {
-  res.status(500).json({ msg: error.message });
-}
+          attributes: { exclude: ["id"] },
+        },
+      ],
+    });
+    res.status(200).json(profileUser);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 };
 
 const resetPassword = async (req, res) => {
@@ -410,7 +415,7 @@ const verifyAdmins = async (req, res, next) => {
     if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {
-      res.status(401).json({ msg: "You are not an ADMIN" }); 
+      res.status(401).json({ msg: "You are not an ADMIN" });
     }
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -431,8 +436,6 @@ const verifySuperAdmin = async (req, res, next) => {
     res.status(404).json({ error: error.message });
   }
 };
-
-
 
 module.exports = {
   register,
