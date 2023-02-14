@@ -48,6 +48,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
   };
 
   const handleGroupPublic = (e) => {
+    console.log('public', input.isPublic, input)
     setInput({
       ...input,
       isPublic: e.target.name === 'Public',
@@ -66,8 +67,8 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           handleGroup={handleGroupPublic}
           input={input}
         />
-        {showMsg.isPublic&&(
-                            <p className={style.warning}>{errors.isPublic}</p>
+        {input.isPublic === false &&(
+                            <p>Private events wil not show in the home page</p>
                         )}
         <p className={style.text}>
           Choose if your guests will pay for asist to the event.
@@ -93,7 +94,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
         <div className={style.priceContainer}>
           <h4 className={style.parr}>Price:</h4>
           <input
-            placeholder='Price'
+            placeholder='$'
             className={style.inputs}
             name='price'
             value={input.price}
