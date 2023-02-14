@@ -1,14 +1,44 @@
-.image{
-    color: var(--primary-color);
-    margin: 15px 0;
-}
-
-.container_image{
+.containerVoucher_tittle {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.picture{
+
+.containerVoucher_aceptar>button {
+    position: absolute;
+    bottom: 6%;
+    left: 55%;
+}
+
+.containerVoucher_cancelar>button {
+    position: absolute;
+    bottom: 6%;
+    right: 50%;
+}
+
+.containerVoucher_subTittle {
+    display: flex;
+    margin-top: 1.4%;
+    font-size: 15px;
+    font-weight: 400;
+    width: 100%;
+    justify-content: center;
+    letter-spacing: 2px;
+    color: var(--primary-color);
+}
+
+.image {
+    color: var(--primary-color);
+    margin: 15px 0;
+}
+
+.container_image {
+    display: flex;
+    justify-content: center;
+}
+
+.picture {
     /* background-image: url('../Resources/Portada.jpg'); */
     height: 250px;
     width: 500px;
@@ -26,8 +56,9 @@
 }
 
 .imgDropArea {
-    width: 100%;
-    height: 100%;
+    width: 50%;
+    height: 50%;
+    margin-left: 5%;
     max-width: 1280px;
 }
 
@@ -61,8 +92,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     width: 100%;
-    height: 100%;    
+    height: 100%;
+    position: absolute;
 }
 
 .uploadButton {
@@ -116,7 +149,7 @@
 .imgPreview {
     width: 366px;
     height: 600px;
-    background-image: url('../../Assets/successfullyImgPDF.png');
+    background-image: url('../../../../Assets/successfullyImgPDF.png');
     background-size: contain;
     background-repeat: no-repeat;
     animation: previewIn .3s ease-in-out;
@@ -128,7 +161,7 @@
     position: absolute;
     right: 12px;
     top: 12px;
-    background:none;
+    background: none;
     outline: none;
     border: none;
     background-color: #0005;
@@ -150,6 +183,7 @@
         transform: scale(110%);
         filter: blur(6px) brightness(85%);
     }
+
     to {
         transform: scale(100%);
         filter: none
@@ -170,7 +204,7 @@
     background-size: cover;
     background-position: center center;
     transform: scale(110%);
-    
+
 }
 
 .uploadMsg {
@@ -186,7 +220,9 @@
 }
 
 @media screen and (max-width: 940px) {
-    .imageWrapper, .defaultDropArea {
+
+    .imageWrapper,
+    .defaultDropArea {
         border-radius: 48px 48px 0 0;
     }
 
@@ -213,7 +249,7 @@
 
     .defaultDropArea p {
         display: none;
-       
+
     }
 
     .uploadButton {
