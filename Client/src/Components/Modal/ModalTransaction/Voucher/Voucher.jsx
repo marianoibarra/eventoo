@@ -58,10 +58,6 @@ const Voucher = () => {
     dispatch(axiosPutTicket({ id, urlPDF }))
   }, [pdfIsFetching])
 
-  // if (loading) return <h1>Loading..</h1>
-  // if (error) return <h1>{error.msg ? error.msg : 'error'}.</h1>
-
-
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -171,7 +167,7 @@ const Voucher = () => {
             : <div className={Style.imgPreviewWrappper}>
               <img className={Style.imgPreview} />
 
-              <Link to='/home'>
+              <Link to='/'>
                 <button
                   type='button'
                   className={'btnprimario'} >

@@ -57,7 +57,7 @@ const ModalCancel = ({ setShowModal }) => {
           <button type='button' className={flag ? 'no-visibility' : Style.butonYes} onClick={handleFlag}>Yes</button>
         </Link>
 
-        <Link className={flag ? Style.butonAcept : 'no-visibility'} to='/home'>
+        <Link className={flag ? Style.butonAcept : 'no-visibility'} to='/'>
           <button  type='button'  className={flag ? Style.butonAcept : 'no-visibility'} onClick={handleDelete} >Aceptar</button>
         </Link>
 

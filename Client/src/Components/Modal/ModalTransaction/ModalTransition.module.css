@@ -1,5 +1,6 @@
 .containerBuyTickets{
     display: none;
+    position: relative
 }
 
 .container_tickets {
