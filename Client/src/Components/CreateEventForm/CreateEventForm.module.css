@@ -89,6 +89,20 @@
     cursor: not-allowed;
 }
 
+.containerimg{
+    margin: 20px;
+}
+
+.img{
+    border-radius: 30px;
+    max-width: 100%;
+    height: 100%;
+}
+
+.subtitle{
+    color:var(--primary-color);
+}
+
 /* Paleta colores{
     #121318 Negro
     #005D5E Turquesa O
