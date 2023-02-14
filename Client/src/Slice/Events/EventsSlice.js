@@ -1,14 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
+import QueryBuilder from 'url-search-query-builder'; 
 
+const q = new QueryBuilder('/');
 
-export const axiosModeEvents = createAsyncThunk(
-  'events/axiosModeEvents',
-  async () => {
-    const res = await API.get('/home/events')
-    return res.data
-  }
-)
+export const getEvents = createAsyncThunk(
+  'events/getEvents',
+  async (filter, { rejectWithValue }) => {
+    try {
+      let query = q.buildUrlWithObj('/', Object.fromEntries(Object.entries(filter).filter(value => value[1])))
+      const response = await API.get(`/home/events/${query}` )
+      return response.data
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data)
+      }
+      throw error
+    }
+})
 
 export const eventsSlice = createSlice({
   name: 'events',
@@ -19,16 +28,15 @@ export const eventsSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [axiosModeEvents.pending]: (state) => {
+    [getEvents.pending]: (state) => {
       state.loading = true
     },
-    [axiosModeEvents.fulfilled]: (state, action) => {
+    [getEvents.fulfilled]: (state, action) => {
       state.events = action.payload;
       state.loading = false;
       state.error = null;
-
     },
-    [axiosModeEvents.rejected]: (state, action) => {
+    [getEvents.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error;
     }
