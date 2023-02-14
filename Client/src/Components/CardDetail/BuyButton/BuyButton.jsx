@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import style from "./BuyButton.module.css";
 import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
+import { useContext } from "react";
+import { SessionContext } from "../../..";
 
 
 
@@ -12,12 +14,25 @@ const BuyButton = () => {
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
+
+  const {isLogged} = useSelector(state => state.user)
+  
+  const { setShowSessionModal } = useContext(SessionContext);
+
   function handleButtonSubtraction() {
     setTickets(tickets - 1);
   }
 
   function handleButtonAddition() {
     setTickets(tickets + 1);
+  }
+
+  const handleBuy = () => {
+    if(isLogged) {
+      setShowModal(!showModal)
+    } else {
+      setShowSessionModal('login')
+    }
   }
 
   return (
@@ -42,7 +57,7 @@ const BuyButton = () => {
           </div>
           <div>
         <div>
-          <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>{`Buy by $${totalPrice}`}</button>         
+          <button className={`btnprimario ${style.buybutton}`} href="" onClick={handleBuy}>{`Buy by $${totalPrice}`}</button>         
         </div>
           </div>
         </div>
@@ -64,7 +79,7 @@ const BuyButton = () => {
               </div>
           </div>
           <div>
-            <button className={`btnprimario ${style.buybutton}`} href="" onClick={()=>setShowModal(!showModal)}>Book a place</button>  
+            <button className={`btnprimario ${style.buybutton}`} href="" onClick={handleBuy}>Book a place</button>  
           </div>
         </div>      
       }
