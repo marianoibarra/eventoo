@@ -55,7 +55,7 @@ function Form(){
     parking:null,
     pet_friendly:null,
     placeName:null,
-    price:null,
+    price:'',
     smoking_zone:null,
     start_date:'',
     start_time:'',
@@ -108,6 +108,12 @@ function Form(){
     const num = parseInt(input.guests_capacity)
     if(!input.guests_capacity ){errors.guests_capacity = 'Capacity is required'
     }else if( isNaN(num) || num < 0) { errors.guests_capacity = 'Enter a valid number'};
+
+    if(input.isPaid === true && (input.price === null || input.price.length === 0)){
+      errors.price = 'Price is required'
+    } else if( (input.isPaid === true) && isNaN (parseInt(input.price)) || (parseInt(input.pice)) < 0){
+      errors.price = 'Enter a valid number';
+    }
 
     console.log(errors)
     return errors;
