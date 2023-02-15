@@ -1,5 +1,6 @@
 const { Event, User, Review } = require("../db");
 
+
 const createReview = async (req, res) => {
 
   const userId = req.userId;
@@ -10,8 +11,9 @@ const createReview = async (req, res) => {
     const user = await User.findByPk(userId);
     const event = await Event.findByPk(id);
 
-    const  reviewNotAllowed = await Event.findOne({
-      where:{ id : id},
+    const reviewNotAllowed = await Event.findOne({
+      where: { id : id },
+    
       include: [{
         model: User,
         as: "organizer",

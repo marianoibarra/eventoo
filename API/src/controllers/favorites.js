@@ -14,7 +14,9 @@ const addFavorite = async (req, res) => {
 
 try {
   const user = await User.findByPk(userId);
-  const event = await Event.findByPk(id);
+  const event = await Event.findByPk(id, {
+    where:{ isPublic: true },
+  });
 
 
   const existingEvent = await User.findOne({
@@ -22,8 +24,9 @@ try {
     include: [{
       model: Event,
       as: "favorites",
-      where: { id: id },
-      attributes: [ ],
+      where: { id: id,
+              isPublic: true
+            },
     }]
     });
 

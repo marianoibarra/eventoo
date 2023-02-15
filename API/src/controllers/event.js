@@ -1,6 +1,7 @@
 const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
+
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -11,6 +12,7 @@ const createEvent = async (req, res) => {
     start_time,
     end_time,
     isPublic,
+    privateEvent_password,
     virtualURL,
     category,
     isPremium,
@@ -33,6 +35,18 @@ const createEvent = async (req, res) => {
     pet_friendly,
     bankAccount,
   } = req.body;
+ 
+
+  if(isPublic === false && !privateEvent_password) {
+      return res.status(400).json({
+        errors: [
+          {
+            message: "private event must have a password"
+          
+          }
+        ]
+      });
+  }
 
   try {
     // if (!name ||
@@ -42,6 +56,7 @@ const createEvent = async (req, res) => {
     //     !start_time ||
     //     !end_time ||
     //     !isPublic ||
+    //     !privateEvent_password||
     //     !virtualURL ||
     //     !isPremium ||
     //     !isPaid ||
@@ -79,6 +94,7 @@ const createEvent = async (req, res) => {
         start_time,
         end_time,
         isPublic,
+        privateEvent_password,
         virtualURL,
         isPremium,
         isPaid,
@@ -102,7 +118,7 @@ const createEvent = async (req, res) => {
         },
       },
       { include: ["address"] }
-    );
+    ); 
 
     if (bankAccount) {
       const bankAccountFromDB = await BankAccount.findByPk(bankAccount);
@@ -153,7 +169,60 @@ const createEvent = async (req, res) => {
   }
 };
 
-const getEventByUser = async ({ userId }, res) => {
+const checkPrivatePassword = async (req, res) => {
+
+  const { id , privateEvent_password } = req.body;
+
+  try {
+    if (!id || !privateEvent_password)
+      return res
+        .status(400)
+        .send({msg : "You must enter an id and a privateEvent_password" })
+
+    const event = await Event.findOne({
+      where: {
+        id
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+
+  if (!event) {
+    return res.status(401).send({ msg: " id and privateEvent_password is incorrect" });
+  };
+
+  const matchPassword = await event.validPassword(privateEvent_password);
+    if (!matchPassword) {
+      return res.status(401).send({ msg: "privateEvent_password is incorrect" });
+    }
+    return res.status(200).json(event);
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({
+    error: {
+      message: error.message,
+    },
+  });
+}
+};
+
+const getEventByUser = async ({ userId }, res) => { 
   try {
     const events = await Event.findAll({
       where: {
@@ -327,6 +396,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
   createEvent,
+  checkPrivatePassword,
   getEventByUser,
   modifyEvent,
   deleteEvent,
