@@ -1,7 +1,7 @@
 const { Event, Address, Category, User, BankAccount } = require("../db");
 const { Op } = require("sequelize");
 
-//MODIFIQUE con el privateeventpassword
+
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -34,10 +34,9 @@ const createEvent = async (req, res) => {
     pet_friendly,
     bankAccount,
   } = req.body;
-  let privateEvent_passwordValue = null;
+ 
 
-  if(isPublic === false) {
-    if(!privateEvent_password) {
+  if(isPublic === false && !privateEvent_password) {
       return res.status(400).json({
         errors: [
           {
@@ -45,18 +44,7 @@ const createEvent = async (req, res) => {
           
           }
         ]
-        
       });
-    } else {
-      privateEvent_passwordValue = privateEvent_password;
-    } 
-  // if  (isPublic === true && privateEvent_password !== null) {
-  //     return res.status(400).json({
-  //       errors: [{
-  //         message: "Public event cannot have a private event password"
-  //       }]
-  //     });
-  //   }
   }
 
   try {
@@ -105,7 +93,7 @@ const createEvent = async (req, res) => {
         start_time,
         end_time,
         isPublic,
-        privateEvent_password: privateEvent_passwordValue,
+        privateEvent_password,
         virtualURL,
         isPremium,
         isPaid,
@@ -185,7 +173,7 @@ const checkPrivatePassword = async (req, res) => {
   try {
     if (!id || !privateEvent_password)
       return res
-        .status(500)
+        .status(400)
         .send({msg : "You must enter an id and a privateEvent_password" })
 
     const event = await Event.findOne({

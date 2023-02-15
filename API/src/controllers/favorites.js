@@ -6,7 +6,7 @@ const {
   BankAccount } 
   = require("../db");
 
-//  TOQUE EL MODEL EVENT EXCLUYENDO DE LOS ATRIBUTOS EL PRIVATEEVENT_PASSWORD
+
 const addFavorite = async (req, res) => {
 
   const { id } = req.body;
@@ -62,7 +62,7 @@ const getFavorites = async (req, res) => {
    }
 };
  
-//modifique
+
 const deleteFavorite = async (req, res) => {
 
   try {
