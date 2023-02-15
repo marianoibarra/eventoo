@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { BiChevronDown } from "react-icons/bi";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
@@ -13,7 +14,7 @@ const Navbar = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
   }
-  
+  const { isLogged } = useSelector((state) => state.user);
   useEffect(()=> {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])

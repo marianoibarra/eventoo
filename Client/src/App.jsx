@@ -32,6 +32,7 @@ import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 import NewHome from "./Pages/NewHome";
+import Admin from "./Pages/Admin";
 
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
@@ -60,7 +61,7 @@ function App() {
     }
   }, []);
 
-  const { isLogged } = useSelector((state) => state.user);
+  const { isLogged, roleAdmin } = useSelector((state) => state.user);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -92,6 +93,7 @@ function App() {
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/setting" element={!isLogged ? <Navigate to='/'/> : <Setting />} />
+        <Route path="/admin" element={isLogged && roleAdmin  && roleAdmin !== "USER" ? <Admin /> : <Navigate to='/'/> }/>
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/Help" element={<Help />} />
@@ -100,6 +102,7 @@ function App() {
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/user-event" element={!isLogged ? <Navigate to='/' /> :<UserEvent />}></Route>
         {/* <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route> */}
         <Route path="/user-event" element={<UserEvent />}></Route>
         <Route path="/forgot-password" element={isLogged ? <Navigate to='/'/> : <ForgotPassword />}></Route>

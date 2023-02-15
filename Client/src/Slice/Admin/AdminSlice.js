@@ -30,6 +30,7 @@ export const getAllCategories = createAsyncThunk(
     "admin/changeUserRole",
     async (userId, thunkAPI) => {
       const response = await API.put(`/admin/users/change/${userId}`);
+      console.log(response , userId)
       return response.data;
     }
   );
@@ -37,7 +38,9 @@ export const getAllCategories = createAsyncThunk(
 export const changeStateEvent = createAsyncThunk(
   "admin/changeStateEvent",
   async (eventId, thunkAPI) => {
+    console.log(eventId)
     const response = await API.put(`/admin/events/${eventId}`);
+    
     return response.data;
   }
 );
@@ -58,6 +61,13 @@ export const disableUser = createAsyncThunk(
 //     return response.data;
 //   }
 // );
+export const changeInfoCategory= createAsyncThunk(
+  "admin/ChangeEvent",
+  async (category, thunkAPI) => {
+    const response = await API.put(`/admin/categories/${category.id}`, category.category);
+    return response.data;
+  }
+);
 
 
 export const adminSlice = createSlice({
@@ -103,7 +113,7 @@ export const adminSlice = createSlice({
     },
     [getAllEvents.fulfilled]: (state, action) => {
       state.loading = false;
-      state.users = state.users.filter((user) => user.id !== action.payload);
+      state.events = action.payload
     },
     [getAllEvents.rejected]: (state, action) => {
       state.loading = false;
@@ -114,10 +124,14 @@ export const adminSlice = createSlice({
     },
     [disableUser.fulfilled]: (state, action) => {
       state.loading = false;
-      const userIndex = state.users.findIndex(
-        (user) => user.id === action.payload
-      );
-      state.users[userIndex].disabled = true;
+      const userId = action.payload.id;
+
+      // 2. Buscar el índice del usuario en el arreglo state.users usando findIndex
+      const userIndex = state.users.findIndex(user => user.id === userId);
+    
+      // 3. Actualizar la propiedad isBanned del usuario con el id correspondiente
+      if (userIndex !== -1) {
+        state.users[userIndex].isBanned = !state.users[userIndex].isBanned }
     },
     [disableUser.rejected]: (state, action) => {
       state.loading = false;
@@ -129,11 +143,14 @@ export const adminSlice = createSlice({
     },
     [changeUserRole.fulfilled]: (state, action) => {
       state.loading = false;
-      const userIndex = state.users.findIndex(
-        (user) => user.id === action.payload
-        );
-      state.users[userIndex].role =
-        state.users[userIndex].role === "admin" ? "user" : "admin";
+      const userId = action.payload.id;
+
+      // 2. Buscar el índice del usuario en el arreglo state.users usando findIndex
+      const userIndex = state.users.findIndex(user => user.id === userId);
+    
+      // 3. Actualizar la propiedad isBanned del usuario con el id correspondiente
+      if (userIndex !== -1) {
+        state.users[userIndex].roleAdmin = state.users[userIndex].roleAdmin === "USER" ? "ADMIN" : "USER"}
     },
     [changeUserRole.rejected]: (state, action) => {
       state.loading = false;
@@ -144,9 +161,6 @@ export const adminSlice = createSlice({
     },
     [changeStateEvent.fulfilled]: (state, action) => {
       state.loading = false;
-      state.events = state.events.filter(
-        (event) => event.id !== action.payload
-      );
     },
     [changeStateEvent.rejected]: (state, action) => {
       state.loading = false;
@@ -154,20 +168,7 @@ export const adminSlice = createSlice({
     },
 
 
-    [disableUser.pending]: (state) => {
-      state.loading = true;
-    },
-    [disableUser.fulfilled]: (state, action) => {
-      state.loading = false;
-      const userIndex = state.users.findIndex(
-        (user) => user.id === action.payload
-      );
-      state.users[userIndex].active = false;
-    },
-    [disableUser.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    },
+
     //   state.loading = true;
     // },
     // [deleteComment.fulfilled]: (state, action) => {
