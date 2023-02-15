@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
             "COMPLETED",
             "FAILED",
             "APPROVED",
-            "REJECTED",
+            "DENIED",
             "CANCELED",
             "INWAITING",
           ];

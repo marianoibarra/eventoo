@@ -24,8 +24,8 @@ const createTransactions = async (req, res) => {
       }
     );
 
-    await newTransaction.setBuyer(user);
-    await newTransaction.setEvent(event);
+      await newTransaction.setBuyer(user);
+      await newTransaction.setEvent(event);
 
     await newTransaction.reload({
       include: [
@@ -59,9 +59,7 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
-    return res.status(201).json(
-      newTransaction,
-    );
+    return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -118,7 +116,7 @@ const getTransactionsByUserSeller = async (req, res) => {
     const userId = req.userId;
     const transactions = await Transaction.findAll({
       where: {
-        "$event.organizer.id$": userId
+        "$event.organizer.id$": userId,
       },
       include: [
         "tickets",
@@ -308,15 +306,33 @@ const ApprovePayment = async (req, res) => {
   try {
     const { isApproved } = req.body;
     const { transactionId } = req.params;
-    const transaction = await Transaction.findByPk(transactionId);
+    const userId = req.userId;
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: {
+        model: Event,
+        as: 'event',
+        attributes: ['organizerId']
+      }
+    });
 
+    console.log (transaction.event.dataValues.organizerId + " console.log " + userId)
+    if(transaction.event.dataValues.organizerId !== userId){
+        return res.status(401).json({
+    error: "Unauthorized: You can only modify transactions of events you organized.",
+  });
+    }
     if (!transaction) {
       return res.status(404).json({
         error: "Transaction not found",
       });
     }
 
-    const status = isApproved ? "APPROVED" : "DENIED";
+    const status =
+      isApproved === true || isApproved === "true"
+        ? "APPROVED"
+        : isApproved === false || isApproved === "false"
+        ? "DENIED"
+        : "INVALID_VALUE_NOT_IS_true_OR_false";
     await transaction.update({ status });
 
     return res.status(200).json({
@@ -329,10 +345,6 @@ const ApprovePayment = async (req, res) => {
     });
   }
 };
-
-
-
-
 
 const cancelTransaction = async (req, res) => {
   try {
