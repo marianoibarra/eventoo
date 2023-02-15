@@ -314,8 +314,7 @@ const ApprovePayment = async (req, res) => {
         attributes: ['organizerId']
       }
     });
-
-    console.log (transaction.event.dataValues.organizerId + " console.log " + userId)
+    
     if(transaction.event.dataValues.organizerId !== userId){
         return res.status(401).json({
     error: "Unauthorized: You can only modify transactions of events you organized.",
