@@ -10,7 +10,7 @@ export const axiosModeEventDetail = createAsyncThunk(
         const res = await API.get(`/home/events/${id}`);
         return res.data;
       }
-      else return {};
+      return {event: {}};
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -50,6 +50,7 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
+      console.log(action.payload)
       state.eventDetail = action.payload.event;
       state.isPublic = action.payload.isPublic;
       state.loading = false;
