@@ -141,6 +141,7 @@ User.beforeUpdate(async function (user) {
 
 // Funcion que se va a usar en el logeo, para verificar que sea la contraseña.
 User.prototype.validPassword = async function (password) {
+  console.log(this)
   return await bcrypt.compare(password, this.password);
 };
 

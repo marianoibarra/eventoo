@@ -1,6 +1,6 @@
 const { Event, Address, Category, User } = require("../db");
 
-const getEventsPublic = async (req, res) => { //modificque excluyendo el privateevent_password en el finone del model event.
+const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
     const queryParams = req.query;
 

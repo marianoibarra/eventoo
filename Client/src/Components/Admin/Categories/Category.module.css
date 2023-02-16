@@ -56,7 +56,7 @@
   color: gray;
 }
 
-button {
+/* button {
   margin-top: auto;
   border: none;
   border-radius: 5px;
@@ -84,4 +84,4 @@ input:focus {
   outline: none;
   box-shadow: 0 0 5px var(--secondary-color);
   border-color: var(--secondary-color);
-}
+} */

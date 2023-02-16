@@ -37,15 +37,12 @@ const createEvent = async (req, res) => {
   } = req.body;
  
 
-  if(isPublic === false && !privateEvent_password) {
-      return res.status(400).json({
-        errors: [
-          {
-            message: "private event must have a password"
-          
-          }
-        ]
-      });
+  if((isPublic === false || isPublic === 'false') && !privateEvent_password) {
+    return res.status(400).json(
+      {
+        msg: "private event must have a password"
+      }
+  )
   }
 
   try {
@@ -274,6 +271,7 @@ const modifyEvent = async (req, res) => {
     address_line,
     city,
     state,
+    privateEvent_password,
     country,
     zip_code,
     disability_access,
@@ -313,6 +311,14 @@ const modifyEvent = async (req, res) => {
         await event.setAddress(newAddress);
       }
 
+      if(isPublic === false && !privateEvent_password) {
+        return res.status(400).json(
+            {
+              msg: "private event must have a password"
+            }
+        )
+    }
+
       await event.update({
         name,
         description,
@@ -324,6 +330,7 @@ const modifyEvent = async (req, res) => {
         category,
         virtualURL,
         isPremium,
+        privateEvent_password,
         isPaid,
         age_range,
         guests_capacity,
@@ -354,6 +361,7 @@ const modifyEvent = async (req, res) => {
             attributes: ["name", "modality"],
           },
         ],
+        attributes:{exclude: ['privateEvent_password']}
       });
 
       res.send({ msg: "Data updated successfully", data: event });
