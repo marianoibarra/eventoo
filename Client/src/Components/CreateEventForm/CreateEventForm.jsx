@@ -62,6 +62,7 @@ function Form() {
     state: null,
     virtualURL: '',
     zip_code: null,
+    privateEvent_password:'',
   }
 
 
@@ -116,6 +117,12 @@ function Form() {
       errors.price = 'Enter a valid number';
     }
 
+    if (input.isPublic === false && input.privateEvent_password.length === 0) {
+      errors.privateEvent_password = "Password is required";
+    } else if (input.privateEvent_password.length < 6){
+      errors.privateEvent_password = "Password must be at least 6 characters length";
+    }
+
     console.log(errors)
     return errors;
   }
@@ -165,7 +172,6 @@ function Form() {
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
       {/* <Lateral/> */}
-
       <form className={style.form} onSubmit={e => handleSubmit(e)}>
         <h1 className={style.title}>EVENT INFORMATION</h1>
         {input.cover_pic !== null?
@@ -174,7 +180,6 @@ function Form() {
           </div>
          : <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
         }
-
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
