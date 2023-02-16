@@ -44,7 +44,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
     }
 
     return (
-        <Box sx={{ }}
+        <Box sx={{ width:'70%'}}
         >
                 <h2 className={style.title}>Title</h2>
                 <p className={style.text}>Pick a name for your event and tell guests why they'll love it.</p>
