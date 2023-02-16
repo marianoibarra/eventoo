@@ -18,7 +18,7 @@ function Buys() {
     <div className={Styles.container}>
       {Array.isArray(events) && events.length !== 0 && events.map(event => (
         <div className={Styles.eventCard} key={event?.name}>
-          <Link to={`/event/${event?.id}`}><h3 className={Styles.eventCardTitle}>Name: {event?.name}</h3></Link>
+          <Link to={`/Event/${event?.id}`}><h3 className={Styles.eventCardTitle}>Name: {event?.name}</h3></Link>
           <p>Start date: {event?.start_date}</p>
           <p>End date: {event?.end_date}</p>
           <p>Category: {event.category?.name}</p>
