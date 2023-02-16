@@ -11,7 +11,7 @@ import { SessionContext } from "../../..";
 const Menu = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { name, last_name, email, profile_pic, isLogged } = useSelector(
+  const { name, last_name, email, profile_pic, isLogged , roleAdmin} = useSelector(
     (state) => state.user
   );
   const dispatch = useDispatch();
@@ -69,6 +69,13 @@ const Menu = () => {
                 </Link>
                 <Link to="/Setting" className={Styles.menuLink}>
                   Settings
+                </Link>
+              </>
+            ) : undefined}
+            {roleAdmin && roleAdmin !== "USER" ? (
+              <>
+                <Link to="/admin" className={Styles.menuLink}>
+                  Dashboard
                 </Link>
               </>
             ) : undefined}

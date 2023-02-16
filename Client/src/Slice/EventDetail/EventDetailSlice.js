@@ -40,6 +40,7 @@ export const eventDetailSlice = createSlice({
   name: "eventDetail",
   initialState: {
     eventDetail: {},
+    isPublic: null,
     loading: false,
     error: null,
   },
@@ -49,7 +50,8 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload;
+      state.eventDetail = action.payload.event;
+      state.isPublic = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -62,7 +64,8 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload;
+      state.eventDetail = action.payload.event;
+      state.isPublic = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },

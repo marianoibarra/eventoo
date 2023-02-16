@@ -1,0 +1,100 @@
+.container {
+  display: grid;
+  width: 100%;
+  padding: 8px 24px;
+  height: calc(100% - 130px);
+  overflow-y: auto;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-content: start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-auto-rows: minmax(300px, 1fr);
+  gap: 16px 24px;
+  height: calc(100% - 42px);
+  padding-bottom: 82px;
+}
+  
+.eventCard {
+  width: 300px;
+  height: max-content;
+  min-height: 150px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #ddd;
+  text-align: center;
+  padding: 30px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: 1s;
+  overflow: hidden;
+}
+
+.eventCard:hover {
+  box-shadow: 5px 5px 20px #ddd;
+  transform: translateY(-10px);
+}
+
+.eventCardTitle {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: var( --dark-text);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.eventCardTitle:hover {
+  color: var(--secondary-color);
+}
+
+.eventCard p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+/* button {
+  margin-top: auto;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  background-color: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #5e5e5e;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 5px var(--secondary-color);
+  border-color: var(--secondary-color);
+} */
+
+
+.user{
+background-color: beige;
+}
+
+.superadmin{
+  background-color: var(--secondary-color);
+}
+
+.ADMIN{
+  background-color: var(--primary-color);
+}

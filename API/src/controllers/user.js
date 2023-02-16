@@ -26,7 +26,7 @@ const googleAuth = async (req, res) => {
 
     if(created) {
       const role = await RoleAdmin.findByPk(3)
-      await newUser.setRoleAdmin(role)
+      await user.setRoleAdmin(role)
     }
 
     await user.reload({

@@ -1,81 +1,82 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { activateEvent } from "../../../Slice/Admin/AdminSlice";
-import { axiosModeEventsBuys } from "../../../Slice/EventsBuysForUser/BuysSlice";
-import Styles from "../Users/Create.module.css";
+import {
+  activateEvent,
+  changeStateEvent,
+} from "../../../Slice/Admin/AdminSlice";
+import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
+import Styles from "./Category.module.css";
+import ImputCategorie from "./ImputCategorie";
 
 function Buys() {
-  const categories = useSelector((state) => state.categories);
-
+  const categories = useSelector((state) => state.categories.categories.categories);
   const [name, setName] = useState("");
-const [modality, setModality] = useState("");
-const [image, setImage] = useState("");
+  const [modality, setModality] = useState("");
+  const [image, setImage] = useState("");
+  const [showDetails, setShowDetails] = useState(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
 
-const dispatch = useDispatch();
-useEffect(() => {
-  dispatch(axiosModeEventsBuys());
-}, [dispatch]);
+    dispatch(axiosModeCategories());
 
-const handleInputChange = (e) => {
-  switch (e.target.name) {
-    case "name":
-      setName(e.target.value);
-      break;
-    case "modality":
-      setModality(e.target.value);
-      break;
-    case "state":
-      setImage(e.target.value);
-      break;
-    default:
-      break;
-  }
-};
+  }, [dispatch,]);
 
-const handleClick = (e) => {
-  if(name.length===0){
-    setName(e.name)
-  }
-  if(modality.length===0){
-    setModality(e.name)
-  }
-  if(image.length===0){
-    setImage(e.name)
-  }
-  dispatch(activateEvent(e.id, { name, modality, image }));
-};
+  const handleInputChange = (e) => {
+    switch (e.target.name) {
+      case "name":
+        setName(e.target.value);
+        break;
+      case "modality":
+        setModality(e.target.value);
+        break;
+      case "state":
+        setImage(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
 
-return (
-  <div className={Styles.container}>
-    {categories.length > 0
-      ? categories.map((categorie) => {
-        (
-          <div className={Styles.eventCard} key={categorie.name}>
-            <h3 className={Styles.eventCardTitle}>
-              Nombre: {categorie.name}
-            </h3>
-            <input
-              name="name"
-              value={name}
-              onChange={handleInputChange}
-            />
-            <p>modality: {categorie.modality}</p>
-            <input
-              name="modality"
-              value={modality}
-              onChange={handleInputChange}
-            />
-            <p>State: {categorie.image}</p>
-            <input
-              name="state"
-              value={image}
-              onChange={handleInputChange}
-            />
-            <button onClick={() => handleClick(categorie)}></button>
-          </div>
-        )})
-      : u1ndefined}
-  </div>
+  const handleClick = (e) => {
+    if (name.length === 0) {
+      setName(e.name);
+    }
+    if (modality.length === 0) {
+      setModality(e.modality);
+    }
+    if (image.length === 0) {
+      setImage(e.image);
+    }
+
+    const event = {id:e.id,
+ name:name,
+    modality:modality,
+    image:image
+  
+    };
+    console.log(e)
+    dispatch(changeStateEvent(event));
+    setName('')
+    setModality('')
+    setImage('')
+  };
+
+  return (
+    <div className={Styles.container}>
+ <ImputCategorie
+      categories={categories}
+      name={name}
+      modality={modality}
+      image={image}
+      handleInputChange={handleInputChange}
+      handleClick={handleClick}
+      setShowDetails={setShowDetails}
+      showDetails={showDetails}
+      setName={setName}
+setModality={setModality}
+setImage={setImage}
+/>
+    </div>
   );
 }
 

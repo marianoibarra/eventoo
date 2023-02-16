@@ -1,47 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  activateEvent,
-  deactivateEvent,
+  changeStateEvent,
+  getAllEvents,
 } from "../../../Slice/Admin/AdminSlice";
 import { axiosModeEventsBuys } from "../../../Slice/EventsBuysForUser/BuysSlice";
-import Styles from "../Users/Create.module.css";
+import Styles from "../Categories/Category.module.css";
+import EventsInfo from "./EventsInfo";
 
 function EventsAdmin() {
-  const { events } = useSelector((state) => state.events);
+  const { events } = useSelector((state) => state.admin);
 
+  const [showDetails, setShowDetails] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(axiosModeEventsBuys());
+    dispatch(getAllEvents());
   }, [dispatch]);
 
   const handleChange = (e) => {
-    e.preventDefault();
-
-    dispatch(activateEvent(e));
+    console.log(e)
+    dispatch(changeStateEvent(e.id));
   };
-  const handleDelete = (e) => {
-    e.preventDefault();
 
-    dispatch(deactivateEvent(e));
-  };
 
   return (
     <div className={Styles.container}>
-      {events.length > 0 ? (
-        events.map((event) => (
-          <div className={Styles.eventCard} key={event.name}>
-            <h3 className={Styles.eventCardTitle}>Nombre: {event.name}</h3>
-            <p>
-              Organizador: {event.organizer.name && event.organizer.last_name}
-            </p>
-            <p>Fecha de Finalización: {event.end_time}</p>
-            <p>Category: {event.category.modality}</p>
-            <button onClick={handleChange(event.id)}>Pause</button>
-            <button onClick={handleDelete(event.id)}>Delete</button>
-          </div>
-        ))
-      ) : (
+      {events.length > 0 ? <EventsInfo
+      events={events}
+      handleChange={handleChange}
+      setShowDetails={setShowDetails}
+      showDetails={showDetails}
+      
+      
+      /> : (
         <h2>Loading...</h2>
       )}
     </div>

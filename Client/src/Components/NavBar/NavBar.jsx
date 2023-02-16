@@ -13,7 +13,6 @@ const Navbar = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
   }
-  
   useEffect(()=> {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])

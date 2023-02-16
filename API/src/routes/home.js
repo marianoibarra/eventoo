@@ -3,6 +3,7 @@ const {
   getEventsPublic,
   getCategories,
   getEventById,
+  checkEventPassword,
 } = require("../controllers/home");
 
 const router = Router();
@@ -10,5 +11,6 @@ const router = Router();
 router.get("/categories", getCategories);
 router.get("/events", getEventsPublic);
 router.get("/events/:id", getEventById);
+
 
 module.exports = router;

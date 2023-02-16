@@ -9,7 +9,7 @@ export const getEvents = createAsyncThunk(
   async (filter, { rejectWithValue }) => {
     try {
       let query = q.buildUrlWithObj('/', Object.fromEntries(Object.entries(filter).filter(value => value[1])))
-      const response = await API.get(`/home/events/${query}` )
+      const response = await API.get(`/home/events${query}` )
       return response.data
     } catch (error) {
       if (error.response) {

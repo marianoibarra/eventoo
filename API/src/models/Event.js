@@ -38,6 +38,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
+    privateEvent_password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     virtualURL: {
       type: DataTypes.STRING,
       allowNull: true,

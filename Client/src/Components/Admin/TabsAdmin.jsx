@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Users from './Users/Users';
 import Category from './Categories/Category';
 import EventsAdmin from './Events/EventAdmin';
+import { useDispatch } from 'react-redux';
+import { getAllEvents } from '../../Slice/Admin/AdminSlice';
+import { axiosModeCategories } from '../../Slice/Filter/categorieSlice';
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 function TabsComponent() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
+  const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -56,18 +59,17 @@ function TabsComponent() {
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>
-          <Category/>
+          <EventsAdmin/>
         </div>
       )}
       {value === 1 && (
         <div className={classes.content}>
-          
-          <Users/>
+          <Category/>
         </div>
       )}
       {value === 2 && (
         <div className={classes.content}>
-          <EventsAdmin/>
+          <Users/>
         </div>
       )}
     </div>
