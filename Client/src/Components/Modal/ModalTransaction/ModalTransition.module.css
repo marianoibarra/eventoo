@@ -93,10 +93,32 @@ position: relative;
     font-size: 19px;
 }
 
+<<<<<<< Updated upstream
 .container_detailEvent {
     margin-left: 26.1%;
     margin-top: -28.3%;;
     position: absolute;
+=======
+.btnPedido{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    font-size: 1.3vw;
+    font-weight: 500;
+    border: none;
+    color: var(--white-text);
+    cursor: pointer;
+    margin: 0 auto;
+    height: 50px;
+    background-size: 300% 100%;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+}
+
+.container_detailEvent {     
+    width: 50%;
+>>>>>>> Stashed changes
     display: flex;
     justify-content: end;
     width: 600px;
@@ -151,7 +173,11 @@ position: relative;
 .detailBankAccount{
 display: flex;
     position: relative;
+<<<<<<< Updated upstream
     bottom: 84px;
+=======
+     bottom: 50px; 
+>>>>>>> Stashed changes
     align-items: center;
     flex-direction: column;
     width: 100%;

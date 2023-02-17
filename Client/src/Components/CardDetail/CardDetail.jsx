@@ -77,7 +77,7 @@ const CardDetail = () => {
     useEffect(() => {
         dispatch(axiosModeEventDetail(id));
         dispatch(axiosModeEventsBuys());
-        return () => dispatch(axiosModeEventDetail());
+        // return () => dispatch(axiosModeEventDetail());
     }, [dispatch]);
 
     useEffect(() => {

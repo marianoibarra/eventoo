@@ -84,6 +84,7 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
+<<<<<<< Updated upstream
       <div className={isVoucher ? '' : Style.containerBuyTickets}>
         <div className={Style.container_tickets}>
           <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
@@ -99,6 +100,32 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
             Realizar Pedido
           </button>
         </div>
+=======
+      <div className={Style.container_Transaction}>
+        {isVoucher ?
+          <div className={Style.containerBuyTickets}>
+            <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
+            <h3 className={Style.dataTicket_user}>comprando como <p>{email}</p></h3>
+            <div className={Style.container_tickets}>
+              {ticketFormArray}
+            </div>
+
+            <div className={Style.modify}>
+              <button
+                className={isButtonDisabled ? Style.btnPedido : `btnprimario `}
+                onClick={handleSubmit}
+                disabled={isButtonDisabled} >
+                Realizar Pedido
+              </button>
+            </div>
+          </div> :
+          <div className={Style.container_voucer}>
+            <Voucher />
+          </div>
+        }
+
+
+>>>>>>> Stashed changes
         <div className={Style.container_detailEvent}>
           <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
         </div>
