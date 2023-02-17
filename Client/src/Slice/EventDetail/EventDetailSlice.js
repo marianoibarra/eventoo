@@ -25,7 +25,6 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   async ({id, body}, { rejectWithValue }) => {
     try {
       const res = await API.put(`/event/${id}`, body);
-      console.log('data', res.data);
       return res.data;
     } catch (error) {
       if (error.response) {
@@ -50,7 +49,6 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
-      console.log(action.payload)
       state.eventDetail = action.payload.event;
       state.isPublic = action.payload.isPublic;
       state.loading = false;

@@ -62,7 +62,9 @@ const CardDetail = () => {
         event.preventDefault();
         if(editedEvent.edited === true){
             await dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
-            window.location.reload()
+            setEditedEvent({...editedEvent, edited: false});
+            setEdit({name: false, description: false});
+            await dispatch(axiosModeEventDetail(id));
         }
     }
 
@@ -81,7 +83,7 @@ const CardDetail = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if(eventDetail.organizer){
+        if(eventDetail?.organizer){
             if(user.id === eventDetail.organizer.id){
                 setOrganizer(true);
                 setEditedEvent({
@@ -95,7 +97,7 @@ const CardDetail = () => {
 
     return(
         <>
-            {Object.keys(eventDetail).length > 0 && 
+            {eventDetail && Object.keys(eventDetail).length > 0 && 
                 <div className={style.containertop}>
                     <div className={style.container_img_and_h1}>
                         <div className={style.containerimg}>
@@ -120,7 +122,7 @@ const CardDetail = () => {
 
             <EventInformation/>
 
-            {Object.keys(eventDetail).length > 0 && 
+            {eventDetail && Object.keys(eventDetail).length > 0 && 
                 <div className={style.containerbottom}>
                     <div className={style.containerdate}>
                         <div className={style.containericon}>
@@ -146,7 +148,7 @@ const CardDetail = () => {
                         </div>
                     </div> 
 
-                    {organizer === false && <BuyButton organizer={organizer} edited={editedEvent.edited}/>}
+                    {organizer === false && <BuyButton />}
                     
                     {organizer === true &&
                         <div className={style.container_organizerbutton}>
