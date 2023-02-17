@@ -181,6 +181,14 @@ Event.beforeFind((options) => {
     }
   } 
 
+  if(options.where['$address.state$']) {
+    options.where[Sequelize.Op.or] = [
+      {'$address.state$': options.where['$address.state$']},
+      {"$category.modality$": 'Virtual'}
+    ]
+    delete options.where['$address.state$']
+  }
+
   if (options.where.isNextWeekend) {
     options.where.start_date = {
       [Sequelize.Op.or]: [
