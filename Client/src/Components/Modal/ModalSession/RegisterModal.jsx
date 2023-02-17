@@ -106,10 +106,6 @@ const RegisterModal = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(input)
-  }, [input])
-
   const [step, setStep] = useState(isNewUser ? styles.s2: styles.s1);
 
   return (
@@ -258,7 +254,6 @@ const RegisterModal = () => {
                     value={input.born}
                     OpenPickerButtonProps={{tabIndex: -1}}
                     onChange={(value) => {
-                      console.log(value)
                       setInput({
                         ...input,
                         born: value._d ? value._d : value,

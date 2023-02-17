@@ -79,7 +79,6 @@ export const googleLogin = createAsyncThunk(
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
        API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
-      console.log(response.data)
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
       } else {

@@ -11,7 +11,6 @@ const BankAccountCards = ({ buttons, setInput, input }) => {
       ...input,
       bankAccount: buttons[id].id
     });
-    console.log(input)
   };
 
   return (

@@ -15,14 +15,11 @@ export const RecoverPass = createAsyncThunk('auth/recover', async (formData, { r
   }
 })
 export const RecoverPassput = createAsyncThunk('auth/recoverPut', async (formData, { rejectWithValue }) => {
-console.log(formData)
   try {
     const response = await API.put(`/user/reset-password/`,formData )
-    console.log(response)
     return response.data
   } catch (error) {
     if (error.response) {
-      console.log(error.response.data)
       return rejectWithValue(error.response.data)
     }
     throw error

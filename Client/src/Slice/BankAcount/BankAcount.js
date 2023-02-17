@@ -5,7 +5,6 @@ export const getBankAccounts = createAsyncThunk(
   'bankAccounts/getBankAccounts',
   async () =>
   {try {
-    console.log(API.defaults.headers)
     const res = await API('/bank-account');
     return res.data.bankAccounts
   } catch (error) {
@@ -22,7 +21,6 @@ export const createBankAccount = createAsyncThunk(
   return response.data
 } catch (error) {
   if (error.response) {
-      console.log(error.response.data)
     return rejectWithValue(error.response.data)
   }
   throw error

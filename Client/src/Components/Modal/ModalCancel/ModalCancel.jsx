@@ -21,12 +21,10 @@ const ModalCancel = ({ setShowModal }) => {
       setLoading(true)
       setError(false)
       try {
-        console.log(axios.defaults.headers.common)
         const res = await API.get('/transaction/' + `${id}`)
         setLoading(false)
         setData(res.data)
       } catch (error) {
-        console.log(error)
         setError(error)
         setLoading(false)
       }
@@ -35,7 +33,6 @@ const ModalCancel = ({ setShowModal }) => {
     getTransaction()
   }, []);
 
-  console.log(id, 'soy el id')
 
   const handleDelete = () => {
     dispatch(axiosCANCELTicket(id))   
@@ -46,7 +43,6 @@ const ModalCancel = ({ setShowModal }) => {
     setFlag(true)
   }
 
-  console.log(data)
 
   return (
     <Modal setShowModal={setShowModal}>

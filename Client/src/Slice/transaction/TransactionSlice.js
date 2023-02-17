@@ -7,12 +7,10 @@ export const axiosPostTicket = createAsyncThunk(
   async (object, { rejectWithValue }) => {
     try {
       const res = await API.post('/transaction', object)
-      console.log(res.data)
       localStorage.setItem('idTransaction', JSON.stringify(res.data))
       return res.data
     } catch (error) {
       if (error.res) {
-        console.log(error.res.data)
         return rejectWithValue(error.res.data)
       }
       throw error
