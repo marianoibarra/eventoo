@@ -119,7 +119,7 @@ function Form() {
 
     if (input.isPublic === false && input.privateEvent_password.length === 0) {
       errors.privateEvent_password = "Password is required";
-    } else if (input.privateEvent_password.length < 6){
+    } else if ((input.isPublic === false) && input.privateEvent_password.length < 6){
       errors.privateEvent_password = "Password must be at least 6 characters length";
     }
 

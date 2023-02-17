@@ -187,12 +187,13 @@ export default function GoogleMaps({ input, setInput }) {
           );
         }}
       />
-      <div style={{marginTop: '12px', marginBottom: '12px' ,}}>
+      <div style={{marginTop: '12px', marginBottom: '12px' ,display:'flex', justifyContent:'center'}}>
         {coord && (
           <StaticGoogleMap
             style={mapStyle}
             zoom={13}
-            size="390x150"
+            size='350x150'
+            scale={2}
             className="img-fluid"
             apiKey="AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g"
           >

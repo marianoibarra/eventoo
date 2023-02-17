@@ -9,6 +9,7 @@ import CheckboxFacilities from './CheckBox';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Box from "@mui/material/Box";
+import GoogleMaps from '../../Modal/ModalSession/MapRegister';
     
 
 function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, setSelectedModality}){
@@ -67,9 +68,10 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
               <div>
               <TextField
                     select
+                    ref={selectRef}
                     label="Category"
                     name='category'
-                    defaultValue="Category"
+                    value={input.category}
                     variant="standard"
                     onChange={handleChanges}
                     onBlur={handleBlur}
@@ -93,7 +95,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
                 {selectedModality === "Presential"
                ? <>
                 <p className={style.text}>Help locate your event and make sure attendees know where to go.</p>
-                <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+                <GoogleMaps input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
                 <p className={style.text}>Select the facilities the place has.</p>
                 <CheckboxFacilities input={input} setInput={setInput}/>
                 </>
