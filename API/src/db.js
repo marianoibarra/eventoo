@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const moment = require('moment');
+const Payment = require("./models/PaymentMP");
 
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
@@ -54,7 +55,8 @@ const {
   Ticket,
   Review,
   EmailCode,
-  RoleAdmin
+  RoleAdmin,
+  PaymentMP
 
 } = sequelize.models;
 
@@ -120,6 +122,12 @@ Event.belongsTo(Address, {as: 'address'})
 
 Event.hasMany(Review)
 Review.belongsTo(Event)
+
+PaymentMP.hasOne(Event);
+Event.belongsTo(PaymentMP);
+
+PaymentMP.hasMany(User);
+User.belongsTo(PaymentMP, {as: "paymentMP" });
 
 
 //PASSWORD USER
