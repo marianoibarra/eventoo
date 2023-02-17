@@ -69,7 +69,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                     name='description'
                     multiline
                     rows={8}
-                    fullWidth
+                    sx={{m: 1, width: '100ch' }}
                     placeholder='Write here...'
                     onChange={handleChange}
                     onBlur={handleBlur}

@@ -12,6 +12,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import TextField from '@mui/material/TextField';
+import { Input } from '@mui/material';
 
 
 
@@ -75,9 +77,9 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
       />
       {input.isPublic === false && (<>
         <p>Remember private events will not show in the home page</p>
-        <h4 style={{margin:'15px'}} >Enter a password for your guests so only them will have the access</h4>
+        <h4 style={{ margin: '15px' }} >Enter a password for your guests so only them will have the access</h4>
         <Textfield
-        required
+          required
           name="privateEvent_password"
           variant="standard"
           label="Password"
@@ -111,37 +113,41 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
         handleGroup={handleGroupPrice}
         input={input}
       />
-      <h4 className={style.parr}>Capacity:</h4>
-      <input
-        placeholder='Capacity'
-        className={style.inputs}
-        name='guests_capacity'
-        value={input.guests_capacity}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        style={showMsg.guests_capacity && errors.guests_capacity ? { border: 'red 1px solid' } : {}} />
-      {showMsg.guests_capacity && (
-        <p className={style.warning}>{errors.guests_capacity}</p>
-      )}
+      <div className={style.capacityContainer}>
+        <h3 className={style.parr}>Capacity:</h3>
+        <TextField
+          name="guests_capacity"
+          variant="standard"
+          value={input.guests_capacity}
+          sx={{ m: 1, width: '25ch' }}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          margin="dense"
+          helperText={showMsg.guests_capacity ? errors.guests_capacity : ""}
+          error={showMsg.guests_capacity && errors.guests_capacity}
+          style={{ marginBottom: showMsg.guests_capacity && errors.guests_capacity ? '0px' : '20px' }}
+        />
+      </div>
       {input.isPaid === true && (
         <div className={style.priceContainer}>
-          <h4 className={style.parr}>Price:</h4>
-          <input
-            placeholder='$'
-            className={style.inputs}
+          <h3 className={style.parr}>Price:</h3>
+          <Input
+            id="standard-adornment-amount"
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
             name='price'
             value={input.price}
             onChange={handleChange}
             onBlur={handleBlur}
-            style={showMsg.price && errors.price ? { border: 'red 1px solid' } : {}} />
-          {showMsg.price && (
+            margin="dense"
+            error={showMsg.price && errors.price}
+            style={{ marginBottom: showMsg.price && errors.price ? '0px' : '20px' }}
+          /> {showMsg.price && (
             <p className={style.warning}>{errors.price}</p>
           )}
-
           {isLogged
             ? <button type='button' className={style.bankAcc} onClick={() => setShowModal(!showModal)}>Select Bank Account</button>
             : <>
-              <p>Please log in for select bank account</p>
+              <p className={style.text}>Please log in for select bank account</p>
               <button type='button' className={style.bankAcc} onClick={() => setShowSessionModal("login")}>Log In</button>
             </>}
           {input.bankAccount && (
@@ -153,7 +159,6 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           )}
         </div>
       )}
-
     </div>
   )
 }
