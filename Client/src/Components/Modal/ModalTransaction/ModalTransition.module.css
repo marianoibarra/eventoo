@@ -93,12 +93,6 @@ position: relative;
     font-size: 19px;
 }
 
-<<<<<<< Updated upstream
-.container_detailEvent {
-    margin-left: 26.1%;
-    margin-top: -28.3%;;
-    position: absolute;
-=======
 .btnPedido{
     display: flex;
     justify-content: center;
@@ -118,7 +112,6 @@ position: relative;
 
 .container_detailEvent {     
     width: 50%;
->>>>>>> Stashed changes
     display: flex;
     justify-content: end;
     width: 600px;
@@ -173,11 +166,7 @@ position: relative;
 .detailBankAccount{
 display: flex;
     position: relative;
-<<<<<<< Updated upstream
-    bottom: 84px;
-=======
      bottom: 50px; 
->>>>>>> Stashed changes
     align-items: center;
     flex-direction: column;
     width: 100%;

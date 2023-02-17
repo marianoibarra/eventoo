@@ -2,8 +2,6 @@
     width: 100%;
     display: flex;
     justify-content: center;
-<<<<<<< Updated upstream
-=======
     font-size: 30px;
     margin-top: 3%;
     font-weight: 400;
@@ -13,7 +11,6 @@
     font-weight: 500;
     color: var(--primary-color);
     margin-left: 2%;
->>>>>>> Stashed changes
 }
 
 
@@ -155,16 +152,6 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
-<<<<<<< Updated upstream
-    height: 100%;
-}
-
-.imgPreview {
-    width: 366px;
-    height: 600px;
-    background-image: url('../../../../Assets/successfullyImgPDF.png');
-    background-size: contain;
-=======
     height: 65%;
     /* margin-bottom: 6.8%; */
     /* background: blueviolet; */
@@ -175,7 +162,6 @@
     width: 80%;
     height: 80%;
     background-size: cover;
->>>>>>> Stashed changes
     background-repeat: no-repeat;
     animation: previewIn .3s ease-in-out;
     z-index: 40;

@@ -84,23 +84,6 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-<<<<<<< Updated upstream
-      <div className={isVoucher ? '' : Style.containerBuyTickets}>
-        <div className={Style.container_tickets}>
-          <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
-          <h3 className={Style.dataTicket_user}>comprando como <p>{email}</p></h3>
-          {ticketFormArray}
-        </div>
-        <div className={Style.modify}
-        >
-          <button
-            className={`btnprimario `}
-            onClick={handleSubmit}
-            disabled={isButtonDisabled} >
-            Realizar Pedido
-          </button>
-        </div>
-=======
       <div className={Style.container_Transaction}>
         {isVoucher ?
           <div className={Style.containerBuyTickets}>
@@ -125,7 +108,6 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
         }
 
 
->>>>>>> Stashed changes
         <div className={Style.container_detailEvent}>
           <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
         </div>
