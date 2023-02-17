@@ -24,8 +24,8 @@ const createTransactions = async (req, res) => {
       }
     );
 
-      await newTransaction.setBuyer(user);
-      await newTransaction.setEvent(event);
+    await newTransaction.setBuyer(user);
+    await newTransaction.setEvent(event);
 
     await newTransaction.reload({
       include: [
@@ -290,7 +290,7 @@ const completeTransaction = async (req, res) => {
         error: "Transaction not found",
       });
     }
-    await transaction.update({ payment_proof, status: "COMPLETED" });
+    await transaction.update({ payment_proof, status: "INWAITING" });
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,
@@ -307,31 +307,44 @@ const ApprovePayment = async (req, res) => {
     const { isApproved } = req.body;
     const { transactionId } = req.params;
     const userId = req.userId;
+
+    // if (transaction.status !== "INWAITING") {
+    //   return res.status(400).json({
+    //     error: "Transaction is not in waiting status",
+    //   });
+    // }
+    // ---- descomentar validacion comentada para test ----
+
     const transaction = await Transaction.findByPk(transactionId, {
       include: {
         model: Event,
-        as: 'event',
-        attributes: ['organizerId']
-      }
+        as: "event",
+        attributes: ["organizerId"],
+      },
     });
-    
-    if(transaction.event.dataValues.organizerId !== userId){
-        return res.status(401).json({
-    error: "Unauthorized: You can only modify transactions of events you organized.",
-  });
+
+    if (transaction.event.dataValues.organizerId !== userId) {
+      return res.status(401).json({
+        error:
+          "Unauthorized: You can only modify transactions of events you organized.",
+      });
     }
     if (!transaction) {
       return res.status(404).json({
         error: "Transaction not found",
       });
     }
+    
+
 
     const status =
       isApproved === true || isApproved === "true"
         ? "APPROVED"
         : isApproved === false || isApproved === "false"
         ? "DENIED"
-        : "INVALID_VALUE_NOT_IS_true_OR_false";
+        : null;
+
+    if (status === null) return res.status(401).json({ msg: "invalid status" });
     await transaction.update({ status });
 
     return res.status(200).json({

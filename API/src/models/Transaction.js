@@ -18,7 +18,6 @@ module.exports = (sequelize) => {
           const enums = [
             "PENDING",
             "COMPLETED",
-            "FAILED",
             "APPROVED",
             "DENIED",
             "CANCELED",
