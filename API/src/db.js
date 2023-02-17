@@ -190,6 +190,14 @@ Event.beforeFind((options) => {
     }
   }
 
+  if(options.where['$address.state$']) {
+    options.where[Sequelize.Op.or] = [
+      {'$address.state$': options.where['$address.state$']},
+      {"$category.modality$": 'Virtual'}
+    ]
+    delete options.where['$address.state$']
+  }
+
   if (options.where.isToday) {
     options.where.start_date = {
       [Sequelize.Op.eq]: moment().format("YYYY-MM-DD")
