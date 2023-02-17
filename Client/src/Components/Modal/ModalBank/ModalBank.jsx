@@ -59,6 +59,11 @@ const ModalBank = ({ setShowModal, input, setInput }) => {
       <div className={style.modal}>
         <h2>Select your bank account</h2>
         <BankAccountCards buttons={bankAccount} input={input} setInput={setInput} />
+        <div className={style.or2}>
+            <div className={style.or}></div>
+            <p className={style.or3}>or</p>
+            <div className={style.or}></div>
+          </div>
         <div className={style.createAccount}>
           <h2>Create a new bank account</h2>
           <TextField
