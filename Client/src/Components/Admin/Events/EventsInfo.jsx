@@ -3,9 +3,10 @@ import "./Events.css";
 import { FaEdit } from "react-icons/fa";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 
-const EventsInfo = ({ events, accent , desccent }) => 
+const EventsInfo = ({ events, accent , desccent, handleChange }) => 
   
 
   (
@@ -52,7 +53,7 @@ const EventsInfo = ({ events, accent , desccent }) =>
             <FaEdit color="darkslateblue" size={25} />
           </button>
           <button className="btnSap">
-            <RiDeleteBinLine color="red" size={25} />
+          {event?.IsActive ? <AiOutlineClose color="red" size={35} onClick={()=> handleChange(event.id)} /> : <AiOutlineCheck onClick={()=> handleChange(event.id)} size={35}/>}
           </button>
         </div>
       </div>

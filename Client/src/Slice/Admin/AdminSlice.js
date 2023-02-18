@@ -25,6 +25,7 @@ export const getUsers = createAsyncThunk("admin/getUsers", async (thunkAPI) => {
 export const changeUserRole = createAsyncThunk(
   "admin/changeUserRole",
   async (userId, thunkAPI) => {
+    console.log(userId)
     const response = await API.put(`/admin/users/change/${userId}`);
     console.log(response, userId);
     return response.data;
@@ -33,17 +34,26 @@ export const changeUserRole = createAsyncThunk(
 
 export const changeStateEvent = createAsyncThunk(
   "admin/changeStateEvent",
-  async (eventId, thunkAPI) => {
+  async (eventId, {rejectWithValue}) => {
+   try {
     console.log(eventId);
     const response = await API.put(`/admin/events/${eventId}`);
 
-    return response.data;
+    return {isActive:response.data, id:eventId};
+   } catch (error) {
+    if (error.response) {
+      console.log(error.response.data)
+      return rejectWithValue(error.response.data);
+    }
+    throw error;
+  }
   }
 );
 
 export const disableUser = createAsyncThunk(
   "admin/disableUser",
   async (userId, thunkAPI) => {
+    console.log(userId)
     const response = await API.put(`/admin/users/ban/${userId}`);
     return response.data;
   }
@@ -301,16 +311,7 @@ export const adminSlice = createSlice({
     },
     [changeUserRole.fulfilled]: (state, action) => {
       state.loading = false;
-      const userId = action.payload.id;
-
-      // 2. Buscar el índice del usuario en el arreglo state.users usando findIndex
-      const userIndex = state.users.findIndex((user) => user.id === userId);
-
-      // 3. Actualizar la propiedad isBanned del usuario con el id correspondiente
-      if (userIndex !== -1) {
-        state.users[userIndex].roleAdmin =
-          state.users[userIndex].roleAdmin === "USER" ? "ADMIN" : "USER";
-      }
+      state.users = action.payload;
     },
     [changeUserRole.rejected]: (state, action) => {
       state.loading = false;
@@ -321,10 +322,19 @@ export const adminSlice = createSlice({
     },
     [changeStateEvent.fulfilled]: (state, action) => {
       state.loading = false;
+      const eventId = action.payload.id;
+      
+      // 2. Buscar el índice del usuario en el arreglo state.users usando findIndex
+      const eventsIndex = state.events.findIndex((user) => user.id === eventId);
+
+      // 3. Actualizar la propiedad isBanned del usuario con el id correspondiente
+      if (eventsIndex !== -1) {
+        state.events[eventsIndex].isActive = action.payload.isActive;
+      }
     },
     [changeStateEvent.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = action.error;
     },
 
     //   state.loading = true;

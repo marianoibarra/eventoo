@@ -21,18 +21,17 @@ function Users() {
     dispatch(getUsers());}
   }, []);
   const handleBanned = (e) => {
-    console.log(e);
-    dispatch(disableUser(e.id));
+    dispatch(disableUser(e));
     // dispatch(deleteUser(e));
   };
   const handleChangeRole = (e) => {
-    console.log(e);
-    dispatch(changeUserRole(e.id));
+    console.log(e)
+    dispatch(changeUserRole(e));
     // dispatch(deleteUser(e));
   };
 
-  const handleSearch = (key) => {
-    dispatch(setFilterUser(key));
+  const handleSearch = (e) => {
+    dispatch(setFilterUser(e));
   };
   const accent = (e) => {
     dispatch(sortByAscendingUser(e));

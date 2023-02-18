@@ -116,16 +116,16 @@ const UserInfo = ({
         <div className={`${Styles.sapListItem} ${Styles.sap}`}>
           <button className={`${Styles.btnSap}`}>
             {user?.roleAdmin?.name === "USER" ? (
-              <RiAdminLine color="darkslateblue" size={25} />
+              <RiAdminLine color="darkslateblue" size={25}  onClick={()=>handleChangeRole(user.id)}/>
             ) : (
-              <RiAdminFill color="darkslateblue" size={25} />
+              <RiAdminFill color="darkslateblue" size={25}  onClick={()=>handleChangeRole(user.id)}/>
             )}
           </button>
           <button className={`${Styles.btnSap}`}>
             {!user?.isBanned ? (
-              <AiFillLike size={25} />
+              <AiFillLike size={25} onClick={()=> handleBanned(user.id)} />
             ) : (
-              <BsHandThumbsUp size={25} />
+              <BsHandThumbsUp size={25} onClick={()=> handleBanned(user.id)}/>
             )}
           </button>
         </div>

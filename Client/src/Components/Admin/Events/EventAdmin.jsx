@@ -19,7 +19,11 @@ function EventsAdmin() {
   }, []);
   const handleChange = (e) => {
     console.log(e);
-    dispatch(changeStateEvent(e.id));
+    dispatch(changeStateEvent(e));
+  };
+  const handledelete = (e) => {
+    console.log(e);
+    dispatch(changeStateEvent(e));
   };
 
 const accent = (e) => {
@@ -44,6 +48,7 @@ const desccent = (e) => {
           events={events}
           accent={accent}
           desccent={desccent}
+          handleChange={handleChange}
         />
       </>
     ) : (
