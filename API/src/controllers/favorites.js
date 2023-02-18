@@ -37,7 +37,7 @@ try {
   await user.addFavorites(event);
   const favorites = await user.getFavorites()
 
-  return res.status(200).json(favorites);
+  return res.status(200).json(favorites.map(f => f.id));
 
 } catch (error) {
   res.status(500).json({ msg: error.message })
@@ -72,7 +72,7 @@ const deleteFavorite = async (req, res) => {
 
    const favorites = await user.getFavorites()
 
-   return res.status(200).json(favorites);
+   return res.status(200).json(favorites.map(f => f.id));
  } catch (error) {
    res.status(500).json({ msg: error.message })
  }
