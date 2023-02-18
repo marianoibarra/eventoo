@@ -7,7 +7,7 @@ const mercadopago = require("mercadopago");
 mercadopago.configure({ access_token: MP_TOKEN });
 
 const setMercadoPago = async (req, res) => {
-
+      
       let preference = {
 		items: [
 			{
@@ -17,23 +17,24 @@ const setMercadoPago = async (req, res) => {
 			}
 		],
 		back_urls: {
-			"success": `${base_url}/feedback`,
-			"failure": `${base_url}/feedback`,
-			"pending": `${base_url}/feedback`
+			success: "http://localhost:3000", 
+			failure: " ",
+			pending: " ",
 		},
+            auto_return: 'approved',
+            binary_mode: true, // para que no se acepten pagos pendientes 
 	
 	};
 
 	mercadopago.preferences.create(preference)
-		.then(function (response) {
-			res.json({
-				preferenceId: response.body.id
-			});
-		}).catch(function (error) {
-			console.log(error);
-		});
+  .then(function(response){
+  
+    res.redirect(response.body.init_point); // link de la compra que necesitamos 
+   
+  }).catch(function(error){
+    console.log(error);
+  });
 };
-
 
 
 
@@ -42,10 +43,10 @@ const setMercadoPago = async (req, res) => {
 const createPaymentMP =  async (req, res) => { 
       const payment = req.body;
       try {
-            const newPaymentMP = await PaymentMP.create({
+            const newPaymentMP = await PaymentMP.create({ // aqui corroborar que necesitamos que se guarde en base de datos por lo tanto esto esta a modo de prueba. 
                   transactionId_MP: payment.transactionId_MP,
                   status: payment.status,
-                  unit_price: payment.items[0].unit_price
+                  price: payment.items[0].price
             },{ include: [ Event, { model: User, as: "paymentMP" } ] })
             return res.status(201).json(newPaymentMP);
       } catch (error) {
