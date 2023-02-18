@@ -24,6 +24,34 @@ const initialState = {
   },
 };
 
+// const setLocation = (address) => {
+//   if(address) {
+//     const inputValue = `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`
+//     const googleServices = new window.google.maps.places.AutocompleteService();
+//     googleServices.getPlacePredictions({input: inputValue, type: ['Address']},
+//       (res) => {
+//         console.log(res)
+//         if(res[0]) {
+//           localStorage.setItem('location_value', JSON.stringify(res[0]))
+//           localStorage.setItem('location_inputValue', inputValue)
+//         }
+//       });
+//   }
+// }
+
+function getLocation(address) {
+  if(address) {
+    const inputValue = `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`
+    localStorage.setItem('location_inputValue', inputValue)
+    const googleServices = new window.google.maps.places.AutocompleteService();
+    return new Promise((resolve, reject) => {
+      googleServices.getPlacePredictions({input: inputValue, type: ['Address']}, (res) => {
+        resolve(res[0]);
+      });
+    });
+  }
+}
+
 export const register = createAsyncThunk(
   "user/register",
   async ({ input, setShowSessionModal }, { rejectWithValue }) => {
@@ -54,6 +82,8 @@ export const login = createAsyncThunk(
         "/user/login",
         input
       );
+      const value = await getLocation(response.data.data.address)
+      localStorage.setItem('location_value', JSON.stringify(value))
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
        API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
@@ -142,6 +172,8 @@ export const UserSlice = createSlice({
     logOut: (state, action) => {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
+      localStorage.removeItem("location_inputValue");
+      localStorage.removeItem("location_value");
       window.google.accounts.id.disableAutoSelect();
        API.defaults.headers.common["authorization"] = null;
       return initialState

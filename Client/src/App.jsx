@@ -4,7 +4,6 @@ import axios from "axios";
 import { BrowserRouter } from 'react-router-dom';
 //pages
 import CreateEvent from "./Pages/CreateEvent";
-import Landing from "./Pages/Landing";
 import Setting from "./Pages/Setting";
 import FAQ from "./Pages/FAQ";
 import AboutUs from "./Pages/AboutUs";
@@ -23,15 +22,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from "react-redux";
 import RecoverPass from "./Pages/RecoverPass";
-import { fetchLocation } from "./Slice/Location/LocationSlice";
-import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
 import { SessionContext } from ".";
 import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 // import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
-import NewHome from "./Pages/NewHome";
 import Admin from "./Pages/Admin";
 
 export const API = axios.create({
@@ -62,27 +58,6 @@ function App() {
   }, []);
 
   const { isLogged, roleAdmin } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const positions = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        dispatch(fetchLocation(positions));
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getLocationFromIP());
-  }, [dispatch]);
-
-
 
   return (
 

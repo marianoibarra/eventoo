@@ -48,18 +48,16 @@ const FilterMode = () => {
       <div className={`${Style.modality} ${someActive ? Style.border : ''}`}>
         <div className={Style.container_btns_modality}>
           <button
-            style={filter.modality === 'Presential' ? { opacity: 1 } : { opacity: 0.6 }}
             onClick={handleClick}
             value='Presential'
-            className={Style.btn}
+            className={`${Style.btn} ${filter.modality === 'Presential' ? Style.active : ''}`}
             name='modality'>
             <MdEventSeat style={{pointerEvents: 'none'}} /> Presential
           </button>
           <button
-            style={filter.modality === 'Virtual' ? { opacity: 1 } : { opacity: 0.6 }}
             onClick={handleClick}
             value='Virtual'
-            className={Style.btn}
+            className={`${Style.btn} ${filter.modality === 'Virtual' ? Style.active : ''}`}
             name='modality'>
             <MdDesktopMac style={{pointerEvents: 'none'}} /> Virtual
           </button>
@@ -69,24 +67,22 @@ const FilterMode = () => {
       <div className={Style.date}>
         <div className={Style.container_btns_date}>
           <button
-            style={filter.isNextWeekend == 'true' ? { opacity: 1 } : { opacity: 0.6 }}
             onClick={handleClick}
             value={'true'}
-            className={Style.btn}
+            className={`${Style.btn} ${filter.isNextWeekend == 'true' ? Style.active : ''}`}
             name='isNextWeekend'>
             <MdDateRange style={{pointerEvents: 'none'}} />Next weekend
           </button>
           <button
-            style={filter.isToday == 'true' ? { opacity: 1 } : { opacity: 0.6 }}
             onClick={handleClick}
             value={'true'}
-            className={Style.btn}
+            className={`${Style.btn} ${filter.isToday == 'true' ? Style.active : ''}`}
             name='isToday'>
             <MdHistory style={{pointerEvents: 'none'}} /> Today
           </button>
         </div>
       </div>
-      <button name='modal' onClick={handleClick} className={Style.clearFilter}>
+      <button name='modal' onClick={handleClick} className={Style.moreFilter}>
           <MdOutlineTune style={{pointerEvents: 'none'}} size={20} />
       </button>
     </div>

@@ -34,6 +34,7 @@ body {
   color: var(--dark-text);
   overflow-x: hidden;
   padding-top: 60px;
+  overflow-y: overlay;
 }
 html{
   min-height: 100%;
@@ -141,4 +142,52 @@ footer {
   text-align: center;
   margin-top: 10px;
   font-size: 1vw;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent
+}
+
+*::-webkit-scrollbar-thumb {
+  opacity: 0;
+  background-color: #0003;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  opacity: 0;
+  background-color: #0006;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  opacity: 0;
+  background-color: #0008;
+  border-radius: 20px;
+}
+
+@media screen and (max-width: 605px) {
+
+  *::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+
+    border: 3px solid var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    border: 3px solid var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    border: 2px solid var(--color-background);
+  }
+  
+
 }
