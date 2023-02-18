@@ -92,7 +92,7 @@ const changeRole = async (req, res) => {
 const changeStatusEvent = async (req, res) => {
   const { id } = req.params;
   try {
-    const event = Event.findByPk(id);
+    const event = await Event.findByPk(id);
     await event.update({
       isActive: !event.isActive,
     });
