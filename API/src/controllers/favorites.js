@@ -48,7 +48,7 @@ const getFavorites = async (req, res) => {
   try {
    const user = await User.findByPk(userId)
    const favorites = await user.getFavorites({
-      attributtes: ['id']
+      attributes: ['id']
    })
    
    return res.json( favorites );
