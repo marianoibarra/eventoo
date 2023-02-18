@@ -53,22 +53,25 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
     <div key={index} className={Style.container_dataTicket}>
 
       <h2 className={Style.dataTicket_subTitle}>Ticket {index + 1} {eventDetail.name}</h2>
-      <input
-        className={Style.input_name}
-        type="text"
-        name="name"
-        value={ticketForms[index].name || ''}
-        placeholder="Ingrese Name"
-        onChange={(e) => handleDataTicket(e, index)}
-      />
-      <input
-        className={Style.input_lastName}
-        type="text"
-        name="last_name"
-        value={ticketForms[index].last_name || ''}
-        placeholder="Ingrese Last Name"
-        onChange={(e) => handleDataTicket(e, index)}
-      />
+      <div className={Style.firstRow}>
+        <input
+          className={Style.input_name}
+          type="text"
+          name="name"
+          value={ticketForms[index].name || ''}
+          placeholder="Ingrese Name"
+          onChange={(e) => handleDataTicket(e, index)}
+        />
+        <input
+          className={Style.input_lastName}
+          type="text"
+          name="last_name"
+          value={ticketForms[index].last_name || ''}
+          placeholder="Ingrese Last Name"
+          onChange={(e) => handleDataTicket(e, index)}
+        />
+      </div>
+      
       <input
         className={Style.input_email}
         type="email"
@@ -84,50 +87,72 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-      <div className={Style.container_Transaction}>
-        {isVoucher ?
-          <div className={Style.containerBuyTickets}>
-            <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
-            <h3 className={Style.dataTicket_user}>comprando como <p>{email}</p></h3>
-            <div className={Style.container_tickets}>
+      <div className={Style.containerBuyTickets}>
+
+        <div className={Style.topWrapper}>
+
+
+          <div className={Style.formWrapper}>
+            <header>
+              <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
+              <h3 className={Style.dataTicket_user}>comprando como <span>{email}</span></h3>
+            </header>
+            <main>
               {ticketFormArray}
-            </div>
-
-            <div className={Style.modify}>
-              <button
-                className={isButtonDisabled ? Style.btnPedido : `btnprimario `}
-                onClick={handleSubmit}
-                disabled={isButtonDisabled} >
-                Realizar Pedido
-              </button>
-            </div>
-          </div> :
-          <div className={Style.container_voucer}>
-            <Voucher />
+            </main>
           </div>
-        }
 
 
-        <div className={Style.container_detailEvent}>
-          <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+
+          <div className={Style.detailWrapper}>
+
+            <div className={Style.imgWrapper}>
+                <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+            </div>
+
+            <div className={Style.detail}>
+              <h3 className={Style.detailEvent_resume}>Resumen de la compra</h3>
+              <div className={Style.detailEvent_tickets}>
+                {ticketForms.length} x {eventDetail.name}
+                <span>{ticketForms.length * eventDetail.price}</span>
+              </div>
+              <div className={Style.detailEvent_total}>
+                Total: <span>{ticketForms.length * eventDetail.price}</span>
+              </div>
+            </div>
+            
+
+          </div>
         </div>
-        <div className={Style.detail}>
-          <h3 className={Style.detailEvent_resume}>Resumen de la compra</h3>
-          <p className={Style.detailEvent_tickets}>{ticketForms.length} x {eventDetail.name}</p>
-          <p className={Style.detailEvent_subTotal}>${ticketForms.length * eventDetail.price}</p>
-          <h2 className={Style.detailEvent_total}>Total: <p className={Style.detailEvent_price}>${ticketForms.length * eventDetail.price}</p> </h2>
-        </div>
 
+        <div className={Style.bottomWrapper}>
+          <div className={Style.modify}>
+            <button
+              className={`btnprimario `}
+              onClick={handleSubmit}
+              disabled={isButtonDisabled} >
+              Realizar Pedido
+            </button>
+          </div>
+        </div>
+      </div>
+
+        
+        
+        
+        
+
+       
+{/* 
         <div className={Style.detailBankAccount}>
           <h2>Datos del Organizador {eventDetail.organizer?.name} {eventDetail.organizer?.last_name}</h2>
           <h3 className={Style.detailBankAccount_CBU_name}> Cuenta {eventDetail.bankAccount?.name} {eventDetail.bankAccount?.CBU}</h3>
 
-        </div>
-      </div>
+        </div> */}
 
-      <div className={Style.container_voucer}>
+      {/* <div className={Style.container_voucer}>
         <Voucher />
-      </div>
+      </div> */}
     </Modal>
   )
 }
