@@ -29,7 +29,6 @@ const CaruselCard = ({
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const date = start_time && start_date ? genDate() : null;
-  const [fav, setFav] = useState(false)
   const {favorites} = useSelector(state => state.favorites)
 
   const handleFav = (e) => {

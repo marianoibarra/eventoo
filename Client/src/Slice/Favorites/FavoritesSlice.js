@@ -20,13 +20,15 @@ export const switchFavorites = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => { 
     try {
       const {favorites:{favorites}} = getState()
-      console.log(favorites)
+      console.log(favorites, id)
       if(favorites.some(f => f === id)) {
-        await API.delete('/favorites', {id})
-        return {add: false, id}
+        const response = await API.delete('/favorites', {id: id})
+        console.log('delete: ', response.data)
+        return response.data
       } else {
-        await API.post('/favorites', {id})
-        return {add: true, id}
+        const response = await API.post('/favorites', {id: id})
+        console.log('post: ', response.data)
+        return response.data
       }
     } catch (error) {
       if (error.response) {
@@ -61,11 +63,9 @@ export const favoritesSlice = createSlice({
       state.loading = true
     },
     [switchFavorites.fulfilled]: (state, action) => {
-      return {
-        favorites: action.payload.add ? [...state.favorites, action.payload.id ] : [...state.favorites.filter(f => f !== action.payload.id)],
-        loading: false,
-        error: null,
-      }
+      state.favorites = action.payload;
+      state.loading = false;
+      state.error = null;
     },
     [switchFavorites.rejected]: (state, action) => {
       state.loading = false;
