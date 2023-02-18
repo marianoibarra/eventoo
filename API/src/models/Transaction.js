@@ -18,7 +18,8 @@ module.exports = (sequelize) => {
           const enums = [
             "PENDING",
             "COMPLETED",
-            "FAILED",
+            "APPROVED",
+            "DENIED",
             "CANCELED",
             "INWAITING",
           ];
@@ -27,6 +28,10 @@ module.exports = (sequelize) => {
           }
         },
       },
+    },
+    expiration_date: {
+      type: DataTypes.DATE,
+      allowNull: false
     },
     payment_proof: {
       type: DataTypes.STRING,

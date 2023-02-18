@@ -75,6 +75,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BIGINT,
       allowNull: true,
     },
+    stock_ticket: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
     placeName: {
       type: DataTypes.STRING,
       allowNull: true,
