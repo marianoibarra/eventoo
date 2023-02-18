@@ -16,6 +16,7 @@ import { eventsCreateForUserSlice } from "../Slice/EventsCreateForUser/CreateFor
 import { eventsBuysSlice } from "../Slice/EventsBuysForUser/BuysSlice";
 import { adminSlice } from "../Slice/Admin/AdminSlice";
 import {newFilterSlice} from "../Slice/newFilter/newFilterSlice";
+import { favoritesSlice } from "../Slice/Favorites/FavoritesSlice";
 
 
 const store = configureStore({
@@ -36,7 +37,8 @@ const store = configureStore({
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
     eventsBuysSlice:eventsBuysSlice.reducer,
     admin:adminSlice.reducer,
-    newFilter: newFilterSlice.reducer
+    newFilter: newFilterSlice.reducer,
+    favorites: favoritesSlice.reducer
   },
 });
 

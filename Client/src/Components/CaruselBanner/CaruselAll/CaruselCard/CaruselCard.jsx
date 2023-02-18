@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FaRegHeart, FaHeart } from 'react-icons/fa'
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
+import { useDispatch, useSelector } from "react-redux";
+import { switchFavorites } from "../../../../Slice/Favorites/FavoritesSlice";
 
 const CaruselCard = ({
   img,
@@ -24,16 +26,15 @@ const CaruselCard = ({
     return date;
   };
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const date = start_time && start_date ? genDate() : null;
   const [fav, setFav] = useState(false)
+  const {favorites} = useSelector(state => state.favorites)
 
   const handleFav = (e) => {
     e.stopPropagation()
-    setFav(!fav)
-    if(fav) {
-      
-    }
+    dispatch(switchFavorites(id))
   }
 
   return (
@@ -46,7 +47,7 @@ const CaruselCard = ({
         <div className={Style.container_details}>
           <div  className={Style.favorite} onClick={handleFav}>
             {
-              fav
+              favorites.some(f => f === id)
               ? <HiHeart className={Style.favEnabled} size={20} />
               : <HiOutlineHeart size={20} />
             }

@@ -29,6 +29,7 @@ import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 import Admin from "./Pages/Admin";
+import { getFavorites } from "./Slice/Favorites/FavoritesSlice";
 
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
@@ -43,6 +44,7 @@ function App() {
   
   const { showSessionModal, setShowSessionModal } = useContext(SessionContext)
   const dispatch = useDispatch();
+  const {user} = useSelector(state => state.user)
 
   window.handleGoogleLogin = function ({ credential }) {
     dispatch(googleLogin({credential, setShowSessionModal }))
@@ -53,9 +55,10 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(getUserData());
+      dispatch(getFavorites());
       dispatch(getBankAccounts());
     }
-  }, []);
+  }, [user]);
 
   const { isLogged, roleAdmin } = useSelector((state) => state.user);
 
