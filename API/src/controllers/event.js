@@ -84,6 +84,7 @@ const createEvent = async (req, res) => {
         isPaid,
         age_range,
         guests_capacity,
+        stock_ticket:guests_capacity,
         placeName,
         advertisingTime_start,
         adversiting_end,

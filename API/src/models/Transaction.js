@@ -29,6 +29,10 @@ module.exports = (sequelize) => {
         },
       },
     },
+    expiration_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
     payment_proof: {
       type: DataTypes.STRING,
       allowNull: true,
