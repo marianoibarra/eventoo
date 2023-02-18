@@ -49,9 +49,7 @@ const getFavorites = async (req, res) => {
    const user = await User.findByPk(userId)
    const favorites = await user.getFavorites({
     include: [
-      Address,
-      Category,
-      BankAccount
+      'address',
     ]
    })
    
