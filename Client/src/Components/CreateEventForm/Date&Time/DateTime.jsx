@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
     const dispatch = useDispatch();
-    const [value, setValue] = React.useState(dayjs('2022-04-07'));
+    const [value, setValue] = React.useState(dayjs('2023-02-17'));
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -40,12 +40,13 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                         {/* <DatePicker
                             name='start_date'
                             label="Star date"
-                            openTo="month"
+                            openTo="day"
+                            inputFormat="DD/MM/YYYY"
                             views={['year', 'month', 'day']}
                             value={value}
                             onChange={(newValue) => {
                                 setValue(newValue);
-                                console.log(value)
+                                console.log(value.$y,value.$M,value,value.$D)
                               }}
                             onBlur={handleBlur}
                             renderInput={(params) => <TextField {...params} />}

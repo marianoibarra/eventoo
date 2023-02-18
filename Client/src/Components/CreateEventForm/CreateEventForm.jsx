@@ -38,7 +38,7 @@ function Form() {
     advertisingTime_start: null,
     age_range: 'ALL PUBLIC',
     bankAccount: '',
-    category: null,
+    category: '',
     city: null,
     country: null,
     cover_pic: null,
@@ -174,12 +174,7 @@ function Form() {
       {/* <Lateral/> */}
       <form className={style.form} onSubmit={e => handleSubmit(e)}>
         <h1 className={style.title}>EVENT INFORMATION</h1>
-        {input.cover_pic !== null?
-          <div className={style.containerimg}>
-          <img className={style.img} src={input.cover_pic} alt='cover_pic' /> 
-          </div>
-         : <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
-        }
+        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
