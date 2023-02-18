@@ -79,9 +79,6 @@ transition: 0.4ms;
 
 .sapListImage  {
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  position: relative;
-  top: 5px;
-  right: 10px;
+  width: 15px;
+  height: 15px;
 }

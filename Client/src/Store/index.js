@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore , getDefaultMiddleware } from "@reduxjs/toolkit";
 import { categorieSlice } from "../Slice/Filter/categorieSlice";
 import { UserSlice } from "../Slice/User/UserSlice";
 import { eventsSlice } from "../Slice/Events/EventsSlice";
@@ -19,6 +19,10 @@ import {newFilterSlice} from "../Slice/newFilter/newFilterSlice";
 
 
 const store = configureStore({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    }),
   reducer: {
     categories: categorieSlice.reducer,
     user: UserSlice.reducer,
@@ -36,8 +40,9 @@ const store = configureStore({
     eventsCreateForUserSlice:eventsCreateForUserSlice.reducer,
     eventsBuysSlice:eventsBuysSlice.reducer,
     admin:adminSlice.reducer,
-    newFilter: newFilterSlice.reducer
-  },
+    newFilter: newFilterSlice.reducer,
+    
+ }
 });
 
 export default store;
