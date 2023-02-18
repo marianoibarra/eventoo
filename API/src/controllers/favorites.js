@@ -47,11 +47,9 @@ const getFavorites = async (req, res) => {
   const userId  = req.userId;
   try {
    const user = await User.findByPk(userId)
-   const favorites = await user.getFavorites({
-      attributes: ['id']
-   })
+   const favorites = await user.getFavorites()
    
-   return res.json( favorites );
+   return res.json( favorites.map(f => f.id) );
   
   } catch (error) {
       res.status(500).json({ msg: error.message });
