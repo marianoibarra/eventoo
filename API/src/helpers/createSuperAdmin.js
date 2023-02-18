@@ -26,15 +26,7 @@ const createSuperAdmin = async (data) => {
       name,
       last_name,
       profile_pic,
-      born,
-      //   address: {
-      //     address_line,
-      //     city,
-      //     state,
-      //     country,
-      //     zip_code,
-      //   },
-      //   RoleAdmin: {name: 'SUPERADMIN'},
+      born
     });
     const address = await Address.create({
       address_line,
@@ -45,8 +37,8 @@ const createSuperAdmin = async (data) => {
     });
     user.setAddress(address);
 
-    const role = await RoleAdmin.create({ name: "SUPERADMIN" });
-    user.setRoleAdmin(role);
+    const role = await RoleAdmin.findByPk(1)
+    await user.setRoleAdmin(role)
   }
 };
 
