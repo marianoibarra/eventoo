@@ -11,12 +11,15 @@ const getUsers = async (req, res) => {
         },
         {
           model: RoleAdmin,
+          where:{
+            id: [2,3]
+          }
         },
       ],
     });
     res.json(users);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -29,7 +32,7 @@ const changeBan = async (req, res) => {
     });
     res.json(user);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -45,7 +48,7 @@ const getCategories = async (req, res) => {
     });
     res.json(category);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -56,14 +59,17 @@ const changeRole = async (req, res) => {
       where: { id },
       include: [{ model: RoleAdmin }],
     });
-    user.roleAdmin.name =
-      user.roleAdmin.name === "ADMIN"
-        ? (user.roleAdmin.name = "USER")
-        : (user.roleAdmin.name = "ADMIN");
-    await user.roleAdmin.update({ name: user.roleAdmin.name });
+
+    if(user.RoleAdminId === 3) {
+      user.RoleAdminId = 2
+    } else {
+      user.RoleAdminId = 3
+    }
+    user.save()
+    
     res.send(user.roleAdmin);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -76,7 +82,7 @@ const changeStatusEvent = async (req, res) => {
     });
     res.json(event.isActive);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

@@ -22,7 +22,11 @@ export const switchFavorites = createAsyncThunk(
       const {favorites:{favorites}} = getState()
       console.log(favorites, id)
       if(favorites.some(f => f === id)) {
-        const response = await API.delete('/favorites', {id: id})
+        const response = await API.delete('/favorites', {
+          data: {
+            id: id
+          }
+        })
         console.log('delete: ', response.data)
         return response.data
       } else {
@@ -38,14 +42,20 @@ export const switchFavorites = createAsyncThunk(
     }
 })
 
+const initialState = {
+  favorites: [],
+  loading: false,
+  error: null
+}
+
 export const favoritesSlice = createSlice({
   name: 'favorites',
-  initialState: {
-    favorites: [],
-    loading: false,
-    error: null
+  initialState,
+  reducers: {
+    clearFavorites: (state, action) => {
+      return initialState
+    }
   },
-  reducers: {},
   extraReducers: {
     [getFavorites.pending]: (state) => {
       state.loading = true
