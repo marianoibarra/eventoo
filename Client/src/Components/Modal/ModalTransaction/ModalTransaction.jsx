@@ -84,39 +84,48 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-      <div className={Style.container_Transaction}>
-        {isVoucher ?
-          <div className={Style.containerBuyTickets}>
-            <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
-            <h3 className={Style.dataTicket_user}>comprando como <p>{email}</p></h3>
+      <div className={Style.containerBuyTickets}>
+
+        <div className={Style.topWrapper}>
+          <div className={Style.formWrapper}>
+            <div className={Style.container_detailEvent}>
+              <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+            </div>
+
+          </div>
+
+          <div className={Style.detailWrapper}>
+            <div className={Style.container_detailEvent}>
+              <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+            </div>
+
             <div className={Style.container_tickets}>
+              <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
+              <h3 className={Style.dataTicket_user}>comprando como <p>{email}</p></h3>
               {ticketFormArray}
             </div>
 
-            <div className={Style.modify}>
-              <button
-                className={isButtonDisabled ? Style.btnPedido : `btnprimario `}
-                onClick={handleSubmit}
-                disabled={isButtonDisabled} >
-                Realizar Pedido
-              </button>
-            </div>
-          </div> :
-          <div className={Style.container_voucer}>
-            <Voucher />
           </div>
-        }
-
-
-        <div className={Style.container_detailEvent}>
-          <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
         </div>
-        <div className={Style.detail}>
-          <h3 className={Style.detailEvent_resume}>Resumen de la compra</h3>
-          <p className={Style.detailEvent_tickets}>{ticketForms.length} x {eventDetail.name}</p>
-          <p className={Style.detailEvent_subTotal}>${ticketForms.length * eventDetail.price}</p>
-          <h2 className={Style.detailEvent_total}>Total: <p className={Style.detailEvent_price}>${ticketForms.length * eventDetail.price}</p> </h2>
+
+        <div className={Style.bottomWrapper}>
+          <div className={Style.modify}>
+          <button
+            className={`btnprimario `}
+            onClick={handleSubmit}
+            disabled={isButtonDisabled} >
+            Realizar Pedido
+          </button>
         </div>
+          
+        </div>
+
+        
+        
+
+        
+
+       
 
         <div className={Style.detailBankAccount}>
           <h2>Datos del Organizador {eventDetail.organizer?.name} {eventDetail.organizer?.last_name}</h2>
@@ -125,9 +134,9 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
         </div>
       </div>
 
-      <div className={Style.container_voucer}>
+      {/* <div className={Style.container_voucer}>
         <Voucher />
-      </div>
+      </div> */}
     </Modal>
   )
 }
