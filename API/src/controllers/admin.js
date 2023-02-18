@@ -60,14 +60,30 @@ const changeRole = async (req, res) => {
       include: [{ model: RoleAdmin }],
     });
 
-    if(user.RoleAdminId === 3) {
-      user.RoleAdminId = 2
+    if(user.roleAdminId === 3) {
+      user.roleAdminId = 2
     } else {
-      user.RoleAdminId = 3
+      user.roleAdminId = 3
     }
-    user.save()
-    
-    res.send(user.roleAdmin);
+    await user.save()
+
+    const users = await User.findAll({
+      include: [
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: RoleAdmin,
+          where:{
+            id: [2,3]
+          }
+        },
+      ],
+    });
+    res.json(users);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
