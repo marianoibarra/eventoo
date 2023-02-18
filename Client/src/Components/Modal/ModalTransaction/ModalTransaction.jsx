@@ -90,6 +90,8 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
       <div className={Style.containerBuyTickets}>
 
         <div className={Style.topWrapper}>
+
+
           <div className={Style.formWrapper}>
             <header>
               <h1 className={Style.dataTicket_title}>Informacion de orden de compra</h1>
@@ -110,9 +112,13 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
 
             <div className={Style.detail}>
               <h3 className={Style.detailEvent_resume}>Resumen de la compra</h3>
-              <p className={Style.detailEvent_tickets}>{ticketForms.length} x {eventDetail.name}</p>
-              <p className={Style.detailEvent_subTotal}>${ticketForms.length * eventDetail.price}</p>
-              <h2 className={Style.detailEvent_total}>Total: <p className={Style.detailEvent_price}>${ticketForms.length * eventDetail.price}</p> </h2>
+              <div className={Style.detailEvent_tickets}>
+                {ticketForms.length} x {eventDetail.name}
+                <span>{ticketForms.length * eventDetail.price}</span>
+              </div>
+              <div className={Style.detailEvent_total}>
+                Total: <span>{ticketForms.length * eventDetail.price}</span>
+              </div>
             </div>
             
 
