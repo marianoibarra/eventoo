@@ -32,11 +32,13 @@ try {
 
   if (existingEvent){
     return res.status(400).json({msg: "event already exists in favorites list"});
-  } else {
-  await user.addFavorites(event);
-}
+  } 
 
-  return res.status(200).json({msg: 'event added to favorites successfully'});
+  await user.addFavorites(event);
+  const favorites = await user.getFavorites()
+
+  return res.status(200).json(favorites);
+
 } catch (error) {
   res.status(500).json({ msg: error.message })
 }
@@ -68,7 +70,9 @@ const deleteFavorite = async (req, res) => {
 
    await user.removeFavorites(event);
 
-   return res.status(200).json({msg: 'event removed of favorites successfully'});
+   const favorites = await user.getFavorites()
+
+   return res.status(200).json(favorites);
  } catch (error) {
    res.status(500).json({ msg: error.message })
  }
