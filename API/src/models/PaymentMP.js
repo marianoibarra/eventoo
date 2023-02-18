@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },             
-        price: {
+        unit_price: {
             type: DataTypes.FLOAT,
             allowNull: true,
         }              
@@ -21,14 +21,6 @@ module.exports = (sequelize) => {
 
 //transactcion id para que el usuario pueda verificar en su mercado pago la compra. 
  //status: estado de la transaccion proporcionada por mercado pago
- //precio (payments.items[0].price )
+ //precio (payment.items[0].price )
 
 
-
-
-
-//un evento tiene un payment
-//un payment tiene un evento 
-
-//un usuario tiene muchos payments
-//un payment tiene un solo usuario 
