@@ -165,8 +165,18 @@ export const adminSlice = createSlice({
         propiedad === "email" ||
         propiedad === "name" ||
         propiedad === "born"
-      ) {
+      )
+       {
+        
         state.users.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0; 
+          }
           return a[propiedad].localeCompare(b[propiedad]);
         });
       } else if (propiedad === "roleAdmin") {
@@ -189,6 +199,14 @@ export const adminSlice = createSlice({
         propiedad === "born"
       ) {
         state.users.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0; 
+          }
           return b[propiedad].localeCompare(a[propiedad]);
         });
       } else if (propiedad === "roleAdmin") {
