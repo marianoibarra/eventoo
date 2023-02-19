@@ -15,6 +15,8 @@ import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 import { SessionContext } from '../..';
 import { useNavigate } from 'react-router-dom'
+import CheckOut from '../Checkout card/CheckoutCard';
+import PackSelection from './PackSelection/PackSelection';
 
 
 function Form() {
@@ -47,7 +49,7 @@ function Form() {
     end_date: '',
     end_time: '',
     guests_capacity: "",
-    modality: '',
+    modality: 'Presential',
     isPaid: true,
     isPremium: null,
     isPublic: true,
@@ -154,25 +156,15 @@ function Form() {
       localStorage.removeItem("formEvent");
       localStorage.removeItem("lastTime");
     }
-  }, [confirm])
+  }, [confirm]);
 
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (isLogged) {
-      dispatch(createEvent(input))
-      alert("Event created!")
-    } else {
-      alert('Please Log in');
-      setShowSessionModal('login');
-    };
-  };
+  const [selectedPack, setSelectedPack] = useState('');
 
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
       {/* <Lateral/> */}
-      <form className={style.form} onSubmit={e => handleSubmit(e)}>
+      <div className={style.form} >
         <h1 className={style.title}>EVENT INFORMATION</h1>
         <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
@@ -189,12 +181,10 @@ function Form() {
         <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         {event.error ? <p className={style.errorMessage}>Can't create event</p> :
           event.create ? <p className={style.sendMessage}>Event created successfully</p> : undefined}
-        {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
-        <div className={style.footerForm}>
-          {/* <button type='button' >Save changes</button> */}
-          <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
-        </div>
-      </form>
+        <div className={style.split}></div>
+        <PackSelection selectedPack={selectedPack} setSelectedPack={setSelectedPack} />
+      </div>
+      <CheckOut errors={errors} isLogged={isLogged} input={input} setShowSessionModal={setShowSessionModal} selectedPack={selectedPack} />
     </div>
   )
 };
