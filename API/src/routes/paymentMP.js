@@ -9,8 +9,8 @@ const {
 
 const router = Router();
 
-router.post("/", setMercadoPago);
 router.post("/create", createPaymentMP);
+router.post("/:eventId", setMercadoPago);
 router.get("/", getAllPaymentsMP);
 
 module.exports = router;

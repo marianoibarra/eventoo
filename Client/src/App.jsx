@@ -33,9 +33,11 @@ import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 import NewHome from "./Pages/NewHome";
 import Admin from "./Pages/Admin";
+import Mp1 from "./Pages/Mp1";
+import Mp2 from "./Pages/Mp2";
 
 export const API = axios.create({
-  baseURL: 'https://api.eventoo.com.ar',
+  baseURL: 'http://localhost:3001',
   headers: {
     common: {
       'authorization': 'Bearer ' + localStorage.getItem("token"),
@@ -91,6 +93,8 @@ function App() {
       <Routes>
         {/* <Route exact path="/" element={<Landing />} /> */}
         <Route exact path="/" element={<Home />}></Route>
+        <Route path="mp1" element={<Mp1 />} />
+        <Route path="mp2/:eventId" element={<Mp2 />} />
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/setting" element={!isLogged ? <Navigate to='/'/> : <Setting />} />
         <Route path="/admin" element={isLogged && roleAdmin  && roleAdmin !== "USER" ? <Admin /> : <Navigate to='/'/> }/>

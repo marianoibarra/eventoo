@@ -1,5 +1,6 @@
-const { Event, Address, Category, User, BankAccount } = require("../db");
+const { Event, Address, Category, User, BankAccount, Payment } = require("../db");
 const { Op } = require("sequelize");
+const getMercadoPago = require("../helpers/mercadopago");
 
 
 const createEvent = async (req, res) => {
@@ -16,6 +17,7 @@ const createEvent = async (req, res) => {
     virtualURL,
     category,
     isPremium,
+    items,
     isPaid,
     age_range,
     guests_capacity,
@@ -135,6 +137,16 @@ const createEvent = async (req, res) => {
 
     await event.setOrganizer(organizer);
 
+    if(isPremium && items) {
+      await event.createPayment()
+      
+      const id = getMercadoPago(items)
+      event.isActive = false
+      await event.save()
+      
+    }
+
+
     await event.reload({
       include: [
         "bankAccount",
@@ -153,6 +165,7 @@ const createEvent = async (req, res) => {
           as: "category",
           attributes: ["name", "modality"],
         },
+        Payment
       ],
     });
 
