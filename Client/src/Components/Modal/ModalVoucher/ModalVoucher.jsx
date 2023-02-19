@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import Style from './Voucher.module.css'
-import { API } from '../../../../App';
-import { axiosPutTicket, axiosCANCELTicket } from '../../../../Slice/transaction/TransactionSlice';
+import Style from './ModalVoucher.module.css'
+import { API } from '../../../App';
+import { axiosPutTicket, axiosCANCELTicket } from '../../../Slice/transaction/TransactionSlice';
 import { Document, Page } from 'react-pdf'
 import pdfjsLib from 'pdfjs-dist'
+import Modal from '../Modal';
 
-const Voucher = () => {
+
+
+const ModalVoucher = ({ setShowModal }) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -22,9 +25,9 @@ const Voucher = () => {
   const [pdfDocument, setPdfDocument] = useState(null)
   const [accepted, setAccepted] = useState(true);
   const { email } = useSelector(state => state.user)
-  const refInputImg = useRef()
   const dataTransaction = useSelector(state => state.transaction)
   const id = dataTransaction?.transaction?.id
+  const refInputImg = useRef()
   const canvasRef = useRef(null)
 
 
@@ -155,87 +158,89 @@ const Voucher = () => {
 
 
   return (
-    data &&
-    <div onDragEnter={handleDrag} className={Style.imageWrapper}>
+    <Modal width={'1100px'} setShowModal={setShowModal}>
+      {data &&
+        <div onDragEnter={handleDrag} className={Style.imageWrapper}>
 
-      <h1 className={Style.containerVoucher_tittle}>Operacion de pedido <p>{id?.slice(0, 8)}</p></h1>
-      <h2 className={Style.containerVoucher_subTittle}><p>del usuario</p> {email}</h2>
+          <h1 className={Style.containerVoucher_tittle}>Operacion de pedido <p>{id?.slice(0, 8)}</p></h1>
+          <h2 className={Style.containerVoucher_subTittle}><p>del usuario</p> {email}</h2>
 
-      {
-        !preview && id
-          ?
-          <div className={Style.containerVoucher}>
-            <input
-              hidden
-              id="imgInput"
-              type="file"
-              accept=".jpg,.jpeg,.png,.pdf"
-              ref={refInputImg}
-              onChange={(e) => handleFiles(e.target.files[0])}
-            />
-            <label className={Style.imgDropArea} htmlFor="imgInput">
-              {!dragActive
-                ? <div className={Style.defaultDropArea}>
-                  <p>Drag and drop a PDF here</p>
-                  <p>or</p>
-                  <button
-                    type='button'
-                    className={Style.uploadButton}
-                    onClick={() => refInputImg.current.click()}
-                  >
-                    Upload a PDF
-                  </button>
-                </div>
-                : <div className={Style.onDragDropArea}>
-                  Drop your PDF here
-                </div>
-              }
-            </label>
-          </div>
-
-          : fileIsFetching
-            ?
-            <div className={Style.uploadMsg}>
-              <h2>Cargando comprobante</h2>
-              <h3>Aguarde por favor</h3>
-              <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
-            </div>
-
-            : imgDocument
+          {
+            !preview && id
               ?
-              <div className={Style.imgPreviewWrappper}>
-                <img className={Style.imgPreview} style={{ backgroundImage: `url(${preview})` }} />
+              <div className={Style.containerVoucher}>
+                <input
+                  hidden
+                  id="imgInput"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  ref={refInputImg}
+                  onChange={(e) => handleFiles(e.target.files[0])}
+                />
+                <label className={Style.imgDropArea} htmlFor="imgInput">
+                  {!dragActive
+                    ? <div className={Style.defaultDropArea}>
+                      <p>Drag and drop a PDF here</p>
+                      <p>or</p>
+                      <button
+                        type='button'
+                        className={Style.uploadButton}
+                        onClick={() => refInputImg.current.click()}
+                      >
+                        Upload a PDF
+                      </button>
+                    </div>
+                    : <div className={Style.onDragDropArea}>
+                      Drop your PDF here
+                    </div>
+                  }
+                </label>
               </div>
-              :
-              <div className={Style.imgPreviewWrappper}>
-                <Document file={pdfDocument} className={Style.imgPreviewWrappper}>
-                  <Page pageNumber={1} />
-                </Document>
-              </div>
+
+              : fileIsFetching
+                ?
+                <div className={Style.uploadMsg}>
+                  <h2>Cargando comprobante</h2>
+                  <h3>Aguarde por favor</h3>
+                  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
+                </div>
+
+                : imgDocument
+                  ?
+                  <div className={Style.imgPreviewWrappper}>
+                    <img className={Style.imgPreview} style={{ backgroundImage: `url(${preview})` }} />
+                  </div>
+                  :
+                  <div className={Style.imgPreviewWrappper}>
+                    <Document file={pdfDocument} className={Style.imgPreviewWrappper}>
+                      <Page pageNumber={1} />
+                    </Document>
+                  </div>
 
 
-      }
+          }
 
-      <div className={Style.containerVoucher_button}>
-        <button
-          type='button'
-          className={'btnprimario'}
-          onClick={handleDelete}>
-          CANCELAR
-        </button>
+          <div className={Style.containerVoucher_button}>
+            <button
+              type='button'
+              className={'btnprimario'}
+              onClick={handleDelete}>
+              CANCELAR
+            </button>
 
-        <button
-          type='button'
-          className={accepted ? Style.btnAceptar : 'btnprimario'}
-          disabled={accepted}
-          onClick={handleAccept}>
-          ACEPTAR
-        </button>
-      </div>
-      {dragActive && <div className={Style.dragImgElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
-    </div>
+            <button
+              type='button'
+              className={accepted ? Style.btnAceptar : 'btnprimario'}
+              disabled={accepted}
+              onClick={handleAccept}>
+              ACEPTAR
+            </button>
+          </div>
+          {dragActive && <div className={Style.dragImgElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
+        </div>}
+    </Modal>
   )
 }
 
-export default Voucher
+export default ModalVoucher
 

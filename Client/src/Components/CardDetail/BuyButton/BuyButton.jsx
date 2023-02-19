@@ -4,12 +4,14 @@ import style from "./BuyButton.module.css";
 import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
 import { SessionContext } from "../../..";
+import ModalVoucher from "../../Modal/ModalVoucher/ModalVoucher";
 
 
 
 const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
+  const [showModalVoucher, setShowModalVoucher] = useState(false)
   const { events } = useSelector(state => state.eventsBuysSlice);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
@@ -39,7 +41,7 @@ const BuyButton = () => {
     
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
-
+      {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher}/> }
       {isPaid === true && !events.find(element => element.status === 'COMPLETE') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
