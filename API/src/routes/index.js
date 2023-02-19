@@ -17,4 +17,9 @@ router.use("/reviews", reviewsMiddleware);
 router.use("/transaction", transactionMiddleware);
 router.use("/admin", adminMiddleware);
 
+router.post('/payments/notifications', (req,res) => {
+  console.log(req.body)
+  res.status(200).send('OK')
+})
+
 module.exports = router;
