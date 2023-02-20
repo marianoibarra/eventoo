@@ -3,7 +3,15 @@ import Modal from '../Modal'
 import style from './ModalMP.module.css'
 
 
-const ModalMP = ({ setShowModal, selectedPack }) => {
+const ModalMP = ({ setShowModal, selectedPack, paymentStatus, setPaymentStatus }) => {
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setPaymentStatus('SUCCESS');
+    setShowModal(false);
+    console.log(paymentStatus)
+  };
+
   return (
     <Modal setShowModal={setShowModal}>
       <div className={style.container}>
@@ -11,6 +19,7 @@ const ModalMP = ({ setShowModal, selectedPack }) => {
         <p>{selectedPack.title}</p>
         <p>{selectedPack.unit_price}</p>
         <h1>Pay with Mercado Pago</h1>
+        <button onClick={handleClick}>Pay me!</button>
       </div>
     </Modal>
   )

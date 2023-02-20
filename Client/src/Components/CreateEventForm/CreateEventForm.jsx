@@ -17,6 +17,9 @@ import { SessionContext } from '../..';
 import { useNavigate } from 'react-router-dom'
 import CheckOut from '../Checkout card/CheckoutCard';
 import PackSelection from './PackSelection/PackSelection';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 function Form() {
@@ -26,6 +29,8 @@ function Form() {
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
   const { setShowSessionModal } = useContext(SessionContext);
+  const [selectedPack, setSelectedPack] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('');
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -64,7 +69,7 @@ function Form() {
     state: null,
     virtualURL: '',
     zip_code: null,
-    privateEvent_password:'',
+    privateEvent_password: '',
   }
 
 
@@ -121,8 +126,12 @@ function Form() {
 
     if (input.isPublic === false && input.privateEvent_password.length === 0) {
       errors.privateEvent_password = "Password is required";
-    } else if ((input.isPublic === false) && input.privateEvent_password.length < 6){
+    } else if ((input.isPublic === false) && input.privateEvent_password.length < 6) {
       errors.privateEvent_password = "Password must be at least 6 characters length";
+    }
+
+    if (selectedPack.unit_price !== 0 && paymentStatus !== 'SUCCESS') {
+      errors.paymentStatus = "First you have to pay for your pack selected";
     }
 
     console.log(errors)
@@ -158,11 +167,22 @@ function Form() {
     }
   }, [confirm]);
 
-  const [selectedPack, setSelectedPack] = useState('');
+
 
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
+        {event.error ?
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
+          </Stack> :
+          event.create ? <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="success">Event Created succesfully.</Alert>
+            <Alert severity="success">
+              <AlertTitle>Success</AlertTitle>
+              This is a success alert — <strong>check it out!</strong>
+            </Alert>
+          </Stack> : undefined}
       {/* <Lateral/> */}
       <div className={style.form} >
         <h1 className={style.title}>EVENT INFORMATION</h1>
@@ -179,12 +199,10 @@ function Form() {
         <DateTime input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
-        {event.error ? <p className={style.errorMessage}>Can't create event</p> :
-          event.create ? <p className={style.sendMessage}>Event created successfully</p> : undefined}
         <div className={style.split}></div>
         <PackSelection selectedPack={selectedPack} setSelectedPack={setSelectedPack} />
       </div>
-      <CheckOut errors={errors} isLogged={isLogged} input={input} setShowSessionModal={setShowSessionModal} selectedPack={selectedPack} />
+      <CheckOut errors={errors} isLogged={isLogged} input={input} setShowSessionModal={setShowSessionModal} selectedPack={selectedPack} setShowMsg={setShowMsg} showMsg={showMsg} paymentStatus={paymentStatus} setPaymentStatus={setPaymentStatus} event={event} />
     </div>
   )
 };

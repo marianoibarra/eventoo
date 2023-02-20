@@ -8,7 +8,7 @@ function PackSelection({ setSelectedPack, selectedPack }) {
         {
             title: 'Free',
             description: 'Basic listing',
-            unit_price: 'Free'
+            unit_price: 0,
         },
         {
             title: 'Classic',
@@ -31,14 +31,14 @@ function PackSelection({ setSelectedPack, selectedPack }) {
             <h1 className={style.title}>Packs</h1>
             <h4>Choose the type of publicity</h4>
             <div className={style.cardsContainer}>
-                {packs.map((pack) => (
+                {packs.map((pack,index) => (
                     <div
                         key={pack.title}
                         className={style.card}
                         onClick={() => handleCardClick(pack)}>
                         <h3>{pack.title}</h3>
                         <p>{pack.description}</p>
-                        <p>Price: {pack.unit_price}</p>
+                        <p>Price: ${pack.unit_price}</p>
                     </div>
                 ))}
             </div>
