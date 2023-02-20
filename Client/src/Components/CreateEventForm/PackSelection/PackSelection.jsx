@@ -9,18 +9,21 @@ function PackSelection({ input, setInput }) {
             id: 0,
             title: 'Free',
             description: 'Basic listing',
+            quantity: 1,
             unit_price: 0,
         },
         {
             id: 1,
             title: 'Classic',
             description: 'Highlighted listing and first to apear on search',
+            quantity: 1,
             unit_price: '5'
         },
         {
             id: 2,
             title: 'Premium',
             description: 'Highlighted listing, first to apear on search and featured on homepage',
+            quantity: 1,
             unit_price: '20'
         },
     ];

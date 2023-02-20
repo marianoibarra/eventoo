@@ -5,15 +5,13 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { clearState, createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
+import { clear } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
-import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
-import { SessionContext } from '../..';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import CheckOut from '../Checkout card/CheckoutCard';
 import PackSelection from './PackSelection/PackSelection';
@@ -28,10 +26,10 @@ function Form() {
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
-  const { setShowSessionModal } = useContext(SessionContext);
-  const [paymentStatus, setPaymentStatus] = useState('');
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     isLogged && dispatch(getBankAccounts());
@@ -60,7 +58,14 @@ function Form() {
       script.src = 'https://sdk.mercadopago.com/js/v2';
       script.addEventListener('load', addCheckout);
       document.body.appendChild(script);
+    } else if(preference_id === false) {
+      navigate('/Event/' + event.id + '?checkout=true')
     }
+
+    return () => {
+      dispatch(clear())
+    }
+
   }, [preference_id]);
 
 

@@ -7,11 +7,14 @@ const manageMercadoPagoResponse = async (req, res) => {
   try {
     if (response.status === "approved") {
       const payment = await Payment.findByPk(response.preference_id);
+      const event = await Event.findByPk(eventId);
       await payment.update({
         status: "approved",
         merchant_order: response.merchant_order,
         payment_id: response.payment_id,
       });
+      await event.update({isActive: true})
+
       return res.redirect("http://localhost:3000/Event/" + eventId + "?checkout=true");
     }
 

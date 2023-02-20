@@ -8,6 +8,7 @@ const createEvent = async (req, res) => {
   const {
     name,
     description,
+    large_description,
     start_date,
     end_date,
     start_time,
@@ -88,6 +89,7 @@ const createEvent = async (req, res) => {
       {
         name,
         description,
+        large_description,
         start_date,
         end_date,
         start_time,
@@ -136,7 +138,7 @@ const createEvent = async (req, res) => {
     const organizer = await User.findByPk(userId);
 
     await event.setOrganizer(organizer);
-    let preference_id = null
+    let preference_id = false
 
     if(isPremium && items) {
 
@@ -175,7 +177,7 @@ const createEvent = async (req, res) => {
         Payment
       ],
     });
-
+    
     return res.status(201).json({event, preference_id});
   } catch (error) {
     console.log(error);

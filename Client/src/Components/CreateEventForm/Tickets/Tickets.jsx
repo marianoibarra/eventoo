@@ -24,7 +24,6 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
   const [showModal, setShowModal] = useState(false);
   const { bankAccount } = useSelector(state => state.bankAccounts);
   const accountID = input.bankAccount;
-  const selectedAccount = bankAccount.filter(c => c.id === accountID)[0];
   const { setShowSessionModal } = useContext(SessionContext);
   const { isLogged } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
@@ -153,8 +152,8 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           {input.bankAccount && (
             <div className={style.accountSelected}>
               <h3 className={style.parr}>Bank Account selected:</h3>
-              <p>{selectedAccount.name}</p>
-              <p>{selectedAccount.CBU}</p>
+              <p>{bankAccount?.filter(c => c.id === accountID)[0].name}</p>
+              <p>{bankAccount?.filter(c => c.id === accountID)[0].CBU}</p>
             </div>
           )}
         </div>

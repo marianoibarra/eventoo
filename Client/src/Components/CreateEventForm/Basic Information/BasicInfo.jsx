@@ -68,6 +68,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                     label="Description"
                     name='description'
                     multiline
+                    value={input.description}
                     rows={8}
                     sx={{m: 1, width: '90ch' }}
                     placeholder='Write here...'

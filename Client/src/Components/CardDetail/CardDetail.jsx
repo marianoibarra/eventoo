@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosModeEventDetail, axiosModeEditEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
 import { axiosModeEventsBuys } from "../../Slice/EventsBuysForUser/BuysSlice";
@@ -19,6 +19,7 @@ const CardDetail = () => {
     const { eventDetail } = useSelector(state => state.eventDetail);
     const dispatch = useDispatch();
     const { id } = useParams();
+    const [query] = useSearchParams()
 
     // estados para usuario organizador
     const user = useSelector(state => state.user);
@@ -77,8 +78,11 @@ const CardDetail = () => {
     useEffect(() => {
         dispatch(axiosModeEventDetail(id));
         dispatch(axiosModeEventsBuys());
-        return () => dispatch(axiosModeEventDetail());
-    }, [dispatch]);
+        if(query.get('checkout')) {
+          localStorage.removeItem("formEvent");
+          localStorage.removeItem("lastTime");
+        }
+      }, []);
 
     useEffect(() => {
         if(eventDetail.organizer){

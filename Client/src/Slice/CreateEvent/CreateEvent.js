@@ -17,15 +17,21 @@ export const createEvent = createAsyncThunk(
   }
 );
 
+const initialState = {
+  event: {},
+  loading: false,
+  error: null,
+  preference_id: null,
+}
+
 export const eventSlice = createSlice({
   name: "event",
-  initialState: {
-    event: {},
-    loading: false,
-    error: null,
-    preference_id: null,
+  initialState,
+  reducers: {
+    clear: () => {
+      return initialState
+    }
   },
-  reducers: {},
   extraReducers: {
     [createEvent.pending]: (state) => {
       state.loading = true;
@@ -46,6 +52,9 @@ export const eventSlice = createSlice({
     },
   },
 });
+
+
+export const { clear } = eventSlice.actions;
 
 export const selectEvent = (state) => state.event;
 
