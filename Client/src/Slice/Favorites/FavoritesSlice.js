@@ -67,7 +67,7 @@ export const favoritesSlice = createSlice({
     },
     [getFavorites.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      state.error = action.payload;
     },
     [switchFavorites.pending]: (state) => {
       state.loading = true
@@ -79,7 +79,7 @@ export const favoritesSlice = createSlice({
     },
     [switchFavorites.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      state.error = action.payload;
     }
   }
 }

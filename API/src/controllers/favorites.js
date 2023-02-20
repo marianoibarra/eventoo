@@ -1,7 +1,6 @@
 const { 
   Event, 
   User, 
-  Address, 
   Category, 
   BankAccount } 
   = require("../db");
@@ -47,11 +46,12 @@ const getFavorites = async (req, res) => {
   const userId  = req.userId;
   try {
    const user = await User.findByPk(userId)
+   console.log(user)
    const favorites = await user.getFavorites({
     include: [
-      Address,
-      Category,
-      BankAccount
+      'address',
+      'category',
+      'bankAccount'
     ]
    })
    
@@ -59,6 +59,7 @@ const getFavorites = async (req, res) => {
   
   } catch (error) {
       res.status(500).json({ msg: error.message });
+      console.log(error)
    }
 };
  

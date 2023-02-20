@@ -231,7 +231,7 @@ export const UserSlice = createSlice({
     },
     [getUserData.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.errorGetUser = action.payload;
       state.data = null;
     },
     [googleLogin.pending]: (state) => {

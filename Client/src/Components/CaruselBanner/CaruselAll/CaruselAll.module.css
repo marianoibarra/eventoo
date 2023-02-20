@@ -39,7 +39,7 @@
 
 .notFoundWrapper {
     margin-top: 40px;
-    grid-column: 1 / 6;
+    grid-column: 1/-1;
     align-self: center;
     justify-self: center;
     text-align: center;
@@ -68,7 +68,7 @@
     height: 80px;
     transform: scale(100%);
     margin-top: 40px;
-    grid-column: 1 / 6;
+    grid-column: 1 / -1;
     align-self: center;
     justify-self: center;
     text-align: center;
