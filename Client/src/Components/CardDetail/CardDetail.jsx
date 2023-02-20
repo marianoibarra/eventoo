@@ -68,12 +68,13 @@ const CardDetail = () => {
   }
 
   async function handleOnClick(event) {
-        event.preventDefault();
-        if(editedEvent.edited === true){
-            await dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
-            setEditedEvent({...editedEvent, edited: false});
-            setEdit({name: false, description: false});
-            await dispatch(axiosModeEventDetail(id));
+    event.preventDefault();
+    if(editedEvent.edited === true){
+        dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
+        setEditedEvent({...editedEvent, edited: false});
+        setEdit({name: false, description: false});
+        dispatch(axiosModeEventDetail(id));
+    }
   }
         
   function editButton(event) {
@@ -173,5 +174,6 @@ const CardDetail = () => {
       </>
   )
 }
+
 
 export default CardDetail;
