@@ -18,7 +18,6 @@ import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
-require("dotenv").config();
 
 function Form() {
   const dispatch = useDispatch();

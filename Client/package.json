@@ -24,7 +24,6 @@
     "axios": "^1.2.0",
     "country-state-city": "^3.1.2",
     "dayjs": "^1.11.7",
-    "dotenv": "^16.0.3",
     "framer-motion": "^7.6.6",
     "i": "^0.3.7",
     "moment": "^2.29.4",
@@ -70,5 +69,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv-webpack": "^8.0.1"
   }
 }
