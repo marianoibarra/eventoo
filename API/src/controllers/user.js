@@ -340,7 +340,7 @@ const checkResetToken = async (req, res) => {
 };
 
 const getProfile = async ({ userId }, res) => {
-  console.log(userId);
+
   try {
     const profileUser = await User.findByPk(userId, {
       attributes: { exclude: ["password", "addressId", "roleAdminId"] },

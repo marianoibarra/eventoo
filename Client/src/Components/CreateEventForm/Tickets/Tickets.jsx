@@ -55,7 +55,6 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
   };
 
   const handleGroupPublic = (e) => {
-    console.log('public', input.isPublic, input)
     setInput({
       ...input,
       isPublic: e.target.name === 'Public',

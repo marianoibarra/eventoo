@@ -26,9 +26,6 @@ const Voucher = () => {
   const id = dataTransaction?.transaction?.id
   const navigate = useNavigate()
 
-  console.log(eventDetail, 'desde el voucher')
-
-
 
   useEffect(() => {
     const getTransaction = async () => {
@@ -36,7 +33,6 @@ const Voucher = () => {
       setError(false)
       if (!data) {
         try {
-          console.log(axios.defaults.headers.common)
           const res = await API.get('/transaction/' + `${id}`)
           setLoading(false)
           setData(res.data)

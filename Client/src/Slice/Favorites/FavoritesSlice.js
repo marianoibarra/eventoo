@@ -20,18 +20,15 @@ export const switchFavorites = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => { 
     try {
       const {favorites:{favorites}} = getState()
-      console.log(favorites, id)
       if(favorites.some(f => f === id)) {
         const response = await API.delete('/favorites', {
           data: {
             id: id
           }
         })
-        console.log('delete: ', response.data)
         return response.data
       } else {
         const response = await API.post('/favorites', {id: id})
-        console.log('post: ', response.data)
         return response.data
       }
     } catch (error) {

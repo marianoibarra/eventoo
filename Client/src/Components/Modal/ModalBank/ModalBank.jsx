@@ -33,7 +33,6 @@ const ModalBank = ({ setShowModal, input, setInput }) => {
 
   useEffect((name, cbu) => {
     const cbuNums = CBU.length;
-    console.log('cbu', CBU, 'name', name, cbuNums)
   }, [name, CBU]);
 
   const handleBlur = (e) => {

@@ -8,7 +8,6 @@ export const forgotPass = createAsyncThunk('auth/forgot', async (formData, { rej
     return response.data
   } catch (error) {
     if (error.response) {
-        console.log(error.response.data)
       return rejectWithValue(error.response.data)
     }
     throw error

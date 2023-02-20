@@ -170,7 +170,6 @@ function Form() {
 
   useEffect(() => {
     setErrors(validate(input));
-    console.log(input)
     if (confirm !== null) {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());

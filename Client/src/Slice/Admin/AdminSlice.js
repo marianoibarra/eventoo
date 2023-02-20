@@ -25,9 +25,7 @@ export const getUsers = createAsyncThunk("admin/getUsers", async (thunkAPI) => {
 export const changeUserRole = createAsyncThunk(
   "admin/changeUserRole",
   async (userId, thunkAPI) => {
-    console.log(userId)
     const response = await API.put(`/admin/users/change/${userId}`);
-    console.log(response, userId);
     return response.data;
   }
 );
@@ -36,13 +34,11 @@ export const changeStateEvent = createAsyncThunk(
   "admin/changeStateEvent",
   async (eventId, {rejectWithValue}) => {
    try {
-    console.log(eventId);
     const response = await API.put(`/admin/events/${eventId}`);
 
     return {isActive:response.data, id:eventId};
    } catch (error) {
     if (error.response) {
-      console.log(error.response.data)
       return rejectWithValue(error.response.data);
     }
     throw error;
@@ -53,7 +49,6 @@ export const changeStateEvent = createAsyncThunk(
 export const disableUser = createAsyncThunk(
   "admin/disableUser",
   async (userId, thunkAPI) => {
-    console.log(userId)
     const response = await API.put(`/admin/users/ban/${userId}`);
     return response.data;
   }
@@ -93,7 +88,6 @@ export const adminSlice = createSlice({
   reducers: {
     sortByAscendingEvents: (state, action) => {
       const propiedad = action.payload;
-      console.log(propiedad);
       if (
         propiedad === "start_date" ||
         propiedad === "name" 
@@ -110,11 +104,9 @@ export const adminSlice = createSlice({
           return a[propiedad].localeCompare(b[propiedad]);
         });
       } else if (propiedad === "organizer") {
-        console.log('entre')
         state.events.sort((a, b) => {
           let c = a[propiedad] && a[propiedad].name;
           let d = b[propiedad] && b[propiedad].name;
-          console.log(c);
           if (
             !c ||
             !d ||
@@ -131,7 +123,6 @@ export const adminSlice = createSlice({
     },
     sortByDescendingEvents: (state, action) => {
       const propiedad = action.payload;
-      console.log(propiedad);
       if (
         propiedad === "start_date" ||
         propiedad === "name" 
@@ -148,11 +139,9 @@ export const adminSlice = createSlice({
           return b[propiedad].localeCompare(a[propiedad]);
         });
       } else if (propiedad === "organizer") {
-        console.log('entre')
         state.events.sort((a, b) => {
           let c = a[propiedad] && a[propiedad].name;
           let d = b[propiedad] && b[propiedad].name;
-          console.log(c);
           if (
             !c ||
             !d ||
@@ -170,7 +159,6 @@ export const adminSlice = createSlice({
     },
     sortByAscendingUser: (state, action) => {
       const propiedad = action.payload;
-      console.log(propiedad);
       if (
         propiedad === "email" ||
         propiedad === "name" ||
@@ -193,7 +181,6 @@ export const adminSlice = createSlice({
         state.users.sort((a, b) => {
           let c = a[propiedad].name;
           let d = b[propiedad].name;
-          console.log(c);
           return c.localeCompare(d);
         });
       } else {
@@ -223,7 +210,6 @@ export const adminSlice = createSlice({
         state.users.sort((a, b) => {
           let c = a[propiedad].name;
           let d = b[propiedad].name;
-          console.log(d);
           return d.localeCompare(c);
         });
       } else {

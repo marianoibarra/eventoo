@@ -11,7 +11,6 @@ const approvalTimeLimit = 1
 
 const cleanTransactions = async (IdEvent) => {
   
-console.log(IdEvent.stock_ticket, "stock antes de limpiar") 
 const event = await Event.findByPk(IdEvent.id , {
   include: [
     {
@@ -42,8 +41,7 @@ const event = await Event.findByPk(IdEvent.id , {
       0
     );
     await event.increment("stock_ticket", { by: ticketsToReturn });
-    console.log(expiredTransactions.map((transaction) => transaction.id))
-    // Cancelar transacciones expiradas
+
     await Transaction.update(
       { status: "CANCELED" },
       {
@@ -69,7 +67,6 @@ const createTransactions = async (req, res) => {
 
     await cleanTransactions(event);
     await event.reload(); 
-    console.log(event.stock_ticket, "stock despues de limpiar") 
     const user = await User.findByPk(buyerId);
 
     if (event.stock_ticket < tickets.length) {

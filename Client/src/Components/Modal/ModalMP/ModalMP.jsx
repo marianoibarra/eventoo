@@ -9,7 +9,6 @@ const ModalMP = ({ setShowModal, selectedPack, paymentStatus, setPaymentStatus }
     e.preventDefault();
     setPaymentStatus('SUCCESS');
     setShowModal(false);
-    console.log(paymentStatus)
   };
 
   return (

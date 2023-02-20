@@ -47,7 +47,6 @@ try {
 
 const getFavorites = async (req, res) => {
   const userId  = req.userId;
-  console.log(req.headers)
   try {
    const user = await User.findByPk(userId)
    const favorites = await user.getFavorites()
