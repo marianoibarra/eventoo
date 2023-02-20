@@ -11,6 +11,7 @@ const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
   const { events } = useSelector(state => state.eventsBuysSlice);
+  const user = useSelector(state => state.user);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
@@ -40,7 +41,7 @@ const BuyButton = () => {
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
 
-      {isPaid === true && !events.find(element => element.status === 'PENDING') && 
+      {user.isLogged !== false ? !events.find(element => element.status === 'PENDING') : true && isPaid === true &&
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -63,7 +64,7 @@ const BuyButton = () => {
         </div>
       }
 
-      {isPaid === false && !events.find(element => element.status === 'PENDING') && 
+      {user.isLogged !== false ? !events.find(element => element.status === 'PENDING') : true && isPaid === false &&
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -84,7 +85,7 @@ const BuyButton = () => {
         </div>      
       }
 
-      {events.length > 0 && events.find(element => element.status === 'PENDING') ? 
+      {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'PENDING') ? 
         <div className={style.container_buyer_pending}>
           <div className={style.buyer_pending}>
               <p>

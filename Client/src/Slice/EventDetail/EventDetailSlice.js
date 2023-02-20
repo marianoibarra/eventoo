@@ -10,7 +10,7 @@ export const axiosModeEventDetail = createAsyncThunk(
         console.log(res.data)
         return res.data;
       }
-      else return {};
+      return {event: {}};
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -25,7 +25,6 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   async ({id, body}, { rejectWithValue }) => {
     try {
       const res = await API.put(`/event/${id}`, body);
-      console.log('data', res.data);
       return res.data;
     } catch (error) {
       if (error.response) {

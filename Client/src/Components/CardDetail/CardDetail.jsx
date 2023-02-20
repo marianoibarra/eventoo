@@ -68,13 +68,14 @@ const CardDetail = () => {
   }
 
   async function handleOnClick(event) {
-    event.preventDefault();
-    if(editedEvent.edited === true){
-        await dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
-        window.location.reload()
-    }
+        event.preventDefault();
+        if(editedEvent.edited === true){
+            await dispatch(axiosModeEditEventDetail({id, body:{...editedEvent}}));
+            setEditedEvent({...editedEvent, edited: false});
+            setEdit({name: false, description: false});
+            await dispatch(axiosModeEventDetail(id));
   }
-
+        
   function editButton(event) {
     event.preventDefault();
     setEdit({
@@ -95,10 +96,10 @@ const CardDetail = () => {
       }
     }
   }, [eventDetail, user]);
-
+  
   if(loading) return <div className={style.spinner}><div></div><div></div><div></div><div></div></div>;
   if(error || Object.keys(eventDetail).length === 0) return <div className={style.error}>Something was wrong..</div>
-    
+
   return(
     <>
     {eventDetail && Object.keys(eventDetail).length > 0 && 

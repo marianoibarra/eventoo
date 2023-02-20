@@ -12,7 +12,7 @@ const EventInformation = () => {
 
     return(
         <>
-            {Object.keys(eventDetail).length > 0 && <div className={style.background}>
+            {eventDetail && Object.keys(eventDetail).length > 0 && <div className={style.background}>
                 {eventDetail.category && 
                     <div className={style.containercategory}>
                         <span className={style.iconspantext}>{eventDetail.category.name}</span> 
