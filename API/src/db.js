@@ -54,7 +54,8 @@ const {
   Ticket,
   Review,
   EmailCode,
-  RoleAdmin
+  RoleAdmin,
+  Payment
 
 } = sequelize.models;
 
@@ -120,6 +121,12 @@ Event.belongsTo(Address, {as: 'address'})
 
 Event.hasMany(Review)
 Review.belongsTo(Event)
+
+Payment.hasOne(Event);
+Event.belongsTo(Payment);
+
+User.hasMany(Payment, {as: 'payments'});
+Payment.belongsTo(User, {as: 'user'});
 
 
 //PASSWORD USER

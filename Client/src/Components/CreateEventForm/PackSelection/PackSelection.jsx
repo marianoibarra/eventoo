@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import style from './PackSelection.module.css'
 
-function PackSelection({ setSelectedPack, selectedPack }) {
+function PackSelection({ input, setInput }) {
 
 
     const packs = [
-        {
+        {   
+            id: 0,
             title: 'Free',
             description: 'Basic listing',
             unit_price: 0,
         },
         {
+            id: 1,
             title: 'Classic',
             description: 'Highlighted listing and first to apear on search',
             unit_price: '5'
         },
         {
+            id: 2,
             title: 'Premium',
             description: 'Highlighted listing, first to apear on search and featured on homepage',
             unit_price: '20'
@@ -23,7 +26,20 @@ function PackSelection({ setSelectedPack, selectedPack }) {
     ];
 
     const handleCardClick = (pack) => {
-        setSelectedPack(pack);
+        if(pack.id !== 0) {
+            setInput({
+                ...input,
+                isPremium: true,
+                items: [pack]
+            })
+        } else {
+            setInput({
+                ...input,
+                isPremium: false,
+                items: null
+            })
+        }
+
     };
 
     return (

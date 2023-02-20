@@ -1,5 +1,6 @@
-const { Event, Address, Category, User, BankAccount } = require("../db");
+const { Event, Address, Category, User, BankAccount, Payment } = require("../db");
 const { Op } = require("sequelize");
+const getMercadoPago = require("../helpers/mercadopago");
 
 
 const createEvent = async (req, res) => {
@@ -16,6 +17,7 @@ const createEvent = async (req, res) => {
     virtualURL,
     category,
     isPremium,
+    items,
     isPaid,
     age_range,
     guests_capacity,
@@ -97,6 +99,7 @@ const createEvent = async (req, res) => {
         isPaid,
         age_range,
         guests_capacity,
+        stock_ticket:guests_capacity,
         placeName,
         advertisingTime_start,
         adversiting_end,
@@ -133,6 +136,23 @@ const createEvent = async (req, res) => {
     const organizer = await User.findByPk(userId);
 
     await event.setOrganizer(organizer);
+    let preference_id = null
+
+    if(isPremium && items) {
+
+      let itemsParsed = items.map(i => {return {...i, unit_price: Number(i.unit_price), quantity: Number(i.quantity),}})
+      const price = items.reduce((acc, val) =>  acc + (val.quantity * val.unit_price),0)
+      preference_id = await getMercadoPago(event.id, itemsParsed)
+
+      const payment = await Payment.create({id: preference_id, price})
+      await organizer.setPayments(payment)
+      await event.setPayment(payment)
+      
+      event.isActive = false
+      await event.save()
+    } else {
+      if(isPremium) return res.status(401).send({msg: 'items are required'})
+    }
 
     await event.reload({
       include: [
@@ -152,10 +172,11 @@ const createEvent = async (req, res) => {
           as: "category",
           attributes: ["name", "modality"],
         },
+        Payment
       ],
     });
 
-    return res.status(201).json(event);
+    return res.status(201).json({event, preference_id});
   } catch (error) {
     console.log(error);
     return res.status(500).json({

@@ -14,7 +14,7 @@ import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 import { SessionContext } from '../..';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import CheckOut from '../Checkout card/CheckoutCard';
 import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
@@ -24,12 +24,11 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 function Form() {
   const dispatch = useDispatch();
-  const event = useSelector(state => state.event);
+  const { event, preference_id } = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
   const { setShowSessionModal } = useContext(SessionContext);
-  const [selectedPack, setSelectedPack] = useState('');
   const [paymentStatus, setPaymentStatus] = useState('');
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
@@ -37,6 +36,32 @@ function Form() {
   useEffect(() => {
     isLogged && dispatch(getBankAccounts());
   }, []);
+
+  function addCheckout() {
+    const mp = new window.MercadoPago('APP_USR-78c8ed61-282c-4022-a30b-8463bffaaec4', {
+      locale: 'es-AR'
+    });
+  
+    mp.checkout({
+      preference: {
+        id: preference_id,
+      },
+      autoOpen: true,
+      theme: {
+        elementsColor: '#007F80'
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (preference_id) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://sdk.mercadopago.com/js/v2';
+      script.addEventListener('load', addCheckout);
+      document.body.appendChild(script);
+    }
+  }, [preference_id]);
 
 
   const initialState = {
@@ -56,8 +81,9 @@ function Form() {
     guests_capacity: "",
     modality: 'Presential',
     isPaid: true,
-    isPremium: null,
+    isPremium: false,
     isPublic: true,
+    items: null,
     name: '',
     parking: null,
     pet_friendly: null,
@@ -130,15 +156,12 @@ function Form() {
       errors.privateEvent_password = "Password must be at least 6 characters length";
     }
 
-    if (selectedPack.unit_price !== 0 && paymentStatus !== 'SUCCESS') {
-      errors.paymentStatus = "First you have to pay for your pack selected";
-    }
-
     console.log(errors)
     return errors;
   }
 
   const [confirm, setConfirm] = useState(null)
+  const [query] = useSearchParams()
 
   useEffect(() => {
     setErrors(validate(input));
@@ -151,7 +174,11 @@ function Form() {
 
   useEffect(() => {
     if (stgData && stgData.name !== null & stgData.name.length > 0) {
-      setShowModal(true)
+      if(query.get('checkout_failed') === 'true' || query.get('checkout_failed') === true ) { 
+        setConfirm(true)
+      } else {
+        setShowModal(true)
+      }
     } else {
       setConfirm(false)
     }
@@ -200,9 +227,9 @@ function Form() {
         <div className={style.split}></div>
         <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
-        <PackSelection selectedPack={selectedPack} setSelectedPack={setSelectedPack} />
+        <PackSelection input={input} setInput={setInput} />
       </div>
-      <CheckOut errors={errors} isLogged={isLogged} input={input} setShowSessionModal={setShowSessionModal} selectedPack={selectedPack} setShowMsg={setShowMsg} showMsg={showMsg} paymentStatus={paymentStatus} setPaymentStatus={setPaymentStatus} event={event} />
+      <CheckOut errors={errors} isLogged={isLogged} input={input} />
     </div>
   )
 };

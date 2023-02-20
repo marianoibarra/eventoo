@@ -35,7 +35,7 @@ import NewHome from "./Pages/NewHome";
 import Admin from "./Pages/Admin";
 
 export const API = axios.create({
-  baseURL: 'https://api.eventoo.com.ar',
+  baseURL: 'http://localhost:3001',
   headers: {
     common: {
       'authorization': 'Bearer ' + localStorage.getItem("token"),

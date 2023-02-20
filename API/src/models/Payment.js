@@ -1,27 +1,29 @@
-const { DataTypes } = require('sequelize');
-
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define('payment',{
-        status: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },          
-        payment_type:{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },             
-        total:{
-            type: DataTypes.FLOAT,
-            allowNull: true,
-        }              
-    })
+  sequelize.define("payment", {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'pending'
+    },
+    merchant_order: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    payment_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+  });
 };
-
-
-
-//un evento tiene un payment
-//un payment tiene un evento 
-
-//un usuario tiene muchos payments
-//un payment tiene un solo usuario 
