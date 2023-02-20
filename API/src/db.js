@@ -54,7 +54,8 @@ const {
   Ticket,
   Review,
   EmailCode,
-  RoleAdmin
+  RoleAdmin,
+  Payment
 
 } = sequelize.models;
 
@@ -121,6 +122,12 @@ Event.belongsTo(Address, {as: 'address'})
 Event.hasMany(Review)
 Review.belongsTo(Event)
 
+Payment.hasOne(Event);
+Event.belongsTo(Payment);
+
+User.hasMany(Payment, {as: 'payments'});
+Payment.belongsTo(User, {as: 'user'});
+
 
 //PASSWORD USER
 
@@ -181,21 +188,21 @@ Event.beforeFind((options) => {
     }
   } 
 
-  if (options.where.isNextWeekend) {
-    options.where.start_date = {
-      [Sequelize.Op.or]: [
-        {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
-        {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
-      ]
-    }
-  }
-
   if(options.where['$address.state$']) {
     options.where[Sequelize.Op.or] = [
       {'$address.state$': options.where['$address.state$']},
       {"$category.modality$": 'Virtual'}
     ]
     delete options.where['$address.state$']
+  }
+
+  if (options.where.isNextWeekend) {
+    options.where.start_date = {
+      [Sequelize.Op.or]: [
+        {[Sequelize.Op.eq]: moment().day(6).format("YYYY-MM-DD")},
+        {[Sequelize.Op.eq]: moment().day(7).format("YYYY-MM-DD")}
+      ]
+    };[Op.iLike]
   }
 
   if (options.where.isToday) {

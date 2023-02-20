@@ -5,6 +5,7 @@ const {
   getTransactionById,
   cancelTransaction,
   completeTransaction,
+  ApprovePayment,
   getTransactionsByEvent,
   getTransactionsByEventOrganizer,
   updateTransaction,
@@ -20,6 +21,7 @@ router.get("/buyer", verifyToken, getTransactionsByUserBuyer);
 router.get("/seller", verifyToken, getTransactionsByUserSeller);
 router.get("/event/:id", verifyToken, getTransactionsByEvent);
 router.put("/complete/:transactionId", verifyToken, completeTransaction);
+router.put("/approvePayment/:transactionId", verifyToken, ApprovePayment);
 router.put("/cancel/:transactionId", verifyToken, cancelTransaction);
 router.get("/tickets", verifyToken, showTicketsByTransactionId);
 router.get("/:id", verifyToken, getTransactionById);

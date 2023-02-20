@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    large_description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     start_date: {
       type: DataTypes.DATEONLY,
       allowNull: true,
@@ -72,6 +76,10 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     guests_capacity: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
+    stock_ticket: {
       type: DataTypes.BIGINT,
       allowNull: true,
     },

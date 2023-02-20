@@ -45,7 +45,7 @@ const googleAuth = async (req, res) => {
       expiresIn: "90d",
     });
 
-    const response = await user.toJSON()  
+    const response = user ? await user.toJSON() : null
     
     if(response.roleAdmin) response.roleAdmin = response.roleAdmin.name;
      delete response.password
@@ -340,7 +340,7 @@ const checkResetToken = async (req, res) => {
 };
 
 const getProfile = async ({ userId }, res) => {
-  console.log(userId);
+
   try {
     const profileUser = await User.findByPk(userId, {
       attributes: { exclude: ["password", "addressId", "roleAdminId"] },
