@@ -13,7 +13,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-conn.sync({ alter: true })
+conn.sync({ force: true })
   .then(() => fillTables())
   .then(()=> createSuperAdmin(data))
   .then(() =>

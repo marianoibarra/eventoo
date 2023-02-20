@@ -1,9 +1,10 @@
 const { Router } = require("express");
 const {
+  
   getEventsPublic,
   getCategories,
   getEventById,
-  checkEventPassword,
+ 
 } = require("../controllers/home");
 
 const router = Router();

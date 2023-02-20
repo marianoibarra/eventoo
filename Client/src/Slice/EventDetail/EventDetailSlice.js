@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
-// const urlLocal = `http://localhost:3001/home/events/${id}`
 export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {
     try {
       if(id){
         const res = await API.get(`/home/events/${id}`);
+        console.log(res.data)
         return res.data;
       }
       return {event: {}};
@@ -46,7 +46,10 @@ export const eventDetailSlice = createSlice({
   reducers: {},
   extraReducers: {
     [axiosModeEventDetail.pending]: (state) => {
+      state.eventDetail = {};
+      state.isPublic = null;
       state.loading = true;
+      state.error = null;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;

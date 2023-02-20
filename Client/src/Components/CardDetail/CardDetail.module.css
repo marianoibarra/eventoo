@@ -232,3 +232,72 @@ h1 a:hover {
 .organizerbutton_disabled:hover {
     box-shadow: none;
 }
+
+.spinner {
+    display: inline-block;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    transform: scale(100%);
+  }
+  
+  .spinner div {
+    position: absolute;
+    top: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #007F80;
+    opacity: .9;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  
+  .spinner div:nth-child(1) {
+    left: 8px;
+    animation: spinner1 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(2) {
+    left: 8px;
+    animation: spinner2 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(3) {
+    left: 32px;
+    animation: spinner2 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(4) {
+    left: 56px;
+    animation: spinner3 0.6s infinite;
+  }
+  
+  @keyframes spinner1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+  }
+  
+  @keyframes spinner3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+  }
+  
+  @keyframes spinner2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+  }

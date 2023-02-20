@@ -17,7 +17,6 @@ const SearchBar = () => {
     const dispatch = useDispatch()
 
     const handleClick = (e) => {
-        console.log(e.type)
         e.preventDefault()
         setShowSearchClear(true)
         inputRef.current.blur()
