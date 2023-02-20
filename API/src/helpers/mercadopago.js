@@ -4,13 +4,13 @@ mercadopago.configure({
   access_token: MP_ACCESS_TOKEN,
 });
 
-const getMercadoPago = async (eventId, items) => {
+const getMercadoPago = async (eventId, items, client_url, server_url) => {
   let preference = {
     items,
     back_urls: {
-      success: "http://localhost:3001/mercadopago/" + eventId,
-      failure: "http://localhost:3001/mercadopago/" + eventId,
-      pending: "http://localhost:3001/mercadopago/" + eventId,
+      success: `${server_url}/mercadopago/${eventId}`,
+      failure: `${server_url}/mercadopago/${eventId}`,
+      pending: `${server_url}/mercadopago/${eventId}`,
     },
     auto_return: "approved",
     binary_mode: true,
@@ -26,7 +26,7 @@ const getMercadoPago = async (eventId, items) => {
       installments: 1,
     },
     statement_descriptor: "Eventoo",
-    external_reference: "Reference_1234",
+    external_reference: client_url
   };
 
   try {

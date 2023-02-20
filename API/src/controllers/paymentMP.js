@@ -15,15 +15,15 @@ const manageMercadoPagoResponse = async (req, res) => {
       });
       await event.update({isActive: true})
 
-      return res.redirect("http://localhost:3000/Event/" + eventId + "?checkout=true");
+      return res.redirect(`${response.external_reference}/Event/${eventId}?checkout=true`);
     }
 
     const eventToDestroy = await Event.findByPk(eventId)
     if(eventToDestroy) await eventToDestroy.destroy()
-    res.redirect("http://localhost:3000/create-event?checkout_failed=true");
+    res.redirect(`${response.external_reference}/create-event?checkout_failed=true`);
 
   } catch (error) {
-    res.redirect("http://localhost:3000/create-event?internal_error=true");
+    res.redirect(`${response.external_reference}/create-event?internal_error=true`);
   }
 };
 

@@ -103,17 +103,3 @@ export const transactionSlice = createSlice({
 
 export default transactionSlice.reducer
 
-// export const createBankAccount = createAsyncThunk(
-//   'bankAccounts/createBankAccount',
-//   async (formData, { rejectWithValue }) => {
-//   try {
-//   const response = await axios.post('https://api.eventoo.com.ar/bank-account', formData);
-//   return response.data
-// } catch (error) {
-//   if (error.response) {
-//       console.log(error.response.data)
-//     return rejectWithValue(error.response.data)
-//   }
-//   throw error
-// }
-// })

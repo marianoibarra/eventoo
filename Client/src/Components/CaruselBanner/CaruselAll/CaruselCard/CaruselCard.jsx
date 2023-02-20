@@ -44,7 +44,7 @@ const CaruselCard = ({
         </div>
         <span className={Style.details_category}>{category}</span>
         <div className={Style.container_details}>
-          <div  className={Style.favorite} onClick={handleFav}>
+          <div className={Style.favorite} onClick={handleFav}>
             {
               favorites.some(f => f === id)
               ? <HiHeart className={Style.favEnabled} size={20} />

@@ -1,6 +1,7 @@
 const { 
   Event, 
   User, 
+  Address, 
   Category, 
   BankAccount } 
   = require("../db");
@@ -31,11 +32,13 @@ try {
 
   if (existingEvent){
     return res.status(400).json({msg: "event already exists in favorites list"});
-  } else {
-  await user.addFavorites(event);
-}
+  } 
 
-  return res.status(200).json({msg: 'event added to favorites successfully'});
+  await user.addFavorites(event);
+  const favorites = await user.getFavorites()
+
+  return res.status(200).json(favorites.map(f => f.id));
+
 } catch (error) {
   res.status(500).json({ msg: error.message })
 }
@@ -44,22 +47,15 @@ try {
 
 const getFavorites = async (req, res) => {
   const userId  = req.userId;
+  console.log(req.headers)
   try {
    const user = await User.findByPk(userId)
-   console.log(user)
-   const favorites = await user.getFavorites({
-    include: [
-      'address',
-      'category',
-      'bankAccount'
-    ]
-   })
+   const favorites = await user.getFavorites()
    
-   return res.json( favorites );
+   return res.json( favorites.map(f => f.id) );
   
   } catch (error) {
       res.status(500).json({ msg: error.message });
-      console.log(error)
    }
 };
  
@@ -75,7 +71,9 @@ const deleteFavorite = async (req, res) => {
 
    await user.removeFavorites(event);
 
-   return res.status(200).json({msg: 'event removed of favorites successfully'});
+   const favorites = await user.getFavorites()
+
+   return res.status(200).json(favorites.map(f => f.id));
  } catch (error) {
    res.status(500).json({ msg: error.message })
  }

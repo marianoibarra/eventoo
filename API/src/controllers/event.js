@@ -144,7 +144,9 @@ const createEvent = async (req, res) => {
 
       let itemsParsed = items.map(i => {return {...i, unit_price: Number(i.unit_price), quantity: Number(i.quantity),}})
       const price = items.reduce((acc, val) =>  acc + (val.quantity * val.unit_price),0)
-      preference_id = await getMercadoPago(event.id, itemsParsed)
+      const client_url = req.protocol + '://' + (req.hostname === 'localhost' ? 'localhost:3000' : req.hostname)
+      const server_url = req.headers.host
+      preference_id = await getMercadoPago(event.id, itemsParsed, client_url, server_url)
 
       const payment = await Payment.create({id: preference_id, price})
       await organizer.setPayments(payment)
