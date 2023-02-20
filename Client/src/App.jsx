@@ -32,7 +32,7 @@ import Admin from "./Pages/Admin";
 import { getFavorites } from "./Slice/Favorites/FavoritesSlice";
 
 export const API = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://api.eventoo.com.ar',
   headers: {
     common: {
       'authorization': 'Bearer ' + localStorage.getItem("token"),

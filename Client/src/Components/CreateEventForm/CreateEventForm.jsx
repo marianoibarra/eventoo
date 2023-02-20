@@ -18,7 +18,7 @@ import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
-
+require("dotenv").config();
 
 function Form() {
   const dispatch = useDispatch();
@@ -26,6 +26,7 @@ function Form() {
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
+  const MP_PUBLIC_KEY = process.env.REACT_APP_MP_PUBLIC_KEY
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -36,7 +37,7 @@ function Form() {
   }, []);
 
   function addCheckout() {
-    const mp = new window.MercadoPago('APP_USR-78c8ed61-282c-4022-a30b-8463bffaaec4', {
+    const mp = new window.MercadoPago(MP_PUBLIC_KEY, {
       locale: 'es-AR'
     });
   
