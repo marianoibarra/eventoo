@@ -6,7 +6,6 @@ export const axiosModeEventsBuys = createAsyncThunk(
   'eventsBuysSlice/axiosModeEventsBuys',
   async () => {
     const res = await API.get('/transaction/buyer')
-    console.log(res)
     return res.data
   }
 )

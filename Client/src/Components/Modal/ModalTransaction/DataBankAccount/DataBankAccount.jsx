@@ -17,7 +17,7 @@ const DataBankAccount = ({ quantity }) => {
   const [cancel, setCancel] = useState(false)
   const ticketForms = quantity
   const idTransaction = eventDetail.id
-
+  
   const handleConfirmed = () => {
     setConfirmed(!confirmed)
   }

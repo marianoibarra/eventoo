@@ -7,18 +7,16 @@ import DataBankAccount from './DataBankAccount/DataBankAccount'
 
 
 const ModalTransaction = ({ setShowModal, quantity }) => {
-
   const dispatch = useDispatch()
   const [ticketForms, setTicketForms] = useState(Array.from({ length: quantity }, () => ({})));
   const { eventDetail } = useSelector(state => state.eventDetail);
   const { email } = useSelector(state => state.user)
   const [isButtonDisabled, setisButtonDisabled] = useState(true)
   const [isDataBankAccount, setisDataBankAccount] = useState(true)
+  
 
-  console.log(ticketForms,'informacion de los tickets')
 
   const handleDataTicket = (e, index) => {
-
     const updatedForm = { ...ticketForms[index], [e.target.name]: e.target.value };
     setTicketForms(ticketForms => ([...ticketForms.slice(0, index), updatedForm, ...ticketForms.slice(index + 1)]));
 
@@ -48,8 +46,6 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
     setisDataBankAccount(!isDataBankAccount)
   }
 
-
-  // console.log(ticketForms, 'algo 2??');
 
   const renderTicketForm = (index) => (
     <div key={index} className={Style.container_dataTicket}>
@@ -135,7 +131,7 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
           </div>
           :
           <DataBankAccount quantity={quantity} />
-          }
+      }
     </Modal>
   )
 }

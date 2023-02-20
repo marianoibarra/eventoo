@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Style from './ModalVoucher.module.css'
 import { API } from '../../../App';
-import { axiosPutTicket, axiosCANCELTicket } from '../../../Slice/transaction/TransactionSlice';
+import { axiosPutTicket, axiosCANCELTicket, axiosGetTicket } from '../../../Slice/transaction/TransactionSlice';
 import { Document, Page } from 'react-pdf'
 import pdfjsLib from 'pdfjs-dist'
 import Modal from '../Modal';
@@ -11,12 +11,8 @@ import Modal from '../Modal';
 
 
 const ModalVoucher = ({ setShowModal }) => {
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [data, setData] = useState(null)
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(false)
   const [fileIsFetching, setfileIsFetching] = useState(false)
@@ -24,40 +20,31 @@ const ModalVoucher = ({ setShowModal }) => {
   const [imgDocument, setImgDocument] = useState(null)
   const [pdfDocument, setPdfDocument] = useState(null)
   const [accepted, setAccepted] = useState(true);
-  const { email } = useSelector(state => state.user)
-  const dataTransaction = useSelector(state => state.transaction)
-  const id = dataTransaction?.transaction?.id
   const refInputImg = useRef()
-  const canvasRef = useRef(null)
+  const { email } = useSelector(state => state.user)
+  const { eventDetail } = useSelector(state => state.eventDetail)
+  const { transaction } = useSelector(state => state.transaction)
+  const [id, setId] = useState(null)
 
 
-
-  // useEffect para cargar la informacion que viene por API
   useEffect(() => {
-    const getTransaction = async () => {
-      setLoading(true)
-      setError(false)
-      if (!data) {
-        try {
-          const res = await API.get('/transaction/' + `${id}`)
-          setLoading(false)
-          setData(res.data)
-        } catch (error) {
-          setError(error)
-          setLoading(false)
-        }
+    dispatch(axiosGetTicket(eventDetail.id))
+  }, []);
+
+  useEffect(() => {
+    transaction?.map(i => {
+      if (i.status === 'PENDING') {
+        setId(i.id)
       }
-    }
-    getTransaction()
-  }, [id]);
+    })
+  }, [transaction])
 
 
 
-  //useEffect que instanciar el urlFile, para hacer un put en el handle
+  //useEffect que instanciar el urlFile, para hacer un PUT en el handle
   useEffect(() => {
     if (pdfDocument) {
-      const url = pdfDocument.replace("view", "download");
-      console.log(url)
+      // const url = pdfDocument.replace("view", "download");
       seturlFile(pdfDocument)
     } else if (imgDocument) {
       seturlFile(imgDocument)
@@ -72,7 +59,6 @@ const ModalVoucher = ({ setShowModal }) => {
     }
     dispatch(axiosPutTicket({ id, objUrlFile }))
   };
-
 
 
 
@@ -95,8 +81,6 @@ const ModalVoucher = ({ setShowModal }) => {
     }
   };
 
-  console.log(pdfDocument, 'soy la url del PDF')
-
   const handleFiles = (file) => {
     var reader = new FileReader()
     reader.readAsDataURL(file)
@@ -118,7 +102,7 @@ const ModalVoucher = ({ setShowModal }) => {
         setPreview(URL.createObjectURL(file))
         setfileIsFetching(true)
         fetch('https://script.google.com/macros/s/AKfycbxU47iTlWQkocTIWS_Wr_fO_U7zqLuQE3jF7QTMeChKn-d2KrNdOLrCsFerZeS50W_2Ow/exec', //your AppsScript URL
-          { method: "POST", body: JSON.stringify(dataSend) })
+          { method: "POST", body: JSON.stringify(dataSend), })
           .then(res => res.json()).then(res => {
             setPdfDocument(res.url)
             setfileIsFetching(false)
@@ -128,45 +112,23 @@ const ModalVoucher = ({ setShowModal }) => {
     }
   }
 
-
-
-  // useEffect(()=>{    
-  //   if(pdfDocument){
-  //     pdfjsLib.getDocument(pdfDocument).promise
-  //     .then(function(pdf){
-  //       pdf.getPage(1)
-  //       .then(function(page){
-  //         const viewport= page.getViewport({scale:1});
-  //         const canvas = canvasRef.current;
-  //         const context= canvas.getContext('2d');
-  //         canvas.width=viewport.width;
-  //         canvas.height=viewport.height;
-  //         const renderContext={
-  //           canvasContext: context,
-  //           viewport: viewport
-  //         }
-  //         page.render(renderContext)
-  //       })
-  //     })
-  //   }
-  // },[pdfDocument])
-
   const handleDelete = () => {
     dispatch(axiosCANCELTicket(id))
     navigate(0)
   }
 
+  console.log(pdfDocument,'soy la url del pdf')
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-      {data &&
+      {transaction &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
 
           <h1 className={Style.containerVoucher_tittle}>Operacion de pedido <p>{id?.slice(0, 8)}</p></h1>
           <h2 className={Style.containerVoucher_subTittle}><p>del usuario</p> {email}</h2>
 
           {
-            !preview && id
+            !preview
               ?
               <div className={Style.containerVoucher}>
                 <input
@@ -212,12 +174,8 @@ const ModalVoucher = ({ setShowModal }) => {
                   </div>
                   :
                   <div className={Style.imgPreviewWrappper}>
-                    <Document file={pdfDocument} className={Style.imgPreviewWrappper}>
-                      <Page pageNumber={1} />
-                    </Document>
+                    <embed src={`${pdfDocument}`} type='application/pdf'/>
                   </div>
-
-
           }
 
           <div className={Style.containerVoucher_button}>
@@ -244,3 +202,25 @@ const ModalVoucher = ({ setShowModal }) => {
 
 export default ModalVoucher
 
+
+
+  // useEffect(()=>{
+  //   if(pdfDocument){
+  //     pdfjsLib.getDocument(pdfDocument).promise
+  //     .then(function(pdf){
+  //       pdf.getPage(1)
+  //       .then(function(page){
+  //         const viewport= page.getViewport({scale:1});
+  //         const canvas = canvasRef.current;
+  //         const context= canvas.getContext('2d');
+  //         canvas.width=viewport.width;
+  //         canvas.height=viewport.height;
+  //         const renderContext={
+  //           canvasContext: context,
+  //           viewport: viewport
+  //         }
+  //         page.render(renderContext)
+  //       })
+  //     })
+  //   }
+  // },[pdfDocument])
