@@ -1,16 +1,16 @@
-const { MP_ACCESS_TOKEN } = process.env;
+const { MP_ACCESS_TOKEN, SERVER_URL } = process.env;
 const mercadopago = require("mercadopago");
 mercadopago.configure({
   access_token: MP_ACCESS_TOKEN,
 });
 
-const getMercadoPago = async (eventId, items, client_url, server_url) => {
+const getMercadoPago = async (eventId, items, client_url) => {
   let preference = {
     items,
     back_urls: {
-      success: `${server_url}/mercadopago/${eventId}`,
-      failure: `${server_url}/mercadopago/${eventId}`,
-      pending: `${server_url}/mercadopago/${eventId}`,
+      success: `${SERVER_URL}/mercadopago/${eventId}`,
+      failure: `${SERVER_URL}/mercadopago/${eventId}`,
+      pending: `${SERVER_URL}/mercadopago/${eventId}`,
     },
     auto_return: "approved",
     binary_mode: true,
