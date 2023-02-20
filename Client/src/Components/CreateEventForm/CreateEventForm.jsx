@@ -216,8 +216,8 @@ function Form() {
           </Stack> : undefined}
       {/* <Lateral/> */}
       <div className={style.form} >
-        <h1 className={style.title}>EVENT INFORMATION</h1>
-        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
+        {/* <h1 className={style.title}>EVENT INFORMATION</h1>
+        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
