@@ -10,3 +10,10 @@
     align-items: center;
     width: 120px;
 }
+
+.iconspan {
+    color: var(--primary-color);
+    margin: 5px;
+    width: min-content;
+
+}

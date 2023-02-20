@@ -1,26 +1,29 @@
-const { DataTypes } = require('sequelize');
-
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("paymentMP",{
-
-        transactionId_MP: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },          
-        status: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },             
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
-        }              
-    })
+  sequelize.define("payment", {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'pending'
+    },
+    merchant_order: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    payment_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+  });
 };
-
-//transactcion id para que el usuario pueda verificar en su mercado pago la compra. 
- //status: estado de la transaccion proporcionada por mercado pago
- //precio (payment.items[0].price )
-
-

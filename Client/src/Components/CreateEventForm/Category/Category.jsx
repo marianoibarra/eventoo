@@ -5,7 +5,11 @@ import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import style from './Category.module.css'
 import Map from './Map';
 import ButtonGroup from "./ButtonGroup";
-import Checkbox from './CheckBox';
+import CheckboxFacilities from './CheckBox';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Box from "@mui/material/Box";
+import GoogleMaps from '../../Modal/ModalSession/MapRegister';
     
 
 function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, setSelectedModality}){
@@ -62,15 +66,27 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
             <div>
               {filteredCategories.length > 0 && (
               <div>
-              Category:
-              <select ref={selectRef} name="category" className={style.select} value={input.category} onChange={handleChanges}>
-               <option value="" selected disabled hidden>Choose here</option>
-                {filteredCategories.map((c) => (
-                  <option key={c.id} value={c.name}>
-                    {c.name}
-                  </option>
-              ))}
-              </select>
+              <TextField
+                    select
+                    ref={selectRef}
+                    label="Category"
+                    name='category'
+                    value={input.category}
+                    variant="standard"
+                    onChange={handleChanges}
+                    onBlur={handleBlur}
+                    margin="dense"
+                    sx={{m: 2, width: '25ch' }}
+                    helperText={showMsg.category ? errors.category : ""}
+                    error={showMsg.category && errors.category}
+                    style={{ marginBottom: showMsg.category && errors.category ? '0px' : '20px' }}
+                >
+                    {filteredCategories.map((option) => (
+                        <MenuItem key={option.id} value={option.name}>
+                            {option.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
               </div>
               )}
               {selectedModality  && (
@@ -79,9 +95,9 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
                 {selectedModality === "Presential"
                ? <>
                 <p className={style.text}>Help locate your event and make sure attendees know where to go.</p>
-                <Map input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+                <GoogleMaps input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
                 <p className={style.text}>Select the facilities the place has.</p>
-                <Checkbox input={input} setInput={setInput}/>
+                <CheckboxFacilities input={input} setInput={setInput}/>
                 </>
                 : <div>
                   <p>Add the Link to the virtual event.This is only going to be for your guests and sended the day of the event</p>
