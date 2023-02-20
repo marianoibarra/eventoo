@@ -136,16 +136,23 @@ const createEvent = async (req, res) => {
     const organizer = await User.findByPk(userId);
 
     await event.setOrganizer(organizer);
+    let preference_id = null
 
     if(isPremium && items) {
-      await event.createPayment()
+
+      let itemsParsed = items.map(i => {return {...i, unit_price: Number(i.unit_price), quantity: Number(i.quantity),}})
+      const price = items.reduce((acc, val) =>  acc + (val.quantity * val.unit_price),0)
+      preference_id = await getMercadoPago(event.id, itemsParsed)
+
+      const payment = await Payment.create({id: preference_id, price})
+      await organizer.setPayments(payment)
+      await event.setPayment(payment)
       
-      const id = getMercadoPago(items)
       event.isActive = false
       await event.save()
-      
+    } else {
+      if(isPremium) return res.status(401).send({msg: 'items are required'})
     }
-
 
     await event.reload({
       include: [
@@ -169,7 +176,7 @@ const createEvent = async (req, res) => {
       ],
     });
 
-    return res.status(201).json(event);
+    return res.status(201).json({event, preference_id});
   } catch (error) {
     console.log(error);
     return res.status(500).json({

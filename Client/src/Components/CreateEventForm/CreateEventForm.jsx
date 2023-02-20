@@ -14,12 +14,12 @@ import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
 import { SessionContext } from '../..';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 
 function Form() {
   const dispatch = useDispatch();
-  const event = useSelector(state => state.event);
+  const { event, preference_id} = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +30,33 @@ function Form() {
   useEffect(() => {
     isLogged && dispatch(getBankAccounts());
   }, []);
+
+  function addCheckout() {
+    const mp = new window.MercadoPago('APP_USR-78c8ed61-282c-4022-a30b-8463bffaaec4', {
+      locale: 'es-AR'
+    });
+  
+    mp.checkout({
+      preference: {
+        id: preference_id,
+      },
+      autoOpen: true,
+      theme: {
+        elementsColor: '#007F80'
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (preference_id) {
+      // con el preferenceId en mano, inyectamos el script de mercadoPago
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://sdk.mercadopago.com/js/v2';
+      script.addEventListener('load', addCheckout); // Cuando cargue el script, se ejecutará la función addCheckout
+      document.body.appendChild(script);
+    }
+  }, [preference_id]);
 
 
   const initialState = {
@@ -49,7 +76,7 @@ function Form() {
     guests_capacity: "",
     modality: '',
     isPaid: true,
-    isPremium: null,
+    isPremium: false,
     isPublic: true,
     name: '',
     parking: null,
@@ -121,10 +148,10 @@ function Form() {
   }
 
   const [confirm, setConfirm] = useState(null)
+  const [query] = useSearchParams()
 
   useEffect(() => {
     setErrors(validate(input));
-    console.log(input)
     if (confirm !== null) {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());
@@ -133,7 +160,11 @@ function Form() {
 
   useEffect(() => {
     if (stgData && stgData.name !== null & stgData.name.length > 0) {
-      setShowModal(true)
+      if(query.get('checkout_failed') === 'true' || query.get('checkout_failed') === true ) { 
+        setConfirm(true)
+      } else {
+        setShowModal(true)
+      }
     } else {
       setConfirm(false)
     }
@@ -190,8 +221,11 @@ function Form() {
         {event.error ? <p className={style.errorMessage}>Can't create event</p> :
           event.create ? <p className={style.sendMessage}>Event created successfully</p> : undefined}
         {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
+        <label style={{float: "left"}} htmlFor='premium'>isPremium</label>
+        <input onChange={(e) => setInput({...input, isPremium: e.target.checked})} checked={input.isPremium} type="checkbox" name="isPremium" id="premium"/>
         <div className={style.footerForm}>
           {/* <button type='button' >Save changes</button> */}
+          
           <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
         </div>
       </form>

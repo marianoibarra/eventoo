@@ -114,8 +114,8 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           {input.bankAccount && (
             <div className={style.accountSelected}>
               <h3 className={style.parr}>Bank Account selected:</h3>
-              <p>{selectedAccount.name}</p>
-              <p>{selectedAccount.CBU}</p>
+              <p>{selectedAccount?.name}</p>
+              <p>{selectedAccount?.CBU}</p>
             </div>
           )}
         </div>
