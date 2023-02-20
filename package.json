@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@mui/x-date-pickers": "^5.0.18",
-    "moment": "^2.29.4",
-    "url-query-builder": "^3.0.4"
-  }
-}

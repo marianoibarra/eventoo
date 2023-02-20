@@ -1,23 +1,24 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Menu from "./menu/Menu";
-import { FaLanguage } from "react-icons/fa";
 import Styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { BiChevronDown } from "react-icons/bi";
-import { useSelector } from "react-redux";
+import LocationFilter from "./LocationFilter/LocationFilter";
+
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
+  
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
   }
-  const { isLogged } = useSelector((state) => state.user);
+  
+  
   useEffect(()=> {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])
+
 
 
   return (
@@ -30,13 +31,8 @@ const Navbar = () => {
               Even<span className={Styles.bold}>too</span>
             </span>
           </Link>
-          <div className={Styles.location}>
-            <HiOutlineLocationMarker color="#fffa" size={20}/>
-            Buenos Aires
-            <BiChevronDown color="#fffa" size={18}/>
+          <LocationFilter />
           </div>
-        </div>
-
         <div className={Styles.searchbarOpen}>
           <SearchBar />
         </div>

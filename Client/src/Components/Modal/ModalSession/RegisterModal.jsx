@@ -264,7 +264,7 @@ const RegisterModal = () => {
                     )}
                   />
                 </LocalizationProvider>
-                <GoogleMaps input={input} setInput={setInput} />
+                <GoogleMaps input={input} setInput={setInput} load />
               </div>
               <div
                 style={isNewUser ? { justifyContent: "center" } : {}}
