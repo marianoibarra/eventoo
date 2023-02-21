@@ -16,6 +16,7 @@ import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
 import UserEvent from "./Pages/UserEvents";
 import ForgotPassword from "./Pages/ForgotPassword";
+import NewReview from "./Pages/NewReview";
 
 //libraries
 import "slick-carousel/slick/slick.css";
@@ -79,6 +80,7 @@ function App() {
         <Route path="/create-user" element={isLogged ? <Navigate to='/'/> : <CreateUser />}></Route>
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
+        <Route path="/new-review/:id" element={<NewReview />} />
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/user-event" element={!isLogged ? <Navigate to='/' /> :<UserEvent />}></Route>
         {/* <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route> */}
