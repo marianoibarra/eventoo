@@ -44,7 +44,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
     }
 
     return (
-        <Box sx={{ width:'70%'}}
+        <Box sx={{ width:'80%'}}
         >
                 <h2 className={style.title}>Title</h2>
                 <p className={style.text}>Pick a name for your event and tell guests why they'll love it.</p>
@@ -65,12 +65,12 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 <h2 className={style.title}>Short overview</h2>
                 <p className={style.text}>Sum up in 140 characters or less why your event is unique, thrilling and worth attending.</p>
                 <TextField
-                    label="Description"
+                    // label="Description"
                     name='description'
                     multiline
                     value={input.description}
-                    rows={8}
-                    sx={{m: 1, width: '90ch' }}
+                    rows={5}
+                    sx={{m: 1, width: '100%' }}
                     placeholder='Write here...'
                     onChange={handleChange}
                     onBlur={handleBlur}
