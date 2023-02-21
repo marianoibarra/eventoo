@@ -66,17 +66,6 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                 </div>
                 <h4 className={style.title}>Start and end time</h4>
                 <div className={style.datetime}>
-                    {/* <input
-                        type='date'
-                        className={style.inputs}
-                        name='end_date'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={input.end_date}
-                        style={showMsg.end_date && errors.end_date ? { border: 'red 1px solid' } : {}} />
-                    {showMsg.end_date && (
-                        <p className={style.warning}>{errors.end_date}</p>
-                        )} */}
                         <input
                             type='time'
                             className={style.inputs}

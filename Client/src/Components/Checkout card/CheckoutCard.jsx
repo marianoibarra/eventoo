@@ -26,14 +26,14 @@ function CheckOut({ errors, isLogged, input }) {
         <div className={style.details}>
           <div className={style.typeof}>
             <h3>Selected publicity</h3>
-            <p>{input.items !== null ? input.items[0].title : 'cero pe'}</p>
+            <p>{input.items !== null ? input.items[0].title : 'Free'}</p>
             <h3>Price</h3>
-            <p>{input.items !== null ? `$${input.items[0].unit_price}` : 'cero pe'}</p>
+            <p>{input.items !== null ? `$${input.items[0].unit_price}` : '0'}</p>
           </div>
           <div className={style.containerButton}>
             <button
               onClick={handleclick}
-              className={style.btnprimario}
+              className='btnprimario'
               disabled={Object.keys(errors).length !== 0}
             >
               Create
