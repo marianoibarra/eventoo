@@ -106,6 +106,7 @@ const getCategories = async (req, res) => {
 
 const getEventById = async (req, res) => { //aqui agregue el condicional 
   const { id } = req.params;
+  const {userId} = req
   try {
     const event = await Event.findOne({
       where: {
@@ -130,7 +131,8 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
         },
       ],
     });
-    if (event.isPublic) {
+
+    if (event.isPublic || event.organizer.id === userId) {
       res.json({  isPublic: true , event })
     } else {
       res.json ({ isPublic: false, event: { id: id, name: event.name , start_date: event.start_date, start_time: event.start_time }})
