@@ -5,12 +5,12 @@ export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {
     try {
-      if(id){
+      if (id) {
         const res = await API.get(`/home/events/${id}`);
-        console.log(res.data)
+        console.log(res.data, 'axiosModeEventDetail')
         return res.data;
       }
-      return {event: {}};
+      else return {};
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -22,7 +22,7 @@ export const axiosModeEventDetail = createAsyncThunk(
 
 export const axiosModeEditEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEditEventDetail",
-  async ({id, body}, { rejectWithValue }) => {
+  async ({ id, body }, { rejectWithValue }) => {
     try {
       const res = await API.put(`/event/${id}`, body);
       return res.data;
@@ -35,25 +35,48 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   }
 );
 
+
+export const axiosGetEventPrivate = createAsyncThunk(
+  'eventDetail/axiosGentEventPrivate',
+  async (objPrivate, { rejectWithValue }) => {
+    try {
+      console.log(objPrivate)
+      const res = await API.get(`/event/checkPrivate`, objPrivate)
+      console.log(res.data, 'la respuesta')
+      return res.data
+    } catch (error) {
+      if (error.res) {
+        return rejectWithValue(error.res.data)
+      }
+    }
+  }
+)
+
+
+const initialState = {
+  eventDetail: {},
+  showEvent: true,
+  loading: false,
+  error: null,
+  errorPass: null
+}
+
+
 export const eventDetailSlice = createSlice({
   name: "eventDetail",
-  initialState: {
-    eventDetail: {},
-    isPublic: null,
-    loading: false,
-    error: null,
+  initialState,
+  reducers: {
+    clear: () => {
+      return initialState;
+    }
   },
-  reducers: {},
   extraReducers: {
     [axiosModeEventDetail.pending]: (state) => {
-      state.eventDetail = {};
-      state.isPublic = null;
       state.loading = true;
-      state.error = null;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -67,7 +90,7 @@ export const eventDetailSlice = createSlice({
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -75,7 +98,26 @@ export const eventDetailSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
+    [axiosGetEventPrivate.pending]: (state) => {
+      state.loading = true;
+      state.errorPass = null
+    },
+    [axiosGetEventPrivate.fulfilled]: (state, action) => {
+      console.log(action.payload,'entre al fulfilled')
+      state.eventDetail = action.payload;
+      state.showEvent = action.payload;
+      state.loading = false;
+      state.errorPass = null;
+    },
+    [axiosGetEventPrivate.rejected]: (state, action) => {
+      state.loading = false;
+      state.errorPass = action.error;
+    },
   },
+
+
 });
 
+
+export const { clear } = eventDetailSlice.actions;
 export default eventDetailSlice.reducer;

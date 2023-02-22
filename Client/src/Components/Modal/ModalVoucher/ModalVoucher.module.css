@@ -1,7 +1,22 @@
+.containerLoadVoucher{
+    width: 60%;
+    height: 69.5%;
+}
+
+
 .containerVoucher_tittle {
     width: 100%;
     display: flex;
     justify-content: center;
+    font-size: 30px;
+    margin-top: 3%;
+    font-weight: 400;
+}
+
+.containerVoucher_tittle > p{
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-left: 2%;
 }
 
 
@@ -28,6 +43,11 @@
     color: var(--primary-color);
 }
 
+.containerVoucher{
+    height: 100%;
+}
+
+
 .image {
     color: var(--primary-color);
     margin: 15px 0;
@@ -47,18 +67,18 @@
 
 .imageWrapper {
     position: relative;
-    /* display: flex; */
+    display: flex; 
     width: 100%;
     max-width: 1280px;
-    height: 600px;
+    height: 100%;
     overflow: hidden;
-    margin: 3% auto;
+    /* margin: 3% auto; */
 }
 
 .imgDropArea {
     width: 50%;
     height: 50%;
-    margin-left: 5%;
+    /* margin-left: 5%; */
     max-width: 1280px;
 }
 
@@ -67,13 +87,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 50%;
+    height: 90%;
     gap: 12px;
     font-size: 0.95rem;
     background-color: #007F8019;
+    margin: 0 auto;
     transition: filter .3s ease-in-out, border .3s ease-in-out;
     border: 2px dashed transparent;
+    border-radius: 15px;
 }
 
 .onDragDropArea {
@@ -143,14 +165,21 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
+    height: 94%;
+     margin-bottom: 5%; 
+    /* background: blueviolet; */
+    border: none;
+}
+
+.embedPdf{
     height: 100%;
 }
 
+
 .imgPreview {
-    width: 366px;
-    height: 600px;
-    background-image: url('../../../../Assets/successfullyImgPDF.png');
-    background-size: contain;
+    width: 80%;
+    height: 80%;
+    background-size: cover;
     background-repeat: no-repeat;
     animation: previewIn .3s ease-in-out;
     z-index: 40;
@@ -196,28 +225,94 @@
     object-fit: cover;
 }
 
-.imgFetchingWrapper {
-    overflow: hidden;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    transform: scale(110%);
-
-}
-
 .uploadMsg {
     display: flex;
+    /* position: absolute; */
+    top: 95px;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    flex-direction: column;
+    width: 62.6%;
     height: 100%;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     font-size: 1.2rem;
-    background-color: #0005;
-    color: white;
+    /* background-color: #0005; */
+    color: var(--dark-text);
+    margin-left: 18.8%;
 }
+
+
+.spinner {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    transform: scale(100%);
+    margin-top: 40px;
+    grid-column: 1 / 6;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+  }
+  
+  .spinner div {
+    position: absolute;
+    top: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #007F80;
+    opacity: .9;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  
+  .spinner div:nth-child(1) {
+    left: 8px;
+    animation: spinner1 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(2) {
+    left: 8px;
+    animation: spinner2 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(3) {
+    left: 32px;
+    animation: spinner2 0.6s infinite;
+  }
+  
+  .spinner div:nth-child(4) {
+    left: 56px;
+    animation: spinner3 0.6s infinite;
+  }
+  
+  @keyframes spinner1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+  }
+  
+  @keyframes spinner3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+  }
+  
+  @keyframes spinner2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+  }
 
 @media screen and (max-width: 940px) {
 
@@ -267,4 +362,104 @@
     }
 
 
+}
+
+.containerVoucher_button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.btnAceptar{
+ display: flex;
+justify-content: center;
+align-items: center;
+width: 150px;
+font-size: 1.3vw;
+font-weight: 500;
+border: none;
+color: var(--white-text);
+cursor: pointer;
+margin: 0 auto;
+height: 50px;
+background-size: 300% 100%;
+border-radius: 10px;
+background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+}
+
+
+.detailWrapper {
+    display: flex;
+    height: 100%;
+    width: 40%;
+    flex-direction: column;
+}
+
+.imgWrapper {
+    width: 100%;
+    height: 220px;
+}
+
+.detailEvent_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.detail {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 22px;
+    padding: 5%;
+}
+
+.detailEvent_resume {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.detailEvent_tickets {
+    width: 100%;
+    display: flex;
+    font-size: 1.1rem;
+    justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: #0002 1px solid;
+}
+
+.detailEvent_total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.detail span::before {
+    content: "$";
+    position: relative;
+    bottom: 5%;
+    right: 5%;
+    font-size: 65%;
+}
+
+.detailBankAccount {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 44%;
+    margin-left: -6%;
+    width: 112%;
+    gap: 6px;
+    background-color: var(--primary-color);
+    color: var(--white-text);
+}
+
+.detailBankAccount_CBU_name {
+    font-weight: 300;
+    font-size: 18px;
 }
