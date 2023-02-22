@@ -26,21 +26,6 @@ const initialState = {
   },
 };
 
-// const setLocation = (address) => {
-//   if(address) {
-//     const inputValue = `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`
-//     const googleServices = new window.google.maps.places.AutocompleteService();
-//     googleServices.getPlacePredictions({input: inputValue, type: ['Address']},
-//       (res) => {
-//         console.log(res)
-//         if(res[0]) {
-//           localStorage.setItem('location_value', JSON.stringify(res[0]))
-//           localStorage.setItem('location_inputValue', inputValue)
-//         }
-//       });
-//   }
-// }
-
 function getLocation(address) {
   if(address) {
     const inputValue = `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`
