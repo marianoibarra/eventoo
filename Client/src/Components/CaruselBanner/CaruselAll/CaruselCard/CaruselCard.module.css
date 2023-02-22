@@ -103,6 +103,7 @@
     font-weight: 500;
 }
 
+.details_free,
 .details_price{
     display: block;
     color: #000a;
