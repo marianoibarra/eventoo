@@ -12,7 +12,6 @@ const BuyButton = () => {
   const [showModal, setShowModal] = useState(false)
   const [showModalVoucher, setShowModalVoucher] = useState(false)
   const { events } = useSelector(state => state.eventsBuysSlice);
-  const user = useSelector(state => state.user);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
@@ -42,7 +41,7 @@ const BuyButton = () => {
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
       {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
-      {isPaid === true && !events.find(element => element.status === 'PENDING') && 
+      {!events.find(element => element.status === 'PENDING' || element.status === 'INWAITING') && isPaid === true &&
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -65,7 +64,7 @@ const BuyButton = () => {
         </div>
       }
 
-      {user.isLogged !== false ? !events.find(element => element.status === 'PENDING') : true && isPaid === false &&
+      {!events.find(element => element.status === 'PENDING' || element.status === 'INWAITING') && isPaid === false &&
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -86,7 +85,7 @@ const BuyButton = () => {
         </div>      
       }
 
-      {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'PENDING') ? 
+      {events.length > 0 && events.find(element => element.status === 'PENDING') ? 
         <div className={style.container_buyer_pending} onClick={() => setShowModalVoucher(true)}>
           <div className={style.buyer_pending}>
               <p>
@@ -96,9 +95,11 @@ const BuyButton = () => {
         </div>
         : null
       }
+      {console.log(events)}
 
-    {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'INWAITTING') ? 
+    {events.length > 0 && events.find(element => element.status === 'INWAITING') ? 
         <div className={style.container_buyer_pending} >
+          {console.log('entre')}
           <div className={style.buyer_pending}>
               <p>
                 Inwaitting
@@ -106,7 +107,7 @@ const BuyButton = () => {
           </div>
         </div>
         : null
-      }
+    }
     </div>
   );
 };

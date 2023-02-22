@@ -10,14 +10,20 @@ export const axiosModeEventsBuys = createAsyncThunk(
   }
 )
 
+const initialState = {
+  events: [],
+  loading: false,
+  error: null
+}
+
 export const eventsBuysSlice = createSlice({
   name: 'eventsBuysSlice',
-  initialState: {
-    events: [],
-    loading: false,
-    error: null
+  initialState,
+  reducers: {
+    clearBuy: () => {
+      return initialState;
+    }
   },
-  reducers: {},
   extraReducers: {
     [axiosModeEventsBuys.pending]: (state) => {
       state.loading = true
@@ -35,4 +41,5 @@ export const eventsBuysSlice = createSlice({
   }
 }
 )
+export const { clearBuy } = eventsBuysSlice.actions;
 export default eventsBuysSlice.reducer

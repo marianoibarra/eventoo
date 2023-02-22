@@ -7,7 +7,7 @@ import {
   axiosGetEventPrivate,
   clear,
 } from "../../Slice/EventDetail/EventDetailSlice";
-import { axiosModeEventsBuys } from "../../Slice/EventsBuysForUser/BuysSlice";
+import { axiosModeEventsBuys, clearBuy } from "../../Slice/EventsBuysForUser/BuysSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import BuyButton from "./BuyButton/BuyButton";
@@ -93,6 +93,10 @@ const CardDetailPublic = () => {
           description: eventDetail.description,
         });
       }
+    }
+    return () => {
+      dispatch(clear());
+      dispatch(clearBuy());
     }
   }, [eventDetail, user]);
 
@@ -277,6 +281,7 @@ const CardDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [privatePass, setPrivatePass] = useState("");
+  const user = useSelector((state) => state.user);
   const { showEvent, loading, error, errorPass, eventDetail } = useSelector(
     (state) => state.eventDetail
   );
@@ -284,7 +289,10 @@ const CardDetail = () => {
 
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));
-    dispatch(axiosModeEventsBuys());
+    if(user.isLogged){
+      dispatch(axiosModeEventsBuys());
+    }
+    else dispatch(clearBuy());
   }, []);
 
   const handleSubmit = (e) => {
