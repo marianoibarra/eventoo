@@ -7,7 +7,6 @@ export const axiosModeEventDetail = createAsyncThunk(
     try {
       if (id) {
         const res = await API.get(`/home/events/${id}`);
-        console.log(res.data, 'axiosModeEventDetail')
         return res.data;
       }
       else return {};
@@ -37,17 +36,15 @@ export const axiosModeEditEventDetail = createAsyncThunk(
 
 
 export const axiosGetEventPrivate = createAsyncThunk(
-  'eventDetail/axiosGentEventPrivate',
+  'eventDetail/axiosGetEventPrivate',
   async (objPrivate, { rejectWithValue }) => {
     try {
-      console.log(objPrivate)
-      const res = await API.get(`/event/checkPrivate`, objPrivate)
-      console.log(res.data, 'la respuesta')
+      // const res = await API.get(`/event/checkPrivate`, objPrivate)
+      const res = await API.post(`/event/checkPrivate`, objPrivate)
+      console.log(res.data)
       return res.data
     } catch (error) {
-      if (error.res) {
-        return rejectWithValue(error.res.data)
-      }
+      return rejectWithValue(error.response.data)
     }
   }
 )
@@ -55,7 +52,7 @@ export const axiosGetEventPrivate = createAsyncThunk(
 
 const initialState = {
   eventDetail: {},
-  showEvent: true,
+  showEvent: null,
   loading: false,
   error: null,
   errorPass: null
@@ -103,14 +100,14 @@ export const eventDetailSlice = createSlice({
       state.errorPass = null
     },
     [axiosGetEventPrivate.fulfilled]: (state, action) => {
-      console.log(action.payload,'entre al fulfilled')
       state.eventDetail = action.payload;
-      state.showEvent = action.payload;
+      state.showEvent = true;
       state.loading = false;
       state.errorPass = null;
     },
     [axiosGetEventPrivate.rejected]: (state, action) => {
       state.loading = false;
+      state.showEvent = false;
       state.errorPass = action.error;
     },
   },
