@@ -22,24 +22,10 @@ const ModalVoucher = ({ setShowModal }) => {
   const [accepted, setAccepted] = useState(true);
   const refInputImg = useRef()
   const { email } = useSelector(state => state.user)
-  const { eventDetail } = useSelector(state => state.eventDetail)
-  const { transaction } = useSelector(state => state.transaction)
-  const [id, setId] = useState(null)
-  const [ticketForms, setTicketForms] = useState('')
+  const { events } = useSelector(state => state.eventsBuysSlice);
+  const [eventData, setEventData] = useState(events.find(e => e.status === 'PENDING'))
 
-
-  useEffect(() => {
-    dispatch(axiosGetTicket(eventDetail.id))
-  }, []);
-
-  useEffect(() => {
-    setTicketForms(transaction?.length)
-    transaction?.map(i => {
-      if (i.status === 'PENDING') {
-        setId(i.id)
-      }
-    })
-  }, [transaction])
+  const quantity = eventData.tickets.length
 
 
 
@@ -59,8 +45,7 @@ const ModalVoucher = ({ setShowModal }) => {
     const objUrlFile = {
       payment_proof: urlFile
     }
-    dispatch(axiosPutTicket({ id, objUrlFile }))
-    navigate(0)
+    dispatch(axiosPutTicket({ id: eventData.transactionId, objUrlFile }))
   };
 
 
@@ -116,16 +101,16 @@ const ModalVoucher = ({ setShowModal }) => {
   }
 
   const handleDelete = () => {
-    dispatch(axiosCANCELTicket(id))
+    dispatch(axiosCANCELTicket(eventData.transactionId))
     navigate(0)
   }
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-      {transaction &&
+      {eventData &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
           <div className={Style.containerLoadVoucher}>
-            <h1 className={Style.containerVoucher_tittle}>Operation <p>{id?.slice(0, 8)}</p></h1>
+            <h1 className={Style.containerVoucher_tittle}>Operation <p>{eventData.transactionId?.slice(0, 8)}</p></h1>
             <h2 className={Style.containerVoucher_subTittle}><p>user </p> {email}</h2>
 
             {
@@ -199,22 +184,22 @@ const ModalVoucher = ({ setShowModal }) => {
 
           <div className={Style.detailWrapper}>
             <div className={Style.imgWrapper}>
-              <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+              <img className={Style.detailEvent_img} src={eventData.cover_pic} alt="" />
             </div>
 
             <div className={Style.detail}>
               <h3 className={Style.detailEvent_resume}>Order overview</h3>
               <div className={Style.detailEvent_tickets}>
-                {ticketForms} x {eventDetail.name}
-                <span>{ticketForms * eventDetail.price}</span>
+                {quantity} x {eventData.name}
+                <span>{quantity * eventData.price}</span>
               </div>
               <div className={Style.detailEvent_total}>
-                Total: <span>{ticketForms * eventDetail.price}</span>
+                Total: <span>{quantity * eventData.price}</span>
               </div>
 
               <div className={Style.detailBankAccount}>
-                <h2>Organizer {eventDetail.organizer?.name} {eventDetail.organizer?.last_name}</h2>
-                <h3 className={Style.detailBankAccount_CBU_name}> Account {eventDetail.bankAccount?.name} {eventDetail.bankAccount?.CBU}</h3>
+                <h2>Organizer {eventData.organizer?.name} {eventData.organizer?.last_name}</h2>
+                <h3 className={Style.detailBankAccount_CBU_name}> Account {eventData.bankAccount?.name} {eventData.bankAccount?.CBU}</h3>
               </div>
             </div>
           </div>
@@ -226,25 +211,3 @@ const ModalVoucher = ({ setShowModal }) => {
 
 export default ModalVoucher
 
-
-
-  // useEffect(()=>{
-  //   if(pdfDocument){
-  //     pdfjsLib.getDocument(pdfDocument).promise
-  //     .then(function(pdf){
-  //       pdf.getPage(1)
-  //       .then(function(page){
-  //         const viewport= page.getViewport({scale:1});
-  //         const canvas = canvasRef.current;
-  //         const context= canvas.getContext('2d');
-  //         canvas.width=viewport.width;
-  //         canvas.height=viewport.height;
-  //         const renderContext={
-  //           canvasContext: context,
-  //           viewport: viewport
-  //         }
-  //         page.render(renderContext)
-  //       })
-  //     })
-  //   }
-  // },[pdfDocument])

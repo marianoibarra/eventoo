@@ -4,12 +4,13 @@ import style from "./BuyButton.module.css";
 import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
 import { SessionContext } from "../../..";
-
+import ModalVoucher from "../../Modal/ModalVoucher/ModalVoucher"
 
 
 const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
+  const [showModalVoucher, setShowModalVoucher] = useState(false)
   const { events } = useSelector(state => state.eventsBuysSlice);
   const user = useSelector(state => state.user);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
@@ -40,7 +41,8 @@ const BuyButton = () => {
     
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
-      {isPaid === true && !events.find(element => element.status === 'COMPLETE') && 
+      {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
+      {isPaid === true && !events.find(element => element.status === 'PENDING') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -85,10 +87,21 @@ const BuyButton = () => {
       }
 
       {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'PENDING') ? 
-        <div className={style.container_buyer_pending}>
+        <div className={style.container_buyer_pending} onClick={() => setShowModalVoucher(true)}>
           <div className={style.buyer_pending}>
               <p>
-                Sorry! you have a pending transaction, please finalize the transaction before buying another ticket.
+                You have a pending purchase, click here to load the receipt or cancel the reservation.
+              </p>
+          </div>
+        </div>
+        : null
+      }
+
+    {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'INWAITTING') ? 
+        <div className={style.container_buyer_pending} >
+          <div className={style.buyer_pending}>
+              <p>
+                Inwaitting
               </p>
           </div>
         </div>

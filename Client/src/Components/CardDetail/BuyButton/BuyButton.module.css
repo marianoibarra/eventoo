@@ -88,6 +88,7 @@ button:disabled {
     width: 100%;
     height: max-content;
     background-color: var(--white-text);
+    cursor: pointer;
 }
 
 .buyer_pending {

@@ -23,7 +23,7 @@ export const eventsBuysSlice = createSlice({
       state.loading = true
     },
     [axiosModeEventsBuys.fulfilled]: (state, action) => {
-      state.events = action.payload.map(t => {return {...t.event, status: t.status}}).filter(e => e !== null);
+      state.events = action.payload.map(t => {return {...t.event, status: t.status, transactionId: t.id, tickets: t.tickets}}).filter(e => e !== null);
       state.loading = false;
       state.error = null;
 

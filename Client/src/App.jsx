@@ -55,11 +55,14 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      API.defaults.headers.common["authorization"] = "Bearer " + token;
       dispatch(getUserData());
       dispatch(getFavorites());
       dispatch(getBankAccounts());
     }
-  }, [user]);
+  }, []);
+
+
 
   const { isLogged, roleAdmin } = useSelector((state) => state.user);
 

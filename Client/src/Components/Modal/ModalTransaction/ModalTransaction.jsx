@@ -11,8 +11,8 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
   const [ticketForms, setTicketForms] = useState(Array.from({ length: quantity }, () => ({})));
   const { eventDetail } = useSelector(state => state.eventDetail);
   const { email } = useSelector(state => state.user)
+  const { transaction, loading, error } = useSelector(state => state.transaction)
   const [isButtonDisabled, setisButtonDisabled] = useState(true)
-  const [isDataBankAccount, setisDataBankAccount] = useState(true)
   
 
 
@@ -43,7 +43,6 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
     }
     dispatch(axiosPostTicket(object))
     setisButtonDisabled(true)
-    setisDataBankAccount(!isDataBankAccount)
   }
 
 
@@ -86,51 +85,53 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
       {
-        isDataBankAccount
-          ?
-          <div className={isDataBankAccount ? Style.containerBuyTickets : Style.containerDisplayNone}>
-            <div className={Style.topWrapper}>
-              <div className={Style.formWrapper}>
-                <header>
-                  <h1 className={Style.dataTicket_title}>Purchase order info</h1>
-                  <h3 className={Style.dataTicket_user}>by <span>{email}</span></h3>
-                </header>
-                <main>
-                  {ticketFormArray}
-                </main>
-              </div>
-              <div className={Style.detailWrapper}>
-                <div className={Style.imgWrapper}>
-                  <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
-                </div>
-
-                <div className={Style.detail}>
-                  <h3 className={Style.detailEvent_resume}>Order overview</h3>
-                  <div className={Style.detailEvent_tickets}>
-                    {ticketForms.length} x {eventDetail.name}
-                    <span>{ticketForms.length * eventDetail.price}</span>
+        transaction
+          ? <DataBankAccount quantity={quantity} />
+          : loading
+              ? <p>Loading..</p>
+              : error
+                ? <p>{error}</p>
+                : <div className={true ? Style.containerBuyTickets : Style.containerDisplayNone}>
+                    <div className={Style.topWrapper}>
+                      <div className={Style.formWrapper}>
+                        <header>
+                          <h1 className={Style.dataTicket_title}>Purchase order info</h1>
+                          <h3 className={Style.dataTicket_user}>by <span>{email}</span></h3>
+                        </header>
+                        <main>
+                          {ticketFormArray}
+                        </main>
+                      </div>
+                      <div className={Style.detailWrapper}>
+                        <div className={Style.imgWrapper}>
+                          <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+                        </div>
+        
+                        <div className={Style.detail}>
+                          <h3 className={Style.detailEvent_resume}>Order overview</h3>
+                          <div className={Style.detailEvent_tickets}>
+                            {ticketForms.length} x {eventDetail.name}
+                            <span>{ticketForms.length * eventDetail.price}</span>
+                          </div>
+                          <div className={Style.detailEvent_total}>
+                            Total: <span>{ticketForms.length * eventDetail.price}</span>
+                          </div>
+                        </div>
+                      </div>
+        
+                    </div>
+        
+                    <div className={Style.bottomWrapper}>
+                      <div className={Style.modify}>
+                        <button
+                          className={isButtonDisabled ? Style.btnPedido : `btnprimario `}
+                          onClick={handleSubmit}
+                          disabled={isButtonDisabled} >
+                          Reserve
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className={Style.detailEvent_total}>
-                    Total: <span>{ticketForms.length * eventDetail.price}</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <div className={Style.bottomWrapper}>
-              <div className={Style.modify}>
-                <button
-                  className={isButtonDisabled ? Style.btnPedido : `btnprimario `}
-                  onClick={handleSubmit}
-                  disabled={isButtonDisabled} >
-                  Place order
-                </button>
-              </div>
-            </div>
-          </div>
-          :
-          <DataBankAccount quantity={quantity} />
       }
     </Modal>
   )

@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API } from '../../App';
+import { getBankAccounts } from '../BankAcount/BankAcount';
+import { getFavorites } from '../Favorites/FavoritesSlice';
 
 const initialState = {
   isLogged: false,
@@ -76,7 +78,7 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "user/login",
-  async ({ input, setShowSessionModal }, { rejectWithValue }) => {
+  async ({ input, setShowSessionModal }, { rejectWithValue, dispatch }) => {
     try {
       const response = await API.post(
         "/user/login",
@@ -86,7 +88,9 @@ export const login = createAsyncThunk(
       localStorage.setItem('location_value', JSON.stringify(value))
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      dispatch(getFavorites());
+      dispatch(getBankAccounts());
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -100,7 +104,7 @@ export const login = createAsyncThunk(
 
 export const googleLogin = createAsyncThunk(
   "user/googleLogin",
-  async ({credential, setShowSessionModal}, { rejectWithValue }) => {
+  async ({credential, setShowSessionModal}, { rejectWithValue, dispatch }) => {
     try {
       const response = await API.post(
         "/user/auth",
@@ -108,7 +112,9 @@ export const googleLogin = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      dispatch(getFavorites());
+      dispatch(getBankAccounts());
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
       } else {

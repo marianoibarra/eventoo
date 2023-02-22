@@ -39,12 +39,6 @@ const CardDetailPublic = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(clear());
-  //   };
-  // })
-
   //funciones de usuario organizador
   function validate(input) {
     let errors = {};
@@ -91,7 +85,7 @@ const CardDetailPublic = () => {
 
   useEffect(() => {
     if (eventDetail.organizer) {
-      if (user.id === eventDetail.organizer.id) {
+      if (user.id !== null && user.id === eventDetail.organizer.id) {
         setOrganizer(true);
         setEditedEvent({
           ...editedEvent,
@@ -101,9 +95,6 @@ const CardDetailPublic = () => {
       }
     }
   }, [eventDetail, user]);
-
-  // if (error || Object.keys(eventDetail).length === 0)
-  // return <div className={style.error}>Something was wrong..</div>;
 
   return (
     <>
