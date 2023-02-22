@@ -1,4 +1,5 @@
 const { Event, Address, Category, User } = require("../db");
+const jwt = require("jsonwebtoken");
 
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
@@ -106,7 +107,6 @@ const getCategories = async (req, res) => {
 
 const getEventById = async (req, res) => { //aqui agregue el condicional 
   const { id } = req.params;
-  const {userId} = req
   try {
     const event = await Event.findOne({
       where: {
@@ -130,8 +130,22 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
           attributes: ["name", "modality"],
         },
       ],
-    });
+    raw: true, nest:true});
 
+    let userId = null
+
+    const { authorization } = req.headers;
+    if (authorization) {
+    const token = authorization.split(" ")[1];
+    jwt.verify(token, process.env.SECRET, (err, user) => {
+      if (err) {
+        console.log(err)
+      } else {
+        userId = user.id;
+      }
+    });
+    }
+    
     if (event.isPublic || event.organizer.id === userId) {
       res.json({  isPublic: true , event })
     } else {
