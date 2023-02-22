@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { axiosModeEventDetail, axiosModeEditEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
+import { axiosModeEventDetail, axiosModeEditEventDetail, axiosGetEventPrivate } from "../../Slice/EventDetail/EventDetailSlice";
 import { axiosModeEventsBuys } from "../../Slice/EventsBuysForUser/BuysSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
@@ -13,7 +13,6 @@ import style from './CardDetail.module.css';
 
 
 const CardDetail = () => {
-
    
   const { eventDetail, loading, error } = useSelector(state => state.eventDetail);
   const dispatch = useDispatch();

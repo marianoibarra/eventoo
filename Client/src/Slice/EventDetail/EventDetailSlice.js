@@ -5,7 +5,7 @@ export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {
     try {
-      if(id){
+      if (id) {
         const res = await API.get(`/home/events/${id}`);
         console.log(res.data)
         return res.data;
@@ -22,10 +22,10 @@ export const axiosModeEventDetail = createAsyncThunk(
 
 export const axiosModeEditEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEditEventDetail",
-  async ({id, body}, { rejectWithValue }) => {
+  async ({ id, body }, { rejectWithValue }) => {
     try {
       const res = await API.put(`/event/${id}`, body);
-      return res.data;
+       return res.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -35,13 +35,32 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   }
 );
 
+
+ export const axiosGetEventPrivate = createAsyncThunk(
+   'eventDetail/axiosGentEventPrivate',
+   async ({ id, privateEvent }, { rejectWithValue }) => {
+     try {
+       const res = await API.get(`/event/checkPrivate/${id}` + privateEvent)
+       return res.data
+     } catch (error) {
+       if (error.res) {
+         return rejectWithValue(error.res.data)
+       }
+    }
+   }
+ )
+
+
+
+
 export const eventDetailSlice = createSlice({
   name: "eventDetail",
   initialState: {
     eventDetail: {},
-    isPublic: null,
+    showEvent: true,
     loading: false,
     error: null,
+    errorPass: null
   },
   reducers: {},
   extraReducers: {
@@ -53,7 +72,7 @@ export const eventDetailSlice = createSlice({
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -66,8 +85,8 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.eventDetail = action.payload.event;      
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -75,7 +94,23 @@ export const eventDetailSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
+     [axiosGetEventPrivate.pending]: (state) => {
+       state.loading = true;
+       state.errorPass = null
+     },
+     [axiosGetEventPrivate.fulfilled]: (state, action) => {
+       state.eventDetail = action.payload;
+       state.showEvent = action.payload.isPublic
+       state.loading = false;
+       state.errorPass = null;
+     },
+     [axiosGetEventPrivate.rejected]: (state, action) => {
+       state.loading = false;
+       state.errorPass = action.error;
+     },
   },
+
+
 });
 
 export default eventDetailSlice.reducer;

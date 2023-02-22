@@ -2,9 +2,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
 
+export const axiosGetTicket= createAsyncThunk(
+  'transaction/axiosGetTicket',
+  async(idEvent)=>{
+    const res = await API.get('transaction/event/'+idEvent)
+    return res.data
+  }
+)
+
+
+
 export const axiosPostTicket = createAsyncThunk(
   'transaction/axiosPostTicket',
-  async (object, { rejectWithValue }) => {
+  async ({object}, { rejectWithValue }) => {
     try {
       const res = await API.post('/transaction', object)
       localStorage.setItem('idTransaction', JSON.stringify(res.data))
@@ -57,6 +67,20 @@ export const transactionSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
+    [axiosGetTicket.pending]:(state)=>{
+      state.loading=true;
+      state.error=null
+    },
+    [axiosGetTicket.fulfilled]:(state, action)=>{
+      state.loading=false;
+      state.error=null;
+      state.transaction=action.payload
+    },
+    [axiosGetTicket.rejected]:(state, action)=>{
+      state.loading=false
+      state.error=action.error
+    },
+
     [axiosPostTicket.pending]: (state) => {
       state.loading = true;
       state.error = null

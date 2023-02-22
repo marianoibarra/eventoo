@@ -40,8 +40,7 @@ const BuyButton = () => {
     
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
-
-      {user.isLogged !== false ? !events.find(element => element.status === 'PENDING') : true && isPaid === true &&
+      {isPaid === true && !events.find(element => element.status === 'COMPLETE') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
