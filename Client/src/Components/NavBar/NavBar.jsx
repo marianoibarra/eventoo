@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Menu from "./menu/Menu";
 import Styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
@@ -8,7 +8,10 @@ import LocationFilter from "./LocationFilter/LocationFilter";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
-  
+  let { pathname } = useLocation();
+
+  console.log(pathname)
+
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
@@ -31,10 +34,10 @@ const Navbar = () => {
               Even<span className={Styles.bold}>too</span>
             </span>
           </Link>
-          <LocationFilter />
+          {pathname === '/' && <LocationFilter />}
           </div>
         <div className={Styles.searchbarOpen}>
-          <SearchBar />
+          {pathname === '/' && <SearchBar />}
         </div>
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
