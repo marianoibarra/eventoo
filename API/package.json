@@ -28,6 +28,7 @@
     "nodemailer": "^6.9.0",
     "nodemon": "^2.0.20",
     "path": "^0.12.7",
+    "pdfkit": "^0.13.0",
     "pg": "^8.8.0",
     "sequelize": "^6.28.0",
     "sequelize-cli": "^6.5.2",
