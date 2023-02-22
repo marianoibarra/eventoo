@@ -25,6 +25,7 @@ const ModalVoucher = ({ setShowModal }) => {
   const { eventDetail } = useSelector(state => state.eventDetail)
   const { transaction } = useSelector(state => state.transaction)
   const [id, setId] = useState(null)
+  const [ticketForms, setTicketForms] = useState('')
 
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const ModalVoucher = ({ setShowModal }) => {
   }, []);
 
   useEffect(() => {
+    setTicketForms(transaction?.length)
     transaction?.map(i => {
       if (i.status === 'PENDING') {
         setId(i.id)
@@ -58,6 +60,7 @@ const ModalVoucher = ({ setShowModal }) => {
       payment_proof: urlFile
     }
     dispatch(axiosPutTicket({ id, objUrlFile }))
+    navigate(0)
   };
 
 
@@ -117,82 +120,103 @@ const ModalVoucher = ({ setShowModal }) => {
     navigate(0)
   }
 
-  console.log(pdfDocument,'soy la url del pdf')
-
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
       {transaction &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
+          <div className={Style.containerLoadVoucher}>
+            <h1 className={Style.containerVoucher_tittle}>Operation <p>{id?.slice(0, 8)}</p></h1>
+            <h2 className={Style.containerVoucher_subTittle}><p>user </p> {email}</h2>
 
-          <h1 className={Style.containerVoucher_tittle}>Operacion de pedido <p>{id?.slice(0, 8)}</p></h1>
-          <h2 className={Style.containerVoucher_subTittle}><p>del usuario</p> {email}</h2>
-
-          {
-            !preview
-              ?
-              <div className={Style.containerVoucher}>
-                <input
-                  hidden
-                  id="imgInput"
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={refInputImg}
-                  onChange={(e) => handleFiles(e.target.files[0])}
-                />
-                <label className={Style.imgDropArea} htmlFor="imgInput">
-                  {!dragActive
-                    ? <div className={Style.defaultDropArea}>
-                      <p>Drag and drop a PDF here</p>
-                      <p>or</p>
-                      <button
-                        type='button'
-                        className={Style.uploadButton}
-                        onClick={() => refInputImg.current.click()}
-                      >
-                        Upload a PDF
-                      </button>
-                    </div>
-                    : <div className={Style.onDragDropArea}>
-                      Drop your PDF here
-                    </div>
-                  }
-                </label>
-              </div>
-
-              : fileIsFetching
+            {
+              !preview
                 ?
-                <div className={Style.uploadMsg}>
-                  <h2>Cargando comprobante</h2>
-                  <h3>Aguarde por favor</h3>
-                  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
+                <div className={Style.containerVoucher}>
+                  <input
+                    hidden
+                    id="imgInput"
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    ref={refInputImg}
+                    onChange={(e) => handleFiles(e.target.files[0])}
+                  />
+                  <label className={Style.imgDropArea} htmlFor="imgInput">
+                    {!dragActive
+                      ? <div className={Style.defaultDropArea}>
+                        <p>Drag and drop a PDF or Image here</p>
+                        <p>or</p>
+                        <button
+                          type='button'
+                          className={Style.uploadButton}
+                          onClick={() => refInputImg.current.click()}
+                        >
+                          Upload a PDF or Image
+                        </button>
+                      </div>
+                      : <div className={Style.onDragDropArea}>
+                        Drop your PDF or Image here
+                      </div>
+                    }
+                  </label>
                 </div>
 
-                : imgDocument
+                : fileIsFetching
                   ?
-                  <div className={Style.imgPreviewWrappper}>
-                    <img className={Style.imgPreview} style={{ backgroundImage: `url(${preview})` }} />
+                  <div className={Style.uploadMsg}>
+                    <h2>Loading receipt</h2>
+                    <h3>Please wait</h3>
+                    <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
                   </div>
-                  :
-                  <div className={Style.imgPreviewWrappper}>
-                    <embed src={`${pdfDocument}`} type='application/pdf'/>
-                  </div>
-          }
 
-          <div className={Style.containerVoucher_button}>
-            <button
-              type='button'
-              className={'btnprimario'}
-              onClick={handleDelete}>
-              CANCELAR
-            </button>
+                  : imgDocument
+                    ?
+                    <div className={Style.imgPreviewWrappper}>
+                      <img className={Style.imgPreview} style={{ backgroundImage: `url(${preview})` }} />
+                    </div>
+                    :
+                    <div className={Style.imgPreviewWrappper}>
+                      <embed className={Style.embedPdf} src={`${pdfDocument}#toolbar=0`} type='application/pdf' />
+                    </div>
+            }
 
-            <button
-              type='button'
-              className={accepted ? Style.btnAceptar : 'btnprimario'}
-              disabled={accepted}
-              onClick={handleAccept}>
-              ACEPTAR
-            </button>
+            <div className={Style.containerVoucher_button}>
+              <button
+                type='button'
+                className={'btnprimario'}
+                onClick={handleDelete}>
+                CANCEL
+              </button>
+
+              <button
+                type='button'
+                className={accepted ? Style.btnAceptar : 'btnprimario'}
+                disabled={accepted}
+                onClick={handleAccept}>
+                ACEPT
+              </button>
+            </div>
+          </div>
+
+          <div className={Style.detailWrapper}>
+            <div className={Style.imgWrapper}>
+              <img className={Style.detailEvent_img} src={eventDetail.cover_pic} alt="" />
+            </div>
+
+            <div className={Style.detail}>
+              <h3 className={Style.detailEvent_resume}>Order overview</h3>
+              <div className={Style.detailEvent_tickets}>
+                {ticketForms} x {eventDetail.name}
+                <span>{ticketForms * eventDetail.price}</span>
+              </div>
+              <div className={Style.detailEvent_total}>
+                Total: <span>{ticketForms * eventDetail.price}</span>
+              </div>
+
+              <div className={Style.detailBankAccount}>
+                <h2>Organizer {eventDetail.organizer?.name} {eventDetail.organizer?.last_name}</h2>
+                <h3 className={Style.detailBankAccount_CBU_name}> Account {eventDetail.bankAccount?.name} {eventDetail.bankAccount?.CBU}</h3>
+              </div>
+            </div>
           </div>
           {dragActive && <div className={Style.dragImgElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
         </div>}

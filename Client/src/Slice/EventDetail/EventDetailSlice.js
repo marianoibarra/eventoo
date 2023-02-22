@@ -32,39 +32,41 @@ export const axiosModeEditEventDetail = createAsyncThunk(
 );
 
 
- export const axiosGetEventPrivate = createAsyncThunk(
-   'eventDetail/axiosGentEventPrivate',
-   async ({ id, privateEvent }, { rejectWithValue }) => {
-     try {
-       const res = await API.get(`/event/checkPrivate/${id}` + privateEvent)
-       return res.data
-     } catch (error) {
-       if (error.res) {
-         return rejectWithValue(error.res.data)
-       }
+export const axiosGetEventPrivate = createAsyncThunk(
+  'eventDetail/axiosGetEventPrivate',
+  async (objPrivate, { rejectWithValue }) => {
+    try {
+      // const res = await API.get(`/event/checkPrivate`, objPrivate)
+      const res = await API.post(`/event/checkPrivate`, objPrivate)
+      console.log(res.data)
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
     }
-   }
- )
+  }
+)
 
 
+const initialState = {
+  eventDetail: {},
+  showEvent: null,
+  loading: false,
+  error: null,
+  errorPass: null
+}
 
 
 export const eventDetailSlice = createSlice({
   name: "eventDetail",
-  initialState: {
-    eventDetail: {},
-    showEvent: true,
-    loading: false,
-    error: null,
-    errorPass: null
+  initialState,
+  reducers: {
+    clear: () => {
+      return initialState;
+    }
   },
-  reducers: {},
   extraReducers: {
     [axiosModeEventDetail.pending]: (state) => {
-      state.eventDetail = {};
-      state.isPublic = null;
       state.loading = true;
-      state.error = null;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;
@@ -81,7 +83,7 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload.event;      
+      state.eventDetail = action.payload.event;
       state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
@@ -90,23 +92,26 @@ export const eventDetailSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-     [axiosGetEventPrivate.pending]: (state) => {
-       state.loading = true;
-       state.errorPass = null
-     },
-     [axiosGetEventPrivate.fulfilled]: (state, action) => {
-       state.eventDetail = action.payload;
-       state.showEvent = action.payload.isPublic
-       state.loading = false;
-       state.errorPass = null;
-     },
-     [axiosGetEventPrivate.rejected]: (state, action) => {
-       state.loading = false;
-       state.errorPass = action.error;
-     },
+    [axiosGetEventPrivate.pending]: (state) => {
+      state.loading = true;
+      state.errorPass = null
+    },
+    [axiosGetEventPrivate.fulfilled]: (state, action) => {
+      state.eventDetail = action.payload;
+      state.showEvent = true;
+      state.loading = false;
+      state.errorPass = null;
+    },
+    [axiosGetEventPrivate.rejected]: (state, action) => {
+      state.loading = false;
+      state.showEvent = false;
+      state.errorPass = action.error;
+    },
   },
 
 
 });
 
+
+export const { clear } = eventDetailSlice.actions;
 export default eventDetailSlice.reducer;
