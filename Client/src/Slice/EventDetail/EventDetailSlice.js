@@ -5,12 +5,8 @@ export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {
     try {
-      if (id) {
-        const res = await API.get(`/home/events/${id}`);
-        console.log(res.data)
-        return res.data;
-      }
-      return {event: {}};
+      const res = await API.get(`/home/events/${id}`);
+      return res.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);

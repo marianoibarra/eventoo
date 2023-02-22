@@ -5,7 +5,7 @@ import { eventsSlice } from "../Slice/Events/EventsSlice";
 import { eventSlice } from "../Slice/CreateEvent/CreateEvent";
 import { forgot } from "../Slice/ForgotPass/ForgotPassSlice";
 import { recover } from "../Slice/RecoverPass/RecoverPassSlice";
-import eventDetailSlice from "../Slice/EventDetail/EventDetailSlice";
+import { eventDetailSlice } from "../Slice/EventDetail/EventDetailSlice";
 import { combinedFilterSlice } from "../Slice/Filter/combinedFilterSlice";
 import { locationSlice } from "../Slice/Location/LocationSlice";
 import { locationIpSlice } from "../Slice/Location/locationIpSlice";
@@ -30,7 +30,7 @@ const store = configureStore({
     event: eventSlice.reducer,
     forgot: forgot.reducer,
     recover: recover.reducer,
-    eventDetail: eventDetailSlice,
+    eventDetail: eventDetailSlice.reducer,
     combinedFilter: combinedFilterSlice.reducer,
     locationSlice: locationSlice.reducer,
     transaction: transactionSlice.reducer,
