@@ -7,7 +7,7 @@ const {
   Address,
 } = require("../db");
 const moment = require("moment");
-const approvalTimeLimit = 1
+const approvalTimeLimit = 15
 
 const cleanTransactions = async (IdEvent) => {
   
