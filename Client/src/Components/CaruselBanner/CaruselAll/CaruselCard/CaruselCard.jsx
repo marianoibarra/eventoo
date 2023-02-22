@@ -36,9 +36,9 @@ const CaruselCard = ({
   const handleFav = (e) => {
     e.stopPropagation()
     if(isLogged) {
-      setShowSessionModal('login')
-    } else {
       dispatch(switchFavorites(id))
+    } else {
+      setShowSessionModal('login')
     }
   }
 

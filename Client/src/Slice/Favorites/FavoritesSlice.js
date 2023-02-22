@@ -81,4 +81,9 @@ export const favoritesSlice = createSlice({
   }
 }
 )
+
+export const {
+  clearFavorites
+} = favoritesSlice.actions
+
 export default favoritesSlice.reducer
