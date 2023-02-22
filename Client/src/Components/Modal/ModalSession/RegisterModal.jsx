@@ -256,7 +256,7 @@ const RegisterModal = () => {
                     onChange={(value) => {
                       setInput({
                         ...input,
-                        born: value._d ? value._d : value,
+                        born: value && value.hasOwnProperty('_d') ? value._d : value,
                       });
                     }}
                     renderInput={(params) => (

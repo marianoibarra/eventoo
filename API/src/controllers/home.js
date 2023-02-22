@@ -26,7 +26,7 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
       isToday: null,
       isNextWeekend: null,
       "$organizer.id$": queryParams.organizer ? queryParams.organizer : null,
-      "$category.name$": queryParams.category ? queryParams.category : null,
+      "$category.id$": queryParams.category ? queryParams.category : null,
       "$category.modality$": queryParams.modality ? queryParams.modality : null,
       "$address.address_line$": queryParams.address_line
         ? queryParams.address_line
