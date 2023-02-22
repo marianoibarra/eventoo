@@ -25,7 +25,7 @@ const CardDetailPublic = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-    // estados para usuario organizador
+  // estados para usuario organizador
   const user = useSelector((state) => state.user);
   const [organizer, setOrganizer] = useState(false);
   const [edit, setEdit] = useState({
@@ -102,8 +102,8 @@ const CardDetailPublic = () => {
     }
   }, [eventDetail, user]);
 
-    // if (error || Object.keys(eventDetail).length === 0)
-    // return <div className={style.error}>Something was wrong..</div>;
+  // if (error || Object.keys(eventDetail).length === 0)
+  // return <div className={style.error}>Something was wrong..</div>;
 
   return (
     <>
@@ -261,12 +261,11 @@ const CardDetailPublic = () => {
                 <div className={style.organizerbutton_div}>
                   <div className={style.organizerbutton}>
                     <a
-                      className={`btnprimario ${
-                        editedEvent.edited === false ||
-                        Object.keys(errors).length > 0
+                      className={`btnprimario ${editedEvent.edited === false ||
+                          Object.keys(errors).length > 0
                           ? style.organizerbutton_disabled
                           : null
-                      }`}
+                        }`}
                       href=""
                       onClick={handleOnClick}
                     >
@@ -287,9 +286,10 @@ const CardDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [privatePass, setPrivatePass] = useState("");
-  const { showEvent, loading, error, errorPass } = useSelector(
+  const { showEvent, loading, error, errorPass, eventDetail } = useSelector(
     (state) => state.eventDetail
   );
+  console.log(eventDetail, 'info')
 
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));
@@ -315,23 +315,32 @@ const CardDetail = () => {
     </div>
   );
 
-   if (error)
+  if (error)
     return <div className={style.error}>Something was wrong..</div>;
 
   if (showEvent) return <CardDetailPublic />;
 
   return (
-    <div>
-      <h1>Event</h1>
-      <p>Date: </p>
-      <form onSubmit={handleSubmit}>
-        <input type="password" onChange={(e) => setPrivatePass(e.target.value)} />
-        <input type="submit" value={'Send'}/>
-      </form>
-      {errorPass && <span>Invalid password</span>}
-      <Link to="/">
-        <button>Back</button>
-      </Link>
+    <div className={style.containerEventPrivate}>
+      <div className={style.containerInfoEventPrivate}>
+        <p>{eventDetail.start_date} at {eventDetail.start_time}</p>
+        <h1>Event {eventDetail.name}</h1>
+        <form  className={style.containerPass} onSubmit={handleSubmit}>
+          <input 
+          type="password" 
+          onChange={(e) => setPrivatePass(e.target.value)}
+          placeholder='Enter the password'
+          className={style.pass} />
+          <input 
+          type="submit" 
+          value={'Send'} 
+          className={style.btnSubmit}/>
+        </form>
+        {errorPass && <span>Invalid password</span>}
+        <Link className={style.btnBack} to="/">
+          <button className="btnprimario">Back</button>
+        </Link>
+      </div>
     </div>
   );
 };
