@@ -7,6 +7,7 @@ import { axiosPutTicket, axiosCANCELTicket, axiosGetTicket } from '../../../Slic
 import { Document, Page } from 'react-pdf'
 import pdfjsLib from 'pdfjs-dist'
 import Modal from '../Modal';
+import { cancelTransaction } from '../../../Slice/eventsManagement/eventsManagementSlice';
 
 
 
@@ -22,10 +23,10 @@ const ModalVoucher = ({ setShowModal }) => {
   const [accepted, setAccepted] = useState(true);
   const refInputImg = useRef()
   const { email } = useSelector(state => state.user)
-  const { events } = useSelector(state => state.eventsBuysSlice);
-  const [eventData, setEventData] = useState(events.find(e => e.status === 'PENDING'))
+  const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement);
 
-  const quantity = eventData.tickets.length
+  const transactionData = eventsBuyed.find(e => e.status === 'PENDING')
+  const quantity = transactionData.tickets.length
 
 
 
@@ -45,7 +46,7 @@ const ModalVoucher = ({ setShowModal }) => {
     const objUrlFile = {
       payment_proof: urlFile
     }
-    dispatch(axiosPutTicket({ id: eventData.transactionId, objUrlFile }))
+    dispatch(axiosPutTicket({ id: transactionData.transactionId, objUrlFile }))
   };
 
 
@@ -101,16 +102,15 @@ const ModalVoucher = ({ setShowModal }) => {
   }
 
   const handleDelete = () => {
-    dispatch(axiosCANCELTicket(eventData.transactionId))
-    navigate(0)
+    dispatch(cancelTransaction(transactionData.id))
   }
 
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
-      {eventData &&
+      {transactionData &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
           <div className={Style.containerLoadVoucher}>
-            <h1 className={Style.containerVoucher_tittle}>Operation <p>{eventData.transactionId?.slice(0, 8)}</p></h1>
+            <h1 className={Style.containerVoucher_tittle}>Operation <p>{transactionData.id?.slice(0, 8)}</p></h1>
             <h2 className={Style.containerVoucher_subTittle}><p>user </p> {email}</h2>
 
             {
@@ -184,22 +184,22 @@ const ModalVoucher = ({ setShowModal }) => {
 
           <div className={Style.detailWrapper}>
             <div className={Style.imgWrapper}>
-              <img className={Style.detailEvent_img} src={eventData.cover_pic} alt="" />
+              <img className={Style.detailEvent_img} src={transactionData.event.cover_pic} alt="" />
             </div>
 
             <div className={Style.detail}>
               <h3 className={Style.detailEvent_resume}>Order overview</h3>
               <div className={Style.detailEvent_tickets}>
-                {quantity} x {eventData.name}
-                <span>{quantity * eventData.price}</span>
+                {quantity} x {transactionData.event.name}
+                <span>{quantity * transactionData.event.price}</span>
               </div>
               <div className={Style.detailEvent_total}>
-                Total: <span>{quantity * eventData.price}</span>
+                Total: <span>{quantity * transactionData.event.price}</span>
               </div>
 
               <div className={Style.detailBankAccount}>
-                <h2>Organizer {eventData.organizer?.name} {eventData.organizer?.last_name}</h2>
-                <h3 className={Style.detailBankAccount_CBU_name}> Account {eventData.bankAccount?.name} {eventData.bankAccount?.CBU}</h3>
+                <h2>Organizer {transactionData.event.organizer?.name} {transactionData.event.organizer?.last_name}</h2>
+                <h3 className={Style.detailBankAccount_CBU_name}> Account {transactionData.event.bankAccount?.name} {transactionData.event.bankAccount?.CBU}</h3>
               </div>
             </div>
           </div>

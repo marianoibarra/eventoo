@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import Style from './DataBankAccount.module.css'
-import { GiConfirmed } from "react-icons/gi";
-import Checkbox from '@material-ui/core/Checkbox';
 import { axiosCANCELTicket } from '../../../../Slice/transaction/TransactionSlice';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-regular-svg-icons'
 import { useDispatch } from 'react-redux';
+import { cancelTransaction } from '../../../../Slice/eventsManagement/eventsManagementSlice';
 
 
 
@@ -15,20 +14,19 @@ const DataBankAccount = ({ quantity }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { eventDetail } = useSelector(state => state.eventDetail);
+  const { transactionWasCreated } = useSelector(state => state.eventsManagement);
   const [cancel, setCancel] = useState(false)
-  const idTransaction = eventDetail.id
   
   const handleCancel = () => {
     setCancel(!cancel)
   }
 
   const handleAcept = () => {
-    navigate(0)
+    navigate(0) //ver, rompe el flujo
   }
 
   const handleDelete = () => {
-    dispatch(axiosCANCELTicket(idTransaction))
-    navigate(0)
+    dispatch(cancelTransaction(transactionWasCreated.id))
   }
 
   return (
@@ -41,7 +39,7 @@ const DataBankAccount = ({ quantity }) => {
               <FontAwesomeIcon icon={faCircleCheck} size='6x' />
           </header>
 
-          <h2>Reservation made successfully <span>{`#${idTransaction.slice(0, 8)}`}</span></h2>
+          <h2>Reservation made successfully <span>{`#${transactionWasCreated.id.slice(0, 8)}`}</span></h2>
 
           
           <div className={Style.textOrder}>
@@ -61,7 +59,7 @@ const DataBankAccount = ({ quantity }) => {
           <div className={Style.bottomWrapper}>
             <button className={Style.cancelBtn}
               onClick={handleCancel}>
-              Cancel reserve
+              Cancel reservation
             </button>
 
             <button
@@ -74,25 +72,21 @@ const DataBankAccount = ({ quantity }) => {
       </div>
 
       <div className={cancel ? Style.containerCancel : Style.containerCancelNoVisible}>
-        <h2>Do you want to abandon the purchase process?</h2>
-        <p className={Style.cancelMsg}>Are you sure you want to leave the page? The items you selected may not be available later.</p>
+        <FontAwesomeIcon icon={faCircleXmark} size='8x' color='#ff4235'/>
+        <h2>Are you sure?</h2>
+        <p className={Style.cancelMsg}>Are you sure you want to cancel this reservartion?</p>
 
         <div className={Style.containerBtn}>
-          <div className={Style.btnGoOut}>
-            <button
-              className={`btnprimario ${Style.modifyGoOut}`}
+          <div 
+              className={Style.modifyGoOut}
               onClick={handleCancel}>
-              NO
-            </button>
+              No, keep reservation
           </div>
-          <div className={Style.btnStay}>
-            <button
-              className={`btnprimario ${Style.modifyStay}`}
+          <div
+              className={Style.modifyStay}
               onClick={handleDelete}>
-              YES
-            </button>
+              Yes, cancel reservation
           </div>
-
         </div>
       </div>
     </>

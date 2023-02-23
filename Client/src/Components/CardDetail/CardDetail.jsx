@@ -15,7 +15,6 @@ import covers from "../../imgs/covers";
 import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
 import { RiTicket2Fill } from "react-icons/ri";
 import style from "./CardDetail.module.css";
-import { distance } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const CardDetailPublic = () => {
@@ -280,7 +279,6 @@ const CardDetail = () => {
   const { showEvent, loading, error, errorPass, eventDetail } = useSelector(
     (state) => state.eventDetail
   );
-  console.log(eventDetail, 'info')
 
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));

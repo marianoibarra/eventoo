@@ -31,6 +31,7 @@ import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
 import Admin from "./Pages/Admin";
 import { getFavorites } from "./Slice/Favorites/FavoritesSlice";
+import { getEventsManagement } from "./Slice/eventsManagement/eventsManagementSlice";
 
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
@@ -57,6 +58,7 @@ function App() {
     if (token) {
       API.defaults.headers.common["authorization"] = "Bearer " + token;
       dispatch(getUserData());
+      dispatch(getEventsManagement());
       dispatch(getFavorites());
       dispatch(getBankAccounts());
     }
