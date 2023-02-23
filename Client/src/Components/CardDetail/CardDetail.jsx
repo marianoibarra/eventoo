@@ -7,7 +7,6 @@ import {
   axiosGetEventPrivate,
   clear,
 } from "../../Slice/EventDetail/EventDetailSlice";
-import { axiosModeEventsBuys } from "../../Slice/EventsBuysForUser/BuysSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import BuyButton from "./BuyButton/BuyButton";
@@ -282,7 +281,6 @@ const CardDetail = () => {
 
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));
-    dispatch(axiosModeEventsBuys());
   }, []);
 
   const handleSubmit = (e) => {

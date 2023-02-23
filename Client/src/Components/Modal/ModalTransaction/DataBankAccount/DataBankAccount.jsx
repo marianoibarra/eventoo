@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import Style from './DataBankAccount.module.css'
-import { axiosCANCELTicket } from '../../../../Slice/transaction/TransactionSlice';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-regular-svg-icons'

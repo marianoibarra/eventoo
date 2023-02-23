@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../../Slice/User/UserSlice";
 import { SessionContext } from "../../..";
 import { clearFavorites } from "../../../Slice/Favorites/FavoritesSlice";
-import { clearTransactions } from "../../../Slice/transaction/TransactionSlice";
 import { clearEventsManagement } from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 const Menu = () => {
@@ -23,7 +22,6 @@ const Menu = () => {
   const handleClearLocalStorage = () => {
     dispatch(logOut());
     dispatch(clearFavorites())
-    dispatch(clearTransactions())
     dispatch(clearEventsManagement())
     navigate("/");
     setIsOpen(false);

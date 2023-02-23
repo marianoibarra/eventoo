@@ -12,7 +12,6 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
   const [ticketForms, setTicketForms] = useState(Array.from({ length: quantity }, () => ({})));
   const { eventDetail } = useSelector(state => state.eventDetail);
   const { email } = useSelector(state => state.user)
-  // const { transaction, loading, error } = useSelector(state => state.transaction)
   const { data: {buys: eventsBuyed}, loading: {post: loading}, error, transactionWasCreated } = useSelector(state => state.eventsManagement)
   const [isButtonDisabled, setisButtonDisabled] = useState(true)
   

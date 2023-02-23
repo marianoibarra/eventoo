@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Style from './ModalVoucher.module.css'
-import { API } from '../../../App';
-import { axiosPutTicket, axiosCANCELTicket, axiosGetTicket } from '../../../Slice/transaction/TransactionSlice';
-import { Document, Page } from 'react-pdf'
-import pdfjsLib from 'pdfjs-dist'
 import Modal from '../Modal';
 import { cancelTransaction, loadPaymentProof } from '../../../Slice/eventsManagement/eventsManagementSlice';
 
