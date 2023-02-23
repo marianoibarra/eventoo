@@ -1,0 +1,91 @@
+.sapList {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  margin: 10px 0;
+  border-radius: 15px;
+}
+
+.sapListHeader {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  font-weight: bold;
+  border-bottom: none;
+  align-items: center;
+}
+.sapListHeader > div:hover{
+background-color: rgba(130, 133, 132, 0.178);
+transition: 0.4ms;
+
+}
+
+.sapListHeader > div {
+  flex: 1;
+  text-align: center;
+  padding: 8px 10px;
+}
+
+.sapListRow {
+  display: flex;
+  flex-direction: row;
+  border-bottom: none;
+  align-items: center;
+  
+}
+
+
+.sapListRow > div {
+  flex: 1;
+  text-align: center;
+  padding: 8px 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sapListRow > div.sapListCellWide {
+  flex: 2;
+  text-align: left;
+}
+
+
+.sapListActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnSap {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 14px;
+  color:darkslateblue;
+}
+
+
+.sapListRow:nth-child(even) {
+  background-color: #188b8b1f;
+}
+
+.sapListRow:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.sap{
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.sapListImage  {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+}
+
+#sapSelection{
+  background-color: #188b8b71;
+}
