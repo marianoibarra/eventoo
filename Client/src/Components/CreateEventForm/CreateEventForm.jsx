@@ -216,7 +216,7 @@ function Form() {
               This is a success alert — <strong>check it out!</strong>
             </Alert>
           </Stack> : undefined}
-      {/* <Lateral/> */}
+      <Lateral/>
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>
         <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}

@@ -3,7 +3,6 @@ import style from './PackSelection.module.css'
 
 function PackSelection({ input, setInput }) {
 
-
     const packs = [
         {   
             id: 0,

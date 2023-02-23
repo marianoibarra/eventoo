@@ -9,7 +9,6 @@ function MoreInfo({ input, setInput}) {
             ...input,
             [e.target.name]: e.target.value
         })
-        console.log(input, 'descrip')
     };
 
     return (
