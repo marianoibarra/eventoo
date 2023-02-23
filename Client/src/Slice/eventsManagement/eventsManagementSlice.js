@@ -46,7 +46,27 @@ export const cancelTransaction = createAsyncThunk(
   }
 );
 
+export const loadPaymentProof = createAsyncThunk(
+  "eventsManagement/loadPaymentProof",
+  async ({id, data}, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/transaction/complete/${id}`, data);
+      return res.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  }
+);
+
+
 const initialState = {
+  data: {
+    buys: [],
+    sells: [],
+    eventsCreated: [],
+  },
   loading: {
     get: false,
     post: false,
@@ -54,11 +74,8 @@ const initialState = {
   },
   error: null,
   transactionWasCreated: false,
-  data: {
-    buys: [],
-    sells: [],
-    eventsCreated: [],
-  }
+  transactionWasCanceled: false,
+  paymentWasLoaded: false,
 }
 
 export const eventsManagementSlice = createSlice({
@@ -80,6 +97,7 @@ export const eventsManagementSlice = createSlice({
       state.loading.get = false;
       state.error = action.payload;
     },
+
     [postNewTransaction.pending]: (state) => {
       state.loading.post = true
       state.transactionWasCreated = false
@@ -94,17 +112,35 @@ export const eventsManagementSlice = createSlice({
       state.loading.post = false;
       state.error = action.payload;
     },
+
     [cancelTransaction.pending]: (state) => {
       state.loading.put = true
+      state.transactionWasCancel = false
     },
-    [cancelTransaction.fulfilled]: (state, action) => {
+    [cancelTransaction.fulfilled]: (state) => {
       state.loading.put = false;
       state.error = null;
-      state.transactionWasCreated = false
+      state.transactionWasCancel = true
     },
     [cancelTransaction.rejected]: (state, action) => {
       state.loading.put = false;
       state.error = action.payload;
+      state.transactionWasCancel = false
+    },
+
+    [loadPaymentProof.pending]: (state) => {
+      state.loading.put = true
+      state.paymentWasLoaded = false
+    },
+    [loadPaymentProof.fulfilled]: (state) => {
+      state.loading.put = false;
+      state.error = null;
+      state.paymentWasLoaded = true
+    },
+    [loadPaymentProof.rejected]: (state, action) => {
+      state.loading.put = false;
+      state.error = action.payload;
+      state.paymentWasLoaded = false
     },
   }
 })

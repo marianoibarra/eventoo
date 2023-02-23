@@ -7,7 +7,7 @@ import { axiosPutTicket, axiosCANCELTicket, axiosGetTicket } from '../../../Slic
 import { Document, Page } from 'react-pdf'
 import pdfjsLib from 'pdfjs-dist'
 import Modal from '../Modal';
-import { cancelTransaction } from '../../../Slice/eventsManagement/eventsManagementSlice';
+import { cancelTransaction, loadPaymentProof } from '../../../Slice/eventsManagement/eventsManagementSlice';
 
 
 
@@ -43,10 +43,7 @@ const ModalVoucher = ({ setShowModal }) => {
 
   //handle que realiza el dispatch, de la url
   const handleAccept = () => {
-    const objUrlFile = {
-      payment_proof: urlFile
-    }
-    dispatch(axiosPutTicket({ id: transactionData.transactionId, objUrlFile }))
+    dispatch(loadPaymentProof({ id: transactionData.id, data: {payment_proof: urlFile} }))
   };
 
 

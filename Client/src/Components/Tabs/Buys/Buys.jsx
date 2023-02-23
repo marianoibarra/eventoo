@@ -1,32 +1,29 @@
-import React, { useEffect } from 'react'
-import {  useDispatch, useSelector } from "react-redux";
+import React from 'react'
+import {  useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
-import { axiosModeEventsBuys } from '../../../Slice/EventsBuysForUser/BuysSlice';
+import SpinnerWhite from '../../../utils/SpinnerWhite/SpinnerWhite';
 import Styles from '../Create/Create.module.css';
 
 function Buys() {
-  const { events } = useSelector(state => state.eventsBuysSlice)
 
-  console.log(events)
-
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(axiosModeEventsBuys());
-  }, [dispatch]);
+  const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
 
   return (
     <div className={Styles.container}>
-      {Array.isArray(events) && events.length !== 0 && events.map(event => (
-        <div className={Styles.eventCard} key={event?.name}>
-          <Link to={`/Event/${event?.id}`}><h3 className={Styles.eventCardTitle}>Name: {event?.name}</h3></Link>
-          <p>Start date: {event?.start_date}</p>
-          <p>End date: {event?.end_date}</p>
-          <p>Category: {event.category?.name}</p>
-          <p>Age range: {event?.age_range}</p>
-          <p id={event?.status}>Status: {event?.status}</p>
+      {!loading
+        ? eventsBuyed.map(transaction => (
+            <div className={Styles.eventCard} key={transaction.event.name}>
+              <Link to={`/Event/${transaction.event.id}`}><h3 className={Styles.eventCardTitle}>Name: {transaction.event.name}</h3></Link>
+              <p>Start date: {transaction.event.start_date}</p>
+              <p>End date: {transaction.event.end_date}</p>
+              <p>Category: {transaction.eventcategory?.name}</p>
+              <p>Age range: {transaction.event.age_range}</p>
+              <p id={transaction.status}>Status: {transaction.status}</p>
 
-        </div>
-      ))}
+            </div>
+          ))
+      : <SpinnerWhite />
+    }
     </div>
   )
 }
