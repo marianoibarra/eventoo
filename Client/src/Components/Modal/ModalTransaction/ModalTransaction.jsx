@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Style from './ModalTransition.module.css'
 import Modal from '../Modal'
-import { axiosPostTicket } from '../../../Slice/transaction/TransactionSlice'
 import DataBankAccount from './DataBankAccount/DataBankAccount'
+import { postNewTransaction } from '../../../Slice/eventsManagement/eventsManagementSlice'
+import SpinnerWhite from '../../../utils/SpinnerWhite/SpinnerWhite'
 
 
 const ModalTransaction = ({ setShowModal, quantity }) => {
@@ -11,7 +12,7 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
   const [ticketForms, setTicketForms] = useState(Array.from({ length: quantity }, () => ({})));
   const { eventDetail } = useSelector(state => state.eventDetail);
   const { email } = useSelector(state => state.user)
-  const { transaction, loading, error } = useSelector(state => state.transaction)
+  const { data: {buys: eventsBuyed}, loading: {post: loading}, error, transactionWasCreated } = useSelector(state => state.eventsManagement)
   const [isButtonDisabled, setisButtonDisabled] = useState(true)
   
 
@@ -34,14 +35,11 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
     );
   };
 
-
-
   const handleSubmit = () => {
-    const object = {
+    dispatch(postNewTransaction({
       eventId: eventDetail.id,
       tickets: ticketForms
-    }
-    dispatch(axiosPostTicket(object))
+    }))
     setisButtonDisabled(true)
   }
 
@@ -85,10 +83,10 @@ const ModalTransaction = ({ setShowModal, quantity }) => {
   return (
     <Modal width={'1100px'} setShowModal={setShowModal}>
       {
-        transaction
+        transactionWasCreated
           ? <DataBankAccount quantity={quantity} />
           : loading
-              ? <p>Loading..</p>
+              ? <SpinnerWhite />
               : error
                 ? <p>{error}</p>
                 : <div className={true ? Style.containerBuyTickets : Style.containerDisplayNone}>

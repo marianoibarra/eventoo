@@ -5,13 +5,15 @@ import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
 import { SessionContext } from "../../..";
 import ModalVoucher from "../../Modal/ModalVoucher/ModalVoucher"
+import { Spinner } from "../../Modal/Spinner/Spinner";
+import SpinnerWhite from "../../../utils/SpinnerWhite/SpinnerWhite";
 
 
 const BuyButton = () => {
 
   const [showModal, setShowModal] = useState(false)
   const [showModalVoucher, setShowModalVoucher] = useState(false)
-  const { events } = useSelector(state => state.eventsBuysSlice);
+  const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement);
   const user = useSelector(state => state.user);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
@@ -37,12 +39,14 @@ const BuyButton = () => {
     }
   }
 
+  if(loading) return <div className={style.containerbottomright}><SpinnerWhite /></div>
+
   return (
     
     <div className={style.containerbottomright}>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
       {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
-      {isPaid === true && !events.find(element => element.status === 'PENDING') && 
+      {isPaid === true && !eventsBuyed.find(element => element.status === 'PENDING') && 
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -65,7 +69,7 @@ const BuyButton = () => {
         </div>
       }
 
-      {user.isLogged !== false ? !events.find(element => element.status === 'PENDING') : true && isPaid === false &&
+      {user.isLogged !== false ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === false &&
         <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
@@ -86,7 +90,7 @@ const BuyButton = () => {
         </div>      
       }
 
-      {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'PENDING') ? 
+      {eventsBuyed.length > 0 && user.isLogged !== false && eventsBuyed.find(element => element.status === 'PENDING') ? 
         <div className={style.container_buyer_pending} onClick={() => setShowModalVoucher(true)}>
           <div className={style.buyer_pending}>
               <p>
@@ -97,7 +101,7 @@ const BuyButton = () => {
         : null
       }
 
-    {events.length > 0 && user.isLogged !== false && events.find(element => element.status === 'INWAITTING') ? 
+    {eventsBuyed.length > 0 && user.isLogged !== false && eventsBuyed.find(element => element.status === 'INWAITTING') ? 
         <div className={style.container_buyer_pending} >
           <div className={style.buyer_pending}>
               <p>

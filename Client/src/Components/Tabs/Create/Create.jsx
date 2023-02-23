@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react'
-import {  useDispatch, useSelector } from "react-redux";
+import React from 'react'
+import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
-import { axiosModeEventsCreateForUser } from '../../../Slice/EventsCreateForUser/CreateForUserSlice';
 import Styles from'./Create.module.css';
+
 function Create() {
-  const { events } = useSelector(state => state.eventsCreateForUserSlice)
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(axiosModeEventsCreateForUser());
-  }, [dispatch]);
+
+  const { data: {eventsCreated}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
 
   return (
     <div className={Styles.container} >
-      {Array.isArray(events) && events.length !== 0 && events.map(event => (
+      {Array.isArray(eventsCreated) && eventsCreated.length !== 0 && eventsCreated.map(event => (
         <div className={Styles.eventCard}  key={event?.name}>
           <Link to={`/Event/${event?.id}`}><h3 className={Styles.eventCardTitle}>Name: {event?.name}</h3></Link>
           <p>Start date: {event?.start_date}</p>

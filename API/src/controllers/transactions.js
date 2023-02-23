@@ -416,7 +416,7 @@ const completeTransaction = async (req, res) => {
       doc.text(`Time: ${t.start_time}`);
       doc.text(`Price: ${t.price}`);
       doc.text(`Address: ${address}`);
-      doc.image(event.cover_pic, { width: 150, height: 150 });
+      event.cover_pic && doc.image(event.cover_pic, { width: 150, height: 150 });
       doc.save();
     }
     doc.end();
@@ -436,7 +436,7 @@ const completeTransaction = async (req, res) => {
 
     const options = {
       from: `Eventoo <${process.env.EMAIL_USER}>`,
-      to: `${user.email}`,
+      to: 'marianoibarratesta@outlook.com',
       subject: 'Tickets',
       text: 'Enjoy the event!!',
       attachments: [

@@ -8,10 +8,7 @@ import {
   sortByAscendingUser,
   sortByDescendingUsers,
 } from "../../../Slice/Admin/AdminSlice";
-import { axiosModeEventsCreateForUser } from "../../../Slice/EventsCreateForUser/CreateForUserSlice";
-import EventsInfo from "../Events/EventsInfo";
 import SearchBar from "../SearchBar/SearchAdmin";
-import Styles from "./User.module.css";
 import UserInfo from "./UserInfo";
 function Users() {
   const { users, errorUser } = useSelector((state) => state.admin);
