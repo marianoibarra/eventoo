@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
-import { axiosModeEventDetail } from "../../Slice/EventDetail/EventDetailSlice";
+import { axiosModeEventDetail, clear } from "../../Slice/EventDetail/EventDetailSlice";
 import { API } from "../../App";
 import covers from "../../imgs/covers";
 import { Box } from "@mui/material";
+import { Alert } from "@mui/material";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import style from "./Review.module.css";
+
+const sx = {
+    borderRadius: '12px',
+    margin: '0 auto',
+    width: "max-content",
+    mb: "20px"
+}
 
 const Review = () => {
 
@@ -22,6 +30,11 @@ const Review = () => {
 
     const [comment, setComment] = useState('');
     const [errors, setErrors] = useState({comment: 'Comment is require.'});
+    const [result, setResult] = useState({
+        result: null,
+        msg: ''
+    });
+
     function validate(value){
         const errors = {};
         if(!value.length) errors.comment = "Comment is require.";
@@ -46,22 +59,32 @@ const Review = () => {
             comment
         }
         try {
-            const res = await API.post(`/reviews`, body);
-            console.log(res.data);
+            await API.post(`/reviews`, body);
+            setResult({
+                result: true,
+                msg: "Review submitted successfully"
+            });
         } catch (error) {
-            console.log(error.message);
+            setResult({
+                result: false,
+                msg: error.response.data.msg
+            });
         }
     }
 
     useEffect(() => {
         dispatch(axiosModeEventDetail(id));
+        return () => dispatch(clear());
     }, [dispatch]);
-
-    const today = new Date().toLocaleString();
-    const dateEvent = new Date(`${eventDetail?.end_date}, ${eventDetail?.end_time}`).toLocaleString();
     
     if(loading) return <div className={style.spinner}><div></div><div></div><div></div><div></div></div>;
     if(error || Object.keys(eventDetail).length === 0) return <div className={style.error}>Something was wrong..</div>
+
+    const today = new Date();
+    const dateEvent = new Date(`${eventDetail?.end_date}, ${eventDetail?.end_time}`);
+
+    console.log(today, 1)
+    console.log(dateEvent, 2);
 
     return(
         <>
@@ -88,11 +111,19 @@ const Review = () => {
                             })}
                         </Box>
                         {!activeStars && <p className={style.spanerror}>You should select at least one star.</p>}
+
                         <textarea className={errors.comment ? style.error : style.good} maxLength={600} name="comment" value={comment} placeholder='Comment...' onChange={handleOnChange}/>
                         {errors.comment && <p className={style.spanerror}>{errors.comment}</p>}
-                        <button className={`btnprimario`} disabled={Object.keys(errors).length || user.isLogged === false || today > dateEvent || !activeStars ? true : false} href="" onClick={handleSubmit}>Submit review</button>
-                        {user.isLogged === false && today < dateEvent && <p className={style.spanerror}>Please login to submit review.</p>}
-                        {today > dateEvent && <p className={style.spanerror}>The event has not ended. Can't send review.</p>}
+
+                        <button className={`btnprimario`} disabled={Object.keys(errors).length || user.isLogged === false || today < dateEvent || !activeStars || result.result === false ? true : false} href="" onClick={handleSubmit}>Submit review</button>
+
+                        {today && user.isLogged === false && today > dateEvent && <Alert sx={sx} severity="warning">Please login to submit review.</Alert>}
+
+                        {today && today < dateEvent && <Alert sx={sx} severity="warning">The event has not ended. Can't send review.</Alert>}
+
+                        {result.result && <Alert sx={sx} severity="success">{result.msg}</Alert>}
+
+                        {result.result === false && <Alert sx={sx} severity="error">{result.msg}</Alert>}
                     </div>
                 </div>
             }
