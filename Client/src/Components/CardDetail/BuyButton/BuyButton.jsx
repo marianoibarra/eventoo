@@ -100,7 +100,6 @@ const BuyButton = () => {
         </div>
         : null
       }
-      {console.log(events)}
 
     {eventsBuyed.length > 0 && user.isLogged !== false && eventsBuyed.find(element => element.status === 'INWAITTING') ? 
         <div className={style.container_buyer_pending} >

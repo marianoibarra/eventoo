@@ -92,10 +92,10 @@ const CardDetailPublic = () => {
         });
       }
     }
-    return () => {
-      dispatch(clear());
-      dispatch(clearBuy());
-    }
+    // return () => {
+    //   dispatch(clear());
+    //   dispatch(clearBuy());
+    // }
   }, [eventDetail, user]);
 
   return (
