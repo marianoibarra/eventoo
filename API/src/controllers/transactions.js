@@ -9,7 +9,6 @@ const {
 require("dotenv").config();
 const moment = require("moment");
 const nodemailer = require("nodemailer");
-// const fs = require("fs"); para pruebas locales de pdf
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const approvalTimeLimit = 1;
@@ -70,20 +69,20 @@ const createTransactions = async (req, res) => {
       },
     });
 
-    // await cleanTransactions(event);
-    // await event.reload();
+    await cleanTransactions(event);
+    await event.reload();
     const user = await User.findByPk(buyerId);
 
-    // if (event.stock_ticket < tickets.length) {
-    //   // se verifica si hay suficiente stock de entradas
-    //   return res.status(400).json({
-    //     error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
-    //   });
-    // }
+    if (event.stock_ticket < tickets.length) {
+      // se verifica si hay suficiente stock de entradas
+      return res.status(400).json({
+        error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
+      });
+    }
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -93,7 +92,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -373,18 +372,18 @@ const completeTransaction = async (req, res) => {
       });
     }
     // Verifica si han pasado menos de 15 minutos desde la creación de la transacción
-    // const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
-    // if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
-    //   // Si han pasado más de 15 minutos, devuelve las entradas al evento
-    //   await transaction.update({ status: "CANCELED" });
-    //   const ticketsToReturn = transaction.tickets.length;
-    //   const event = await Event.findByPk(transaction.eventId);
-    //   await event.increment("stock_ticket", { by: ticketsToReturn });
-    //   return res.status(400).json({
-    //     error:
-    //       "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
-    //   });
-    // }
+    const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
+    if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
+      // Si han pasado más de 15 minutos, devuelve las entradas al evento
+      await transaction.update({ status: "CANCELED" });
+      const ticketsToReturn = transaction.tickets.length;
+      const event = await Event.findByPk(transaction.eventId);
+      await event.increment("stock_ticket", { by: ticketsToReturn });
+      return res.status(400).json({
+        error:
+          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+      });
+    }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
     return res.status(200).json({
