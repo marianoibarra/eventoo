@@ -16,14 +16,16 @@
 
 .imageWrapper {
     position: relative;
-    width: 70%;
+    width: 98%;
     max-width: 1280px;
     min-height: 300px;
     overflow: hidden;
+    margin-top: 1%;
+    border-radius: 15px;
 }
 
 .imgDropArea {
-    width: 90%;
+    width: 100%;
     height: 100%;
     max-width: 1280px;
 }
@@ -33,6 +35,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     height: 100%;
     gap: 5px;
     font-size: 0.95rem;
@@ -41,7 +44,7 @@
 }
 
 .onDragDropArea {
-    width: 90%;
+    width: 95%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -56,7 +59,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;    
+    width: 100%;
+    height: 100%;   
 }
 
 .uploadButton {
@@ -143,7 +147,7 @@
 }
 
 .imgPreviewFetching {
-    width: 90%;
+    width: 100%;
     height: 100%;
     object-fit: cover;
 }
@@ -163,7 +167,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90%;
+    width: 100%;
     height: 100%;
     backdrop-filter: blur(10px);
     font-size: 1.2rem;

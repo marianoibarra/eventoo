@@ -1,11 +1,13 @@
 import style from './Lateral.module.css'
+import { Link } from "react-router-dom";
 
 function Lateral() {
     return (
       <div className={style.container}>
-      
-        <div className={style.menu}>Menu</div>
-    
+      <Link to="/">
+            {" "}
+            <div className={style.button}>Back</div>
+          </Link>
       </div>
   );
 }

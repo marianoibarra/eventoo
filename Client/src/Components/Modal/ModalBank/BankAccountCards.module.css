@@ -29,9 +29,11 @@
 }
   
 .groupcont {
-    margin: 12px 0 24px;
+    margin: 12px 0 5px;
     display: flex;
-    gap: 16px;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: space-around;
+    overflow: auto;
+    max-height: 195px;
 }
