@@ -100,9 +100,11 @@ const BuyButton = () => {
         </div>
         : null
       }
+      {console.log(events)}
 
     {eventsBuyed.length > 0 && user.isLogged !== false && eventsBuyed.find(element => element.status === 'INWAITTING') ? 
         <div className={style.container_buyer_pending} >
+          {console.log('entre')}
           <div className={style.buyer_pending}>
               <p>
                 Inwaitting
@@ -110,7 +112,7 @@ const BuyButton = () => {
           </div>
         </div>
         : null
-      }
+    }
     </div>
   );
 };
