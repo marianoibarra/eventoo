@@ -18,9 +18,10 @@ export const axiosModeEventDetail = createAsyncThunk(
 
 export const axiosModeEditEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEditEventDetail",
-  async ({ id, body }, { rejectWithValue }) => {
+  async ({ id, editedEvent }, { rejectWithValue }) => {
     try {
-      const res = await API.put(`/event/${id}`, body);
+      const res = await API.put(`/event/${id}`, editedEvent);
+      console.log(res.data)
        return res.data;
     } catch (error) {
       if (error.response) {
@@ -104,7 +105,7 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload.event;
+      state.eventDetail = action.payload.data;
       state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;

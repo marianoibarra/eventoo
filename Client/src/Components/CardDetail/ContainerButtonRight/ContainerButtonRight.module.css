@@ -15,6 +15,35 @@
     }
 }
 
+.category_and_age {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    margin-bottom: 35px;
+}
+
+.containercategory {
+    border-radius: 12px;
+    background-color: var(--secondary-color);
+    width: min-content;
+    height: max-content;
+}
+
+.text {
+    display: block;
+    width: min-content;
+    height: 100%;
+    font-size: 1.1vw;
+    font-weight: 400;
+    color: var(--white-text);
+    margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+}
+
 .organizerbutton_div {
     position: sticky;
     z-index: 300;
@@ -54,6 +83,7 @@
     background-color: #cccccc40;
     margin-bottom: 35px;
     font-weight: 400;
+    cursor: pointer;
 }
 
 .organizer_text {
@@ -64,4 +94,14 @@
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
+}
+
+.organizericon {
+    cursor: pointer;
+    width: min-content;
+    color: var(--secondary-color);
+}
+
+.organizericon:hover {
+    color: #ab2a3e;
 }

@@ -45,9 +45,10 @@
 }
 
 .containerdescription {
-    width: 85%;
+    width: 100%;
     height: max-content;
     margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .containerdescription p {
@@ -57,7 +58,6 @@
 
 .containerdescription a {
     margin-left: 10px;
-    color: var(--primary-color);
 }
 
 .containerdescription a:hover {
@@ -68,7 +68,7 @@
     resize: none;
     font-family: 'Roboto', sans-serif;
     font-size: 1.5vw;
-    background-color: var(--ligth-background-color);
+    font-weight: 400;
     height: 20vh;
     width: 100%;
 }
@@ -79,8 +79,6 @@ textarea:focus {
 
 .textdescription_error {
     color: red;
-    position: relative;
-    bottom: 10vh;
 }
 
 .textarea_border {
@@ -108,11 +106,11 @@ textarea:focus {
     border-radius: 12px;
     display: inline;
     height: max-content;
-    width: 93%;
+    width: 100%;
     font-family: 'Roboto', sans-serif;
-    font-weight: 900;
+    font-weight: 400;
     font-size: 4.2vw;
-    color: var(--primary-color);
+    background-color: white;
 }
 
 .organizerinput_error {
@@ -121,20 +119,11 @@ textarea:focus {
     border-radius: 12px;
     display: inline;
     height: max-content;
-    width: 93%;
+    width: 100%;
     font-family: 'Roboto', sans-serif;
-    font-weight: 900;
+    font-weight: 400;
     font-size: 4.2vw;
-    color: var(--primary-color);
-}
-
-.organizericon {
-    margin-left: 5px;
-    color: var(--primary-color);
-}
-
-.organizericon:hover {
-    color: var(--accent-color);
+    background-color: white;
 }
 
 h1 a:hover {

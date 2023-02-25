@@ -13,11 +13,6 @@ const EventInformation = () => {
     return(
         <>
             {eventDetail && Object.keys(eventDetail).length > 0 && <div className={style.background}>
-                {eventDetail.category && 
-                    <div className={style.containercategory}>
-                        <span className={style.iconspantext}>{eventDetail.category.name}</span> 
-                    </div>                    
-                }
 
                 {eventDetail.disability_access === true &&
                     <div className={style.containericon}> 

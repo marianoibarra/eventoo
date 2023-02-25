@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { axiosModeEditEventDetail } from "../../../Slice/EventDetail/EventDetailSlice";
+import { axiosModeEditEventDetail, axiosModeEventDetail, setModeEdit } from "../../../Slice/EventDetail/EventDetailSlice";
+import { AiFillEdit } from "react-icons/ai";
+import { BsSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import BuyButton from "./BuyButton/BuyButton";
 import UserIcon from "../../../Assets/UserProfile.png";
 import style from "./ContainerButtonRight.module.css";
@@ -12,22 +14,62 @@ function ContainerButtonRight() {
   const user = useSelector((state) => state.user);
   const { eventDetail } = useSelector(state => state.eventDetail);
   const { organizer, editedEvent, errors} = useSelector(state => state.eventDetail.eventEdition);
-  const { id } = useParams;
+  const [favorite, setFavorite] = useState(false);
+  const { id } = useParams();
   const dispatch = useDispatch();
 
   function handleOnClick(event) {
     event.preventDefault();
-    if (editedEvent.edited === true) {
+    if (editedEvent.edited === true && !Object.keys(errors).length) {
       dispatch(
-        axiosModeEditEventDetail({ id, body: { ...editedEvent } })
+        axiosModeEditEventDetail({ id, editedEvent })
       );
-      window.location.reload();
     }
+  }
+
+  function editButton(event) {
+    event.preventDefault();
+    dispatch(setModeEdit(true));
+  }
+
+  function heartButton() {
+    favorite ? setFavorite(false) : setFavorite(true);
   }
 
   return (
     <div className={style.background}>
-      <div className={style.container_organizer}>
+
+      <div className={style.category_and_age}>
+        {eventDetail.category && 
+          <div className={style.containercategory}>
+            <span className={style.text}>{eventDetail.category.name}</span> 
+          </div>                    
+        }
+
+        <div className={style.containercategory}>
+          <span className={style.text}>{eventDetail.age_range}</span> 
+        </div>
+
+        {organizer === true &&
+          <a className={style.organizericon} onClick={editButton}>
+            <AiFillEdit size={30} />
+          </a>
+        }
+
+        {favorite && organizer === false && 
+          <a className={style.organizericon} onClick={heartButton}>
+            <BsSuitHeartFill size={30} />
+          </a>
+        }
+
+        {!favorite && organizer === false &&
+          <a className={style.organizericon} onClick={heartButton}>
+            <BsSuitHeart size={30} />
+          </a>
+        }
+      </div>
+
+      {eventDetail.organizer.name && <div className={style.container_organizer}>
         <img 
           src={UserIcon}
           className={style.profile_pic}
@@ -37,7 +79,8 @@ function ContainerButtonRight() {
           <p>Organized by</p>
           <h3>{`${eventDetail.organizer.name} ${eventDetail.organizer.last_name}`}</h3>
         </div>
-      </div>
+      </div>}
+
       {organizer === false && <BuyButton />}
 
       {user.isLogged && organizer === true && (

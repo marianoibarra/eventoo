@@ -78,11 +78,6 @@ const CardDetailPublic = () => {
     dispatch(setErrors(validate(object)));
   }
 
-  function editButton(event) {
-    event.preventDefault();
-    dispatch(setModeEdit(true));
-  }
-
   useEffect(() => {
     dispatch(getEventsManagement());
     if (user.isLogged) {
@@ -136,11 +131,6 @@ const CardDetailPublic = () => {
                       value={editedEvent.name}
                       onChange={handleOnChange}
                     />
-                    {organizer === true && (
-                      <a className={style.organizericon} onClick={editButton}>
-                        <AiFillEdit size={30} />
-                      </a>
-                    )}
                     {organizer === true && errors.name && <p>{errors.name}</p>}
                   </div>
                 )}
@@ -160,25 +150,14 @@ const CardDetailPublic = () => {
                     onChange={handleOnChange}
                   />
                 )}
-                
-                {/* {organizer === true && (
-                  <a
-                    id="description"
-                    className={style.organizericon}
-                    onClick={editButton}
-                  >
-                    <AiFillEdit size={30} />
-                  </a>
-                )} */}
+
+                {organizer === true && errors.description && (
+                  <p className={style.textdescription_error}>
+                  {errors.description}
+                  </p>
+                )}
                 <hr></hr>
               </div>
-
-              {organizer === true && errors.description && (
-              <p className={style.textdescription_error}>
-                {errors.description}
-              </p>
-              )}
-
             </div>
 
             <div className={style.container_date}>
