@@ -202,52 +202,6 @@ h1 a:hover {
     margin-left: 55px;
 }
 
-.container_organizerbutton {
-    position: absolute;
-    top: 60vh;
-    right: 0;
-    bottom: 0;
-    z-index: 290;
-    width: 20%;
-    margin-top: 35px;
-    margin-right: 35px;
-}
-
-@media (min-height: 745px) {
-    .container_organizerbutton {
-        top: 445px;
-    }
-}
-
-.organizerbutton_div {
-    position: sticky;
-    z-index: 300;
-    top: 95px;
-    left: 0;
-    width: 100%;
-    height: max-content;
-}
-
-.organizerbutton {
-    margin: 0 auto;
-}
-
-.organizerbutton a {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 75%;
-}
-
-.organizerbutton_disabled {
-    background-image: none;
-    background-color: #ccc;
-    color: gray;
-}
-
-.organizerbutton_disabled:hover {
-    box-shadow: none;
-}
-
 .spinner {
     display: inline-block;
     position: absolute;

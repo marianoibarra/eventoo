@@ -3,19 +3,22 @@ import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   axiosModeEventDetail,
-  axiosModeEditEventDetail,
   axiosGetEventPrivate,
   clear,
+  setOrganizer,
+  setEditedEvent,
+  setModeEdit,
+  setErrors
 } from "../../Slice/EventDetail/EventDetailSlice";
-import { clearEventsManagement, getEventsManagement } from "../../Slice/eventsManagement/eventsManagementSlice";
+import { getEventsManagement } from "../../Slice/eventsManagement/eventsManagementSlice";
 import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
-import BuyButton from "./BuyButton/BuyButton";
 import covers from "../../imgs/covers";
 import moment from "moment";
 import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
 import { RiTicket2Fill } from "react-icons/ri";
 import style from "./CardDetail.module.css";
+import ContainerButtonRight from "./ContainerButtonRight/ContainerButtonRight";
 
 const lorem = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
 
@@ -25,21 +28,10 @@ const CardDetailPublic = () => {
   );
   const { data } = useSelector(state => state.eventsManagement);
   const dispatch = useDispatch();
-  const { id } = useParams();
 
   // estados para usuario organizador
   const user = useSelector((state) => state.user);
-  const [organizer, setOrganizer] = useState(false);
-  const [edit, setEdit] = useState({
-    name: false,
-    description: false,
-  });
-  const [editedEvent, setEditedEvent] = useState({
-    name: "",
-    description: "",
-    edited: false,
-  });
-  const [errors, setErrors] = useState({});
+  const { organizer, modeEdit, editedEvent, errors} = useSelector(state => state.eventDetail.eventEdition);
 
   const genDate = () => {
     const [hour, minute] = eventDetail.start_time.split(":");
@@ -82,26 +74,13 @@ const CardDetailPublic = () => {
       [event.target.name]: event.target.value,
       edited: true,
     };
-    setEditedEvent(object);
-    setErrors(validate(object));
-  }
-
-  async function handleOnClick(event) {
-    event.preventDefault();
-    if (editedEvent.edited === true) {
-      await dispatch(
-        axiosModeEditEventDetail({ id, body: { ...editedEvent } })
-      );
-      window.location.reload();
-    }
+    dispatch(setEditedEvent(object));
+    dispatch(setErrors(validate(object)));
   }
 
   function editButton(event) {
     event.preventDefault();
-    setEdit({
-      ...edit,
-      [event.currentTarget.id]: true,
-    });
+    dispatch(setModeEdit(true));
   }
 
   useEffect(() => {
@@ -109,17 +88,16 @@ const CardDetailPublic = () => {
     if (user.isLogged) {
       if (eventDetail.organizer) {
         if (user.id === eventDetail.organizer.id) {
-          setOrganizer(true);
-          setEditedEvent({
+          dispatch(setOrganizer(true));
+          dispatch(setEditedEvent({
             ...editedEvent,
             name: eventDetail.name,
             description: eventDetail.description,
-          });
+          }));
         }
       }
     }
     return() => {
-      setOrganizer(false);
       dispatch(clear());
     }
   }, [eventDetail, user]);
@@ -141,7 +119,7 @@ const CardDetailPublic = () => {
             </div>
             <div className={style.container_title_and_description}>
               <div className={style.container_title}>
-                {edit.name === false ? (
+                {modeEdit === false ? (
                   <h1>
                     {eventDetail.name && eventDetail.name}{" "}
                   </h1>
@@ -168,7 +146,7 @@ const CardDetailPublic = () => {
                 )}
               </div>
               <div className={style.containerdescription}>
-                {edit.description === false ? (
+                {modeEdit === false ? (
                   <p>{eventDetail.description}</p>
                 ) : (
                   <textarea
@@ -236,29 +214,7 @@ const CardDetailPublic = () => {
 
             <EventInformation />
 
-            {organizer === false && (
-              <BuyButton />
-            )}
-
-            {user.isLogged && organizer === true && (
-              <div className={style.container_organizerbutton}>
-                <div className={style.organizerbutton_div}>
-                  <div className={style.organizerbutton}>
-                    <a
-                      className={`btnprimario ${editedEvent.edited === false ||
-                          Object.keys(errors).length > 0
-                          ? style.organizerbutton_disabled
-                          : null
-                        }`}
-                      href=""
-                      onClick={handleOnClick}
-                    >
-                      <span>Save Changes</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
+            <ContainerButtonRight />
           </div>
         </>
       )}
