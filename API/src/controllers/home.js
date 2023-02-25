@@ -1,4 +1,4 @@
-const { Event, Address, Category, User } = require("../db");
+const { Event, Address, Category, User, Review } = require("../db");
 
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
@@ -122,6 +122,21 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
           model: User,
           as: "organizer",
           attributes: ["id", "name", "last_name", "profile_pic"],
+          include: [{
+            model: Event,
+            as: 'organizer',
+            include: [{
+              model: Review,
+              attributes: ["stars", "comment", "createdAt"],
+              include: [
+                {
+                  model: User,
+                  attributes: ["name", "last_name", "profile_pic"],
+                  
+                }
+              ]
+            }],
+          }]
         },
         {
           model: Category,
@@ -129,9 +144,17 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
           attributes: ["name", "modality"],
         },
       ],
-    });
+    }).then(r => r.toJSON());
+
+    event.organizer.reviews = event.organizer.organizer.map(r => r.reviews).flat().map(r => { 
+      r.reviewedBy = r.user
+      delete r.user
+      return r
+    })
+    delete event.organizer.organizer
+
     if (event.isPublic) {
-      res.json({  isPublic: true , event })
+      res.json({  isPublic: true , event})
     } else {
       res.json ({ isPublic: false, event: { id: id, name: event.name , start_date: event.start_date, start_time: event.start_time }})
     } 
