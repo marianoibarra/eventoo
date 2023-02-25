@@ -1,0 +1,67 @@
+.background {
+    position: absolute;
+    top: 60vh;
+    right: 0;
+    bottom: 0;
+    z-index: 290;
+    width: 20%;
+    margin-top: 35px;
+    margin-right: 35px;
+}
+
+@media (min-height: 745px) {
+    .background {
+        top: 445px;
+    }
+}
+
+.organizerbutton_div {
+    position: sticky;
+    z-index: 300;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    height: max-content;
+}
+
+.organizerbutton {
+    margin: 0 auto;
+}
+
+.organizerbutton a {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 75%;
+}
+
+.organizerbutton_disabled {
+    background-image: none;
+    background-color: #ccc;
+    color: gray;
+}
+
+.organizerbutton_disabled:hover {
+    box-shadow: none;
+}
+
+.container_organizer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    border-radius: 12px;
+    background-color: #cccccc40;
+    margin-bottom: 35px;
+    font-weight: 400;
+}
+
+.organizer_text {
+    max-width: 50%;
+}
+
+.profile_pic {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
