@@ -46,9 +46,18 @@ export const axiosGetEventPrivate = createAsyncThunk(
   }
 )
 
-
 const initialState = {
   eventDetail: {},
+  eventEdition: {
+    organizer: false,
+    modeEdit: false,
+    editedEvent: {
+      name: "",
+      description: "",
+      edited: false,
+    },
+    errors: {} 
+  },
   showEvent: null,
   loading: false,
   error: null,
@@ -60,6 +69,18 @@ export const eventDetailSlice = createSlice({
   name: "eventDetail",
   initialState,
   reducers: {
+    setOrganizer: (state, action) => {
+      state.eventEdition.organizer = action.payload;
+    },
+    setEditedEvent: (state, action) => {
+      state.eventEdition.editedEvent = action.payload;
+    },
+    setModeEdit: (state, action) => {
+      state.eventEdition.modeEdit = action.payload;
+    },
+    setErrors: (state, action) => {
+      state.eventEdition.errors = action.payload;
+    },
     clear: () => {
       return initialState;
     }
@@ -113,5 +134,5 @@ export const eventDetailSlice = createSlice({
 });
 
 
-export const { clear } = eventDetailSlice.actions;
+export const { clear, setOrganizer, setEditedEvent, setModeEdit, setErrors } = eventDetailSlice.actions;
 export default eventDetailSlice.reducer;
