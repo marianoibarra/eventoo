@@ -1,4 +1,4 @@
-const { Event, Address, Category, User } = require("../db");
+const { Event, Address, Category, User, Review } = require("../db");
 
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
@@ -104,13 +104,12 @@ const getCategories = async (req, res) => {
   }
 };
 
-const getEventById = async (req, res) => { //aqui agregue el condicional 
+const getEventById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const event = await Event.findOne({
-      where: {
-        id
-      },
+      where: { id },
       include: [
         "bankAccount",
         {
@@ -121,7 +120,12 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
         {
           model: User,
           as: "organizer",
-          attributes: ["id", "name", "last_name", "profile_pic"],
+          attributes: [
+            "id",
+            "name",
+            "last_name",
+            "profile_pic"
+          ],
         },
         {
           model: Category,
@@ -130,13 +134,46 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
         },
       ],
     });
-    if (event.isPublic) {
-      res.json({  isPublic: true , event })
-    } else {
-      res.json ({ isPublic: false, event: { id: id, name: event.name , start_date: event.start_date, start_time: event.start_time }})
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
     } 
-} catch (error) {
-    res.status(404).json({ error: error.message });
+
+    try {
+      const scoreByUser = await Event.findAll({
+        where: { "$organizer.id$": event.organizer.id },
+        include: [Review, "organizer"],
+        raw: true,
+        nest: true,
+      });
+  
+      const preResult = scoreByUser.map(a => a.reviews.stars)
+      const resultScore = preResult.reduce((acc, curr) => acc + curr) / preResult.length;
+  
+      event.scoreByUser = resultScore.toFixed(2);
+      // event.scoreByUser = Math.round(resultScore); dejo por si necesitamos que sea solo un entero... (por las estrellitas)
+    } catch (error) {
+      console.log(error)
+      event.scoreByUser = 0;
+    };
+    
+    if (event.isPublic) {
+      event.scoreByUser = event.scoreByUser || 0;
+      res.json({ isPublic: true, event: {...event.toJSON(), scoreByUser: event.scoreByUser} });
+    } else {
+      res.json({
+        isPublic: false,
+        event: {
+          id: id,
+          name: event.name,
+          start_date: event.start_date,
+          start_time: event.start_time,
+          scoreByUser: event.scoreByUser || 0,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
