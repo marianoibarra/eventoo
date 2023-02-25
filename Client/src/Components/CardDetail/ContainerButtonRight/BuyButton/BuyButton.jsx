@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import style from "./BuyButton.module.css";
-import ModalTransaction from '../../Modal/ModalTransaction/ModalTransaction'
+import ModalTransaction from '../../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
-import { SessionContext } from "../../..";
-import ModalVoucher from "../../Modal/ModalVoucher/ModalVoucher"
-import { Spinner } from "../../Modal/Spinner/Spinner";
-import SpinnerWhite from "../../../utils/SpinnerWhite/SpinnerWhite";
+import { SessionContext } from "../../../..";
+import ModalVoucher from "../../../Modal/ModalVoucher/ModalVoucher"
+import { Spinner } from "../../../Modal/Spinner/Spinner";
+import SpinnerWhite from "../../../../utils/SpinnerWhite/SpinnerWhite";
 import { Alert, AlertTitle } from "@mui/material";
 
 const sxPending = {
@@ -55,7 +55,7 @@ const BuyButton = () => {
 
   return (
     
-    <div className={style.containerbottomright}>
+    <>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
       {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
       {console.log(eventsBuyed)}
@@ -64,7 +64,7 @@ const BuyButton = () => {
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
                   <p>
-                      <b>Advance Tickets</b>
+                      <b>Tickets</b>
                   </p>
                   <p className={style.price}>{"$" + price}</p>
               </div>
@@ -121,7 +121,7 @@ const BuyButton = () => {
         </div>
         : null
     }
-    </div>
+    </>
   );
 };
 
