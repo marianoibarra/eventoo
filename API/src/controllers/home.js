@@ -1,6 +1,5 @@
-const { Event, Address, Category, User } = require("../db");
+const { Event, Address, Category, User, Review } = require("../db");
 const jwt = require("jsonwebtoken");
-
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
     const queryParams = req.query;
@@ -123,6 +122,21 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
           model: User,
           as: "organizer",
           attributes: ["id", "name", "last_name", "profile_pic"],
+          include: [{
+            model: Event,
+            as: 'organizer',
+            include: [{
+              model: Review,
+              attributes: ["stars", "comment", "createdAt"],
+              include: [
+                {
+                  model: User,
+                  attributes: ["name", "last_name", "profile_pic"],
+                  
+                }
+              ]
+            }],
+          }]
         },
         {
           model: Category,
@@ -130,9 +144,9 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
           attributes: ["name", "modality"],
         },
       ],
-    raw: true, nest:true});
+    }).then(r => r.toJSON());
 
-    let userId = null
+   let userId = null
 
     const { authorization } = req.headers;
     if (authorization) {
@@ -145,7 +159,14 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
       }
     });
     }
-    
+
+    event.organizer.reviews = event.organizer.organizer.map(r => r.reviews).flat().map(r => { 
+      r.reviewedBy = r.user
+      delete r.user
+      return r
+    })
+    delete event.organizer.organizer
+
     if (event.isPublic || event.organizer.id === userId) {
       res.json({  isPublic: true , event })
     } else {
