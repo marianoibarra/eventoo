@@ -10,7 +10,11 @@ module.exports = (sequelize) => {
         comment:{
             type: DataTypes.STRING,
             allowNull: true,
-        }              
+        },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        }             
     })
 };
 
