@@ -18,9 +18,10 @@ export const axiosModeEventDetail = createAsyncThunk(
 
 export const axiosModeEditEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEditEventDetail",
-  async ({ id, body }, { rejectWithValue }) => {
+  async ({ id, editedEvent }, { rejectWithValue }) => {
     try {
-      const res = await API.put(`/event/${id}`, body);
+      const res = await API.put(`/event/${id}`, editedEvent);
+      console.log(res.data)
        return res.data;
     } catch (error) {
       if (error.response) {
@@ -46,9 +47,18 @@ export const axiosGetEventPrivate = createAsyncThunk(
   }
 )
 
-
 const initialState = {
   eventDetail: {},
+  eventEdition: {
+    organizer: false,
+    modeEdit: false,
+    editedEvent: {
+      name: "",
+      description: "",
+      edited: false,
+    },
+    errors: {} 
+  },
   showEvent: null,
   loading: false,
   error: null,
@@ -60,6 +70,18 @@ export const eventDetailSlice = createSlice({
   name: "eventDetail",
   initialState,
   reducers: {
+    setOrganizer: (state, action) => {
+      state.eventEdition.organizer = action.payload;
+    },
+    setEditedEvent: (state, action) => {
+      state.eventEdition.editedEvent = action.payload;
+    },
+    setModeEdit: (state, action) => {
+      state.eventEdition.modeEdit = action.payload;
+    },
+    setErrors: (state, action) => {
+      state.eventEdition.errors = action.payload;
+    },
     clear: () => {
       return initialState;
     }
@@ -83,7 +105,7 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload.event;
+      state.eventDetail = action.payload.data;
       state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
@@ -113,5 +135,5 @@ export const eventDetailSlice = createSlice({
 });
 
 
-export const { clear } = eventDetailSlice.actions;
+export const { clear, setOrganizer, setEditedEvent, setModeEdit, setErrors } = eventDetailSlice.actions;
 export default eventDetailSlice.reducer;

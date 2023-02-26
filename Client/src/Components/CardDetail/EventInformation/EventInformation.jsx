@@ -13,51 +13,42 @@ const EventInformation = () => {
     return(
         <>
             {eventDetail && Object.keys(eventDetail).length > 0 && <div className={style.background}>
-                {eventDetail.category && 
-                    <div className={style.containercategory}>
-                        <span className={style.iconspantext}>{eventDetail.category.name}</span> 
-                    </div>                    
+
+                {eventDetail.disability_access === true &&
+                    <div className={style.containericon}> 
+                        <span className={style.iconspan}> <TbDisabled size={30}/> </span>
+                        <span className={style.iconspantext}>Disability Access</span> 
+                    </div>
                 }
 
-                {<div className={style.containericon}> 
-                    {eventDetail.disability_access === true ? 
-                        <span className={style.iconspan}> <TbDisabled size={37}/> </span>
-                        : <span className={style.iconspan}> <TbDisabledOff size={37}/> </span>}
-                    <span className={style.iconspantext}>Disability Access</span> 
-                </div>}
-
-                {<div className={style.containericon}> 
-                    {eventDetail.parking === true ? 
-                        <span className={style.iconspan}> <TbParking size={37}/> </span>
-                        : <span className={style.iconspan}> <TbParkingOff size={37}/> </span>}
-                    <span className={style.iconspantext}>Parking</span> 
-                </div>}
+                {eventDetail.parking === true &&
+                    <div className={style.containericon}>   
+                        <span className={style.iconspan}> <TbParking size={30}/> </span>
+                        <span className={style.iconspantext}>Parking</span>
+                    </div>
+                }
 
                 {eventDetail.pet_friendly === true &&
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <MdPets size={37}/> </span> 
+                        <span className={style.iconspan}> <MdPets size={30}/> </span> 
                         <span className={style.iconspantext}>Pet Friendly</span> 
                     </div>                 
                 }
 
-                {eventDetail.smoking_zone === true ?
+                {eventDetail.smoking_zone === true &&
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <MdSmokingRooms size={37}/> </span> 
+                        <span className={style.iconspan}> <MdSmokingRooms size={30}/> </span> 
                         <span className={style.iconspantext}>Smoking Zone</span> 
-                    </div> :
-                    <div className={style.containericon}> 
-                        <span className={style.iconspan}> <MdSmokeFree size={37}/> </span> 
-                        <span className={style.iconspantext}>Smoke Free</span> 
-                    </div>              
+                    </div>             
                 }
 
                 {eventDetail.isPublic === true ?
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <BsFillPeopleFill size={37}/> </span> 
+                        <span className={style.iconspan}> <BsFillPeopleFill size={30}/> </span> 
                         <span className={style.iconspantext}>Public Access</span> 
                     </div> :
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <RiGitRepositoryPrivateFill size={37}/> </span> 
+                        <span className={style.iconspan}> <RiGitRepositoryPrivateFill size={30}/> </span> 
                         <span className={style.iconspantext}>Private Access</span> 
                     </div>              
                 }
