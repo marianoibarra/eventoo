@@ -35,28 +35,28 @@ const SettingForm = () => {
                 <div className={style.name_and_lastname}>
                     <div className={style.container_input_name_last}>
                         <legend htmlFor="name">Name</legend>
-                        <input type='text' name="name" value={input.name} onChange={handleOnChange}/>
+                        <input type='text' name="name" value={input?.name} onChange={handleOnChange}/>
                     </div>
                     <div className={style.container_input_name_last}>
                         <legend htmlFor="last_name">Last Name</legend>
-                        <input type='text' name="last_name" value={input.last_name} onChange={handleOnChange}/>                        
+                        <input type='text' name="last_name" value={input?.last_name} onChange={handleOnChange}/>                        
                     </div>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="email">E-mail</legend>
-                    <input type='text' name="email" value={input.email} onChange={handleOnChange}/>
+                    <input type='text' name="email" value={input?.email} onChange={handleOnChange}/>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="password">Password</legend>
-                    <input type='password' name="password" value={input.password} onChange={handleOnChange}/>
+                    <input type='password' name="password" value={input?.password} onChange={handleOnChange}/>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="adress">Adress</legend>
-                    <input type='text' name="adress" value={input.adress} onChange={handleOnChange}/>
+                    <input type='text' name="adress" value={input?.adress} onChange={handleOnChange}/>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="age">Age</legend>
-                    <input type='text' name="age" value={input.age} onChange={handleOnChange}/>
+                    <input type='text' name="age" value={input?.age} onChange={handleOnChange}/>
                 </div>
             </form>
             <div className={style.divprueba}>

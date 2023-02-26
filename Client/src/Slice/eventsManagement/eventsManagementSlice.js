@@ -9,7 +9,7 @@ export const getEventsManagement = createAsyncThunk(
       data.buys = await API.get('/transaction/buyer').then(res => res.data)
       data.sells = await API.get('/transaction/seller').then(res => res.data)
       data.eventsCreated = await API.get('/event').then(res => res.data)
-      return data
+        return data
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -17,6 +17,23 @@ export const getEventsManagement = createAsyncThunk(
     }
   }
 )
+
+
+
+export const deleteEvent = createAsyncThunk(
+  "eventsBuysSlice/deleteEvent",
+  async (eventId, {rejectWithValue}) => {
+   try {
+    const response = await API.put(`/event/${eventId}`);
+    return  eventId
+   } catch (error) {
+    if (error.response) {
+      return rejectWithValue(error.response.data);
+    }
+    throw error;
+  }
+  }
+);
 
 export const postNewTransaction = createAsyncThunk(
   "eventsManagement/postNewTransaction",
@@ -82,13 +99,95 @@ export const eventsManagementSlice = createSlice({
   name: 'eventsManagement',
   initialState,
   reducers: {
-    clearEventsManagement: () => initialState
+    clearEventsManagement: () => initialState,
+    setFilterBuyEvent: (state, action) => {
+      const keyword = action.payload;
+      const results = state.eventsList.filter((event) =>
+        JSON.stringify(event).includes(keyword)
+      );
+      state.events = results.length ? results : state.events;
+      state.errorEvents = !results.length ? 'No data has been found' : undefined
+    },
+    sortByAscendingEventsBuys: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status" 
+      ) {
+        state.events.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0; 
+          }
+          return a[propiedad].localeCompare(b[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.events.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (
+            !c ||
+            !d ||
+            typeof c !== "string" ||
+            typeof d !== "string"
+          ) {
+            return 0;
+          }
+          return c.localeCompare(d);
+        });
+      }else {
+        state.events.sort((a, b) => a[propiedad] - b[propiedad]);
+      }
+    },
+    sortByDescendingEventsBuys: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name"  ||
+        propiedad === "status"
+      ) {
+        state.filteredDataUser = state.events.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return b[propiedad].localeCompare(a[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.events.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (
+            !c ||
+            !d ||
+            typeof c !== "string" ||
+            typeof d !== "string"
+          ) {
+            return 0;
+          }
+          return d.localeCompare(c);
+        });
+      
+      }else {
+        state.events.sort((a, b) => b[propiedad] - a[propiedad]);
+      }
+    },
   },
   extraReducers: {
     [getEventsManagement.pending]: (state) => {
       state.loading.get = true
     },
     [getEventsManagement.fulfilled]: (state, action) => {
+      console.log(action.payload.eventsCreated)
       state.data = action.payload;
       state.loading.get = false;
       state.error = null;
@@ -142,6 +241,25 @@ export const eventsManagementSlice = createSlice({
       state.error = action.payload;
       state.paymentWasLoaded = false
     },
+    [deleteEvent.pending]: (state) => {
+      state.loading = true
+    },
+    [deleteEvent.fulfilled]: (state, action) => {
+      state.loading = false;
+      const eventId = action.payload;
+    
+      // Buscar el índice del evento en el arreglo state.eventsCreated usando findIndex
+      const eventIndex = state.data.eventsCreated.findIndex((e) => e.id === eventId);
+    
+      // Si el evento existe en el arreglo, eliminarlo usando splice
+      if (eventIndex !== -1) {
+        state.data.eventsCreated.splice(eventIndex, 1);
+      }
+    },
+    [deleteEvent.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    }
   }
 })
 

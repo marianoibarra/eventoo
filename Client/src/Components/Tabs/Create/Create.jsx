@@ -13,23 +13,21 @@ import { axiosModeEventsCreateForUser, setFiltercreateEvent, sortByAscendingEven
 import '../Buys/Events.css'
 import { FaEdit } from "react-icons/fa";
 import { TiArrowSortedDown, TiArrowUnsorted ,TiArrowSortedUp } from "react-icons/ti";
-import { AiOutlineCheck } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
+import { deleteEvent } from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 function Buys() {
-  const { events, errorEvents } = useSelector((state) => state.eventsCreateForUserSlice);
+  const { data: {eventsCreated}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
   const [sortType, setSortType] = useState({ type:null, id: 2 });
-  console.log(events);
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(axiosModeEventsCreateForUser());
   }, [dispatch]);
 
-  const handledelete = (e) => {
-    console.log(e);
-    // dispatch(deleteEvent(e));
-  };
+
 
   const accent = (e) => {
     if(sortType.type === e){
@@ -63,10 +61,8 @@ function Buys() {
     //       <p className={event.isPublic ? Styles.public : Styles.private}>{event.isPublic ? 'Public' : 'Private'} </p>
     <div>
       <SearchBar onSearch={handleSearch} />
-      <h3>{errorEvents ? errorEvents : undefined}</h3>
       <div className="sapList">
         <div className="sapListHeader">
-          <div className="sapListItem">ID</div>
           <div
             className="sapListItem"
             id={sortType.type == `organizer` ? "sapSelection" : undefined}
@@ -147,11 +143,27 @@ function Buys() {
             /> }
             Status
           </div>
-          <div className="sapListItem">Action</div>
+
+          <div
+            className="sapListItem"
+            id={sortType.type == `status` ? "sapSelection" : undefined}
+          >
+            { sortType.type === 'status'? 
+            <TiArrowUnsorted
+              size={18}
+              cursor="pointer"
+              onClick={() =>accent("status")}
+            /> : <TiArrowSortedDown
+              size={18}
+              cursor="pointer"
+              onClick={() =>accent("status")}
+            /> }
+            Action
+          </div>
+
         </div>
-        {events.map((event,index) => (
+        {eventsCreated.map((event,index) => (
           <div className="sapListRow" key={index}>
-            <div className="sapListItem sap">{event.id}</div>
             <div className="sapListItem sap">{`${event?.organizer?.name} ${event?.organizer?.last_name}`}</div>
             <div className="sapListItem sapListItemWide sap">{event.name}</div>
             <div className="sapListItem sapListItemWide sap">
@@ -161,21 +173,15 @@ function Buys() {
               {event?.isPremium ? "Premium" : "Free"}
             </div>
             <div className="sapListItem sap">
-              {event?.status}
+            <p>{event.isPublic ? 'Public' : 'Private'} </p>
             </div>
+            
             <div className="sapListItem sap">
-              <button className="btnSap">
-                <FaEdit color="darkslateblue" size={25} />
-              </button>
-              <button className="btnSap">
-                <AiOutlineCheck
-                  onClick={() => handledelete(event.id)}
-                  size={35}
-                />
-              </button>
+              <Link to={`/Event/${event?.id}`} ><BiEdit /></Link>
+              <div onClick={()=> dispatch(deleteEvent(event.id))}><MdDelete cursor={'pointer'}/></div>
             </div>
           </div>
-        ))}
+        ))} 
       </div>
     </div>
   );

@@ -8,18 +8,21 @@
 
 .menu {
   cursor: pointer;
-  position: absolute;
-  top: 90px;
-  right: 60px;
-  width: max-content;
-  height: max-content;
-  box-shadow: 0 2px 4px var(--primary-color);
-  border-radius: 5px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background-color: var(--ligth-background-color) ;
+    position: absolute;
+    top: 49px;
+    right: -36px;
+    height: 83.3vh;
+    width: 300px;
+    /* width: 50px;
+    width: max-content;
+    height: max-content; */
+    box-shadow: 0 0px 3px var(--primary-color);
+    /* border-radius: 5px; */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* padding: 10px; */
+    background-color: var(--ligth-background-color);
  
 }
 
@@ -32,13 +35,29 @@
   border-radius: 50%;
 }
 
+.containerPhoto{
+  display: flex;
+  width: 100%;
+  height: 20%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  border-top: 3px solid #00000021;
+}
+
 .menuPhoto {
   width: 120px;
   height: 120px;
-  right: 0;
-  top: 0;
   border-radius: 50%;
-  position: fixed;
+}
+
+.containerInfoUser{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 0px 10px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .menuInfo {
@@ -50,12 +69,14 @@
 
 .menuName {
   font-weight: bold;
-  margin-right: 10px;
+  font-size: 25px;
+  margin-top: 8px;
 }
 
 .menuEmail {
-  font-size: 0.8rem;
-  border-bottom:  3px solid var(--accent-color);
+  font-size: 1rem;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #00000021;
 }
 
 .menuLinks {
@@ -65,13 +86,37 @@
 
 .menuLink {
   text-decoration: none;
-  color: #000;
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 5px;
+  color: var(--dark-text);
+  padding: 0px 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 5%;
 }
 
-.menuLink:hover {
+.menuLinkLogOut{
+  text-decoration: none;
+  color: var(--dark-text);
+  padding: 0px 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 5%;
+  background: none;
+  border: none;
+}
+
+.menuLinkLogOut>p{
+  margin-left: 5px;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+
+
+.menuLink:hover,
+.menuLinkLogOut:hover {
+  color: var(--white-text);
   background-color: var(--primary-color);
 }
 

@@ -1,0 +1,24 @@
+.transaction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(251, 59, 59);
+  }
+  
+  .heading {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .message {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    color: white;
+  }
+  
+
