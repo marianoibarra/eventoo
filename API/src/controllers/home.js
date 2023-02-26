@@ -49,10 +49,10 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     searchParams.isPublic = true;
     searchParams.isActive = true;
-    searchParams.typePack = {[Op.or]: [
-      {[Op.is]: null},
-      {[Op.ne]: 'PREMIUM'}
-    ]}
+    // searchParams.typePack = {[Op.or]: [
+    //   {[Op.is]: null},
+    //   {[Op.ne]: 'PREMIUM'}
+    // ]}
 
     let {limit, page} = req.query
     limit = Number(limit)
