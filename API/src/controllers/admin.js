@@ -1,4 +1,4 @@
-const { Category, User, Address, RoleAdmin, Event } = require("../db");
+const { Category, User, Address, RoleAdmin, Event , Review } = require("../db");
 
 const getUsers = async (req, res) => {
   try {
@@ -184,6 +184,75 @@ const getEvents = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
+
+const getAllReviews = async (req, res) => {
+
+  try {
+    const reviews = await Review.findAll({
+      
+      attributes: ["reviewId", "isActive", "stars", "comment", "createdAt"],
+      include: [
+        { model: User,  
+          attributes: [
+          "id",
+          "name",
+          "last_name",
+          "email"]   
+         },
+        { model: Event, 
+          attributes: ['id'],
+        }
+      ],
+    });
+    if (reviews) return res.json(reviews)
+      return res.status(404).json({status: 404, message: "No reviews found"});
+  
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const modifyReview = async (req, res) => {
+
+  const { reviewId } = req.params;
+
+  try {
+    const review = await Review.findByPk(reviewId, {
+      include: [
+        { model: User },
+        { model: Event },
+      ],
+    });
+
+    if (!review) {
+      return res.status(404).send("Review not found");
+    }
+
+    const isActive = review.isActive ? false : true;
+    review.isActive = isActive;
+    await review.save();
+
+    // Busca todos los reviews actualizados y devuelve un array con sus IDs
+    const updatedReviews = await Review.findAll({
+      include: [
+        { model: User },
+        { model: Event },
+      ],
+    });
+
+    const updatedReviewsIds = updatedReviews.map(review => review.reviewId);
+
+    res.status(200).json(updatedReviewsIds);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   getUsers,
   changeBan,
@@ -191,4 +260,6 @@ module.exports = {
   changeRole,
   changeStatusEvent,
   getEvents,
+  getAllReviews,
+  modifyReview
 };
