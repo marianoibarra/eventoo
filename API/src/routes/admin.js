@@ -1,11 +1,15 @@
 const { Router } = require("express");
 const {
+
   getUsers,
   changeBan,
   getCategories,
   changeRole,
   changeStatusEvent,
-  getEvents
+  getEvents,
+  getAllReviews,
+  modifyReview
+
 } = require("../controllers/admin");
 const {
   verifyToken,
@@ -21,5 +25,6 @@ router.put("/users/change/:id", verifyToken, verifySuperAdmin, changeRole);
 router.put("/categories/:id", verifyToken, verifyAdmins, getCategories);
 router.put("/events/:id", verifyToken, verifyAdmins, changeStatusEvent);
 router.get("/events", verifyToken, verifyAdmins, getEvents);
-
+router.get("/reviews", verifyToken, verifyAdmins, getAllReviews)
+router.put("/reviews/:id",verifyToken, verifyAdmins, modifyReview )
 module.exports = router;
