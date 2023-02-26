@@ -1,8 +1,7 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendEmail = (to, url, name, template) => {
-
   const emailTemplates = {
     resetPassword: `
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -770,7 +769,10 @@ const sendEmail = (to, url, name, template) => {
                                 <div align="center">
                                   <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:46px; v-text-anchor:middle; width:377px;" arcsize="8.5%"  stroke="f" fillcolor="#bc4000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Cabin',sans-serif;"><![endif]-->
                                   <div class="v-button" style="box-sizing: border-box;display: inline-block;font-family:'Cabin',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #bc4000; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; margin: auto; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
-                                    <span style="display:block;padding:17px 36px 16px;line-height:120%;"><span style="font-size: 16px; line-height: 19.2px;"><strong><span style="line-height: 19.2px; font-size: 20px;">${url.slice(0,3)}-${url.slice(3)}</span></strong>
+                                    <span style="display:block;padding:17px 36px 16px;line-height:120%;"><span style="font-size: 16px; line-height: 19.2px;"><strong><span style="line-height: 19.2px; font-size: 20px;">${url.slice(
+                                      0,
+                                      3
+                                    )}-${url.slice(3)}</span></strong>
                                     </span>
                                     </span>
                                   </div>
@@ -990,43 +992,105 @@ const sendEmail = (to, url, name, template) => {
     <!--[if IE]></div><![endif]-->
   </body>
   
-    </html>`
-  }
+    </html>`,
+  };
 
   const subjectTemplates = {
-    resetPassword: 'Reset your password',
-    confirmEmail: "Confirm your Eventoo's account"
-  }
+    resetPassword: "Reset your password",
+    confirmEmail: "Confirm your Eventoo's account",
+  };
 
   var transporter = nodemailer.createTransport({
     host: "smtp.hostinger.com",
-    secureConnection: false, 
+    secureConnection: false,
     port: 465,
     tls: {
-       ciphers:'SSLv3'
+      ciphers: "SSLv3",
     },
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
   var message = {
     from: `Eventoo <${process.env.EMAIL_USER}>`,
     to,
     subject: subjectTemplates[template],
     text: "Plaintext version of the message",
-    html: emailTemplates[template]
+    html: emailTemplates[template],
   };
 
   transporter.sendMail(message, (error, info) => {
     if (error) {
-        console.log("Error enviando email")
-        console.log(error.message)
+      console.log("Error enviando email");
+      console.log(error.message);
     } else {
-        console.log("Email enviado")
+      console.log("Email enviado");
     }
-  })
-}
+  });
+};
 
-module.exports = sendEmail
+const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
+  // const emailTemplates = {
+  //accepted:,
+  //   tickets:,
+  //   reserveTickets:,
+  //   cancelTickets:,
+  //   reviewEvent:,
+
+  // }
+  const subjectTemplates = {
+    accepted: "Transfer accepted",
+    tickets: "Your tickets are here",
+    reserveTickets: "Tickets reservation",
+    cancelTickets: "Expired reservation",
+    reviewEvent: "Review the event",
+  };
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    secureConnection: false,
+    port: 465,
+    tls: {
+      ciphers: "SSLv3",
+    },
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const optionsPDF = {
+    from: `Eventoo <${process.env.EMAIL_USER}>`,
+    to,
+    subject: subjectTemplates[template],
+    // text: "Plaintext version of the message",
+    // html: emailTemplates[template],
+    attachments: [
+      {
+        filename: "tickets.pdf",
+        content: pdf,
+        contentType: "application/pdf",
+      },
+    ],
+  };
+
+  const options = {
+    from: `Eventoo <${process.env.EMAIL_USER}>`,
+    to,
+    subject: subjectTemplates[template],
+     text: `${cbu}`
+     //"Plaintext version of the message",
+    // html: emailTemplates[template],
+  };
+
+  transporter.sendMail(pdf ? optionsPDF : options, (error, info) => {
+    if (error) {
+      console.log("Error sending mail: ", error);
+    } else {
+      console.log("Mail sent: ", info.response);
+    }
+  });
+};
+
+module.exports = { sendEmail, sendBuyerNotifications };
