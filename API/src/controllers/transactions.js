@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer');
 // const fs = require("fs"); para pruebas locales de pdf
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 20;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -59,7 +59,7 @@ const cleanTransactions = async (IdEvent) => {
 };
 
 const updateEventLowStock = async (eventId) => {
-  let percentageThreshold = 10
+  let percentageThreshold = 15
   const event = await Event.findByPk(eventId);
 
   const availableTickets = event.guests_capacity - event.stock_ticket;
