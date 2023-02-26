@@ -191,7 +191,7 @@ const getTransactionsByUserSeller = async (req, res) => {
         {
           model: User,
           as: "buyer",
-          attributes: ["id", "name", "last_name", "email"],
+          attributes: ["id", "name", "last_name", "email", "profile_pic"],
         },
         {
           model: Event,

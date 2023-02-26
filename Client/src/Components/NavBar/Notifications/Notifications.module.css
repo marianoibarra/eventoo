@@ -4,13 +4,14 @@
   height: 100%;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  user-select: none;
 }
 
 .iconWrapper {
   height: 100%;
   width: auto;
   position: relative;
+  cursor: pointer;
   display: flex;
   align-items: center;
 }
@@ -23,4 +24,53 @@
   border-radius: 9px;
   top: 32%;
   right: 1px;
+}
+
+.notificationsOpen {
+  position: absolute;
+  background-color: var(--ligth-background-color);
+  width: 320px;
+  height: auto;
+  top: 54px;
+  right: 0;
+  box-shadow: 0px 0px 20px 12px #00000019;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  border-radius: 6px;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.notificationsClose {
+  position: absolute;
+  background-color: var(--ligth-background-color);
+  width: 320px;
+  height: auto;
+  top: 54px;
+  right: 0;
+  box-shadow: 0px 0px 20px 12px #00000019;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  border-radius: 6px;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: visibility 0s linear 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.head {
+  width: 100%;
+  border-bottom: #0002 1px solid;
+  height: 36px;
+  text-align: center;
+  font-weight: 500;
+  line-height: 36px;
+  font-size: 0.9rem;
+}
+
+.main {
+  height: 260px;
 }

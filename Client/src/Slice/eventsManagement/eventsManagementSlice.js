@@ -9,6 +9,8 @@ export const getEventsManagement = createAsyncThunk(
       data.buys = await API.get('/transaction/buyer').then(res => res.data)
       data.sells = await API.get('/transaction/seller').then(res => res.data)
       data.eventsCreated = await API.get('/event').then(res => res.data)
+      data.buys.forEach(t => t.type = 'BUY')
+      data.sells.forEach(t => t.type = 'SELL')
       return data
     } catch (error) {
       if (error.response) {

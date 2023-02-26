@@ -82,7 +82,7 @@ const Menu = () => {
           </Link>
         )}
 
-        <Link to="/user-events" className={Styles.rowC}>
+        <Link to="/user-event" className={Styles.rowC}>
           <div className={Styles.icon}>
             <AiOutlineCalendar />
           </div>
