@@ -404,6 +404,9 @@ const completeTransaction = async (req, res) => {
     // }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
+    const buyer = await User.findByPk(transaction.buyerId);
+    sendBuyerNotifications(buyer.email, "voucherUploaded");
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,

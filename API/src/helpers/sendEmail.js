@@ -1033,17 +1033,18 @@ const sendEmail = (to, url, name, template) => {
 
 const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
   // const emailTemplates = {
-  //accepted:,
-  //   tickets:,
-  //   reserveTickets:,
-  //   cancelTickets:,
-  //   reviewEvent:,
-
+  // reserveTickets: "",
+  // voucherUploaded: "",
+  // accepted: "",
+  // tickets: "",
+  // cancelTickets: "",
+  // reviewEvent: "",
   // }
   const subjectTemplates = {
+    reserveTickets: "Tickets reservation",
+    voucherUploaded: "Voucher uploaded",
     accepted: "Transfer accepted",
     tickets: "Your tickets are here",
-    reserveTickets: "Tickets reservation",
     cancelTickets: "Expired reservation",
     reviewEvent: "Review the event",
   };
@@ -1079,8 +1080,7 @@ const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
     from: `Eventoo <${process.env.EMAIL_USER}>`,
     to,
     subject: subjectTemplates[template],
-     text: `${cbu}`
-     //"Plaintext version of the message",
+    // text: "Plaintext version of the message",
     // html: emailTemplates[template],
   };
 
