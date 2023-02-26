@@ -233,7 +233,7 @@ const modifyReview = async (req, res) => {
     review.isActive = isActive;
     await review.save();
 
-    // Buscar todas las reseñas actualizadas y devuelve un array con sus IDs
+    // Busca todos los reviews actualizados y devuelve un array con sus IDs
     const updatedReviews = await Review.findAll({
       include: [
         { model: User },
