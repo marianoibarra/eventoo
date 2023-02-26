@@ -6,32 +6,36 @@ const {
   Category,
   Address,
 } = require("../db");
+require("dotenv").config();
 const moment = require("moment");
-const approvalTimeLimit = 15
+const nodemailer = require('nodemailer');
+// const fs = require("fs"); para pruebas locales de pdf
+const PDFDocument = require("pdfkit");
+const QRCode = require("qrcode");
+const approvalTimeLimit = 1;
 
 const cleanTransactions = async (IdEvent) => {
-  
-const event = await Event.findByPk(IdEvent.id , {
-  include: [
-    {
-      model: Transaction,
-      as: "transactions",
-      attributes: ['expiration_date','status','id'],
-      include: [
-        "tickets",
-        {
-          model: User,
-          as: "buyer",
-          attributes: ["id", "name", "last_name", "email"],
-        },
-      ],
-    },
-  ],
-});
-
+  const event = await Event.findByPk(IdEvent.id, {
+    include: [
+      {
+        model: Transaction,
+        as: "transactions",
+        attributes: ["expiration_date", "status", "id"],
+        include: [
+          "tickets",
+          {
+            model: User,
+            as: "buyer",
+            attributes: ["id", "name", "last_name", "email"],
+          },
+        ],
+      },
+    ],
+  });
   const expiredTransactions = event.transactions.filter(
     (transaction) =>
-      moment().isAfter(moment(transaction.dataValues.expiration_date)) && transaction.dataValues.status === "PENDING"
+      moment().isAfter(moment(transaction.dataValues.expiration_date)) &&
+      transaction.dataValues.status === "PENDING"
   );
 
   if (expiredTransactions.length > 0) {
@@ -51,6 +55,20 @@ const event = await Event.findByPk(IdEvent.id , {
       }
     );
   }
+  updateEventLowStock(IdEvent.id)
+};
+
+const updateEventLowStock = async (eventId) => {
+  let percentageThreshold = 10
+  console.log(eventId)
+  const event = await Event.findByPk(eventId);
+
+  const availableTickets = event.guests_capacity - event.stock_ticket;
+  const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
+
+  const isLowStock = percentageAvailable <= percentageThreshold;
+
+  await event.update({ low_stock: isLowStock });
 };
 
 const createTransactions = async (req, res) => {
@@ -61,12 +79,12 @@ const createTransactions = async (req, res) => {
     const event = await Event.findByPk(eventId, {
       include: {
         model: Transaction,
-        as: 'transactions',
+        as: "transactions",
       },
     });
 
     await cleanTransactions(event);
-    await event.reload(); 
+    await event.reload();
     const user = await User.findByPk(buyerId);
 
     if (event.stock_ticket < tickets.length) {
@@ -346,7 +364,9 @@ const completeTransaction = async (req, res) => {
   try {
     const { payment_proof } = req.body;
     const { transactionId } = req.params;
-    const transaction = await Transaction.findByPk(transactionId, { include: 'tickets' });
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: "tickets",
+    });
 
     // if (transaction.status !== "PENDING") {
     //   return res.status(400).json({
@@ -354,7 +374,6 @@ const completeTransaction = async (req, res) => {
     //   });
     // }
     // ---- descomentar validacion comentada para test ----
-
 
     if (!transaction) {
       return res.status(404).json({
@@ -375,9 +394,80 @@ const completeTransaction = async (req, res) => {
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
       return res.status(400).json({
-        error: "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+        error:
+          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
       });
     }
+    const tickets = await Ticket.findAll({
+      where: {
+        transactionId,
+      },
+    });
+    const event = await Event.findByPk(transaction.eventId);
+    const eventName = event.name;
+    const address = await Address.findByPk(event.addressId);
+    const user = await User.findByPk(transaction.buyerId)
+    const doc = new PDFDocument({ autoFirstPage: false });
+
+    for (const t of tickets) {
+      const url = await QRCode.toDataURL(`${t.id}`, {
+        errorCorrectionLevel: "H",
+        type: "image/jpeg",
+        quality: 0.3,
+        margin: 1,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      });
+      doc.addPage();
+      doc.text(`${eventName}'s ticket`);
+      doc.image(url, { width: 150, height: 150 });
+      doc.text(`${t.id}`);
+      doc.text(`Titular: ${t.name} ${t.last_name}`);
+      doc.text(`Date: ${t.start_date}`);
+      doc.text(`Time: ${t.start_time}`);
+      doc.text(`Price: ${t.price}`);
+      doc.text(`Address: ${address}`);
+      event.cover_pic && doc.image(event.cover_pic, { width: 150, height: 150 });
+      doc.save();
+    }
+    doc.end();
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      secureConnection: false, 
+      port: 465,
+      tls: {
+         ciphers:'SSLv3'
+      },
+      auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const options = {
+      from: `Eventoo <${process.env.EMAIL_USER}>`,
+      to: 'marianoibarratesta@outlook.com',
+      subject: 'Tickets',
+      text: 'Enjoy the event!!',
+      attachments: [
+        {
+          filename: 'tickets.pdf',
+          content: doc,
+          contentType: 'application/pdf'
+        }
+      ]
+    };
+
+    transporter.sendMail(options, (error, info) => {
+      if (error) {
+        console.log('Error sending mail: ', error);
+      } else {
+        console.log('Mail sent: ', info.response);
+      }
+    })
 
     await transaction.update({ payment_proof, status: "INWAITING" });
     return res.status(200).json({
@@ -440,7 +530,7 @@ const ApprovePayment = async (req, res) => {
     if (status === null) return res.status(401).json({ msg: "invalid status" });
     await transaction.update({ status });
 
-    if (status === "DENIED" ) {
+    if (status === "DENIED") {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
       await transaction.update({ status: "CANCELED" });
       const ticketsToReturn = transaction.tickets.length;

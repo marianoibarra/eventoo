@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Event, Address, Category, User, Review } = require("../db");
 const jwt = require("jsonwebtoken");
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
@@ -48,6 +49,10 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     searchParams.isPublic = true;
     searchParams.isActive = true;
+    // searchParams.typePack = {[Op.or]: [
+    //   {[Op.is]: null},
+    //   {[Op.ne]: 'PREMIUM'}
+    // ]}
 
     let {limit, page} = req.query
     limit = Number(limit)
@@ -57,6 +62,7 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     const publicEvents = await Event.findAll({
       where: searchParams,
+      order: [['typePack', 'NULLS LAST']],
       attributes:  { exclude: ["privateEvent_password"] },
       include: [
         "bankAccount",
@@ -177,12 +183,42 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
   }
 };
 
-
+const getAllPremiumEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      where: {
+        typePack: 'PREMIUM',
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
 
 module.exports = {
 
   getCategories,
   getEventsPublic,
   getEventById,
+  getAllPremiumEvents,
 
 };
