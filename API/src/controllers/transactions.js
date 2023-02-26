@@ -8,7 +8,7 @@ const {
 } = require("../db");
 require("dotenv").config();
 const moment = require("moment");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 // const fs = require("fs"); para pruebas locales de pdf
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
@@ -393,7 +393,6 @@ const completeTransaction = async (req, res) => {
     const event = await Event.findByPk(transaction.eventId);
     const eventName = event.name;
     const address = await Address.findByPk(event.addressId);
-    const user = await User.findByPk(transaction.buyerId)
     const doc = new PDFDocument({ autoFirstPage: false });
 
     for (const t of tickets) {
@@ -416,45 +415,11 @@ const completeTransaction = async (req, res) => {
       doc.text(`Time: ${t.start_time}`);
       doc.text(`Price: ${t.price}`);
       doc.text(`Address: ${address}`);
-      event.cover_pic && doc.image(event.cover_pic, { width: 150, height: 150 });
+      event.cover_pic &&
+        doc.image(event.cover_pic, { width: 150, height: 150 });
       doc.save();
     }
     doc.end();
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      secureConnection: false, 
-      port: 465,
-      tls: {
-         ciphers:'SSLv3'
-      },
-      auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-      }
-    });
-
-    const options = {
-      from: `Eventoo <${process.env.EMAIL_USER}>`,
-      to: 'marianoibarratesta@outlook.com',
-      subject: 'Tickets',
-      text: 'Enjoy the event!!',
-      attachments: [
-        {
-          filename: 'tickets.pdf',
-          content: doc,
-          contentType: 'application/pdf'
-        }
-      ]
-    };
-
-    transporter.sendMail(options, (error, info) => {
-      if (error) {
-        console.log('Error sending mail: ', error);
-      } else {
-        console.log('Mail sent: ', info.response);
-      }
-    })
 
     await transaction.update({ payment_proof, status: "INWAITING" });
     return res.status(200).json({
@@ -526,6 +491,44 @@ const ApprovePayment = async (req, res) => {
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
+      });
+    }
+
+    if (status === "APPROVED") {
+      const user = await User.findByPk(transaction.buyerId);
+      const transporter = nodemailer.createTransport({
+        host: "smtp.hostinger.com",
+        secureConnection: false,
+        port: 465,
+        tls: {
+          ciphers: "SSLv3",
+        },
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const options = {
+        from: `Eventoo <${process.env.EMAIL_USER}>`,
+        to: `${user.email}`,
+        subject: "Tickets",
+        text: "Enjoy the event!!",
+        attachments: [
+          {
+            filename: "tickets.pdf",
+            content: doc,
+            contentType: "application/pdf",
+          },
+        ],
+      };
+
+      transporter.sendMail(options, (error, info) => {
+        if (error) {
+          console.log("Error sending mail: ", error);
+        } else {
+          console.log("Mail sent: ", info.response);
+        }
       });
     }
     return res.status(200).json({
