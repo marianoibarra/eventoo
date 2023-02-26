@@ -381,6 +381,9 @@ const completeTransaction = async (req, res) => {
       include: "tickets",
     });
     const buyer = await User.findByPk(transaction.buyerId);
+    const event = await Event.findByPk(transaction.eventId, {
+      include: { model: User, as: "organizer" },
+    });
 
     // if (transaction.status !== "PENDING") {
     //   return res.status(400).json({
@@ -416,6 +419,11 @@ const completeTransaction = async (req, res) => {
 
     await transaction.update({ payment_proof, status: "INWAITING" });
     sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendOrganizerNotifications(
+      event.organizer.email,
+      "newTransfer",
+      payment_proof
+    );
 
     return res.status(200).json({
       msg: "Transaction completed successfully",
