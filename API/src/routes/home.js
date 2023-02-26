@@ -13,7 +13,7 @@ const router = Router();
 router.get("/categories", getCategories);
 router.get("/events", getEventsPublic);
 router.get("/events/:id", getEventById);
-router.get("/Premium", getAllPremiumEvents);
+router.get("/premium", getAllPremiumEvents);
 
 
 module.exports = router;
