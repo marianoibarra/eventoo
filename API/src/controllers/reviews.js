@@ -55,7 +55,7 @@ const getAllReviewsByEvent = async (req, res) => {
 
   try {
     const response = await Review.findAll({
-      where: { eventId: id },
+      where: { eventId: id, isActive: true },
       attributes: ["stars", "comment", "createdAt"],
       include: [
         {
@@ -76,7 +76,7 @@ const getUserScore = async (req, res) => {
 
   try {
     const scoreByUser = await Event.findAll({
-      where: { "$organizer.id$": id },
+      where: { "$organizer.id$": id, isActive: true },
       include: [Review, "organizer"],
       raw: true,
       nest: true,
