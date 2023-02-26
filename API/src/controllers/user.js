@@ -18,7 +18,7 @@ const googleAuth = async (req, res) => {
       defaults: {
         name: given_name,
         last_name: family_name,
-        profile_pic: picture,
+        profile_pic: picture ? picture : `https://ui-avatars.com/api/?size=128&background=random&name=${given_name}+${family_name}&length=1`,
         email: email,
         emailIsVerify: email_verified,
       },
@@ -68,7 +68,6 @@ const register = async (req, res) => {
       password,
       name,
       last_name,
-      profile_pic,
       born,
       address_line,
       city,
@@ -96,7 +95,7 @@ const register = async (req, res) => {
         password,
         name,
         last_name,
-        profile_pic,
+        profile_pic: `https://ui-avatars.com/api/?size=128&background=random&name=${name}+${last_name}&length=1`,
         born,
         address: {
           address_line,
