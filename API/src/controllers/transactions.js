@@ -7,7 +7,10 @@ const {
   Address,
   BankAccount,
 } = require("../db");
-const { sendBuyerNotifications } = require("../helpers/sendEmail");
+const {
+  sendBuyerNotifications,
+  sendOrganizerNotifications,
+} = require("../helpers/sendEmail");
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
@@ -75,12 +78,17 @@ const createTransactions = async (req, res) => {
           model: BankAccount,
           as: "bankAccount",
         },
+        {
+          model: User,
+          as: "organizer",
+        },
       ],
     });
 
     await cleanTransactions(event);
     await event.reload();
     const user = await User.findByPk(buyerId);
+    const organizer = await User.findByPk(event.organizer.id);
     const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
     // if (event.stock_ticket < tickets.length) {
@@ -143,6 +151,7 @@ const createTransactions = async (req, res) => {
       bankAccount.CBU,
       approvalTimeLimit
     );
+    sendOrganizerNotifications(organizer.email, "reservationReceived");
 
     return res.status(201).json(newTransaction);
   } catch (error) {

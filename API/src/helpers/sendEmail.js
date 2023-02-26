@@ -1036,16 +1036,18 @@ const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
   // reserveTickets: "",
   // voucherUploaded: "",
   // accepted: "",
+  // refused:"",
   // tickets: "",
-  // cancelTickets: "",
+  // expiredReservation: "",
   // reviewEvent: "",
   // }
   const subjectTemplates = {
     reserveTickets: "Tickets reservation",
     voucherUploaded: "Voucher uploaded",
     accepted: "Transfer accepted",
+    refused: "Transfer refused",
     tickets: "Your tickets are here",
-    cancelTickets: "Expired reservation",
+    expiredReservation: "Expired reservation",
     reviewEvent: "Review the event",
   };
   const transporter = nodemailer.createTransport({
@@ -1080,7 +1082,7 @@ const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
     from: `Eventoo <${process.env.EMAIL_USER}>`,
     to,
     subject: subjectTemplates[template],
-    // text: "Plaintext version of the message",
+    // text:"Plaintext version of the message",
     // html: emailTemplates[template],
   };
 
@@ -1093,4 +1095,53 @@ const sendBuyerNotifications = (to, template, pdf, cbu, approvalTimeLimit) => {
   });
 };
 
-module.exports = { sendEmail, sendBuyerNotifications };
+const sendOrganizerNotifications = (to, template,payment_proof,review,tickets) => {
+  // const emailTemplates = {
+  // reservationReceived: "",
+  // newTransfer: "",
+  // accepted: "",
+  // refused:"",
+   // reviewReceived: "",
+  // }
+  const subjectTemplates = {
+   reservationReceived: "New reservation",
+   newTransfer: "New transfer",
+   accepted: "You accepted",
+   refused:"You refused",
+   reviewReceived: "New review",
+  }
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    secureConnection: false,
+    port: 465,
+    tls: {
+      ciphers: "SSLv3",
+    },
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const options = {
+    from: `Eventoo <${process.env.EMAIL_USER}>`,
+    to,
+    subject: subjectTemplates[template],
+    // text:"Plaintext version of the message",
+    // html: emailTemplates[template],
+  };
+
+  transporter.sendMail(options, (error, info) => {
+    if (error) {
+      console.log("Error sending mail: ", error);
+    } else {
+      console.log("Mail sent: ", info.response);
+    }
+  });
+};
+
+module.exports = {
+  sendEmail,
+  sendBuyerNotifications,
+  sendOrganizerNotifications,
+};
