@@ -4,6 +4,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  user-select: none;
 }
 
 .userToggle {
@@ -27,7 +28,7 @@
   align-items: center;
 }
 
-.menu {
+.menuOpen {
   position: absolute;
   background-color: var(--ligth-background-color);
   width: 180px;
@@ -39,6 +40,21 @@
   flex-direction: column;
   padding: 4px 0;
   border-radius: 6px;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.menuClose {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  width: 180px;
+  z-index: 10;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: visibility 0s linear 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;
 }
 
 .rowC,
