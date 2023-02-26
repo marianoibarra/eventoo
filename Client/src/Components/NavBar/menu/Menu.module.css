@@ -1,77 +1,108 @@
 .menuContainer {
   position: relative;
-  width: 56px;
-  height: 34px;
-  padding-left: 22px;
-  border-left: #fff2 1px solid;
+  width: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.userToggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.userLogged img {
+  width: 36px;
+  height: 36px;
+  border-radius: 36px;
+  overflow: hidden;
+  object-fit: contain;
+}
+
+.userLogged {
+  height: 100%;
+  width: auto;
+  display: flex;
+  align-items: center;
 }
 
 .menu {
-  cursor: pointer;
   position: absolute;
-  top: 90px;
-  right: 60px;
-  width: max-content;
-  height: max-content;
-  box-shadow: 0 2px 4px var(--primary-color);
-  border-radius: 5px;
-  overflow: hidden;
+  background-color: var(--ligth-background-color);
+  width: 180px;
+  height: auto;
+  top: 54px;
+  right: 0;
+  box-shadow: 0px 0px 20px 12px #00000019;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  background-color: var(--ligth-background-color) ;
- 
+  padding: 4px 0;
+  border-radius: 6px;
 }
 
-.menuIcon {
+.rowC,
+.row {
   width: 100%;
-  height: 100%;
-  border: none;
-  cursor: pointer;
-  background: transparent;
-  border-radius: 50%;
-}
-
-.menuPhoto {
-  width: 120px;
-  height: 120px;
-  right: 0;
-  top: 0;
-  border-radius: 50%;
-  position: fixed;
-}
-
-.menuInfo {
+  height: 36px;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  
+  user-select: none;
 }
 
-.menuName {
-  font-weight: bold;
-  margin-right: 10px;
+.rowC {
+  cursor: pointer;
 }
 
-.menuEmail {
-  font-size: 0.8rem;
-  border-bottom:  3px solid var(--accent-color);
+.rowC:hover {
+  background-color: #00000009;
 }
 
-.menuLinks {
+.icon {
+  height: 100%;
+  width: 48px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 }
 
-.menuLink {
-  text-decoration: none;
-  color: #000;
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 5px;
+.icon img {
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  object-fit: cover;
 }
 
-.menuLink:hover {
-  background-color: var(--primary-color);
+.label {
+  height: 100%;
+  font-size: 0.85rem;
+  font-family: 'Lato';
+  line-height: 36px;
 }
 
+.divisor {
+  height: 0;
+  border-bottom: 1px solid #0001;
+  margin: 4px 0;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
+}
+
+.login {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--white-text);
+  opacity: .8;
+  transition: opacity 200ms ease-in-out
+}
+
+.login:hover {
+  opacity: .9;
+  transition: opacity 200ms ease-in-out
+}
