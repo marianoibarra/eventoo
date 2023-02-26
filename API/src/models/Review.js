@@ -3,6 +3,13 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define('review',{
+        reviewId: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            allowNull: false,
+            unique: true,
+            defaultValue: DataTypes.UUIDV4,
+          },
         stars: {
             type: DataTypes.INTEGER,
             allowNull: true,

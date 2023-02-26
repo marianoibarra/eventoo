@@ -186,21 +186,22 @@ const getEvents = async (req, res) => {
 };
 
 const getAllReviews = async (req, res) => {
+
   try {
     const reviews = await Review.findAll({
-      order:[['id']],
+      
+      attributes: ["reviewId", "isActive", "stars", "comment", "createdAt"],
       include: [
         { model: User,  
           attributes: [
           "id",
           "name",
           "last_name",
-          "email"],
-          through: { attributes: [] }
+          "email"]   
          },
         { model: Event, 
           attributes: ['id'],
-          through: { attributes: [] } },
+        }
       ],
     });
     if (reviews) return res.json(reviews)
@@ -213,6 +214,7 @@ const getAllReviews = async (req, res) => {
 };
 
 const modifyReview = async (req, res) => {
+
   const { reviewId } = req.params;
 
   try {
@@ -239,7 +241,7 @@ const modifyReview = async (req, res) => {
       ],
     });
 
-    const updatedReviewsIds = updatedReviews.map(review => review.id);
+    const updatedReviewsIds = updatedReviews.map(review => review.reviewId);
 
     res.status(200).json(updatedReviewsIds);
   } catch (error) {
@@ -247,6 +249,8 @@ const modifyReview = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 
 module.exports = {
