@@ -443,6 +443,7 @@ const ApprovePayment = async (req, res) => {
         },
       ],
     });
+    const buyer = await User.findByPk(transaction.buyerId);
 
     if (transaction.event.dataValues.organizerId !== userId) {
       return res.status(401).json({
@@ -472,6 +473,7 @@ const ApprovePayment = async (req, res) => {
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
+      sendBuyerNotifications(buyer.email, "refused");
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
@@ -514,7 +516,6 @@ const ApprovePayment = async (req, res) => {
         doc.save();
       }
       doc.end();
-      const buyer = await User.findByPk(transaction.buyerId);
       sendBuyerNotifications(buyer.email, "accepted");
       sendBuyerNotifications(buyer.email, "tickets", doc);
     }
