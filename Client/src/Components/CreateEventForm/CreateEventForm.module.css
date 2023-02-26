@@ -6,6 +6,7 @@
     width: 65vw;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(151, 152, 152, 1);
+    border-radius: 15px;
 }
 .createEvent{
     text-align: center;

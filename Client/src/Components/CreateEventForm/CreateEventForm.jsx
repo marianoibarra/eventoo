@@ -89,11 +89,12 @@ function Form() {
     isPremium: false,
     isPublic: true,
     items: null,
+    large_description:'',
     name: '',
     parking: null,
     pet_friendly: null,
     placeName: null,
-    price: 0,
+    price: '',
     smoking_zone: null,
     start_date: '',
     start_time: '',
@@ -132,18 +133,19 @@ function Form() {
 
     if (!input.start_date) { errors.start_date = 'Start date is required' }
     if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
-    if (!input.end_date) {
-      errors.end_date = 'End date is required'
-    } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
+    // if (!input.end_date) {
+    //   errors.end_date = 'End date is required'
+    // } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
     if (!input.start_time) { errors.start_time = 'Start time is required' }
-    if (!input.end_time) { errors.end_time = 'End date is required' }
-    if (input.start_date === input.end_date) {
-      const start = new Date(`${input.start_date} ${input.start_time}`);
-      const end = new Date(`${input.end_date} ${input.end_time}`);
-      if (start >= end) {
-        errors.end_time = 'End time can not be before the start time';
-      }
-    }
+    if (!input.end_time) { errors.end_time = 'End date is required'
+  } else if (input.start_time >= input.end_time) {errors.end_time = 'End time can not be before the start time'}
+    // if (input.start_date === input.end_date) {
+    //   const start = new Date(`${input.start_date} ${input.start_time}`);
+    //   const end = new Date(`${input.end_date} ${input.end_time}`);
+    //   if (start >= end) {
+    //     errors.end_time = 'End time can not be before the start time';
+    //   }
+    // }
     const num = parseInt(input.guests_capacity)
     if (!input.guests_capacity) {
       errors.guests_capacity = 'Capacity is required'
@@ -214,15 +216,14 @@ function Form() {
               This is a success alert — <strong>check it out!</strong>
             </Alert>
           </Stack> : undefined}
-      {/* <Lateral/> */}
+      <Lateral/>
       <div className={style.form} >
-        <h1 className={style.title}>EVENT INFORMATION</h1>
-        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
+        {/* <h1 className={style.title}>EVENT INFORMATION</h1>
+        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
-        {/* <div className={style.split}></div>
-          <MoreInfo/> */}
+        <MoreInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <h1 className={style.title}>LOCATION AND CATEGORY</h1>
         <Category input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} />

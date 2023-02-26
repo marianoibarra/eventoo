@@ -11,7 +11,8 @@ import { axiosModeCategories } from '../../Slice/Filter/categorieSlice';
 import { BsCalendar } from 'react-icons/bs';
 import { FaUserFriends } from 'react-icons/fa';
 import { MdLocalOffer } from 'react-icons/md';
-import { BsStarFill } from 'react-icons/bs';
+import { MdOutlineDashboard } from 'react-icons/md';
+import Grafict from './dateEventGrafic/Grafict';
 
 const useStyles = makeStyles(theme => ({
 
@@ -34,9 +35,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row'
   },
   content: {
-    width: '90%',
+    width: '100%',
     textAlign: 'center',
-    borderRadius:'30%',
+    height: '100%',
     border:'none'
   },
 }));
@@ -63,10 +64,11 @@ function TabsComponent() {
         <Tab className={classes.tab} icon={<BsCalendar/>} label="Events" />
        <Tab className={classes.tab} icon={<MdLocalOffer /> } label="Category" />
        <Tab className={classes.tab} icon={<FaUserFriends /> } label="User" />
+       <Tab className={classes.tab} icon={<MdOutlineDashboard /> } label="Grafic" />
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>
-          <EventsAdmin/>
+              <EventsAdmin/>
         </div>
       )}
       {value === 1 && (
@@ -77,6 +79,12 @@ function TabsComponent() {
       {value === 2 && (
         <div className={classes.content}>
           <Users/>
+        </div>
+      )}
+      {value === 3 && (
+        <div className={classes.content}>
+          <Grafict/>
+      
         </div>
       )}
     </div>

@@ -92,6 +92,10 @@ const CardDetailPublic = () => {
         });
       }
     }
+    // return () => {
+    //   dispatch(clear());
+    //   dispatch(clearBuy());
+    // }
   }, [eventDetail, user]);
 
   return (
@@ -275,6 +279,7 @@ const CardDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [privatePass, setPrivatePass] = useState("");
+  const user = useSelector((state) => state.user);
   const { showEvent, loading, error, errorPass, eventDetail } = useSelector(
     (state) => state.eventDetail
   );

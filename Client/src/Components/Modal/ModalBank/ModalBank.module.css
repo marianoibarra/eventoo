@@ -95,3 +95,8 @@
 .or3 {
     background-position-x: 5px;
 }
+
+.cbu{
+    display: flex;
+    align-items: baseline;
+}
