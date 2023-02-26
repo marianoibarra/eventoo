@@ -565,6 +565,12 @@ const cancelTransaction = async (req, res) => {
       });
     }
 
+    if (transaction.status !== "PENDING") {
+      return res.status(400).json({
+        error: "Transaction status is not PENDING",
+      });
+    }
+
     const ticketsToReturn = transaction.tickets.length;
     const event = await Event.findByPk(transaction.eventId);
 
