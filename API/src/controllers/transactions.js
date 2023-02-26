@@ -423,7 +423,6 @@ const ApprovePayment = async (req, res) => {
     const { isApproved } = req.body;
     const { transactionId } = req.params;
     const userId = req.userId;
-
     // if (transaction.status !== "INWAITING") {
     //   return res.status(400).json({
     //     error: "Transaction is not in waiting status",
