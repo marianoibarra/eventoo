@@ -26,5 +26,5 @@ router.put("/categories/:id", verifyToken, verifyAdmins, getCategories);
 router.put("/events/:id", verifyToken, verifyAdmins, changeStatusEvent);
 router.get("/events", verifyToken, verifyAdmins, getEvents);
 router.get("/reviews", verifyToken, verifyAdmins, getAllReviews)
-router.put("/review/:reviewId",verifyToken, verifyAdmins, modifyReview )
+router.put("/reviews/:id",verifyToken, verifyAdmins, modifyReview )
 module.exports = router;

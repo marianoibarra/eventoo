@@ -89,6 +89,7 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     res.json(publicEvents);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ msg: error.message });
   }
 };
@@ -151,8 +152,6 @@ const getEventById = async (req, res) => {
       ],
     }).then(r => r.toJSON());
 
-
-
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
     }  
@@ -184,7 +183,6 @@ const getEventById = async (req, res) => {
           name: event.name,
           start_date: event.start_date,
           start_time: event.start_time,
-          scoreByUser: event.scoreByUser || 0,
         },
       });
     }
