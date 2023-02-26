@@ -83,6 +83,28 @@ module.exports = (sequelize) => {
       type: DataTypes.BIGINT,
       allowNull: true,
     },
+    low_stock: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
+    typePack:{
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: false,
+      validate: {
+        customValidator: (value) => {
+          const enums = [
+            "CLASSIC",
+            "PREMIUM",
+             false,
+          ];
+          if (!enums.includes(value)) {
+            throw new Error("The option is not valid, only CLASSIC and PREMIUM are valid.");
+          }
+        },
+      },
+    },
     placeName: {
       type: DataTypes.STRING,
       allowNull: true,

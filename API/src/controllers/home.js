@@ -163,12 +163,42 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
   }
 };
 
-
+const getAllPremiumEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      where: {
+        typePack: 'PREMIUM',
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
 
 module.exports = {
 
   getCategories,
   getEventsPublic,
   getEventById,
+  getAllPremiumEvents,
 
 };

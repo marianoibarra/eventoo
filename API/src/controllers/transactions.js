@@ -32,7 +32,6 @@ const cleanTransactions = async (IdEvent) => {
       },
     ],
   });
-
   const expiredTransactions = event.transactions.filter(
     (transaction) =>
       moment().isAfter(moment(transaction.dataValues.expiration_date)) &&
@@ -55,7 +54,21 @@ const cleanTransactions = async (IdEvent) => {
         },
       }
     );
+    updateEventLowStock(IdEvent.id)
   }
+};
+
+const updateEventLowStock = async (eventId) => {
+  let percentageThreshold = 10
+  console.log(eventId)
+  const event = await Event.findByPk(eventId);
+
+  const availableTickets = event.guests_capacity - event.stock_ticket;
+  const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
+
+  const isLowStock = percentageAvailable <= percentageThreshold;
+
+  await event.update({ low_stock: isLowStock });
 };
 
 const createTransactions = async (req, res) => {

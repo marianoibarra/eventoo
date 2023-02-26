@@ -2,7 +2,6 @@ const { Event, Address, Category, User, BankAccount, Payment } = require("../db"
 const { Op } = require("sequelize");
 const getMercadoPago = require("../helpers/mercadopago");
 
-
 const createEvent = async (req, res) => {
   const userId = req.userId;
   const {
@@ -18,6 +17,7 @@ const createEvent = async (req, res) => {
     virtualURL,
     category,
     isPremium,
+    typePack,
     items,
     isPaid,
     age_range,
@@ -111,6 +111,7 @@ const createEvent = async (req, res) => {
         smoking_zone,
         pet_friendly,
         price,
+        typePack,
         address: {
           address_line,
           city,
@@ -427,10 +428,42 @@ const deleteEvent = async (req, res) => {
   }
 };
 
+const getAllPremiumEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      where: {
+        typePack:'PREMIUM',
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 module.exports = {
   createEvent,
   checkPrivatePassword,
   getEventByUser,
   modifyEvent,
   deleteEvent,
+  getAllPremiumEvents,
 };
