@@ -91,13 +91,13 @@ module.exports = (sequelize) => {
     typePack:{
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: false,
+      defaultValue: null,
       validate: {
         customValidator: (value) => {
           const enums = [
             "CLASSIC",
             "PREMIUM",
-             false,
+             null,
           ];
           if (!enums.includes(value)) {
             throw new Error("The option is not valid, only CLASSIC and PREMIUM are valid.");
