@@ -4,7 +4,8 @@ const {
   deleteEvent,
   createEvent,
   getEventByUser,
-  checkPrivatePassword  
+  checkPrivatePassword,
+  getAllPremiumEvents,
 } = require("../controllers/event");
 
 const { verifyToken} = require("../controllers/user");
@@ -16,5 +17,6 @@ router.get("/checkPrivate", checkPrivatePassword);
 router.get("/", verifyToken, getEventByUser);
 router.put("/:id", verifyToken, modifyEvent); 
 router.delete("/:id", verifyToken, deleteEvent);
+router.get("/premium", getAllPremiumEvents)
 
 module.exports = router;
