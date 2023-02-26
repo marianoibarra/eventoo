@@ -47,7 +47,7 @@ const cleanTransactions = async (IdEvent) => {
     await event.increment("stock_ticket", { by: ticketsToReturn });
 
     await Transaction.update(
-      { status: "CANCELED" },
+      { status: "EXPIRED" },
       {
         where: {
           id: expiredTransactions.map((transaction) => transaction.id),
@@ -60,7 +60,6 @@ const cleanTransactions = async (IdEvent) => {
 
 const updateEventLowStock = async (eventId) => {
   let percentageThreshold = 10
-  console.log(eventId)
   const event = await Event.findByPk(eventId);
 
   const availableTickets = event.guests_capacity - event.stock_ticket;
@@ -389,13 +388,13 @@ const completeTransaction = async (req, res) => {
     const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
     if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
+      await transaction.update({ status: "EXPIRED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
       return res.status(400).json({
         error:
-          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+          "Transaction has expired, status updated to EXPIRED and tickets have been returned to event",
       });
     }
     const tickets = await Ticket.findAll({
@@ -556,14 +555,24 @@ const cancelTransaction = async (req, res) => {
   try {
     const { payment_proof } = req.body;
     const { transactionId } = req.params;
-    const transaction = await Transaction.findByPk(transactionId);
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: "tickets",
+    });
 
     if (!transaction) {
       return res.status(404).json({
         error: "Transaction not found",
       });
     }
+
+    const ticketsToReturn = transaction.tickets.length;
+    const event = await Event.findByPk(transaction.eventId);
+
+    await event.increment("stock_ticket", { by: ticketsToReturn });
     await transaction.update({ payment_proof, status: "CANCELED" });
+
+    updateEventLowStock(transaction.eventId);
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,

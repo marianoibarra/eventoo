@@ -22,6 +22,7 @@ module.exports = (sequelize) => {
             "DENIED",
             "CANCELED",
             "INWAITING",
+            "EXPIRED",
           ];
           if (!enums.includes(value)) {
             throw new Error("not a valid option");
