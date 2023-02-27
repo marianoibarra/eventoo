@@ -67,7 +67,7 @@ const clearAllTransactions = async () => {
       },
       status: 'PENDING'
     }
-  }).then(t => t.map(t => t.toJSON()))
+  })
 
   for(let transaction of transactions) {
     transaction.status = "EXPIRED"
