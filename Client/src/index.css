@@ -33,7 +33,7 @@ body {
   font-family: 'Roboto', sans-serif;
   color: var(--dark-text);
   overflow-x: hidden;
-  padding-top: 60px;
+  padding-top: 54px;
   overflow-y: overlay;
 }
 html{

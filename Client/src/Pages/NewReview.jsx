@@ -8,7 +8,6 @@ function NewReview() {
     <div>
         <Navbar />
         <Review />
-        <Footer />
     </div>
   )
 }

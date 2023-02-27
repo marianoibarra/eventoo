@@ -69,7 +69,7 @@ const Notifications = () => {
       image: transaction.type === 'BUY' ? transaction.event.cover_pic ? transaction.event.cover_pic : transaction.event.category.image : transaction.buyer.profile_pic,
       msg: <span dangerouslySetInnerHTML={{ __html: msgs[transaction.type][transaction.status] }} />,
       datetime: transaction.updatedAt,
-      type: transaction.type
+      type: transaction.type  
     }
   }
 
