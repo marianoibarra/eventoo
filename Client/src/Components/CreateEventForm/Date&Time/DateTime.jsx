@@ -45,20 +45,19 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             label="Date of event"
                             variant="standard"
                             openTo="day"
-                            inputFormat="DD/MM/YYYY"
+                            inputFormat="YYYY-MM-DD"
                             views={['year', 'month', 'day']}
                             value={input.start_date}
                             OpenPickerButtonProps={{ tabIndex: -1 }}
                             onChange={(value) => {
-                                const fecha = new Date(value && value.hasOwnProperty('_d') ? value._d : value);
-                                const fechaISO = fecha.toISOString();
-                                const fechaFormateada = fechaISO.slice(0, 10);
+                                // const fecha = new Date();
+                                // const fechaISO = fecha.toISOString();
+                                // const fechaFormateada = fechaISO.slice(0, 10);
                                 setInput({
                                     ...input,
-                                    start_date: fechaFormateada,
-                                    end_date: fechaFormateada,
+                                    start_date: value && value.hasOwnProperty('_d') ? value._d : value,
+                                    end_date: value && value.hasOwnProperty('_d') ? value._d : value,
                                 });
-                                console.log('start', fechaFormateada, input)
                             }}
                             onBlur={handleBlur}
                             renderInput={(params) => <TextField {...params} />}
