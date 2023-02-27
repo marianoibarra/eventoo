@@ -60,22 +60,17 @@ const cleanTransactions = async (IdEvent) => {
 };
 
 const clearAllTransactions = async () => {
-  const transactions = await Transaction.findAll({
+  const transactions = await Transaction.update({
+    status: 'EXPIRED'
+  },{
     where: {
       expiration_date: {
         [Op.lte]: Date.now()
       },
       status: 'PENDING'
     }
-  })
-
-  for(let transaction of transactions) {
-    transaction.status = "EXPIRED"
-    await transaction.save()
-  }
-
-  await transactions.reload()
-
+  }).then(t => t.map(t => t.toJSON()))
+  
   console.log(transactions)
 }
 
