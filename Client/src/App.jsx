@@ -46,12 +46,10 @@ function App() {
   
   const { showSessionModal, setShowSessionModal } = useContext(SessionContext)
   const dispatch = useDispatch();
-  const {user} = useSelector(state => state.user)
 
   window.handleGoogleLogin = function ({ credential }) {
     dispatch(googleLogin({credential, setShowSessionModal }))
   };
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -100,3 +98,4 @@ function App() {
 }
 
 export default App;
+

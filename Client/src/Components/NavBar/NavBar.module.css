@@ -22,6 +22,8 @@
   font-weight: 300;
   font-size: 32px;
   color: white;
+  display: flex;
+  align-items: center;
 }
 
 .searchbarOpen, .searchbarClose {

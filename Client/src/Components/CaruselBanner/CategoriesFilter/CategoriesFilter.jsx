@@ -29,7 +29,6 @@ const CategoriesFilter = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [mouseDownTime, setMouseDownTime] = useState(null);
-  // const [timeDiff, setTimeDiff] = useState(null);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);

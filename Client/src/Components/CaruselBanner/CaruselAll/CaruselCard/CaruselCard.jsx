@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Style from "./CaruselCard.module.css";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -34,6 +34,11 @@ const CaruselCard = ({
   const {favorites, loading} = useSelector(state => state.favorites)
   const { setShowSessionModal } = useContext(SessionContext)
   const [thisLoading, setThisLoading] = useState(false)
+  const [mouseDownTime, setMouseDownTime] = useState(null);
+  const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   const handleFav = (e) => {
     e.stopPropagation()
@@ -45,6 +50,34 @@ const CaruselCard = ({
     }
   }
 
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setMouseDownTime(new Date().getTime());
+    setStartX(e.pageX - containerRef.current.offsetLeft);
+    setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const distance = x - startX;
+    containerRef.current.scrollLeft = scrollLeft - distance;
+  };
+
+  const handleClick = () => {
+    const mouseUpTime = new Date().getTime();
+    const timeDiff = (mouseUpTime - mouseDownTime)
+    if(timeDiff < 200) {   
+      navigate(`/Event/${id}`)
+    }
+  }
+
   useEffect(() => {
     if(!loading) {
       setThisLoading(false)
@@ -53,7 +86,13 @@ const CaruselCard = ({
 
   return (
 
-      <div className={!premium ? Style.container_card : Style.container_card_premium} onClick={() => navigate(`/Event/${id}`)}>
+      <div 
+        ref={containerRef} 
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove} 
+        className={!premium ? Style.container_card : Style.container_card_premium} 
+        onClick={handleClick}>
         <div className={Style.imgWrapper}>
           <img src={img} alt={name} />
         </div>
@@ -69,7 +108,6 @@ const CaruselCard = ({
           </div>
           {name && <h2 className={Style.details_title}>{name}</h2>}
           {date && <span className={Style.details_date} >{moment(date).format('ddd, MMMM Do, h:mm')}</span>}
-          <span className={!premium ? Style.details_category : Style.details_category_premium_buttom}>{category}</span>
           { isPaid 
             ? <span className={Style.details_price}>{price}</span>
             : <span className={Style.details_free}>FREE</span>

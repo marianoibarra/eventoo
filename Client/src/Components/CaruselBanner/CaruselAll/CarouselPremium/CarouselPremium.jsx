@@ -91,7 +91,7 @@ export default function CarouselPremium() {
     return (
       <div>
         <div className={Style.container_text}> Premium Events  {`(${premiumEvents.length})`} </div>
-        <Slider {...settings}>
+        <Slider className={Style.slider} {...settings}>
           {
             loading
               ?  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
