@@ -61,6 +61,7 @@
   opacity: 0;
   transform: translateY(-5px);
   transition: visibility 0s linear 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;
+
 }
 
 .rowC,
@@ -88,6 +89,7 @@
   align-items: center;
 }
 
+
 .icon img {
   width: 24px;
   height: 24px;
@@ -107,6 +109,7 @@
   border-bottom: 1px solid #0001;
   margin: 4px 0;
 }
+
 
 a {
   all: unset;

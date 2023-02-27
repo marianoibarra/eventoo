@@ -26,7 +26,7 @@ function Map() {
   return (
     <>
       {location &&
-        <StaticGoogleMap style={style} zoom={16} size="620x300" className="img-fluid" apiKey="AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g">
+        <StaticGoogleMap style={style} zoom={16} size="920x350" className="img-fluid" apiKey="AIzaSyDjaoLiwIGBU9Hr5hr1538Ddbk8n0m-a3g">
           <Marker scale={2} iconURL="https://eventbrite-s3.s3.amazonaws.com/marketing/eds/static-map/custom-markers/pin-listings@1x.png" location={location} />
         </StaticGoogleMap>
       }

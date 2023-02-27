@@ -1,6 +1,7 @@
 import Styles from "./Menu.module.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../../Slice/User/UserSlice";
@@ -11,6 +12,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineSetting, AiOutlineCalendar } from "react-icons/ai";
 import { GrUserAdmin } from "react-icons/gr";
 import { BiChevronDown } from "react-icons/bi";
+
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -107,3 +109,4 @@ const Menu = () => {
 };
 
 export default Menu;
+

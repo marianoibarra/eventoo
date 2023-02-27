@@ -68,9 +68,9 @@ Event.belongsToMany(User, { through: 'Favorites', as: 'favorites' });
 User.belongsToMany(Event, { through: Review, as: 'reviews' });
 Event.belongsToMany(User, { through: Review, as: 'reviews' });
 User.hasMany(Review);
-Review.belongsTo(User);
+Review.belongsTo(User, { foreignKey: 'userId' });
 Event.hasMany(Review);
-Review.belongsTo(Event);
+Review.belongsTo(Event, { foreignKey: 'eventId' });
 
 
 User.belongsToMany(Event, { 
