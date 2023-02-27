@@ -80,6 +80,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
                     helperText={showMsg.category ? errors.category : ""}
                     error={showMsg.category && errors.category}
                     style={{ marginBottom: showMsg.category && errors.category ? '0px' : '20px' }}
+                    disabled={loading}
                 >
                     {filteredCategories.map((option) => (
                         <MenuItem key={option.id} value={option.name}>

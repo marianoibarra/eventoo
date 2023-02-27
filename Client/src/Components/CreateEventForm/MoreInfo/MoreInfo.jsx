@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import style from './MoreInfo.module.css'
 
-function MoreInfo({ input, setInput}) {
+function MoreInfo({ input, setInput, loading}) {
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -25,6 +25,7 @@ function MoreInfo({ input, setInput}) {
                 placeholder='Write here...'
                 onChange={handleChange}
                 margin="dense"
+                disabled={loading}
             />
         </div>
     )
