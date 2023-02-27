@@ -5,7 +5,11 @@
   margin: 10px 0;
   border-radius: 15px;
 }
-
+.sapConteiner{
+  display: flex;
+  flex-direction: column;
+  transition: all;
+}
 .sapListHeader {
   display: flex;
   flex-direction: row;
@@ -76,7 +80,7 @@ transition: 0.4ms;
 }
 
 .sap{
-  font-size: 20px;
+  font-size: 10px;
   font-weight: 500;
 }
 

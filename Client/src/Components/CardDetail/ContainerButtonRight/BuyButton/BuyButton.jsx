@@ -5,9 +5,9 @@ import ModalTransaction from '../../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
 import { SessionContext } from "../../../..";
 import ModalVoucher from "../../../Modal/ModalVoucher/ModalVoucher"
-import { Spinner } from "../../../Modal/Spinner/Spinner";
 import SpinnerWhite from "../../../../utils/SpinnerWhite/SpinnerWhite";
 import { Alert, AlertTitle } from "@mui/material";
+import { SessionContext } from "../../..";
 
 const sxPending = {
   borderRadius: '12px',
@@ -23,10 +23,10 @@ const sxAwaitting = {
 
 const BuyButton = () => {
 
-  const [showModal, setShowModal] = useState(false)
-  const [showModalVoucher, setShowModalVoucher] = useState(false)
+  const [showModal, setShowModal] = useState(false)  
   const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement);
   const user = useSelector(state => state.user);
+  const { eventDetail } = useSelector(state => state.eventDetail);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
@@ -57,10 +57,9 @@ const BuyButton = () => {
     
     <>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
-      {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
       {console.log(eventsBuyed)}
       {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === true &&
-        <div className={style.buycontainer}>
+        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
                   <p>
@@ -68,7 +67,7 @@ const BuyButton = () => {
                   </p>
                   <p className={style.price}>{"$" + price}</p>
               </div>
-              <div className={style.containertickets}>
+              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
                   <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
                   <span><b>{tickets}</b></span>
                   <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
@@ -83,7 +82,7 @@ const BuyButton = () => {
       }
 
       {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === false &&
-        <div className={style.buycontainer}>
+        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
                   <p>
@@ -91,7 +90,7 @@ const BuyButton = () => {
                   </p>
                   <p className={style.price}>Free</p>
               </div>
-              <div className={style.containertickets}>
+              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
                   <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
                   <span><b>{tickets}</b></span>
                   <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
@@ -103,23 +102,22 @@ const BuyButton = () => {
         </div>      
       }
 
-      {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'PENDING') ? 
-        <div className={style.container_buyer_pending} onClick={() => setShowModalVoucher(true)}>
-              <Alert sx={sxPending} severity="warning">
-                <AlertTitle>Warning</AlertTitle>
-                You have a pending purchase, click here to load the receipt or cancel the reservation.
-              </Alert>
+      {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'PENDING') && 
+        <div className={style.container_buyer_pending} >
+          <Alert sx={sxPending} severity="warning">
+            <AlertTitle>Warning</AlertTitle>
+            You have a pending purchase, click here to load the receipt or cancel the reservation.
+          </Alert>
         </div>
-        : null
+        
       }
 
-    {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'INWAITING') ? 
+    {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'INWAITING') && 
         <div className={style.container_buyer_pending} >
           <Alert sx={sxAwaitting} severity="warning">
             Inwaitting
           </Alert>
         </div>
-        : null
     }
     </>
   );

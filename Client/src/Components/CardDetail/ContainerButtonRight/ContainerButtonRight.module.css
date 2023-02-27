@@ -31,6 +31,10 @@
     height: max-content;
 }
 
+.containercategory_premium {
+    background-color: black;
+}
+
 .text {
     display: block;
     width: min-content;
@@ -42,6 +46,10 @@
     margin-left: 10px;
     margin-right: 10px;
     text-align: center;
+}
+
+.text_premium {
+    color: #FFD700;
 }
 
 .organizerbutton_div {
@@ -67,6 +75,7 @@
     background-image: none;
     background-color: #ccc;
     color: gray;
+    cursor: default;
 }
 
 .organizerbutton_disabled:hover {
@@ -89,6 +98,11 @@
     border: solid 1px var(--primary-color);
 }
 
+/* .container_organizer_premium {
+    background-color: black;
+    color: #FFD700;
+} */
+
 .organizer_text {
     max-width: 50%;
 }
@@ -99,12 +113,31 @@
     border-radius: 50%;
 }
 
+/* .profile_pic_premium {
+    border: solid 2px #FFD700;
+} */
+
 .organizericon {
     cursor: pointer;
     width: min-content;
     color: var(--secondary-color);
 }
 
+.organizericon_premium {
+    color: #FFD700;
+    background-color: black;
+    padding-top: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 2px;
+    border-radius: 50%;
+    width: min-content;
+}
+
 .organizericon:hover {
     color: #ab2a3e;
+}
+
+.organizericon_premium:hover {
+    color: #CFB53B;
 }

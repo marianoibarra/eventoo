@@ -101,7 +101,7 @@ const CardDetailPublic = () => {
     <>
       {eventDetail && data && Object.keys(eventDetail).length > 0 && (
         <>
-          <div className={style.body}>
+          <div className={`${style.body} ${eventDetail.typePack === 'PREMIUM' && style.body_premium}`}>
             <div className={style.containerimg}>
               <img
                 src={
@@ -162,7 +162,7 @@ const CardDetailPublic = () => {
 
             <div className={style.container_date}>
               <div className={style.containericon}>
-                <span className={style.iconspan}>
+                <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}>
                   {" "}
                   <AiTwotoneCalendar size={30} />{" "}
                 </span>
@@ -179,7 +179,7 @@ const CardDetailPublic = () => {
 
             <div className={style.container_date}>
               <div className={style.containericon}>
-                <span className={style.iconspan}>
+                <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}>
                   {" "}
                   <RiTicket2Fill size={35} />{" "}
                 </span>

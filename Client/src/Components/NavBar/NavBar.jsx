@@ -4,7 +4,8 @@ import Styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import LocationFilter from "./LocationFilter/LocationFilter";
-
+import Notifications from "./Notifications/Notifications";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
@@ -22,6 +23,7 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])
 
+  const { isLogged } = useSelector(state => state.user)
 
 
   return (
@@ -41,6 +43,8 @@ const Navbar = () => {
         </div>
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
+            <div className={Styles.divisor}></div>
+            { isLogged && <Notifications /> }
             <Menu />
         </div>
       </nav>

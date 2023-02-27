@@ -34,25 +34,35 @@ import {
   sortByAscendingEventsBuys,
   sortByDescendingEventsBuys,
 } from "../../../Slice/EventsBuysForUser/BuysSlice";
+
+import{ getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
 import './Events.css'
 import { FaEdit } from "react-icons/fa";
 import { TiArrowSortedDown, TiArrowUnsorted ,TiArrowSortedUp } from "react-icons/ti";
 import { AiOutlineCheck } from "react-icons/ai";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
+import Pending from "./Status/Pending/Pending";
+import Completed from "./Status/Completed/Completed";
+import Canceled from "./Status/Canceled/Canceled";
+import Rejected from "./Status/Rejected/Rejected";
+import Inwaiting from "./Status/Inwaiting/Inwaiting";
+
+
 
 function Buys() {
-  const { events, errorEvents } = useSelector((state) => state.eventsBuysSlice);
+  const { data:{buys:eventBuys}, error } = useSelector((state) => state.eventsManagement);
   const [sortType, setSortType] = useState({ type:null, id: 2 });
-  console.log(events);
+  const [transactionId, setTransactionId] = useState(null);
+  
+
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(axiosModeEventsBuys());
+    dispatch(getEventsManagement());
   }, [dispatch]);
 
-  const handledelete = (e) => {
-    console.log(e);
-    dispatch(deleteEvent(e));
+  const information = (e) => {
+    setTransactionId(e)
   };
 
   const accent = (e) => {
@@ -77,10 +87,10 @@ function Buys() {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <h3>{errorEvents ? errorEvents : undefined}</h3>
+      <h3>{error ? error : undefined}</h3>
+
       <div className="sapList">
         <div className="sapListHeader">
-          <div className="sapListItem">ID</div>
           <div
             className="sapListItem"
             id={sortType.type == `organizer` ? "sapSelection" : undefined}
@@ -161,24 +171,56 @@ function Buys() {
             /> }
             Status
           </div>
-          <div className="sapListItem">Action</div>
         </div>
-        {events.map((event,index) => (
-          <div className="sapListRow" key={index}>
-            <div className="sapListItem sap">{event.id}</div>
-            <div className="sapListItem sap">{`${event?.organizer?.name} ${event?.organizer?.last_name}`}</div>
-            <div className="sapListItem sapListItemWide sap">{event.name}</div>
+        <div className="sapConteiner">
+        {eventBuys.map((transaction,index) => (<>
+          
+          <div className="sapListRow" key={index} onClick={()=>information(transaction.id)}>
+            <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
+            <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
             <div className="sapListItem sapListItemWide sap">
-              {event?.start_date}
+              {transaction?.event?.start_date}
             </div>
             <div className="sapListItem sap">
-              {event?.isPremium ? "Premium" : "Free"}
+              {transaction?.isPremium ? "Premium" : "Free"}
             </div>
             <div className="sapListItem sap">
-              {event?.status}
+              {transaction?.status}
             </div>
-            <div className="sapListItem sap">
-              <button className="btnSap">
+          </div>
+          
+          {transaction.id === transactionId ? <div  key={index}>
+            {transaction?.status === "CANCELED"? <Canceled transaction={transaction} /> : 
+            transaction?.status === "PENDING"? <Pending transaction={transaction} /> : 
+            transaction?.status === "INWAITING"? <Inwaiting transaction={transaction}/> : 
+            transaction?.status === "REJECTED"? <Rejected transaction={transaction}/> :
+            transaction?.status === "COMPLETED"? <Completed transaction={transaction}/> : <p>no tienes estados pendientes</p>}
+          </div>
+          : undefined}</> 
+        ))}</div>
+      </div>
+
+     
+
+
+      </div>
+
+  );
+}
+
+export default Buys;
+
+
+
+// - PENDING: Cuando el usuario carga los tickets y la operacion queda pendiente de carga del comprobante
+// - CANCELED: Operacion cancelada por el usuario comprador
+// - INWAITING: Luego de que el usuario carga el comprobante y a la espera de que el organizador confirme la operacion
+// - REJECTED: Operacion cancelada por el usuario organizador desde INWAITING
+// - COMPLETED: Operacion confirmada por el usuario organizador desde INWAITING
+
+
+
+     {/* <button className="btnSap">
                 <FaEdit color="darkslateblue" size={25} />
               </button>
               <button className="btnSap">
@@ -186,13 +228,4 @@ function Buys() {
                   onClick={() => handledelete(event.id)}
                   size={35}
                 />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default Buys;
+              </button> */}

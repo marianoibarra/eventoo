@@ -16,39 +16,39 @@ const EventInformation = () => {
 
                 {eventDetail.disability_access === true &&
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <TbDisabled size={30}/> </span>
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <TbDisabled size={30}/> </span>
                         <span className={style.iconspantext}>Disability Access</span> 
                     </div>
                 }
 
                 {eventDetail.parking === true &&
                     <div className={style.containericon}>   
-                        <span className={style.iconspan}> <TbParking size={30}/> </span>
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <TbParking size={30}/> </span>
                         <span className={style.iconspantext}>Parking</span>
                     </div>
                 }
 
                 {eventDetail.pet_friendly === true &&
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <MdPets size={30}/> </span> 
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <MdPets size={30}/> </span> 
                         <span className={style.iconspantext}>Pet Friendly</span> 
                     </div>                 
                 }
 
                 {eventDetail.smoking_zone === true &&
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <MdSmokingRooms size={30}/> </span> 
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <MdSmokingRooms size={30}/> </span> 
                         <span className={style.iconspantext}>Smoking Zone</span> 
                     </div>             
                 }
 
                 {eventDetail.isPublic === true ?
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <BsFillPeopleFill size={30}/> </span> 
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <BsFillPeopleFill size={30}/> </span> 
                         <span className={style.iconspantext}>Public Access</span> 
                     </div> :
                     <div className={style.containericon}> 
-                        <span className={style.iconspan}> <RiGitRepositoryPrivateFill size={30}/> </span> 
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <RiGitRepositoryPrivateFill size={30}/> </span> 
                         <span className={style.iconspantext}>Private Access</span> 
                     </div>              
                 }
