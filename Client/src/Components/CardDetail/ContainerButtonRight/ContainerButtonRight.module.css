@@ -85,6 +85,9 @@
     font-weight: 400;
     cursor: pointer;
 }
+.container_organizer:hover{
+    border: solid 1px var(--primary-color);
+}
 
 .organizer_text {
     max-width: 50%;
