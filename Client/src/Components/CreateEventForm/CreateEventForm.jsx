@@ -26,6 +26,7 @@ function Form() {
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
   const MP_PUBLIC_KEY = process.env.REACT_APP_MP_PUBLIC_KEY
+  console.log(MP_PUBLIC_KEY)
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -99,6 +100,7 @@ function Form() {
     start_date: '',
     start_time: '',
     state: null,
+    typePack:'',
     virtualURL: '',
     zip_code: null,
     privateEvent_password: '',
@@ -176,6 +178,7 @@ function Form() {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());
     }
+    console.log(input);
   }, [input]);
 
   useEffect(() => {

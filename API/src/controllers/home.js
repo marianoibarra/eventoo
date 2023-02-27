@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Event, Address, Category, User, Review } = require("../db");
 
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
@@ -48,6 +49,10 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     searchParams.isPublic = true;
     searchParams.isActive = true;
+    // searchParams.typePack = {[Op.or]: [
+    //   {[Op.is]: null},
+    //   {[Op.ne]: 'PREMIUM'}
+    // ]}
 
     let {limit, page} = req.query
     limit = Number(limit)
@@ -57,6 +62,7 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     const publicEvents = await Event.findAll({
       where: searchParams,
+      order: [['typePack', 'NULLS LAST']],
       attributes:  { exclude: ["privateEvent_password"] },
       include: [
         "bankAccount",
@@ -83,6 +89,7 @@ const getEventsPublic = async (req, res) => { //modificque excluyendo el private
 
     res.json(publicEvents);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ msg: error.message });
   }
 };
@@ -104,13 +111,12 @@ const getCategories = async (req, res) => {
   }
 };
 
-const getEventById = async (req, res) => { //aqui agregue el condicional 
+const getEventById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const event = await Event.findOne({
-      where: {
-        id
-      },
+      where: { id },
       include: [
         "bankAccount",
         {
@@ -146,29 +152,81 @@ const getEventById = async (req, res) => { //aqui agregue el condicional
       ],
     }).then(r => r.toJSON());
 
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }  
+
     event.organizer.reviews = event.organizer.organizer.map(r => r.reviews).flat().map(r => { 
       r.reviewedBy = r.user
       delete r.user
       return r
     })
+    
     delete event.organizer.organizer
+    
+    if(event.organizer.reviews.length > 0) {
+      const preResult = event.organizer.reviews.map(a => a.stars)
+      event.organizer.score = (preResult.reduce((acc, curr) => acc + curr) / preResult.length).toFixed(1);
+    } else {
+       event.organizer.score = 0
+    }
+    
+      // event.scoreByUser = Math.round(resultScore); dejo por si necesitamos que sea solo un entero... (por las estrellitas)
 
     if (event.isPublic) {
       res.json({  isPublic: true , event})
     } else {
-      res.json ({ isPublic: false, event: { id: id, name: event.name , start_date: event.start_date, start_time: event.start_time }})
-    } 
-} catch (error) {
-    res.status(404).json({ error: error.message });
+      res.json({
+        isPublic: false,
+        event: {
+          id: id,
+          name: event.name,
+          start_date: event.start_date,
+          start_time: event.start_time,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-
+const getAllPremiumEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      where: {
+        typePack: 'PREMIUM',
+      },
+      include: [
+        "bankAccount",
+        {
+          model: Address,
+          as: "address",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: User,
+          as: "organizer",
+          attributes: ["id", "name", "last_name", "profile_pic"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name", "modality"],
+        },
+      ],
+    });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
 
 module.exports = {
 
   getCategories,
   getEventsPublic,
   getEventById,
+  getAllPremiumEvents,
 
 };

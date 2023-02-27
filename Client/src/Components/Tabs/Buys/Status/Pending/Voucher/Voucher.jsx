@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Style from './ModalVoucher.module.css'
-import Modal from '../Modal';
-import { cancelTransaction, loadPaymentProof } from '../../../Slice/eventsManagement/eventsManagementSlice';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import Style from './Voucher.module.css'
+import { loadPaymentProof , cancelTransaction} from '../../../../../../Slice/eventsManagement/eventsManagementSlice';
 
 
 
-const ModalVoucher = ({ setShowModal }) => {
+
+const Voucher = ({transaction, eventId}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [dragActive, setDragActive] = useState(false);
@@ -18,12 +18,7 @@ const ModalVoucher = ({ setShowModal }) => {
   const [pdfDocument, setPdfDocument] = useState(null)
   const [accepted, setAccepted] = useState(true);
   const refInputImg = useRef()
-  const { email } = useSelector(state => state.user)
-  const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement);
-
-  const transactionData = eventsBuyed.find(e => e.status === 'PENDING')
-  const quantity = transactionData.tickets.length
-
+  
 
 
   //useEffect que instanciar el urlFile, para hacer un PUT en el handle
@@ -39,7 +34,7 @@ const ModalVoucher = ({ setShowModal }) => {
 
   //handle que realiza el dispatch, de la url
   const handleAccept = () => {
-    dispatch(loadPaymentProof({ id: transactionData.id, data: {payment_proof: urlFile} }))
+    dispatch(loadPaymentProof({ id: transaction, data: {payment_proof: urlFile } }))
   };
 
 
@@ -95,17 +90,16 @@ const ModalVoucher = ({ setShowModal }) => {
   }
 
   const handleDelete = () => {
-    dispatch(cancelTransaction(transactionData.id))
+    dispatch(cancelTransaction(transaction))
+    navigate(0)
   }
 
   return (
-    <Modal width={'1100px'} setShowModal={setShowModal}>
-      {transactionData &&
+    <div>
+      {transaction &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
           <div className={Style.containerLoadVoucher}>
-            <h1 className={Style.containerVoucher_tittle}>Operation <p>{transactionData.id?.slice(0, 8)}</p></h1>
-            <h2 className={Style.containerVoucher_subTittle}><p>user </p> {email}</h2>
-
+            <h1 className={Style.containerVoucher_tittle}>Operation <p>{transaction?.slice(0, 8)}</p></h1>
             {
               !preview
                 ?
@@ -173,34 +167,11 @@ const ModalVoucher = ({ setShowModal }) => {
                 ACEPT
               </button>
             </div>
-          </div>
-
-          <div className={Style.detailWrapper}>
-            <div className={Style.imgWrapper}>
-              <img className={Style.detailEvent_img} src={transactionData.event.cover_pic} alt="" />
-            </div>
-
-            <div className={Style.detail}>
-              <h3 className={Style.detailEvent_resume}>Order overview</h3>
-              <div className={Style.detailEvent_tickets}>
-                {quantity} x {transactionData.event.name}
-                <span>{quantity * transactionData.event.price}</span>
-              </div>
-              <div className={Style.detailEvent_total}>
-                Total: <span>{quantity * transactionData.event.price}</span>
-              </div>
-
-              <div className={Style.detailBankAccount}>
-                <h2>Organizer {transactionData.event.organizer?.name} {transactionData.event.organizer?.last_name}</h2>
-                <h3 className={Style.detailBankAccount_CBU_name}> Account {transactionData.event.bankAccount?.name} {transactionData.event.bankAccount?.CBU}</h3>
-              </div>
-            </div>
-          </div>
+          </div>        
           {dragActive && <div className={Style.dragImgElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
         </div>}
-    </Modal>
+    </div>
   )
 }
 
-export default ModalVoucher
-
+export default Voucher

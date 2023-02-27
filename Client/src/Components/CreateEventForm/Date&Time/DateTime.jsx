@@ -56,6 +56,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                                 setInput({
                                     ...input,
                                     start_date: fechaFormateada,
+                                    end_date: fechaFormateada,
                                 });
                                 console.log('start', fechaFormateada, input)
                             }}

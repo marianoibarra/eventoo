@@ -1,0 +1,143 @@
+.background {
+    position: absolute;
+    top: 60vh;
+    right: 0;
+    bottom: 0;
+    z-index: 290;
+    width: 20%;
+    margin-top: 35px;
+    margin-right: 35px;
+}
+
+@media (min-height: 745px) {
+    .background {
+        top: 445px;
+    }
+}
+
+.category_and_age {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    margin-bottom: 35px;
+}
+
+.containercategory {
+    border-radius: 12px;
+    background-color: var(--secondary-color);
+    width: min-content;
+    height: max-content;
+}
+
+.containercategory_premium {
+    background-color: black;
+}
+
+.text {
+    display: block;
+    width: min-content;
+    height: 100%;
+    font-size: 1.1vw;
+    font-weight: 400;
+    color: var(--white-text);
+    margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.text_premium {
+    color: #FFD700;
+}
+
+.organizerbutton_div {
+    position: sticky;
+    z-index: 300;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    height: max-content;
+}
+
+.organizerbutton {
+    margin: 0 auto;
+}
+
+.organizerbutton a {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 75%;
+}
+
+.organizerbutton_disabled {
+    background-image: none;
+    background-color: #ccc;
+    color: gray;
+    cursor: default;
+}
+
+.organizerbutton_disabled:hover {
+    box-shadow: none;
+}
+
+.container_organizer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    border-radius: 12px;
+    background-color: #cccccc40;
+    margin-bottom: 35px;
+    font-weight: 400;
+    cursor: pointer;
+}
+.container_organizer:hover{
+    border: solid 1px var(--primary-color);
+}
+
+/* .container_organizer_premium {
+    background-color: black;
+    color: #FFD700;
+} */
+
+.organizer_text {
+    max-width: 50%;
+}
+
+.profile_pic {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+
+/* .profile_pic_premium {
+    border: solid 2px #FFD700;
+} */
+
+.organizericon {
+    cursor: pointer;
+    width: min-content;
+    color: var(--secondary-color);
+}
+
+.organizericon_premium {
+    color: #FFD700;
+    background-color: black;
+    padding-top: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 2px;
+    border-radius: 50%;
+    width: min-content;
+}
+
+.organizericon:hover {
+    color: #ab2a3e;
+}
+
+.organizericon_premium:hover {
+    color: #CFB53B;
+}

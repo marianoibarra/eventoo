@@ -5,7 +5,7 @@ const fillTables = require("./src/helpers/fillTables.js");
 const { createSuperAdmin } = require("./src/helpers/createSuperAdmin.js");
 const data=require('./src/mocks/superAdmin.js')
 
-
+  
 const port = process.env.PORT || 3001;
 
 process.on("uncaughtException", (err) => {

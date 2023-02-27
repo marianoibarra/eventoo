@@ -1,4 +1,4 @@
-const { Category, User, Address, RoleAdmin, Event } = require("../db");
+const { Category, User, Address, RoleAdmin, Event, Review } = require("../db");
 
 const getUsers = async (req, res) => {
   try {
@@ -11,9 +11,9 @@ const getUsers = async (req, res) => {
         },
         {
           model: RoleAdmin,
-          where:{
-            id: [2,3]
-          }
+          where: {
+            id: [2, 3],
+          },
         },
       ],
     });
@@ -60,12 +60,12 @@ const changeRole = async (req, res) => {
       include: [{ model: RoleAdmin }],
     });
 
-    if(user.roleAdminId === 3) {
-      user.roleAdminId = 2
+    if (user.roleAdminId === 3) {
+      user.roleAdminId = 2;
     } else {
-      user.roleAdminId = 3
+      user.roleAdminId = 3;
     }
-    await user.save()
+    await user.save();
 
     const users = await User.findAll({
       include: [
@@ -76,14 +76,13 @@ const changeRole = async (req, res) => {
         },
         {
           model: RoleAdmin,
-          where:{
-            id: [2,3]
-          }
+          where: {
+            id: [2, 3],
+          },
         },
       ],
     });
     res.json(users);
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -184,6 +183,115 @@ const getEvents = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
+
+const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.findAll({
+      attributes: ["id", "isActive", "stars", "comment", "createdAt"],
+      include: [
+        {
+          model: User,
+          include: [
+            "roleAdmin",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+          ],
+        },
+        {
+          model: Event,
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality"],
+            },
+          ],
+        },
+      ],
+    });
+    if (reviews) return res.json(reviews);
+    return res.status(404).json({ status: 404, message: "No reviews found" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const modifyReview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const review = await Review.findByPk(id, {
+      include: [{ model: User }, { model: Event }],
+    });
+
+    if (!review) {
+      return res.status(404).send("Review not found");
+    }
+
+    const isActive = review.isActive ? false : true;
+    review.isActive = isActive;
+    await review.save();
+
+    const reviews = await Review.findAll({
+      attributes: ["id", "isActive", "stars", "comment", "createdAt"],
+      include: [
+        {
+          model: User,
+          include: [
+            "roleAdmin",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+          ],
+        },
+        {
+          model: Event,
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality"],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUsers,
   changeBan,
@@ -191,4 +299,6 @@ module.exports = {
   changeRole,
   changeStatusEvent,
   getEvents,
+  getAllReviews,
+  modifyReview,
 };

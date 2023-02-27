@@ -10,7 +10,6 @@ const useStyles = makeStyles(theme => ({
 
   root: {
     margin:'0 auto',
-    marginTop:90,
     width: '100%',
     backgroundColor: `var(--ligth-background-color)`,
     color:`var(--dark-text)`,
@@ -50,7 +49,7 @@ function TabsComponent() {
         centered
       >
         <Tab className={classes.tab} label="Buys events" />
-        <Tab className={classes.tab} label="Create Events" />
+        <Tab className={classes.tab} label="Organizator" />
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>

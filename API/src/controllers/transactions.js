@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 20;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -34,7 +34,6 @@ const cleanTransactions = async (IdEvent) => {
       },
     ],
   });
-
   const expiredTransactions = event.transactions.filter(
     (transaction) =>
       moment().isAfter(moment(transaction.dataValues.expiration_date)) &&
@@ -50,17 +49,33 @@ const cleanTransactions = async (IdEvent) => {
     await event.increment("stock_ticket", { by: ticketsToReturn });
 
     await Transaction.update(
-      { status: "CANCELED" },
+      { status: "EXPIRED" },
       {
         where: {
           id: expiredTransactions.map((transaction) => transaction.id),
         },
       }
     );
+
     //puede ser aca el envio de mail a las personas que se les cancelo la reserva
     //si falta algun dato modificar en donde se invoca esta funcion (otros controllers creo, no se si se invoca
     //sola por cuestiones de tiempo/moment()) y pasarle por parametros el resto de los datos faltantes
+
+    updateEventLowStock(IdEvent.id)
+
   }
+};
+
+const updateEventLowStock = async (eventId) => {
+  let percentageThreshold = 15
+  const event = await Event.findByPk(eventId);
+
+  const availableTickets = event.guests_capacity - event.stock_ticket;
+  const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
+
+  const isLowStock = percentageAvailable <= percentageThreshold;
+
+  await event.update({ low_stock: isLowStock });
 };
 
 const createTransactions = async (req, res) => {
@@ -137,7 +152,7 @@ const createTransactions = async (req, res) => {
             {
               model: Category,
               as: "category",
-              attributes: ["name", "modality"],
+              attributes: ["name", "modality", "image"],
             },
           ],
         },
@@ -186,7 +201,7 @@ const getTransactionsByUserBuyer = async (req, res) => {
                 {
                   model: Category,
                   as: "category",
-                  attributes: ["name", "modality"],
+                  attributes: ["name", "modality", "image"],
                 },
               ],
             },
@@ -214,7 +229,7 @@ const getTransactionsByUserSeller = async (req, res) => {
         {
           model: User,
           as: "buyer",
-          attributes: ["id", "name", "last_name", "email"],
+          attributes: ["id", "name", "last_name", "email", "profile_pic"],
         },
         {
           model: Event,
@@ -403,14 +418,14 @@ const completeTransaction = async (req, res) => {
     const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
     if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
+      await transaction.update({ status: "EXPIRED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
       sendBuyerNotifications(buyer.email, "expiredReservation");
       return res.status(400).json({
         error:
-          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+          "Transaction has expired, status updated to EXPIRED and tickets have been returned to event",
       });
     }
 
@@ -549,14 +564,26 @@ const cancelTransaction = async (req, res) => {
   try {
     const { payment_proof } = req.body;
     const { transactionId } = req.params;
-    const transaction = await Transaction.findByPk(transactionId);
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: "tickets",
+    });
 
     if (!transaction) {
       return res.status(404).json({
         error: "Transaction not found",
       });
     }
-    await transaction.update({ payment_proof, status: "CANCELED" });
+
+    if (transaction.status === "PENDING") {
+      const ticketsToReturn = transaction.tickets.length;
+      const event = await Event.findByPk(transaction.eventId);
+  
+      await event.increment("stock_ticket", { by: ticketsToReturn });
+      await transaction.update({ payment_proof, status: "CANCELED" });
+    }
+
+    updateEventLowStock(transaction.eventId);
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,

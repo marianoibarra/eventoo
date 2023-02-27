@@ -1,12 +1,3 @@
-.containerbottomright {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 290;
-    width: 20vw;
-    height: 95%;
-}
-
 .buycontainer {
     position: sticky;
     z-index: 300;
@@ -14,9 +5,13 @@
     left: 0;
     width: 100%;
     height: max-content;
-    background-color: var(--ligth-background-color);
+    background-color: white;
     border: solid 1px var(--primary-color);
     border-radius: 12px;
+}
+
+.buycontainer_premium {
+    border: solid 1px black;
 }
 
 .container_text_and_tickets {
@@ -45,6 +40,7 @@
 
 .price {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 .containertickets {
@@ -64,11 +60,18 @@
     color: white;
     height: 45%;
     width: 25%;
+    cursor: pointer;
+}
+
+.containertickets_premium button {
+    background-color: black;
+    color: #FFD700;
 }
 
 button:disabled {
     background-color: #ccc;
     color: gray;
+    cursor: auto;
 }
 
 .containertickets span {
@@ -87,20 +90,6 @@ button:disabled {
     left: 0;
     width: 100%;
     height: max-content;
-    background-color: var(--white-text);
-    cursor: pointer;
-}
-
-.buyer_pending {
-    border: solid 1px orange;
     border-radius: 12px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.buyer_pending p {
-    font-size: 1.3vw;
-    color: orange;
-    font-weight: bold;
-    margin: 20px;
+    cursor: pointer;
 }

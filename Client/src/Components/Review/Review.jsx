@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { axiosModeEventDetail, clear } from "../../Slice/EventDetail/EventDetailSlice";
 import { API } from "../../App";
 import covers from "../../imgs/covers";
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { Alert } from "@mui/material";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import style from "./Review.module.css";
@@ -25,7 +25,7 @@ const Review = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const stars = searchParams.get("stars");
-    const [activeStars, setActiveStars] = useState(stars?stars:0);
+    const [activeStars, setActiveStars] = useState(stars ? stars : 0);
     const totalStars = 5;
 
     const [comment, setComment] = useState('');
@@ -64,6 +64,7 @@ const Review = () => {
                 result: true,
                 msg: "Review submitted successfully"
             });
+            setErrors({msg: 'Review submitted'})
         } catch (error) {
             setResult({
                 result: false,
@@ -112,10 +113,24 @@ const Review = () => {
                         </Box>
                         {!activeStars && <p className={style.spanerror}>You should select at least one star.</p>}
 
-                        <textarea className={errors.comment ? style.error : style.good} maxLength={600} name="comment" value={comment} placeholder='Comment...' onChange={handleOnChange}/>
-                        {errors.comment && <p className={style.spanerror}>{errors.comment}</p>}
+                        <TextField
+                            // label="Description"
+                            name='description'
+                            multiline
+                            value={comment}
+                            rows={4}
+                            sx={{ m: 1, width: '70%', flexGrow:1}}
+                            label='Comment'
+                            onChange={handleOnChange}
+                            // onBlur={handleBlur}
+                            margin="dense"
+                            helperText={errors.comment}
+                            error={errors.comment}
+                        />
+                        {/* <textarea className={errors.comment ? style.error : style.good} maxLength={600} name="comment" value={comment} placeholder='Comment...' onChange={handleOnChange}/> */}
+                        {/* {errors.comment && <p className={style.spanerror}>{errors.comment}</p>} */}
 
-                        <button className={`btnprimario`} disabled={Object.keys(errors).length || user.isLogged === false || today < dateEvent || !activeStars || result.result === false ? true : false} href="" onClick={handleSubmit}>Submit review</button>
+                        <button className={style.submit} disabled={Object.keys(errors).length || user.isLogged === false || today < dateEvent || !activeStars || result.result === false ? true : false} href="" onClick={handleSubmit}>Submit review</button>
 
                         {today && user.isLogged === false && today > dateEvent && <Alert sx={sx} severity="warning">Please login to submit review.</Alert>}
 

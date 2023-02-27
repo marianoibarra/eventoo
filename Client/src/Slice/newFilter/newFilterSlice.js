@@ -29,6 +29,7 @@ const initialState = {
   state: null,
   country: null,
   zip_code: null,
+  favorites: false
 }
 
 export const newFilterSlice = createSlice({

@@ -2,12 +2,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 15vh;
-    width: max-content;
+    margin-top: 5vh;
+    margin-bottom: 50px;
+    margin-left: 35px;
+    width: min-content;
 }
 
 .containerlocation b {
     margin-bottom: 5px;
+    color: var(--secondary-color);
 }
 
 .containericon {
@@ -16,17 +19,26 @@
 }
 
 .iconspan {
-    color: var(--primary-color);
-    width: min-content;
+    color: var(--secondary-color);
+    background-color: #cccccc40;
+    padding-top: 5px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 4px;
+    border-radius: 50%;
+}
+
+.iconspan_premium {
+    color: #FFD700;
+    background-color: black;
 }
 
 .iconspantext {
     display: block;
-    margin-left: 15px;
+    margin-left: 8px;
     width: max-content;
-    color: var(--primary-color);
     font-size: 2vw;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .ubicationtext {
