@@ -54,10 +54,6 @@ module.exports = (sequelize) => {
         emailIsVerify: {
           type: DataTypes.BOOLEAN,
           defaultValue: false
-        },  
-        notified:{
-          type: DataTypes.BOOLEAN,
-          defaultValue: false
-        }   
+        }
     })
 };
