@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer');
 // const fs = require("fs"); para pruebas locales de pdf
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 20;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -47,20 +47,19 @@ const cleanTransactions = async (IdEvent) => {
     await event.increment("stock_ticket", { by: ticketsToReturn });
 
     await Transaction.update(
-      { status: "CANCELED" },
+      { status: "EXPIRED" },
       {
         where: {
           id: expiredTransactions.map((transaction) => transaction.id),
         },
       }
     );
+    updateEventLowStock(IdEvent.id)
   }
-  updateEventLowStock(IdEvent.id)
 };
 
 const updateEventLowStock = async (eventId) => {
-  let percentageThreshold = 10
-  console.log(eventId)
+  let percentageThreshold = 15
   const event = await Event.findByPk(eventId);
 
   const availableTickets = event.guests_capacity - event.stock_ticket;
@@ -134,7 +133,7 @@ const createTransactions = async (req, res) => {
             {
               model: Category,
               as: "category",
-              attributes: ["name", "modality"],
+              attributes: ["name", "modality", "image"],
             },
           ],
         },
@@ -389,13 +388,13 @@ const completeTransaction = async (req, res) => {
     const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
     if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
+      await transaction.update({ status: "EXPIRED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
       return res.status(400).json({
         error:
-          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+          "Transaction has expired, status updated to EXPIRED and tickets have been returned to event",
       });
     }
     const tickets = await Ticket.findAll({
@@ -556,14 +555,26 @@ const cancelTransaction = async (req, res) => {
   try {
     const { payment_proof } = req.body;
     const { transactionId } = req.params;
-    const transaction = await Transaction.findByPk(transactionId);
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: "tickets",
+    });
 
     if (!transaction) {
       return res.status(404).json({
         error: "Transaction not found",
       });
     }
-    await transaction.update({ payment_proof, status: "CANCELED" });
+
+    if (transaction.status === "PENDING") {
+      const ticketsToReturn = transaction.tickets.length;
+      const event = await Event.findByPk(transaction.eventId);
+  
+      await event.increment("stock_ticket", { by: ticketsToReturn });
+      await transaction.update({ payment_proof, status: "CANCELED" });
+    }
+
+    updateEventLowStock(transaction.eventId);
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,
