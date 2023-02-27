@@ -13,6 +13,7 @@ const nodemailer = require('nodemailer');
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const approvalTimeLimit = 20;
+const {Op} = require('sequelize')
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -57,6 +58,17 @@ const cleanTransactions = async (IdEvent) => {
     updateEventLowStock(IdEvent.id)
   }
 };
+
+const clearAllTransactions = async () => {
+  const transactions = await Transaction.findAll({
+    where: {
+      expiration_date: {
+        [Op.gte]: Date.now()
+      }
+    }
+  }).then(t => t.map(t => t.toJSON()))
+  console.log(transactions)
+}
 
 const updateEventLowStock = async (eventId) => {
   let percentageThreshold = 15
@@ -183,6 +195,7 @@ const getTransactionsByUserBuyer = async (req, res) => {
         },
       ],
     });
+    await clearAllTransactions()
     return res.status(200).json(user.transactions);
   } catch (error) {
     return res.status(500).json({
