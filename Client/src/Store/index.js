@@ -14,6 +14,7 @@ import { adminSlice } from "../Slice/Admin/AdminSlice";
 import {newFilterSlice} from "../Slice/newFilter/newFilterSlice";
 import { favoritesSlice } from "../Slice/Favorites/FavoritesSlice";
 import { eventsManagementSlice } from "../Slice/eventsManagement/eventsManagementSlice";
+import { premiumEvents } from "../Slice/PremiumEvents/PremiumEventsSlice";
 
 const store = configureStore({
   middleware: (getDefaultMiddleware) =>
@@ -23,6 +24,7 @@ const store = configureStore({
   reducer: {
     categories: categorieSlice.reducer,
     user: UserSlice.reducer,
+    premiumEvents: premiumEvents.reducer,
     events: eventsSlice.reducer,
     event: eventSlice.reducer,
     forgot: forgot.reducer,
