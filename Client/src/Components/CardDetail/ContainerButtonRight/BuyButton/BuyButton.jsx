@@ -4,10 +4,8 @@ import style from "./BuyButton.module.css";
 import ModalTransaction from '../../../Modal/ModalTransaction/ModalTransaction'
 import { useContext } from "react";
 import { SessionContext } from "../../../..";
-import ModalVoucher from "../../../Modal/ModalVoucher/ModalVoucher"
 import SpinnerWhite from "../../../../utils/SpinnerWhite/SpinnerWhite";
 import { Alert, AlertTitle } from "@mui/material";
-import { SessionContext } from "../../..";
 
 const sxPending = {
   borderRadius: '12px',
