@@ -5,7 +5,6 @@ const {
   Ticket,
   Category,
   Address,
-  BankAccount,
 } = require("../db");
 require("dotenv").config();
 const moment = require("moment");
@@ -14,7 +13,6 @@ const nodemailer = require('nodemailer');
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const approvalTimeLimit = 20;
-const {Op} = require('sequelize')
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -56,28 +54,9 @@ const cleanTransactions = async (IdEvent) => {
         },
       }
     );
-
-    //puede ser aca el envio de mail a las personas que se les cancelo la reserva
-    //si falta algun dato modificar en donde se invoca esta funcion (otros controllers creo, no se si se invoca
-    //sola por cuestiones de tiempo/moment()) y pasarle por parametros el resto de los datos faltantes
-
     updateEventLowStock(IdEvent.id)
-
   }
 };
-
-const clearAllTransactions = async () => {
-  await Transaction.update({
-    status: 'EXPIRED'
-  },{
-    where: {
-      expiration_date: {
-        [Op.lte]: Date.now()
-      },
-      status: 'PENDING'
-    }
-  })
-}
 
 const updateEventLowStock = async (eventId) => {
   let percentageThreshold = 15
@@ -97,26 +76,15 @@ const createTransactions = async (req, res) => {
     const { eventId, tickets } = req.body;
 
     const event = await Event.findByPk(eventId, {
-      include: [
-        {
-          model: Transaction,
-          as: "transactions",
-        },
-        {
-          model: BankAccount,
-          as: "bankAccount",
-        },
-        {
-          model: User,
-          as: "organizer",
-        },
-      ],
+      include: {
+        model: Transaction,
+        as: "transactions",
+      },
     });
+
     await cleanTransactions(event);
     await event.reload();
     const user = await User.findByPk(buyerId);
-    const organizer = await User.findByPk(event.organizer.id);
-    const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
     if (event.stock_ticket < tickets.length) {
       // se verifica si hay suficiente stock de entradas
@@ -171,13 +139,6 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
-    sendBuyerNotifications(
-      user.email,
-      "reserveTickets",null,
-      null,
-      bankAccount.CBU,
-      approvalTimeLimit
-    );
     return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
@@ -188,7 +149,6 @@ const createTransactions = async (req, res) => {
 
 const getTransactionsByUserBuyer = async (req, res) => {
   try {
-    await clearAllTransactions()
     const userId = req.userId;
     const user = await User.findByPk(userId, {
       include: [
@@ -263,7 +223,7 @@ const getTransactionsByUserSeller = async (req, res) => {
             {
               model: Category,
               as: "category",
-              attributes: ["name", "modality", "image"],
+              attributes: ["name", "modality"],
             },
           ],
         },
@@ -406,10 +366,6 @@ const completeTransaction = async (req, res) => {
     const transaction = await Transaction.findByPk(transactionId, {
       include: "tickets",
     });
-    const buyer = await User.findByPk(transaction.buyerId);
-    const event = await Event.findByPk(transaction.eventId, {
-      include: { model: User, as: "organizer" },
-    });
 
     // if (transaction.status !== "PENDING") {
     //   return res.status(400).json({
@@ -436,7 +392,6 @@ const completeTransaction = async (req, res) => {
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
-      sendBuyerNotifications(buyer.email, "expiredReservation");
       return res.status(400).json({
         error:
           "Transaction has expired, status updated to EXPIRED and tickets have been returned to event",
@@ -447,7 +402,7 @@ const completeTransaction = async (req, res) => {
         transactionId,
       },
     });
-
+    const event = await Event.findByPk(transaction.eventId);
     const eventName = event.name;
     const address = await Address.findByPk(event.addressId);
     const user = await User.findByPk(transaction.buyerId)
@@ -512,14 +467,8 @@ const completeTransaction = async (req, res) => {
         console.log('Mail sent: ', info.response);
       }
     })
-    await transaction.update({ payment_proof, status: "INWAITING" });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
-    sendOrganizerNotifications(
-      event.organizer.email,
-      "newTransfer",
-      payment_proof
-    );
 
+    await transaction.update({ payment_proof, status: "INWAITING" });
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,
@@ -536,6 +485,7 @@ const ApprovePayment = async (req, res) => {
     const { isApproved } = req.body;
     const { transactionId } = req.params;
     const userId = req.userId;
+
     // if (transaction.status !== "INWAITING") {
     //   return res.status(400).json({
     //     error: "Transaction is not in waiting status",
@@ -556,7 +506,6 @@ const ApprovePayment = async (req, res) => {
         },
       ],
     });
-    const buyer = await User.findByPk(transaction.buyerId);
 
     if (transaction.event.dataValues.organizerId !== userId) {
       return res.status(401).json({
@@ -586,51 +535,10 @@ const ApprovePayment = async (req, res) => {
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
-      sendBuyerNotifications(buyer.email, "refused");
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
       });
-    }
-
-    if (status === "APPROVED") {
-      const tickets = await Ticket.findAll({
-        where: {
-          transactionId,
-        },
-      });
-      const event = await Event.findByPk(transaction.eventId);
-      const eventName = event.name;
-      const address = await Address.findByPk(event.addressId);
-      const doc = new PDFDocument({ autoFirstPage: false });
-
-      for (const t of tickets) {
-        const url = await QRCode.toDataURL(`${t.id}`, {
-          errorCorrectionLevel: "H",
-          type: "image/jpeg",
-          quality: 0.3,
-          margin: 1,
-          color: {
-            dark: "#000000",
-            light: "#FFFFFF",
-          },
-        });
-        doc.addPage();
-        doc.text(`${eventName}'s ticket`);
-        doc.image(url, { width: 150, height: 150 });
-        doc.text(`${t.id}`);
-        doc.text(`Titular: ${t.name} ${t.last_name}`);
-        doc.text(`Date: ${t.start_date}`);
-        doc.text(`Time: ${t.start_time}`);
-        doc.text(`Price: ${t.price}`);
-        doc.text(`Address: ${address}`);
-        event.cover_pic &&
-          doc.image(event.cover_pic, { width: 150, height: 150 });
-        doc.save();
-      }
-      doc.end();
-      sendBuyerNotifications(buyer.email, "accepted");
-      sendBuyerNotifications(buyer.email, "tickets",null, doc);
     }
     return res.status(200).json({
       msg: `Transaction status updated to ${status}`,
