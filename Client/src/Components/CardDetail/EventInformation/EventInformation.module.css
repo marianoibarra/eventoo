@@ -43,6 +43,11 @@
     width: min-content;
 }
 
+.iconspan_premium {
+    color: #FFD700;
+    background-color: black;
+}
+
 .iconspantext {
     display: block;
     width: min-content;
