@@ -13,11 +13,11 @@ const EventLocation = () => {
             {eventDetail && 
                 <div className={style.containerlocation}>
                     <div className={style.containericon}>
-                        <span className={style.iconspan}> <FaMapMarkedAlt size={35}/> </span> 
+                        <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}> <FaMapMarkedAlt size={30}/> </span> 
                         <span className={style.iconspantext}>Location</span> 
                     </div>
-                    <span className={style.ubicationtext}>{eventDetail.address.address_line}</span>
-                    <span className={style.ubicationtext}><b>{eventDetail.address.city}</b>{`, ${eventDetail.address.state} | ${eventDetail.address.country}`}</span>
+                    <span className={style.ubicationtext}>{`${eventDetail.address.address_line}, ${eventDetail.address.city}`}</span>
+                    <span className={style.ubicationtext}><b>{eventDetail.address.state && `${eventDetail.address.state}, `}{eventDetail.address.country}</b></span>
                     <div className={style.containermap}>
                         <Map/>
                     </div>

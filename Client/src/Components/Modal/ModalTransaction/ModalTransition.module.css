@@ -1,174 +1,197 @@
-.containerBuyTickets{
+.containerDisplayNone{
     display: none;
-    position: relative
 }
 
-.container_tickets {
-    overflow: scroll;
-    margin-left: 7%;
-    margin-top: 4%;
-    height: 450px;
+.containerBuyTickets{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.topWrapper {
+    width: 100%;
+    display: flex;
+    height: calc(100% - 72px);
+    flex-grow: 1;
+}
+
+.bottomWrapper {
+    width: 100%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formWrapper {
+    width: 60%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.detailWrapper {
+    display: flex;
+    height: 100%;
+    width: 40%;
+    flex-direction: column;
+}
+
+.imgWrapper {
+    width: 100%;
+    height: 220px;
+}
+
+.detailEvent_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+.formWrapper header{
+    width: 100%;
+    height: 100px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.formWrapper main {
+    height: calc(100% - 100px);   
+    overflow-y: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 20px;
+    flex-grow: 1;
+    padding: 4px 0 16px;
+
 }
 
 
 .container_dataTicket {
-    /* background-color: cornflowerblue; */
+    width: 100%;
+    padding: 0 15%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 150px;
-    width: 40%;
-    /* margin: 0 auto; */
-    /* margin-left: 2%; */
-    margin-top: 1%;
 }
 
 .dataTicket_title {
+    width: 100%;
     font-size: 26px;
+    text-align: center;
 }
 
 .dataTicket_subTitle {
-    margin: 0;
-    margin-right: 0%;
+    text-align: center;
     font-weight: 500;
     font-size: 20px;
     width: 100%;
 }
 
 .dataTicket_user {
-    display: flex;
-    margin-top: 0.4%;
+    width: 100%;
+    text-align: center;
+    margin-top: 4px;
     font-size: 12px;
     font-weight: 400;
     letter-spacing: 2px;
 }
 
-.dataTicket_user>p {
+.dataTicket_user>span {
     color: var(--primary-color);
     margin-left: 0.5%;
 }
 
-.input_name {
-    height: 40px;
-    margin-right: 51.2%;
-    padding-left: 10px;
-    margin-top: 2.1%;
-    border-radius: 4px;
-    width: 190px;
-    background-color: var(--ligth-background-color);
-    border: 1px solid #b4b4b4;
-}
-
-.input_lastName {
-    padding-left: 10px;
-    height: 40px;
-    margin-left: 52%;
-    margin-top: -9.8%;
-    border-radius: 4px;
-    width: 190px;
-    background-color: var(--ligth-background-color);
-    border: 1px solid #b4b4b4;
-}
-
-.input_email {
-    /* position: absolute; */
-    width: 400px;
-    background-color: var(--ligth-background-color);
-    height: 40px;
-    margin-top: 3.5%;
-    border-radius: 4px;
-    padding-left: 10px;
-    border: 1px solid #b4b4b4;
-}
-.modify{
-position: relative;
-    z-index: 9999;
-    top: 60px;
+.firstRow {
+    gap: 10px;
+    margin-bottom: 10px;
     display: flex;
     width: 100%;
+    justify-content: space-between;
 }
+
+.input_name,
+.input_lastName,
+.input_email {
+    padding-left: 4px;
+    height: 40px;
+    margin: 0;
+    border-radius: 4px;
+    width: 100%;
+    background-color: var(--ligth-background-color);
+    border: 1px solid #b4b4b4;
+}
+
 
 .modify>button {
     font-size: 19px;
 }
 
-.container_detailEvent {
-    margin-left: 26.1%;
-    margin-top: -28.3%;;
-    position: absolute;
+.btnPedido{
     display: flex;
-    justify-content: end;
-    width: 600px;
-    height: 79.6%;
-    border-radius: 0 22px 22px 0;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    font-size: 1.3vw;
+    font-weight: 500;
+    border: none;
+    color: var(--white-text);
+    cursor: pointer;
+    margin: 0 auto;
+    height: 50px;
+    background-size: 300% 100%;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
 }
-
-.detailEvent_img {
-    height: 35%;
-    width: 70%;
-    /* margin-top: 0%; */
-    margin-left: -6.5%;
-    border-radius: 0 22px 0 0;
-}
+ 
 
 .detail {
-position: relative;
-    left: 62%;
-    bottom: 32%;
     display: flex;
+    width: 100%;
     flex-direction: column;
-    width: 38%;
     gap: 22px;
+    padding: 5%;
 }
 
 .detailEvent_resume {
-    font-size: 14px;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-weight: 500;
 }
 
 .detailEvent_tickets {
-}
-
-.detailEvent_subTotal {
-    position: relative;
-    bottom: 24%;
-    left: 84%;
-    font-weight: 700;
+    width: 100%;
+    display: flex;
+    font-size: 1.1rem;
+    justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: #0002 1px solid;
 }
 
 .detailEvent_total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.45rem;
+    font-weight: 500;
 }
 
-.detailEvent_price {
-    position: absolute;
-    top: 70%;
-    left: 75%;
-    font-weight: 700;
-    font-size: 30px;
-
-}
-
-.detailBankAccount{
-display: flex;
+.detail span::before {
+    content: "$";
     position: relative;
-    bottom: 84px;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    gap: 6px;
-    background-color: var(--primary-color);
-    color: var(--white-text);
-    margin: 0 auto;
-    padding: 1% 0;
+    bottom: 5%;
+    right: 5%;
+    font-size: 65%;
 }
 
-.detailBankAccount_CBU_name{
-    font-weight: 300;
-    font-size: 18px;
-}
 
-.container_voucer{
-    width: 100%;
-    height: 100%;
-   
-}

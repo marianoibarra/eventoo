@@ -1,16 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
-// const urlLocal = `http://localhost:3001/home/events/${id}`
 export const axiosModeEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEventDetail",
   async (id, { rejectWithValue }) => {
     try {
-      if(id){
-        const res = await API.get(`/home/events/${id}`);
-        return res.data;
-      }
-      else return {};
+      const res = await API.get(`/home/events/${id}`);
+      return res.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -22,11 +18,11 @@ export const axiosModeEventDetail = createAsyncThunk(
 
 export const axiosModeEditEventDetail = createAsyncThunk(
   "eventDetail/axiosModeEditEventDetail",
-  async ({id, body}, { rejectWithValue }) => {
+  async ({ id, editedEvent }, { rejectWithValue }) => {
     try {
-      const res = await API.put(`/event/${id}`, body);
-      console.log('data', res.data);
-      return res.data;
+      const res = await API.put(`/event/${id}`, editedEvent);
+      console.log(res.data)
+       return res.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -36,22 +32,67 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   }
 );
 
+
+export const axiosGetEventPrivate = createAsyncThunk(
+  'eventDetail/axiosGetEventPrivate',
+  async (objPrivate, { rejectWithValue }) => {
+    try {
+      // const res = await API.get(`/event/checkPrivate`, objPrivate)
+      const res = await API.post(`/event/checkPrivate`, objPrivate)
+      console.log(res.data)
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
+const initialState = {
+  eventDetail: {},
+  eventEdition: {
+    organizer: false,
+    modeEdit: false,
+    editedEvent: {
+      name: "",
+      description: "",
+      edited: false,
+    },
+    errors: {} 
+  },
+  showEvent: null,
+  loading: false,
+  error: null,
+  errorPass: null
+}
+
+
 export const eventDetailSlice = createSlice({
   name: "eventDetail",
-  initialState: {
-    eventDetail: {},
-    isPublic: null,
-    loading: false,
-    error: null,
+  initialState,
+  reducers: {
+    setOrganizer: (state, action) => {
+      state.eventEdition.organizer = action.payload;
+    },
+    setEditedEvent: (state, action) => {
+      state.eventEdition.editedEvent = action.payload;
+    },
+    setModeEdit: (state, action) => {
+      state.eventEdition.modeEdit = action.payload;
+    },
+    setErrors: (state, action) => {
+      state.eventEdition.errors = action.payload;
+    },
+    clear: () => {
+      return initialState;
+    }
   },
-  reducers: {},
   extraReducers: {
     [axiosModeEventDetail.pending]: (state) => {
       state.loading = true;
     },
     [axiosModeEventDetail.fulfilled]: (state, action) => {
       state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -64,8 +105,8 @@ export const eventDetailSlice = createSlice({
       state.loading = true;
     },
     [axiosModeEditEventDetail.fulfilled]: (state, action) => {
-      state.eventDetail = action.payload.event;
-      state.isPublic = action.payload.isPublic;
+      state.eventDetail = action.payload.data;
+      state.showEvent = action.payload.isPublic;
       state.loading = false;
       state.error = null;
     },
@@ -73,7 +114,26 @@ export const eventDetailSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
+    [axiosGetEventPrivate.pending]: (state) => {
+      state.loading = true;
+      state.errorPass = null
+    },
+    [axiosGetEventPrivate.fulfilled]: (state, action) => {
+      state.eventDetail = action.payload;
+      state.showEvent = true;
+      state.loading = false;
+      state.errorPass = null;
+    },
+    [axiosGetEventPrivate.rejected]: (state, action) => {
+      state.loading = false;
+      state.showEvent = false;
+      state.errorPass = action.error;
+    },
   },
+
+
 });
 
+
+export const { clear, setOrganizer, setEditedEvent, setModeEdit, setErrors } = eventDetailSlice.actions;
 export default eventDetailSlice.reducer;

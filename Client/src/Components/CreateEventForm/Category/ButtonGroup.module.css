@@ -24,7 +24,8 @@
 }
   
 .groupcont {
-    margin: 12px 0 24px;
+    margin: 20px 0 30px;
     display: flex;
     gap: 16px;
+    justify-content: center;
 }

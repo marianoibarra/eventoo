@@ -1,21 +1,31 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Menu from "./menu/Menu";
-import { FaLanguage } from "react-icons/fa";
 import Styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { BiChevronDown } from "react-icons/bi";
+import LocationFilter from "./LocationFilter/LocationFilter";
+import Notifications from "./Notifications/Notifications";
+import { useSelector } from "react-redux";
+import { MdArrowBackIos } from 'react-icons/md' 
+import { transform } from "framer-motion";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
+  let { pathname } = useLocation();
+
+  console.log(pathname)
+
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
   }
+  
+  
   useEffect(()=> {
     window.addEventListener('scroll', handleScroll);
   }, [scrollHeight])
+
+  const { isLogged } = useSelector(state => state.user)
 
 
   return (
@@ -25,21 +35,19 @@ const Navbar = () => {
           <Link to="/">
             {" "}
             <span className={Styles.Titulo}>
+              <MdArrowBackIos size={20} color={pathname === '/' ? 'transparent' : 'white'} />
               Even<span className={Styles.bold}>too</span>
             </span>
           </Link>
-          <div className={Styles.location}>
-            <HiOutlineLocationMarker color="#fffa" size={20}/>
-            Buenos Aires
-            <BiChevronDown color="#fffa" size={18}/>
+          {pathname === '/' && <LocationFilter />}
           </div>
-        </div>
-
         <div className={Styles.searchbarOpen}>
-          <SearchBar />
+          {pathname === '/' && <SearchBar />}
         </div>
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
+            <div className={Styles.divisor}></div>
+            { isLogged && <Notifications /> }
             <Menu />
         </div>
       </nav>

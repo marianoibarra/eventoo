@@ -3,13 +3,24 @@
   --primary-color: #007F80;
   --accent-color: #005D5E;
   --secondary-color: #BC4001;
-  
-  --ligth-background-color: rgb(247, 248, 249);
+  --ligth-background-color: #F5FaF5;
+  --bg-elevation: #fff;
   --white-text: #FDF7F4;
-
   --dark-background-color: #121318;
-  --dark-text: #121318;
+  --dark-text: #333;
+  --border-color: #0003;
+}
 
+[data-theme='dark'] {
+  --primary-color: #007F80;
+  --accent-color: #005D5E;
+  --secondary-color: #BC4001;
+  --ligth-background-color: #121212;
+  --bg-elevation: #292929;
+  --white-text: #FDF7F4;
+  --dark-background-color: #121318;
+  --dark-text: #e2e2e2;
+  --border-color: #fff3;
 }
 
 * {
@@ -28,17 +39,16 @@
   padding: 0;
 }
 
+#App {
+  background-color: var(--ligth-background-color);
+}
 
 body {
   font-family: 'Roboto', sans-serif;
   color: var(--dark-text);
   overflow-x: hidden;
-  padding-top: 60px;
-}
-html{
-  min-height: 100%;
-  position: relative;
-  background-color: var(  --ligth-background-color);
+  padding-top: 54px;
+  overflow-y: overlay;
 }
 
 footer{
@@ -104,7 +114,6 @@ a:hover {
 html {
   min-height: 100%;
   position: relative;
-  background-color: var(--ligth-background-color);
 }
 
 footer {
@@ -141,4 +150,52 @@ footer {
   text-align: center;
   margin-top: 10px;
   font-size: 1vw;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent
+}
+
+*::-webkit-scrollbar-thumb {
+  opacity: 0;
+  background-color: #0003;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  opacity: 0;
+  background-color: #0006;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  opacity: 0;
+  background-color: #0008;
+  border-radius: 20px;
+}
+
+@media screen and (max-width: 605px) {
+
+  *::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+
+    border: 3px solid var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    border: 3px solid var(--color-background);
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    border: 2px solid var(--color-background);
+  }
+  
+
 }

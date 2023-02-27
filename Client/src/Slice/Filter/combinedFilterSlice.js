@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../../App";
 
-//https://api.eventoo.com.ar/home/events?&modality=Virtual&category=Talks&inWeekend=true&
-
 export const axiosCombinedFilter = createAsyncThunk(
   'filter/axiosCombinedFilter',
   async (resultSuperQuery) => {

@@ -1,16 +1,21 @@
 .background {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
-    background-color: #007F8040;
-    width: 100vw;
-    height: 13vh;
+    min-width: 70%;
+    max-width: 100%;
+    width: 75%;
+    height: max-content;
+    margin-top: 50px;
+    margin-left: 85px;
+    margin-bottom: 50px;
 }
 
 .containercategory {
     border-radius: 12px;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     width: max-content;
+    margin-right: 50px;
 }
 
 .containercategory span {
@@ -24,18 +29,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: 50px;
 }
 
 .iconspan {
-    color: var(--primary-color);
-    margin-top: 5px;
+    color: var(--secondary-color);
+    background-color: #cccccc40;
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 2px;
+    border-radius: 50%;
     width: min-content;
+}
+
+.iconspan_premium {
+    color: #FFD700;
+    background-color: black;
 }
 
 .iconspantext {
     display: block;
     width: min-content;
-    color: var(--primary-color);
-    font-size: 1.4vw;
+    font-size: 1.1vw;
+    font-weight: 400;
     margin-left: 1vw;
 }

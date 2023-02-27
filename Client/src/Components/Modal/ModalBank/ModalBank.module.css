@@ -27,7 +27,6 @@
 .butcreate{
     width: 120px;
     height: 42px;
-    /* letter-spacing: 0.5px; */
     color: var(--primary-color);
     font-size: 1rem;
     border: 1.5px solid var(--primary-color);
@@ -76,4 +75,28 @@
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
     box-shadow: 0 3px 5px 0 rgb(0 0 0 / 65%);
+}
+
+.or {
+    width: 108px;
+    border-bottom: solid 1px #aaa;
+    position: relative;
+    bottom: 0.4rem;
+    margin: 0 6px 0 6px;
+}
+.or2 {
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    font-size: 0.85rem;
+    color: #999;
+    font-weight: 500;
+}
+.or3 {
+    background-position-x: 5px;
+}
+
+.cbu{
+    display: flex;
+    align-items: baseline;
 }

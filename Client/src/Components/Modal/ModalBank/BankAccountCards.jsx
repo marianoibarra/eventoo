@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import style from "./BankAccountCards.module.css";
 
 const BankAccountCards = ({ buttons, setInput, input }) => {
-  
+
   const [clickedId, setClickedId] = useState(null);
 
   const handleClick = (e, id) => {
@@ -11,14 +11,13 @@ const BankAccountCards = ({ buttons, setInput, input }) => {
       ...input,
       bankAccount: buttons[id].id
     });
-    console.log(input)
   };
 
   return (
     <div className={style.groupcont}>
       {buttons && Array.isArray(buttons) && buttons.length > 0 && buttons.map((buttonLabel, i) => (
         <div
-            type="button"
+          type="button"
           key={i}
           name={buttonLabel}
           onClick={(e) => handleClick(e, i)}

@@ -5,31 +5,68 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { clearState, createEvent, selectEventForm } from '../../Slice/CreateEvent/CreateEvent'
+import { clear } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import UploadImage from './UploadImage/UploadImage';
-import ModalBank from '../Modal/ModalBank/ModalBank';
 import { getBankAccounts } from '../../Slice/BankAcount/BankAcount';
 import ModalFormEvent from '../Modal/ModalFormEvent/ModalFormEvent';
-import { SessionContext } from '../..';
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import CheckOut from '../Checkout card/CheckoutCard';
+import PackSelection from './PackSelection/PackSelection';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import AlertTitle from '@mui/material/AlertTitle';
 
 function Form() {
   const dispatch = useDispatch();
-  const event = useSelector(state => state.event);
+  const { event, preference_id } = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
-  const { setShowSessionModal } = useContext(SessionContext);
+  const MP_PUBLIC_KEY = process.env.REACT_APP_MP_PUBLIC_KEY
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     isLogged && dispatch(getBankAccounts());
   }, []);
+
+  function addCheckout() {
+    const mp = new window.MercadoPago(MP_PUBLIC_KEY, {
+      locale: 'es-AR'
+    });
+  
+    mp.checkout({
+      preference: {
+        id: preference_id,
+      },
+      autoOpen: true,
+      theme: {
+        elementsColor: '#007F80'
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (preference_id) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://sdk.mercadopago.com/js/v2';
+      script.addEventListener('load', addCheckout);
+      document.body.appendChild(script);
+    } else if(preference_id === false) {
+      navigate('/Event/' + event.id + '?checkout=true')
+    }
+
+    return () => {
+      dispatch(clear())
+    }
+
+  }, [preference_id]);
 
 
   const initialState = {
@@ -38,7 +75,7 @@ function Form() {
     advertisingTime_start: null,
     age_range: 'ALL PUBLIC',
     bankAccount: '',
-    category: null,
+    category: '',
     city: null,
     country: null,
     cover_pic: null,
@@ -47,21 +84,25 @@ function Form() {
     end_date: '',
     end_time: '',
     guests_capacity: "",
-    modality: '',
+    modality: 'Presential',
     isPaid: true,
-    isPremium: null,
+    isPremium: false,
     isPublic: true,
+    items: null,
+    large_description:'',
     name: '',
     parking: null,
     pet_friendly: null,
     placeName: null,
-    price: null,
+    price: '',
     smoking_zone: null,
     start_date: '',
     start_time: '',
     state: null,
+    typePack:'',
     virtualURL: '',
     zip_code: null,
+    privateEvent_password: '',
   }
 
 
@@ -93,18 +134,19 @@ function Form() {
 
     if (!input.start_date) { errors.start_date = 'Start date is required' }
     if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
-    if (!input.end_date) {
-      errors.end_date = 'End date is required'
-    } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
+    // if (!input.end_date) {
+    //   errors.end_date = 'End date is required'
+    // } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
     if (!input.start_time) { errors.start_time = 'Start time is required' }
-    if (!input.end_time) { errors.end_time = 'End date is required' }
-    if (input.start_date === input.end_date) {
-      const start = new Date(`${input.start_date} ${input.start_time}`);
-      const end = new Date(`${input.end_date} ${input.end_time}`);
-      if (start >= end) {
-        errors.end_time = 'End time can not be before the start time';
-      }
-    }
+    if (!input.end_time) { errors.end_time = 'End date is required'
+  } else if (input.start_time >= input.end_time) {errors.end_time = 'End time can not be before the start time'}
+    // if (input.start_date === input.end_date) {
+    //   const start = new Date(`${input.start_date} ${input.start_time}`);
+    //   const end = new Date(`${input.end_date} ${input.end_time}`);
+    //   if (start >= end) {
+    //     errors.end_time = 'End time can not be before the start time';
+    //   }
+    // }
     const num = parseInt(input.guests_capacity)
     if (!input.guests_capacity) {
       errors.guests_capacity = 'Capacity is required'
@@ -116,24 +158,35 @@ function Form() {
       errors.price = 'Enter a valid number';
     }
 
+    if (input.isPublic === false && input.privateEvent_password.length === 0) {
+      errors.privateEvent_password = "Password is required";
+    } else if ((input.isPublic === false) && input.privateEvent_password.length < 6) {
+      errors.privateEvent_password = "Password must be at least 6 characters length";
+    }
+
     console.log(errors)
     return errors;
   }
 
   const [confirm, setConfirm] = useState(null)
+  const [query] = useSearchParams()
 
   useEffect(() => {
     setErrors(validate(input));
-    console.log(input)
     if (confirm !== null) {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());
     }
+    console.log(input);
   }, [input]);
 
   useEffect(() => {
     if (stgData && stgData.name !== null & stgData.name.length > 0) {
-      setShowModal(true)
+      if(query.get('checkout_failed') === 'true' || query.get('checkout_failed') === true ) { 
+        setConfirm(true)
+      } else {
+        setShowModal(true)
+      }
     } else {
       setConfirm(false)
     }
@@ -147,39 +200,32 @@ function Form() {
       localStorage.removeItem("formEvent");
       localStorage.removeItem("lastTime");
     }
-  }, [confirm])
+  }, [confirm]);
 
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (isLogged) {
-      dispatch(createEvent(input))
-      alert("Event created!")
-    } else {
-      alert('Please Log in');
-      setShowSessionModal('login');
-    };
-  };
 
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
+        {event.error ?
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
+          </Stack> :
+          event.create ? <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="success">Event Created succesfully.</Alert>
+            <Alert severity="success">
+              <AlertTitle>Success</AlertTitle>
+              This is a success alert — <strong>check it out!</strong>
+            </Alert>
+          </Stack> : undefined}
       {/* <Lateral/> */}
-
-      <form className={style.form} onSubmit={e => handleSubmit(e)}>
-        <h1 className={style.title}>EVENT INFORMATION</h1>
-        {input.cover_pic !== null?
-          <div className={style.containerimg}>
-          <img className={style.img} src={input.cover_pic} alt='cover_pic' /> 
-          </div>
-         : <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div>
-        }
-
+      <div className={style.form} >
+        {/* <h1 className={style.title}>EVENT INFORMATION</h1>
+        <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}
         <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
-        {/* <div className={style.split}></div>
-          <MoreInfo/> */}
+        <MoreInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <h1 className={style.title}>LOCATION AND CATEGORY</h1>
         <Category input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} />
@@ -187,14 +233,10 @@ function Form() {
         <DateTime input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
         <div className={style.split}></div>
         <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
-        {event.error ? <p className={style.errorMessage}>Can't create event</p> :
-          event.create ? <p className={style.sendMessage}>Event created successfully</p> : undefined}
-        {/* <button type='button' className={style.btnprimario} onClick={() => setShowModal(!showModal)}>Bank Account</button> */}
-        <div className={style.footerForm}>
-          {/* <button type='button' >Save changes</button> */}
-          <button type='submit' className={style.btnprimario} disabled={Object.keys(errors).length !== 0} >Create</button>
-        </div>
-      </form>
+        <div className={style.split}></div>
+        <PackSelection input={input} setInput={setInput} />
+      </div>
+      <CheckOut errors={errors} isLogged={isLogged} input={input} />
     </div>
   )
 };

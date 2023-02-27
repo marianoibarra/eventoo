@@ -1,0 +1,346 @@
+.containerOrder {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.containerOrderNoVisible {
+    display: none;
+}
+
+
+.containerDataBankAccount {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.containerDataBankAccount header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 30%;
+    margin-bottom: 28px;
+    justify-content: center;
+    background-color: #3cb87c;
+    align-items: center;
+}
+
+.containerDataBankAccount header svg {
+    color: #fffe
+}
+
+.containerDataBankAccount h2 {
+    text-align: center;
+}
+
+.cancelBtn {
+    background: none;
+    border: none;
+    outline: none;
+    width: 200px;
+    height: 50px;
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: #ff4235;
+    cursor: pointer;
+}
+
+.containerDataBankAccount header h2>p {
+    text-transform: uppercase;
+    margin-left: 2%;
+}
+
+
+.iconspan {
+    color: var(--primary-color);
+    width: min-content;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.textOrder {
+    display: block;
+    text-align: center;
+}
+
+.textOrder>p {
+    display: flex;
+    background: #0000000a;
+    width: 80%;
+    padding: 15px;
+    font-size: 90%;
+    font-weight: 400;
+    border-radius: 5px;
+}
+
+
+.detailBankAccount {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    gap: 6px;
+    color: #333;
+    padding: 24px 0;
+    border: 2px #0008 dashed;
+    border-radius: 8px;
+}
+
+.detailBankAccountCBU,
+.detailBankAccountName {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.detailWrapper {
+    display: flex;
+    height: 100%;
+    width: 40%;
+    flex-direction: column;
+}
+
+.imgWrapper {
+    width: 100%;
+    height: 220px;
+    position: relative;
+}
+
+.close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    right: 10px;
+    top: 10px;
+    height: 30px;
+    width: 30px;
+    background-color: var(--white-text);
+    border-radius: 60px;
+    position: absolute;
+    opacity: .6;
+    transition: .3s all ease;
+}
+
+.close:hover {
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 10px;
+    top: 10px;
+    height: 40px;
+    width: 40px;
+    color: var(--white-text);
+    background-color: #fdf7f463;
+    border-radius: 60px;
+    position: absolute;
+    opacity: 1;
+    transition: .3s all ease;
+}
+
+
+.detailEvent_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.detail {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 22px;
+    padding: 5%;
+}
+
+.detailEvent_resume {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.detailEvent_tickets {
+    width: 100%;
+    display: flex;
+    font-size: 1.1rem;
+    justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: #0002 1px solid;
+}
+
+.detailEvent_total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.detail span::before {
+    content: "$";
+    position: relative;
+    bottom: 5%;
+    right: 5%;
+    font-size: 65%;
+}
+
+.container_infoTickets {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 5%;
+    gap: 40px;
+}
+
+.eventName,
+.eventLocation,
+.eventDateTime,
+.eventMsg {
+    font-size: 100%;
+    font-weight: 400;
+}
+
+.eventName>p {
+    font-size: 200%;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.eventMsg {
+    display: flex;
+    flex-direction: column;
+    background: #0000000a;
+    width: 100%;
+    gap: 10px;
+    padding: 15px;
+    font-size: 90%;
+    font-weight: 400;
+    border-radius: 5px;
+}
+
+.eventLocation>p,
+.eventDateTime>p {
+    font-size: 100%;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.eventDateTimeAndLocation {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.checkBoxMsg {
+    display: flex;
+    align-items: end;
+}
+
+.confirmeMsg {
+    font-weight: 500;
+    color: var(--accent-color);
+}
+
+.btnVoucher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    font-size: 1.3vw;
+    font-weight: 500;
+    border: none;
+    color: var(--white-text);
+    cursor: pointer;
+    margin: 0 auto;
+    height: 50px;
+    background-size: 300% 100%;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+}
+
+.bottomWrapper {
+    padding: 24px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.bottomWrapper button {
+    margin: 0 !important;
+}
+
+.containerCancelNoVisible {
+    display: none;
+}
+
+.containerCancel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+}
+
+.containerCancel h2 {
+    font-family: 'Lato';
+    font-size: 2.2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.containerBtn {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.cancelMsg {
+    display: block;
+    font-family: 'Lato';
+    font-size: 1.2rem;
+}
+
+.modifyGoOut{
+    background-image: none;
+    background-color: #ccc;
+    color: #333;
+}
+
+.modifyStay  {
+    background-image: none;
+    background-color: #ff4235;
+    color: white;
+    width: 200px;
+}
+
+.modifyGoOut, .modifyStay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    height: 48px;
+    padding: 0 16px 3px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: 'Lato';
+}

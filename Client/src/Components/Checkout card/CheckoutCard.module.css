@@ -1,0 +1,47 @@
+.container{
+    position: absolute;
+    height: 95%;
+    z-index: 290;
+    width: 17vw;
+    right: 0;
+  }
+  
+.card{
+    position: sticky;
+    z-index: 300;
+    top: 95px;
+    left: 0;
+    width: 95%;
+    height: max-content;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(151, 152, 152, 1);
+    border: solid 1px var(--primary-color);
+    border-radius: 12px;
+}
+
+.details{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 240px;
+    width: 90%;
+    flex-direction: column;
+}
+
+.typeof{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.containerButton{
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

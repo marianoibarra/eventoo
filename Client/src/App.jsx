@@ -4,7 +4,6 @@ import axios from "axios";
 import { BrowserRouter } from 'react-router-dom';
 //pages
 import CreateEvent from "./Pages/CreateEvent";
-import Landing from "./Pages/Landing";
 import Setting from "./Pages/Setting";
 import FAQ from "./Pages/FAQ";
 import AboutUs from "./Pages/AboutUs";
@@ -17,22 +16,22 @@ import CreateUser from "./Pages/CreateUser";
 import Login from "./Pages/Login";
 import UserEvent from "./Pages/UserEvents";
 import ForgotPassword from "./Pages/ForgotPassword";
+import NewReview from "./Pages/NewReview";
 
 //libraries
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from "react-redux";
 import RecoverPass from "./Pages/RecoverPass";
-import { fetchLocation } from "./Slice/Location/LocationSlice";
-import { getLocationFromIP } from "./Slice/Location/locationIpSlice";
 import SessionModal from "./Components/Modal/ModalSession/ModalSessionContainer";
 import { SessionContext } from ".";
 import { getUserData, googleLogin} from "./Slice/User/UserSlice";
 // import ModalVoucher from "./Components/ModalVoucher/ModalVoucher";
 import Cart from "./Pages/UserEvents";
 import { getBankAccounts } from "./Slice/BankAcount/BankAcount";
-import NewHome from "./Pages/NewHome";
 import Admin from "./Pages/Admin";
+import { getFavorites } from "./Slice/Favorites/FavoritesSlice";
+import { getEventsManagement } from "./Slice/eventsManagement/eventsManagementSlice";
 
 export const API = axios.create({
   baseURL: 'https://api.eventoo.com.ar',
@@ -52,37 +51,20 @@ function App() {
     dispatch(googleLogin({credential, setShowSessionModal }))
   };
 
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      API.defaults.headers.common["authorization"] = "Bearer " + token;
       dispatch(getUserData());
+      dispatch(getEventsManagement());
+      dispatch(getFavorites());
       dispatch(getBankAccounts());
     }
   }, []);
 
+
+
   const { isLogged, roleAdmin } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const positions = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        dispatch(fetchLocation(positions));
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getLocationFromIP());
-  }, [dispatch]);
-
-
 
   return (
 
@@ -101,6 +83,7 @@ function App() {
         <Route path="/create-user" element={isLogged ? <Navigate to='/'/> : <CreateUser />}></Route>
         <Route path="/login" element={isLogged ? <Navigate to='/'/> : <Login />}></Route>
         <Route path="/event/:id" element={<Event />}></Route>
+        <Route path="/new-review/:id" element={<NewReview />} />
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/user-event" element={!isLogged ? <Navigate to='/' /> :<UserEvent />}></Route>
         {/* <Route path="/modal-voucher/:id" element={<ModalVoucher />}></Route> */}
@@ -115,3 +98,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API } from '../../App';
+import { getBankAccounts } from '../BankAcount/BankAcount';
+import { getEventsManagement } from '../eventsManagement/eventsManagementSlice';
+import { getFavorites } from '../Favorites/FavoritesSlice';
 
 const initialState = {
   isLogged: false,
@@ -23,6 +26,19 @@ const initialState = {
     zip_code: null,
   },
 };
+
+function getLocation(address) {
+  if(address) {
+    const inputValue = `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`
+    localStorage.setItem('location_inputValue', inputValue)
+    const googleServices = new window.google.maps.places.AutocompleteService();
+    return new Promise((resolve, reject) => {
+      googleServices.getPlacePredictions({input: inputValue, type: ['Address']}, (res) => {
+        resolve(res[0]);
+      });
+    });
+  }
+}
 
 export const register = createAsyncThunk(
   "user/register",
@@ -48,15 +64,20 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "user/login",
-  async ({ input, setShowSessionModal }, { rejectWithValue }) => {
+  async ({ input, setShowSessionModal }, { rejectWithValue, dispatch }) => {
     try {
       const response = await API.post(
         "/user/login",
         input
       );
+      const value = await getLocation(response.data.data.address)
+      localStorage.setItem('location_value', JSON.stringify(value))
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      dispatch(getFavorites());
+      dispatch(getEventsManagement());
+      dispatch(getBankAccounts());
       setShowSessionModal(null);
       return response.data;
     } catch (error) {
@@ -70,7 +91,7 @@ export const login = createAsyncThunk(
 
 export const googleLogin = createAsyncThunk(
   "user/googleLogin",
-  async ({credential, setShowSessionModal}, { rejectWithValue }) => {
+  async ({credential, setShowSessionModal}, { rejectWithValue, dispatch }) => {
     try {
       const response = await API.post(
         "/user/auth",
@@ -78,8 +99,10 @@ export const googleLogin = createAsyncThunk(
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("id", response.data.id);
-       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
-      console.log(response.data)
+      API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
+      dispatch(getFavorites());
+      dispatch(getEventsManagement());
+      dispatch(getBankAccounts());
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
       } else {
@@ -143,6 +166,8 @@ export const UserSlice = createSlice({
     logOut: (state, action) => {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
+      localStorage.removeItem("location_inputValue");
+      localStorage.removeItem("location_value");
       window.google.accounts.id.disableAutoSelect();
        API.defaults.headers.common["authorization"] = null;
       return initialState
@@ -200,7 +225,7 @@ export const UserSlice = createSlice({
     },
     [getUserData.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.errorGetUser = action.payload;
       state.data = null;
     },
     [googleLogin.pending]: (state) => {

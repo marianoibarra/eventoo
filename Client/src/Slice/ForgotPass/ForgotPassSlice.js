@@ -5,11 +5,9 @@ import { API } from '../../App'
 export const forgotPass = createAsyncThunk('auth/forgot', async (formData, { rejectWithValue }) => {
   try {
     const response = await API.post('/user/forgot-password', formData)
-    console.log(response)
     return response.data
   } catch (error) {
     if (error.response) {
-        console.log(error.response.data)
       return rejectWithValue(error.response.data)
     }
     throw error

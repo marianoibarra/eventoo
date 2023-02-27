@@ -1,39 +1,120 @@
-import React from 'react'
-import Style from './CaruselCard.module.css'
-import {Link} from 'react-router-dom'
-import moment from 'moment'
+import React, { useContext, useEffect, useRef, useState } from "react";
+import Style from "./CaruselCard.module.css";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
+import { useDispatch, useSelector } from "react-redux";
+import { switchFavorites } from "../../../../Slice/Favorites/FavoritesSlice";
+import { SessionContext } from "../../../..";
 
-const CaruselCard = ({ img, name, start_date, start_time, category, id, isPaid, price }) => {
-  
+const CaruselCard = ({
+  img,
+  name,
+  start_date,
+  start_time,
+  category,
+  id,
+  isPaid,
+  price,
+  premium
+}) => {
+
   const genDate = () => {
-    const [hour, minute] = start_time.split(':')
-    const date = new Date(start_date)
-    date.setHours(hour)
-    date.setMinutes(minute)
-    return date
+    const [hour, minute] = start_time.split(":");
+    const date = new Date(start_date);
+    date.setHours(hour);
+    date.setMinutes(minute);
+    return date;
+  };
+
+  const {isLogged} = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const date = start_time && start_date ? genDate() : null;
+  const {favorites, loading} = useSelector(state => state.favorites)
+  const { setShowSessionModal } = useContext(SessionContext)
+  const [thisLoading, setThisLoading] = useState(false)
+  const [mouseDownTime, setMouseDownTime] = useState(null);
+  const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleFav = (e) => {
+    e.stopPropagation()
+    if(isLogged) {
+      setThisLoading(true)
+      dispatch(switchFavorites(id))
+    } else {
+      setShowSessionModal('login')
+    }
   }
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setMouseDownTime(new Date().getTime());
+    setStartX(e.pageX - containerRef.current.offsetLeft);
+    setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
   
-  
-  const date = start_time && start_date ? genDate() : null
-  
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const distance = x - startX;
+    containerRef.current.scrollLeft = scrollLeft - distance;
+  };
+
+  const handleClick = () => {
+    const mouseUpTime = new Date().getTime();
+    const timeDiff = (mouseUpTime - mouseDownTime)
+    if(timeDiff < 200) {   
+      navigate(`/Event/${id}`)
+    }
+  }
+
+  useEffect(() => {
+    if(!loading) {
+      setThisLoading(false)
+    }
+  }, [loading])
+
   return (
-    <Link  to={`/Event/${id}`}>
-      <div className={Style.container_card}>
-        <div className={Style.container_details}>
+
+      <div 
+        ref={containerRef} 
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove} 
+        className={!premium ? Style.container_card : Style.container_card_premium} 
+        onClick={handleClick}>
+        <div className={Style.imgWrapper}>
           <img src={img} alt={name} />
+        </div>
+        <span className={!premium ? Style.details_category : Style.details_category_premium}>{category}</span>
+        <div className={!premium ? Style.container_details : Style.container_details_premium}>
+          <div className={`${Style.favorite} ${premium && Style.favorite_premium}`} onClick={handleFav}>
+            {
+              favorites.some(f => f === id)
+              ? <HiHeart className={Style.favEnabled} size={20} />
+              : <HiOutlineHeart size={20} />
+            }
+            {loading && thisLoading && <div class={Style.loadingRing}></div>}
+          </div>
           {name && <h2 className={Style.details_title}>{name}</h2>}
           {date && <span className={Style.details_date} >{moment(date).format('ddd, MMMM Do, h:mm')}</span>}
-          <span className={Style.details_category}>{category}</span>
-          <span className={Style.details_price}>{isPaid ? `${price}` : "FREE"}</span>
-          
+          { isPaid 
+            ? <span className={Style.details_price}>{price}</span>
+            : <span className={Style.details_free}>FREE</span>
+          }
         </div>
       </div>
-    </Link>
-  )
-}
+  );
+};
 
-
-
-export default CaruselCard
-
-
+export default CaruselCard;

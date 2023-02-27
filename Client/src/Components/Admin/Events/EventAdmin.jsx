@@ -3,39 +3,58 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changeStateEvent,
   getAllEvents,
+  setFilterEvent,
 } from "../../../Slice/Admin/AdminSlice";
-import { axiosModeEventsBuys } from "../../../Slice/EventsBuysForUser/BuysSlice";
-import Styles from "../Categories/Category.module.css";
 import EventsInfo from "./EventsInfo";
+import { sortByAscendingEvents, sortByDescendingEvents } from "../../../Slice/Admin/AdminSlice";
+import SearchBar from "../SearchBar/SearchAdmin";
 
 function EventsAdmin() {
-  const { events } = useSelector((state) => state.admin);
-
-  const [showDetails, setShowDetails] = useState(null);
+  const { events, errorEvents } = useSelector((state) => state.admin);
+  
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllEvents());
-  }, [dispatch]);
-
+    if(!events.length){
+    dispatch(getAllEvents());}
+  }, []);
   const handleChange = (e) => {
-    console.log(e)
-    dispatch(changeStateEvent(e.id));
+    console.log(e);
+    dispatch(changeStateEvent(e));
+  };
+  const handledelete = (e) => {
+    console.log(e);
+    dispatch(changeStateEvent(e));
   };
 
+const accent = (e) => {
+  dispatch(sortByAscendingEvents(e))
 
+}
+
+const desccent = (e) => {
+  dispatch(sortByDescendingEvents(e))
+
+}
+ const handleSearch = (key) => {
+    dispatch(setFilterEvent(key));
+  };
   return (
-    <div className={Styles.container}>
-      {events.length > 0 ? <EventsInfo
-      events={events}
-      handleChange={handleChange}
-      setShowDetails={setShowDetails}
-      showDetails={showDetails}
-      
-      
-      /> : (
-        <h2>Loading...</h2>
-      )}
-    </div>
+    <>
+    <SearchBar onSearch={handleSearch} />
+    {events.length > 0 ? (
+      <>
+        {errorEvents ? <h2>{errorEvents}</h2> : undefined}
+        <EventsInfo
+          events={events}
+          accent={accent}
+          desccent={desccent}
+          handleChange={handleChange}
+        />
+      </>
+    ) : (
+      <h2>Loading...</h2>
+    )}
+  </>
   );
 }
 

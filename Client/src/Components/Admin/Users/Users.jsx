@@ -4,45 +4,57 @@ import {
   changeUserRole,
   disableUser,
   getUsers,
+  setFilterUser,
+  sortByAscendingUser,
+  sortByDescendingUsers,
 } from "../../../Slice/Admin/AdminSlice";
-import { axiosModeEventsCreateForUser } from "../../../Slice/EventsCreateForUser/CreateForUserSlice";
-import EventsInfo from "../Events/EventsInfo";
-import Styles from "./User.module.css";
+import SearchBar from "../SearchBar/SearchAdmin";
 import UserInfo from "./UserInfo";
 function Users() {
-  const { users } = useSelector((state) => state.admin);
-
-  const [showDetails, setShowDetails] = useState(null);
+  const { users, errorUser } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUsers());
+    if(!users.length){
+    dispatch(getUsers());}
   }, []);
   const handleBanned = (e) => {
-    console.log(e)
-    dispatch(disableUser(e.id));
+    dispatch(disableUser(e));
     // dispatch(deleteUser(e));
   };
   const handleChangeRole = (e) => {
     console.log(e)
-    dispatch(changeUserRole(e.id));
+    dispatch(changeUserRole(e));
     // dispatch(deleteUser(e));
+  };
+
+  const handleSearch = (e) => {
+    dispatch(setFilterUser(e));
+  };
+  const accent = (e) => {
+    dispatch(sortByAscendingUser(e));
+  };
+
+  const deccent = (e) => {
+    dispatch(sortByDescendingUsers(e));
   };
 
   return (
     <>
-      <div className={Styles.container}>
-        {users.length > 0 ? (
+      <SearchBar onSearch={handleSearch} />
+      {users.length > 0 ? (
+        <>
+          {errorUser ? <h2>{errorUser}</h2> : undefined}
           <UserInfo
             users={users}
             handleChangeRole={handleChangeRole}
             handleBanned={handleBanned}
-            setShowDetails={setShowDetails}
-            showDetails={showDetails}
+            accent={accent}
+            deccent={deccent}
           />
-        ) : (
-          <h2>Loading...</h2>
-        )}
-      </div>
+        </>
+      ) : (
+        <h2>Loading...</h2>
+      )}
     </>
   );
 }

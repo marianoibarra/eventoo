@@ -1,18 +1,18 @@
 .container_carusel{
     width:  100%;
-    margin: 0 auto;
-    margin-bottom: 10%;
-    padding: 0 3%;
+    margin: 0 auto 80px;
+    padding: 0 3% 30px;
 }
 
 .container_text{
     font-size: 1.7rem;
     color: var(--dark-text);
-    border-bottom: 2px solid #0003;
+    border-bottom: 2px solid var(--border-color);
     padding: 12px 0 12px 6px;
     position: sticky;
-    top: 60px;
+    top: 54px;
     z-index: 20;
+    background-color: var(--ligth-background-color);
 }
 
 .container_resultFilter{
@@ -21,7 +21,7 @@
     margin-bottom: 24px;
     width: 100%;
     grid-auto-rows: minmax(320px, 1fr);
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 32px;
 }
 
@@ -39,7 +39,7 @@
 
 .notFoundWrapper {
     margin-top: 40px;
-    grid-column: 1 / 6;
+    grid-column: 1/-1;
     align-self: center;
     justify-self: center;
     text-align: center;
@@ -68,7 +68,7 @@
     height: 80px;
     transform: scale(100%);
     margin-top: 40px;
-    grid-column: 1 / 6;
+    grid-column: 1 / -1;
     align-self: center;
     justify-self: center;
     text-align: center;

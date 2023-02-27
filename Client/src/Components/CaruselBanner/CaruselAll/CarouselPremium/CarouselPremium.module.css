@@ -1,0 +1,15 @@
+.container_text{
+    font-size: 1.7rem;
+    color: var(--dark-text);
+    background-color: var(--ligth-background-color);
+    border-bottom: 2px solid var(--border-color);
+    padding: 12px 0 12px 6px;
+    position: sticky;
+    top: 54px;
+    z-index: 20;
+    margin-bottom: 15px;
+}
+
+.container_card {
+    margin-right: 200px;
+}

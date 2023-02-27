@@ -5,10 +5,9 @@
 }
 
 .container{
-    width: 70%;
+    width: 80%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin-bottom: 25px;
 }
 
@@ -66,6 +65,7 @@
     border-radius: 5px;
     cursor: pointer;
     background-color: transparent;
+    margin: 5px;
 }
 
 .bankAcc:hover{
@@ -82,4 +82,10 @@
 
 .accountSelected{
     margin: 15px;
+}
+
+.capacityContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -1,0 +1,102 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.user{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+}
+
+.modalReview{
+    width: 95%;
+    height: 98%;
+}
+.reviews{
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0 5px;
+    overflow: auto;
+    max-height: 70%;
+    gap: 20px;
+}
+
+.close{
+    display: flex;
+    justify-content: flex-end;
+    width: 98%;
+}
+
+.containerReview{
+    display: flex;
+    align-items: center;
+}
+
+.containerReview img {
+    object-fit: 'cover'
+}
+
+.reviewInfo{
+    width: 95%;
+    margin-right: 5px;
+}
+
+.nameDate{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+@keyframes bgIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(85%);
+    }
+    to {
+        opacity: 1;
+        transform: scale(100%);
+    }    
+}
+
+@keyframes modalDelay {
+    from {
+        opacity: 0;
+        transform: scale(85%);
+    }
+    to {
+        opacity: 0;
+        transform: scale(85%);
+    }    
+}
+
+.card{
+    width: 98%;
+    height: 98%;
+    display: flex;
+    justify-content: center;
+}
+
+.cardTitle{
+    border: solid 1px var(--primary-color);
+    border-radius: 20px;
+    width: 45%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}

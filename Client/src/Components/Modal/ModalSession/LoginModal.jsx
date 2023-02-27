@@ -46,7 +46,7 @@ const LoginModal = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
-    if(error.msg.length > 0) dispatch(clearErrors());
+    if(error.hasOwnProperty('msg') && error.msg.length > 0) dispatch(clearErrors());
   };
 
   useEffect(() => {

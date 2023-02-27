@@ -8,14 +8,17 @@ import EventsAdmin from './Events/EventAdmin';
 import { useDispatch } from 'react-redux';
 import { getAllEvents } from '../../Slice/Admin/AdminSlice';
 import { axiosModeCategories } from '../../Slice/Filter/categorieSlice';
-
+import { BsCalendar } from 'react-icons/bs';
+import { FaUserFriends } from 'react-icons/fa';
+import { MdLocalOffer } from 'react-icons/md';
+import { MdOutlineDashboard } from 'react-icons/md';
+import Grafict from './dateEventGrafic/Grafict';
 
 const useStyles = makeStyles(theme => ({
 
   root: {
     margin:'0 auto',
-    marginTop:90,
-    width: '100%',
+    width: '100vw',
     backgroundColor: `var(--ligth-background-color)`,
     color:`var(--dark-text)`,
     display: 'flex',
@@ -23,15 +26,19 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   tabs: {
-    width: '100%',
+    width: '100vw',
     marginTop: theme.spacing(2),
+
   },
   tab: {
-    width: '50%',
+    display: 'flex',
+    flexDirection: 'row'
   },
   content: {
     width: '100%',
     textAlign: 'center',
+    height: '100%',
+    border:'none'
   },
 }));
 
@@ -43,6 +50,7 @@ function TabsComponent() {
     setValue(newValue);
   };
 
+
   return (
     <div className={classes.root}>
       <Tabs
@@ -53,13 +61,14 @@ function TabsComponent() {
         textColor="primary"
         centered
       >
-        <Tab className={classes.tab} label="Events" />
-        <Tab className={classes.tab} label="Category" />
-        <Tab className={classes.tab} label="User" />
+        <Tab className={classes.tab} icon={<BsCalendar/>} label="Events" />
+       <Tab className={classes.tab} icon={<MdLocalOffer /> } label="Category" />
+       <Tab className={classes.tab} icon={<FaUserFriends /> } label="User" />
+       <Tab className={classes.tab} icon={<MdOutlineDashboard /> } label="Grafic" />
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>
-          <EventsAdmin/>
+              <EventsAdmin/>
         </div>
       )}
       {value === 1 && (
@@ -70,6 +79,12 @@ function TabsComponent() {
       {value === 2 && (
         <div className={classes.content}>
           <Users/>
+        </div>
+      )}
+      {value === 3 && (
+        <div className={classes.content}>
+          <Grafict/>
+      
         </div>
       )}
     </div>

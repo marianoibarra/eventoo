@@ -11,7 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: 54px;
   position: relative;
   margin: 0 auto;
   padding: 0 2%;
@@ -22,6 +22,8 @@
   font-weight: 300;
   font-size: 32px;
   color: white;
+  display: flex;
+  align-items: center;
 }
 
 .searchbarOpen, .searchbarClose {
@@ -36,6 +38,13 @@
   display: flex;
   align-items: center;
   gap: 24px;
+}
+
+.divisor {
+  border-right: #fff3 1px solid;
+  width: 0;
+  height: 36px;
+  margin: 0 2px 0px 4px;
 }
 
 .location {
@@ -60,19 +69,20 @@
   height: 100%;
   align-items: center;
   display: flex;
-  gap: 24px;
-  margin-bottom: 4px;
+  gap: 16px;
 }
 
 .MenuLink{
   background-color: var(--secondary-color);
-  padding: 8px 12px;
+  padding: 0 12px;
+  line-height: 40px;
+  height: 40px;
   width: auto;
   border-radius: 10px;
   color: white;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 0.9rem;
   transition: filter 300ms ease-in-out
 }
 
@@ -80,3 +90,6 @@
   filter: brightness(105%);
   transition: filter 200ms ease-in-out
 }
+
+
+
