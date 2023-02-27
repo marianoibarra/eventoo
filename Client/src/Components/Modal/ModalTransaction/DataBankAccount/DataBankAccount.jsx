@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Style from './DataBankAccount.module.css'
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-regular-svg-icons'
 import { useDispatch } from 'react-redux';
 import { cancelTransaction } from '../../../../Slice/eventsManagement/eventsManagementSlice';
+import { Spinner } from '../../Spinner/Spinner';
 
 
 
@@ -13,7 +14,7 @@ const DataBankAccount = ({ quantity }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { eventDetail } = useSelector(state => state.eventDetail);
-  const { transactionWasCreated } = useSelector(state => state.eventsManagement);
+  const { transactionWasCreated, transactionWasCancel, loading: {put: loading} } = useSelector(state => state.eventsManagement);
   const [cancel, setCancel] = useState(false)
   
   const handleCancel = () => {
@@ -28,8 +29,13 @@ const DataBankAccount = ({ quantity }) => {
     dispatch(cancelTransaction(transactionWasCreated.id))
   }
 
-  return (
+  useEffect(() => {
+    if(transactionWasCancel) {
+      navigate(0)
+    }
+  }, [transactionWasCancel])
 
+  return (
 
     <>
       <div className={cancel ? Style.containerOrderNoVisible : Style.containerOrder}>
@@ -84,7 +90,12 @@ const DataBankAccount = ({ quantity }) => {
           <div
               className={Style.modifyStay}
               onClick={handleDelete}>
-              Yes, cancel reservation
+                {
+                  loading || transactionWasCancel
+                  ? <Spinner />
+                  : 'Yes, cancel reservation'
+                }
+              
           </div>
         </div>
       </div>

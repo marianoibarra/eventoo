@@ -8,7 +8,7 @@ function Home() {
     <div>
       <Navbar/>
       <CaruselBanner />
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   )
 }

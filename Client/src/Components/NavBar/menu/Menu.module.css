@@ -30,7 +30,7 @@
 
 .menuOpen {
   position: absolute;
-  background-color: var(--ligth-background-color);
+  background-color: var(--bg-elevation);
   width: 180px;
   height: auto;
   top: 54px;
@@ -87,6 +87,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--dark-text);
 }
 
 
@@ -102,11 +103,12 @@
   font-size: 0.85rem;
   font-family: 'Lato';
   line-height: 36px;
+  color: var(--dark-text);
 }
 
 .divisor {
   height: 0;
-  border-bottom: 1px solid #0001;
+  border-bottom: 1px solid var(--border-color);
   margin: 4px 0;
 }
 

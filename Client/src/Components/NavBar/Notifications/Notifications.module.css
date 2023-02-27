@@ -29,7 +29,7 @@
 
 .notificationsOpen {
   position: absolute;
-  background-color: var(--ligth-background-color);
+  background-color: var(--bg-elevation);
   width: 360px;
   overflow: hidden;
   height: auto;
@@ -55,7 +55,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 8px 6px 8px;
-  border-color: transparent transparent white transparent;
+  border-color: transparent transparent var(--bg-elevation) transparent;
   visibility: visible;
   opacity: 1;
   transition: visibility 0s linear 0s, opacity 200ms ease-in-out, transform 200ms ease-in-out;
@@ -88,7 +88,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 8px 6px 8px;
-  border-color: transparent transparent white transparent;
+  border-color: transparent transparent var(--bg-elevation) transparent;
   visibility: hidden;
   opacity: 0;
   transform: translate(-50%, -5px);
@@ -100,6 +100,7 @@
   width: 100%;
   border-bottom: #0002 1px solid;
   height: 42px;
+  color: var(--dark-text);
   text-align: center;
   font-weight: 600;
   line-height: 40px;
@@ -119,7 +120,7 @@
   align-items: center;
   flex-direction: row;
   padding: 8px 0;
-  border-bottom: #0002 1px solid;
+  border-bottom: var(--border-color) 1px solid;
 }
 
 .imgWrapper {
@@ -151,7 +152,7 @@
   font-size: 0.85rem;
   padding: 0 12px 0 4px;
   line-height: 140%;
-  color: #333;
+  color: var(--dark-text);
 }
 
 .text > span > span {

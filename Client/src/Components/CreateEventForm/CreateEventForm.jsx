@@ -26,7 +26,6 @@ function Form() {
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
   const MP_PUBLIC_KEY = process.env.REACT_APP_MP_PUBLIC_KEY
-  console.log(MP_PUBLIC_KEY)
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 
@@ -219,7 +218,7 @@ function Form() {
               This is a success alert — <strong>check it out!</strong>
             </Alert>
           </Stack> : undefined}
-      <Lateral/>
+      {/* <Lateral/> */}
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>
         <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}

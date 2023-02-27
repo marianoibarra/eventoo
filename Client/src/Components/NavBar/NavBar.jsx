@@ -6,6 +6,8 @@ import SearchBar from "../SearchBar/SearchBar";
 import LocationFilter from "./LocationFilter/LocationFilter";
 import Notifications from "./Notifications/Notifications";
 import { useSelector } from "react-redux";
+import { MdArrowBackIos } from 'react-icons/md' 
+import { transform } from "framer-motion";
 
 const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
@@ -33,6 +35,7 @@ const Navbar = () => {
           <Link to="/">
             {" "}
             <span className={Styles.Titulo}>
+              <MdArrowBackIos size={20} color={pathname === '/' ? 'transparent' : 'white'} />
               Even<span className={Styles.bold}>too</span>
             </span>
           </Link>

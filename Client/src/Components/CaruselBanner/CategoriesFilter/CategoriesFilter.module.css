@@ -81,7 +81,7 @@
 .categoryName  {
   font-size: 0.8rem;
   font-weight: 400;
-  color: #333;
+  color: var(--dark-text);
   width: 80px;
   flex-grow: 1;
   text-align: center;
