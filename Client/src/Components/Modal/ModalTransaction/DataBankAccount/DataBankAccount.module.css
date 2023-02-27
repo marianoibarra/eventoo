@@ -326,11 +326,13 @@
     background-image: none;
     background-color: #ff4235;
     color: white;
+    width: 200px;
 }
 
 .modifyGoOut, .modifyStay {
     display: flex;
     align-items: center;
+    justify-content: center;
     min-width: 150px;
     height: 48px;
     padding: 0 16px 3px;
