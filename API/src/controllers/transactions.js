@@ -60,7 +60,7 @@ const cleanTransactions = async (IdEvent) => {
 };
 
 const clearAllTransactions = async () => {
-  const transactions = await Transaction.update({
+  await Transaction.update({
     status: 'EXPIRED'
   },{
     where: {
@@ -70,8 +70,6 @@ const clearAllTransactions = async () => {
       status: 'PENDING'
     }
   })
-  
-  console.log(transactions)
 }
 
 const updateEventLowStock = async (eventId) => {
@@ -165,6 +163,7 @@ const createTransactions = async (req, res) => {
 
 const getTransactionsByUserBuyer = async (req, res) => {
   try {
+    await clearAllTransactions()
     const userId = req.userId;
     const user = await User.findByPk(userId, {
       include: [
@@ -199,7 +198,6 @@ const getTransactionsByUserBuyer = async (req, res) => {
         },
       ],
     });
-    await clearAllTransactions()
     return res.status(200).json(user.transactions);
   } catch (error) {
     return res.status(500).json({
