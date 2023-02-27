@@ -4,8 +4,10 @@ import Style from './CaruselAll.module.css'
 import CaruselCard from './CaruselCard/CaruselCard'
 import covers from '../../../imgs/covers/';
 import { axiosCombinedFilter } from '../../../Slice/Filter/combinedFilterSlice';
+import { getPremiumEvents } from '../../../Slice/PremiumEvents/PremiumEventsSlice';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import CarouselPremium from './CarouselPremium/CarouselPremium';
 
 
 const CaruselAll = () => {
@@ -15,6 +17,7 @@ const CaruselAll = () => {
 
 
   useEffect(() => {
+    dispatch(getPremiumEvents());
     dispatch(axiosCombinedFilter());
   }, [dispatch]);
 
@@ -26,6 +29,9 @@ const CaruselAll = () => {
     <div className={Style.container_carusel}>
       
       <div className={Style.container_inPerson}>
+
+        <CarouselPremium />
+
         <div className={Style.container_text}> Events  {`(${events.length})`} </div>
         <div className={Style.container_resultFilter} >
           {
