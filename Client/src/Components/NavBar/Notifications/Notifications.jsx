@@ -1,6 +1,7 @@
 import Styles from "./Notifications.module.css";
 import React, { useState, useRef, useEffect } from "react";
 import { BiBell } from "react-icons/bi";
+import { RiZzzLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -50,24 +51,25 @@ const Notifications = () => {
   const notificationsMsg = (transaction) => {
     const msgs = {
       BUY: {
-        PENDING: `Your reservation for ${transaction.event.name} is pending, load your transfer voucher`,
-        EXPIRED: `Your reservation for ${transaction.event.name} expired for not having loaded the proof of payment`,
-        INWAITTING: `Your transfer for the ${transaction.event.name} reserve is being evaluated by the organizer`,
-        APPROVED: `Your transfer for ${transaction.event.name} was approved, your tickets were sent by email`,
-        DENIED: `Your transfer for ${transaction.event.name} was rejected`,
-        CANCELED: `You canceled your reservation to ${transaction.event.name}`,
+        PENDING: `Your reservation for <span>${transaction.event.name}</span> is pending, load your transfer voucher`,
+        EXPIRED: `Your reservation for <span>${transaction.event.name}</span> expired for not having loaded the proof of payment`,
+        INWAITING: `Your transfer for the <span>${transaction.event.name}</span> reserve is being evaluated by the organizer`,
+        APPROVED: `Your transfer for <span>${transaction.event.name}</span> was approved, your tickets were sent by email`,
+        DENIED: `Your transfer for <span>${transaction.event.name}</span> was rejected`,
+        CANCELED: `You canceled your reservation to <span>${transaction.event.name}</span>`,
       },
       SELL: {
-        PENDING: `You have a new reservation, ${transaction.buyer ? transaction.buyer.name + ' ' + transaction.buyer.last_name : ''} has 30 minutes to transfer the entry value for ${transaction.event.name}`,
-        EXPIRED: `${transaction.buyer ? transaction.buyer.name + ' ' + transaction.buyer.last_name : ''}  does not charge the voucher after 30 minutes, the reserve for ${transaction.event.name} expired`,
-        INWAITTING: `${transaction.buyer ? transaction.buyer.name + ' ' + transaction.buyer.last_name : ''}  already charge the proof of payment for ${transaction.event.name}, await your approval`,
-        CANCELED: `${transaction.buyer ? transaction.buyer.name + ' ' + transaction.buyer.last_name : ''} canceled the reserve for ${transaction.event.name}`,
+        PENDING: `You have a new reservation, ${transaction.buyer ? <span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span> : ''} has 30 minutes to transfer the entry value for <span>${transaction.event.name}</span>`,
+        EXPIRED: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''}  does not charge the voucher after 30 minutes, the reserve for <span>${transaction.event.name}</span> expired`,
+        INWAITING: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''}  already charge the proof of payment for <span>${transaction.event.name}</span>, await your approval`,
+        CANCELED: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''} canceled the reserve for <span>${transaction.event.name}</span>`,
       },
     };
     return {
-      image: '',
-      msg: msgs[transaction.type][transaction.status],
-      datetime: transaction.updatedAt
+      image: transaction.type === 'BUY' ? transaction.event.cover_pic ? transaction.event.cover_pic : transaction.event.category.image : transaction.buyer.profile_pic,
+      msg: <span dangerouslySetInnerHTML={{ __html: msgs[transaction.type][transaction.status] }} />,
+      datetime: transaction.updatedAt,
+      type: transaction.type
     }
   }
 
@@ -79,7 +81,7 @@ const Notifications = () => {
         </div>
         <div className={Styles.msgWrapper}>
           <div className={Styles.text}>{data.msg}</div>
-          <div className={Styles.date}>{moment(data.datetime).calendar()}</div>
+          <div className={Styles.date}>{moment(data.datetime).calendar() + ' - ' + data.type}</div>
         </div>
       </Link>
     )
@@ -88,10 +90,7 @@ const Notifications = () => {
 
   return (
     <div ref={notificationsRef} className={Styles.notificationsContainer}>
-      <div className={Styles.iconWrapper} onClick={handleClick}>
-        <BiBell size={24} color="#fffd" />
-        {showDot && <div className={Styles.dot} />}
-      </div>
+      
       <div
         className={
           isOpen ? Styles.notificationsOpen : Styles.notificationsClose
@@ -99,10 +98,19 @@ const Notifications = () => {
       >
         <div className={Styles.head}>Notifications</div>
         <div className={Styles.main}>{
-          notifications.map(n => 
-              <NotificationRow data={n}/>
-            )
+          notifications.length > 0
+            ? notifications.map(n => 
+                <NotificationRow data={n}/>
+              )
+            : <div className={Styles.nothing}>
+                <RiZzzLine size={80} />
+                Nothing yet
+              </div>
         }</div>
+      </div>
+      <div className={Styles.iconWrapper} onClick={handleClick}>
+        <BiBell size={24} color="#fffd" />
+        {showDot && <div className={Styles.dot} />}
       </div>
     </div>
   );

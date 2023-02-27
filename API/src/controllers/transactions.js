@@ -121,7 +121,7 @@ const createTransactions = async (req, res) => {
             {
               model: Category,
               as: "category",
-              attributes: ["name", "modality"],
+              attributes: ["name", "modality", "image"],
             },
           ],
         },
@@ -163,7 +163,7 @@ const getTransactionsByUserBuyer = async (req, res) => {
                 {
                   model: Category,
                   as: "category",
-                  attributes: ["name", "modality"],
+                  attributes: ["name", "modality", "image"],
                 },
               ],
             },

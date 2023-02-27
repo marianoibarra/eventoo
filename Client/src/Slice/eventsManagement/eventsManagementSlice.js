@@ -25,6 +25,7 @@ export const postNewTransaction = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await API.post("/transaction", data);
+      res.data.type = 'BUY'
       return res.data;
     } catch (error) {
       if (error.response) {
