@@ -25,7 +25,7 @@ const Review = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const stars = searchParams.get("stars");
-    const [activeStars, setActiveStars] = useState(stars?stars:0);
+    const [activeStars, setActiveStars] = useState(stars ? stars : 0);
     const totalStars = 5;
 
     const [comment, setComment] = useState('');
@@ -64,6 +64,7 @@ const Review = () => {
                 result: true,
                 msg: "Review submitted successfully"
             });
+            setErrors({msg: 'Review submitted'})
         } catch (error) {
             setResult({
                 result: false,

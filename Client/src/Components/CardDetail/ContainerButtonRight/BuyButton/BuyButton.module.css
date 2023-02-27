@@ -10,6 +10,10 @@
     border-radius: 12px;
 }
 
+.buycontainer_premium {
+    border: solid 1px black;
+}
+
 .container_text_and_tickets {
     display: flex;
     justify-content: space-between;
@@ -56,11 +60,18 @@
     color: white;
     height: 45%;
     width: 25%;
+    cursor: pointer;
+}
+
+.containertickets_premium button {
+    background-color: black;
+    color: #FFD700;
 }
 
 button:disabled {
     background-color: #ccc;
     color: gray;
+    cursor: auto;
 }
 
 .containertickets span {

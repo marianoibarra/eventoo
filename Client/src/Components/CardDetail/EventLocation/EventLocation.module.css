@@ -28,6 +28,11 @@
     border-radius: 50%;
 }
 
+.iconspan_premium {
+    color: #FFD700;
+    background-color: black;
+}
+
 .iconspantext {
     display: block;
     margin-left: 8px;
