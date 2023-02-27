@@ -8,7 +8,7 @@
     z-index: 1;
     background-color: var(--ligth-background-color);
 }
-
+.container_btns_favorites,
 .container_btns_modality,
 .container_btns_date{
     width: 100%;
@@ -19,6 +19,7 @@
     align-items: center;
 }
 
+.favorites,
 .modality,
 .date{
     display: flex;

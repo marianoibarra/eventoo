@@ -13,6 +13,8 @@ import CarouselPremium from './CarouselPremium/CarouselPremium';
 const CaruselAll = () => {
   const dispatch = useDispatch()
   const { events, loading } = useSelector(state => state.events)
+  const filter = useSelector(state => state.newFilter)
+  const {favorites} = useSelector(state => state.favorites)
   const [moreEvents, setMoreEvents] = useState(10)
 
 
@@ -32,13 +34,14 @@ const CaruselAll = () => {
 
         <CarouselPremium />
 
-        <div className={Style.container_text}> Events  {`(${events.length})`} </div>
+        <div className={Style.container_text}> Events  {`(${events.filter(filter.favorites ? e => favorites.some(f => f === e.id) : e => true).length})`} </div>
+
         <div className={Style.container_resultFilter} >
           {
             loading
               ?  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
               : events.length > 0
-                  ? events.slice(0, moreEvents).map(event => (
+                  ? events.slice(0, filter.favorites ? Infinity : moreEvents).filter(filter.favorites ? e => favorites.some(f => f === e.id) : e => true).map(event => (
                       <CaruselCard
                         img={event.cover_pic ? event.cover_pic : covers[event.category?.name]}
                         key={event.id}
@@ -59,7 +62,7 @@ const CaruselAll = () => {
           }
         </div>
         {
-          events.length > 0 && moreEvents < events.length && !loading && 
+          events.length > 0 && moreEvents < events.length && !loading && !filter.favorites &&
             <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
               <span>MORE</span>
             </a>
