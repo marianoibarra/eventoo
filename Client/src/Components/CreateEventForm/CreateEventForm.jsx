@@ -21,7 +21,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 function Form() {
   const dispatch = useDispatch();
-  const { event, preference_id } = useSelector(state => state.event);
+  const { event, preference_id, loading } = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
@@ -123,10 +123,12 @@ function Form() {
     }
     if (!input.category) { errors.category = 'You must select a category' }
 
+    const urlRegex =/^(ftp|http|https):\/\/(?:www\.)?[^ "]+$/;
+
     if (selectedModality === 'Virtual' && (input.virtualURL === null || input.virtualURL.length === 0)) {
       errors.virtualURL = "URL is required";
-    } else if (selectedModality === 'Virtual' && input.virtualURL.length < 10) {
-      errors.virtualURL = "URL must have at least 10 characters";
+    } else if (selectedModality === 'Virtual' && !urlRegex.test(input.virtualURL)) {
+      errors.virtualURL = "Invalid URL";
     }
     if (!input.address_line && selectedModality === 'Presential') { errors.address_line = 'Address is required' };
 
@@ -223,17 +225,17 @@ function Form() {
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>
         <div className={style.containerimg}> <h3 className={style.subtitle}>Upload your event image</h3></div> */}
-        <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+        <UploadImage input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} loading={loading} />
         <div className={style.split}></div>
-        <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
-        <MoreInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+        <BasicInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} loading={loading} />
+        <MoreInfo input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} loading={loading}/>
         <div className={style.split}></div>
         <h1 className={style.title}>LOCATION AND CATEGORY</h1>
-        <Category input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} />
+        <Category input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} selectedModality={selectedModality} setSelectedModality={setSelectedModality} loading={loading}/>
         <div className={style.split}></div>
-        <DateTime input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+        <DateTime input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} loading={loading}/>
         <div className={style.split}></div>
-        <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
+        <Tickets input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} loading={loading}/>
         <div className={style.split}></div>
         <PackSelection input={input} setInput={setInput} />
       </div>
