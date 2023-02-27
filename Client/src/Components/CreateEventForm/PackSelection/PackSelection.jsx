@@ -34,11 +34,19 @@ function PackSelection({ input, setInput }) {
         } else {
             setClickedId(i);
         }
-        if (pack.id !== 0) {
+        if (pack.id === 1) {
             setInput({
                 ...input,
                 isPremium: true,
-                items: [pack]
+                items: [pack],
+                typePack: 'CLASSIC',
+            });
+        } else if(pack.id === 2){
+            setInput({
+                ...input,
+                isPremium: true,
+                items: [pack],
+                typePack: 'PREMIUM',
             });
         } else {
             setInput({

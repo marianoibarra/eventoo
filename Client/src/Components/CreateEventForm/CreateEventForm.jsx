@@ -99,6 +99,7 @@ function Form() {
     start_date: '',
     start_time: '',
     state: null,
+    typePack:'',
     virtualURL: '',
     zip_code: null,
     privateEvent_password: '',
@@ -176,6 +177,7 @@ function Form() {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());
     }
+    console.log(input);
   }, [input]);
 
   useEffect(() => {
