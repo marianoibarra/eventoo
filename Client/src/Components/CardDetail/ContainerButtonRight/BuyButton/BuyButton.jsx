@@ -27,6 +27,7 @@ const BuyButton = () => {
   const [showModalVoucher, setShowModalVoucher] = useState(false)
   const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement);
   const user = useSelector(state => state.user);
+  const { eventDetail } = useSelector(state => state.eventDetail);
   const { isPaid, price } = useSelector(state => state.eventDetail.eventDetail);
   const [tickets, setTickets] = useState(1);
   const totalPrice = (price?.toFixed(2) * tickets).toFixed(2);
@@ -60,7 +61,7 @@ const BuyButton = () => {
       {showModalVoucher && <ModalVoucher setShowModal={setShowModalVoucher} /> }
       {console.log(eventsBuyed)}
       {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === true &&
-        <div className={style.buycontainer}>
+        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
                   <p>
@@ -68,7 +69,7 @@ const BuyButton = () => {
                   </p>
                   <p className={style.price}>{"$" + price}</p>
               </div>
-              <div className={style.containertickets}>
+              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
                   <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
                   <span><b>{tickets}</b></span>
                   <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
@@ -83,7 +84,7 @@ const BuyButton = () => {
       }
 
       {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === false &&
-        <div className={style.buycontainer}>
+        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
               <div className={style.divtext}>
                   <p>
@@ -91,7 +92,7 @@ const BuyButton = () => {
                   </p>
                   <p className={style.price}>Free</p>
               </div>
-              <div className={style.containertickets}>
+              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
                   <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
                   <span><b>{tickets}</b></span>
                   <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
