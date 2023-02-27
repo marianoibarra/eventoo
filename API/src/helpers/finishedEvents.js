@@ -43,7 +43,7 @@ const cronJob = cron.schedule("* * * * *", async () => {
         });
 
         if (!notification || !notification.notified) {
-          sendBuyerNotifications(buyer.email, "reviewEvent");
+          sendBuyerNotifications(buyer.email, "reviewEvent",event.id);
 
           if (notification) {
             notification.notified = true;

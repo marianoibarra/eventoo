@@ -145,7 +145,7 @@ const createTransactions = async (req, res) => {
     });
     sendBuyerNotifications(
       user.email,
-      "reserveTickets",
+      "reserveTickets",null,
       null,
       bankAccount.CBU,
       approvalTimeLimit
@@ -532,7 +532,7 @@ const ApprovePayment = async (req, res) => {
       }
       doc.end();
       sendBuyerNotifications(buyer.email, "accepted");
-      sendBuyerNotifications(buyer.email, "tickets", doc);
+      sendBuyerNotifications(buyer.email, "tickets",null, doc);
     }
     return res.status(200).json({
       msg: `Transaction status updated to ${status}`,
