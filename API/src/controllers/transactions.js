@@ -447,7 +447,7 @@ const completeTransaction = async (req, res) => {
         transactionId,
       },
     });
-    const event = await Event.findByPk(transaction.eventId);
+
     const eventName = event.name;
     const address = await Address.findByPk(event.addressId);
     const user = await User.findByPk(transaction.buyerId)
