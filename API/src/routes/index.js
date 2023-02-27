@@ -8,6 +8,8 @@ const reviewsMiddleware = require("./reviews");
 const transactionMiddleware = require("./transaction");
 const adminMiddleware = require("./admin");
 const paymentMPMiddleware = require("./paymentMP");
+const varMiddleware = require("./Var.js");
+
 
 router.use("/user", userMiddleware);
 router.use("/event", eventMiddleware);
@@ -18,6 +20,7 @@ router.use("/reviews", reviewsMiddleware);
 router.use("/transaction", transactionMiddleware);
 router.use("/admin", adminMiddleware);
 router.use("/mercadopago", paymentMPMiddleware);
+router.use("/var", varMiddleware);
 
 
 module.exports = router;
