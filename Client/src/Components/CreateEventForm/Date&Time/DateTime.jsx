@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
-function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
+function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
     const dispatch = useDispatch();
     const [value, setValue] = React.useState(dayjs('2023-02-17'));
 
@@ -61,6 +61,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             }}
                             onBlur={handleBlur}
                             renderInput={(params) => <TextField {...params} />}
+                            disabled={loading}
                         />
                     </div>
                 </div>
@@ -73,6 +74,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={input.start_time}
+                            disabled={loading}
                             style={showMsg.start_time && errors.start_time ? { border: 'red 1px solid' } : {}} />
                         {showMsg.start_time && (
                             <p className={style.warning}>{errors.start_time}</p>
@@ -84,6 +86,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={input.end_time}
+                        disabled={loading}
                         style={showMsg.end_time && errors.end_time ? { border: 'red 1px solid' } : {}} />
                     {showMsg.end_time && (
                         <p className={style.warning}>{errors.end_time}</p>

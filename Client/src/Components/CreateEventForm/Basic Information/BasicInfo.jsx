@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Box from "@mui/material/Box";
 
-function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
+function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, loading }) {
     const dispatch = useDispatch();
 
     const agesRange = [
@@ -60,6 +60,8 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 helperText={showMsg.name ? errors.name : ""}
                 error={showMsg.name && errors.name}
                 style={{ marginBottom: showMsg.name && errors.name ? '0px' : '20px' }}
+                disabled={loading}
+                maxLength='40'
             />
             <h2 className={style.title}>Short overview</h2>
             <p className={style.text}>Sum up in 140 characters or less why your event is unique, thrilling and worth attending.</p>
@@ -77,6 +79,8 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 helperText={showMsg.description ? errors.description : ""}
                 error={showMsg.description && errors.description}
                 style={{ marginBottom: showMsg.description && errors.description ? '0px' : '20px' }}
+                disabled={loading}
+                maxLength={140}
             />
             <h2 className={style.title}>Public target</h2>
             <p className={style.text}>Select your public target</p>
@@ -93,6 +97,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 helperText={showMsg.age_range ? errors.age_range : ""}
                 error={showMsg.age_range && errors.age_range}
                 style={{ marginBottom: showMsg.age_range && errors.age_range ? '0px' : '20px' }}
+                disabled={loading}
             >
                 {agesRange.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
