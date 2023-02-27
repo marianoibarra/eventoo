@@ -94,6 +94,9 @@
     font-weight: 400;
     cursor: pointer;
 }
+.container_organizer:hover{
+    border: solid 1px var(--primary-color);
+}
 
 /* .container_organizer_premium {
     background-color: black;

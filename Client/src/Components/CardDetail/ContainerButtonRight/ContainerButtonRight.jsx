@@ -7,6 +7,8 @@ import { BsSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import BuyButton from "./BuyButton/BuyButton";
 import UserIcon from "../../../Assets/UserProfile.png";
 import style from "./ContainerButtonRight.module.css";
+import ModalReviews from "../../Modal/ModalReviews/ModalReviews";
+import { Rating } from "@mui/material";
 
 
 function ContainerButtonRight() {
@@ -17,6 +19,7 @@ function ContainerButtonRight() {
   const [favorite, setFavorite] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
 
   function handleOnClick(event) {
     event.preventDefault();
@@ -38,7 +41,7 @@ function ContainerButtonRight() {
 
   return (
     <div className={style.background}>
-
+      {showModal && <ModalReviews setShowModal={setShowModal} />}
       <div className={style.category_and_age}>
         {eventDetail.category && 
           <div className={`${style.containercategory} ${eventDetail.typePack === 'PREMIUM' && style.containercategory_premium}`}>
@@ -70,6 +73,7 @@ function ContainerButtonRight() {
       </div>
 
       {eventDetail.organizer.name && <div className={`${style.container_organizer} ${eventDetail.typePack === 'PREMIUM' && style.container_organizer_premium}`}>
+
         <img 
           src={eventDetail.organizer.profile_pic ? eventDetail.organizer.profile_pic : UserIcon}
           className={`${style.profile_pic} ${eventDetail.typePack === 'PREMIUM' && style.profile_pic_premium}`}
@@ -78,6 +82,7 @@ function ContainerButtonRight() {
         <div className={style.organizer_text}>
           <p>Organized by</p>
           <h3>{`${eventDetail.organizer.name} ${eventDetail.organizer.last_name}`}</h3>
+          <Rating name="half-rating-read" value={eventDetail.organizer.score} precision={0.1} readOnly />
         </div>
       </div>}
 
