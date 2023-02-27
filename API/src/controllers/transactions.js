@@ -84,7 +84,6 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
-
     await cleanTransactions(event);
     await event.reload();
     const user = await User.findByPk(buyerId);
@@ -100,7 +99,7 @@ const createTransactions = async (req, res) => {
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(), //esta dando problemas
       },
       {
         include: ["tickets"],
@@ -151,8 +150,6 @@ const createTransactions = async (req, res) => {
       bankAccount.CBU,
       approvalTimeLimit
     );
-    sendOrganizerNotifications(organizer.email, "reservationReceived");
-
     return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
