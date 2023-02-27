@@ -92,9 +92,6 @@ const CardDetailPublic = () => {
         }
       }
     }
-    return() => {
-      dispatch(clear());
-    }
   }, [eventDetail, user]);
 
   return (
@@ -209,9 +206,12 @@ const CardDetail = () => {
   const { showEvent, loading, error, errorPass, eventDetail } = useSelector(
     (state) => state.eventDetail
   );
-
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));
+
+    return() => {
+      dispatch(clear());
+    }
   }, []);
 
   const handleSubmit = (e) => {

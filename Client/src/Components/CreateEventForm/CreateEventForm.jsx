@@ -26,6 +26,7 @@ function Form() {
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
   const MP_PUBLIC_KEY = process.env.REACT_APP_MP_PUBLIC_KEY
+  console.log(MP_PUBLIC_KEY)
 
   const stgData = JSON.parse(localStorage.getItem("formEvent"))
 

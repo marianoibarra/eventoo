@@ -59,8 +59,8 @@ const Notifications = () => {
         CANCELED: `You canceled your reservation to <span>${transaction.event.name}</span>`,
       },
       SELL: {
-        PENDING: `You have a new reservation, ${transaction.buyer ? <span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span> : ''} has 30 minutes to transfer the entry value for <span>${transaction.event.name}</span>`,
-        EXPIRED: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''}  does not charge the voucher after 30 minutes, the reserve for <span>${transaction.event.name}</span> expired`,
+        PENDING: `You have a new reservation, ${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''} has 20 minutes to transfer the entry value for <span>${transaction.event.name}</span>`,
+        EXPIRED: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''}  does not charge the voucher after 20 minutes, the reserve for <span>${transaction.event.name}</span> expired`,
         INWAITING: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''}  already charge the proof of payment for <span>${transaction.event.name}</span>, await your approval`,
         CANCELED: `${transaction.buyer ? `<span>${transaction.buyer.name + ' ' + transaction.buyer.last_name}</span>` : ''} canceled the reserve for <span>${transaction.event.name}</span>`,
       },
