@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Style from './FilterMode.module.css'
 import { MdEventSeat, MdDesktopMac, MdHistory, MdDateRange, MdDelete,MdOutlineTune } from "react-icons/md";
+import { AiFillStar } from "react-icons/ai";
 import { clearFilter, setFilter } from '../../../Slice/newFilter/newFilterSlice';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -26,6 +27,7 @@ const FilterMode = () => {
 
   const handleClick = (e) => {
     if(e.target.name === 'clear') return dispatch(clearFilter());
+    if(e.target.name === 'favorites') return dispatch(setFilter({[e.target.name]: !filter.favorites}))
     if(e.target.name === 'modal') return setShowModal(true);
     if(filter[e.target.name] === e.target.value) {
       dispatch(setFilter({[e.target.name]: null}))
@@ -33,9 +35,6 @@ const FilterMode = () => {
       dispatch(setFilter({[e.target.name]: e.target.value}))
     }
   }
-
-  
-
 
   return (
     <div className={Style.containerFilterMode}>
@@ -45,7 +44,20 @@ const FilterMode = () => {
             <MdDelete style={{pointerEvents: 'none'}} size={20} />
         </button>
       }
-      <div className={`${Style.modality} ${someActive ? Style.border : ''}`}>
+
+      <div className={`${Style.favorites} ${someActive ? Style.border : ''}`}>
+        <div className={Style.container_btns_favorites}>
+          <button
+            onClick={handleClick}
+            className={`${Style.btn} ${filter.favorites ? Style.active : ''}`}
+            name='favorites'>
+            <AiFillStar style={{pointerEvents: 'none'}} /> Favorites
+          </button>
+        </div>
+
+      </div>
+
+      <div className={`${Style.modality} ${Style.border}`}>
         <div className={Style.container_btns_modality}>
           <button
             onClick={handleClick}

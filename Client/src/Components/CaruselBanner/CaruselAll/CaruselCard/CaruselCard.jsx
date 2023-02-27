@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Style from "./CaruselCard.module.css";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -30,17 +30,25 @@ const CaruselCard = ({
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const date = start_time && start_date ? genDate() : null;
-  const {favorites} = useSelector(state => state.favorites)
+  const {favorites, loading} = useSelector(state => state.favorites)
   const { setShowSessionModal } = useContext(SessionContext)
+  const [thisLoading, setThisLoading] = useState(false)
 
   const handleFav = (e) => {
     e.stopPropagation()
     if(isLogged) {
+      setThisLoading(true)
       dispatch(switchFavorites(id))
     } else {
       setShowSessionModal('login')
     }
   }
+
+  useEffect(() => {
+    if(!loading) {
+      setThisLoading(false)
+    }
+  }, [loading])
 
   return (
 
@@ -56,6 +64,7 @@ const CaruselCard = ({
               ? <HiHeart className={Style.favEnabled} size={20} />
               : <HiOutlineHeart size={20} />
             }
+            {loading && thisLoading && <div class={Style.loadingRing}></div>}
           </div>
           {name && <h2 className={Style.details_title}>{name}</h2>}
           {date && <span className={Style.details_date} >{moment(date).format('ddd, MMMM Do, h:mm')}</span>}
