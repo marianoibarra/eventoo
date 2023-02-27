@@ -50,7 +50,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             value={input.start_date}
                             OpenPickerButtonProps={{ tabIndex: -1 }}
                             onChange={(value) => {
-                                const fecha = new Date(value._d);
+                                const fecha = new Date(value && value.hasOwnProperty('_d') ? value._d : value);
                                 const fechaISO = fecha.toISOString();
                                 const fechaFormateada = fechaISO.slice(0, 10);
                                 setInput({
