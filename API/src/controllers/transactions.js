@@ -34,6 +34,7 @@ const cleanTransactions = async (IdEvent) => {
       },
     ],
   });
+
   const expiredTransactions = event.transactions.filter(
     (transaction) =>
       moment().isAfter(moment(transaction.dataValues.expiration_date)) &&
@@ -56,18 +57,12 @@ const cleanTransactions = async (IdEvent) => {
         },
       }
     );
-
-    //puede ser aca el envio de mail a las personas que se les cancelo la reserva
-    //si falta algun dato modificar en donde se invoca esta funcion (otros controllers creo, no se si se invoca
-    //sola por cuestiones de tiempo/moment()) y pasarle por parametros el resto de los datos faltantes
-
-    updateEventLowStock(IdEvent.id)
-
+    updateEventLowStock(IdEvent.id);
   }
 };
 
 const updateEventLowStock = async (eventId) => {
-  let percentageThreshold = 15
+  let percentageThreshold = 15;
   const event = await Event.findByPk(eventId);
 
   const availableTickets = event.guests_capacity - event.stock_ticket;
@@ -99,22 +94,23 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
+
     await cleanTransactions(event);
     await event.reload();
     const user = await User.findByPk(buyerId);
     const organizer = await User.findByPk(event.organizer.id);
     const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
-    // if (event.stock_ticket < tickets.length) {
-    //   // se verifica si hay suficiente stock de entradas
-    //   return res.status(400).json({
-    //     error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
-    //   });
-    // }
+    if (event.stock_ticket < tickets.length) {
+      // se verifica si hay suficiente stock de entradas
+      return res.status(400).json({
+        error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
+      });
+    }
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(), //esta dando problemas
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -124,7 +120,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -158,13 +154,17 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
+
     sendBuyerNotifications(
       user.email,
-      "reserveTickets",null,
+      "reserveTickets",
+      event.id,
       null,
       bankAccount.CBU,
       approvalTimeLimit
     );
+    sendOrganizerNotifications(organizer.email, "reservationReceived");
+
     return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
@@ -501,7 +501,15 @@ const ApprovePayment = async (req, res) => {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
       await transaction.update({ status: "CANCELED" });
       const ticketsToReturn = transaction.tickets.length;
-      const event = await Event.findByPk(transaction.eventId);
+      const event = await Event.findByPk(transaction.eventId, {
+        include: [
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+        ],
+      });
       await event.increment("stock_ticket", { by: ticketsToReturn });
       sendBuyerNotifications(buyer.email, "refused");
       return res.status(200).json({
@@ -516,9 +524,16 @@ const ApprovePayment = async (req, res) => {
           transactionId,
         },
       });
-      const event = await Event.findByPk(transaction.eventId);
+      const event = await Event.findByPk(transaction.eventId, {
+        include: [
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+        ],
+      });
       const eventName = event.name;
-      const address = await Address.findByPk(event.addressId);
       const doc = new PDFDocument({ autoFirstPage: false });
 
       for (const t of tickets) {
@@ -537,17 +552,19 @@ const ApprovePayment = async (req, res) => {
         doc.image(url, { width: 150, height: 150 });
         doc.text(`${t.id}`);
         doc.text(`Titular: ${t.name} ${t.last_name}`);
-        doc.text(`Date: ${t.start_date}`);
-        doc.text(`Time: ${t.start_time}`);
-        doc.text(`Price: ${t.price}`);
-        doc.text(`Address: ${address}`);
+        doc.text(`Date: ${event.start_date}`);
+        doc.text(`Time: ${event.start_time}`);
+        doc.text(`Price: ${event.price}`);
+        doc.text(
+          `Address: ${event.address.address_line}, ${event.address.city}, ${event.address.state}`
+        );
         event.cover_pic &&
           doc.image(event.cover_pic, { width: 150, height: 150 });
         doc.save();
       }
       doc.end();
       sendBuyerNotifications(buyer.email, "accepted");
-      sendBuyerNotifications(buyer.email, "tickets",null, doc);
+      sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
     }
     return res.status(200).json({
       msg: `Transaction status updated to ${status}`,
@@ -577,7 +594,7 @@ const cancelTransaction = async (req, res) => {
     if (transaction.status === "PENDING") {
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
-  
+
       await event.increment("stock_ticket", { by: ticketsToReturn });
       await transaction.update({ payment_proof, status: "CANCELED" });
     }
