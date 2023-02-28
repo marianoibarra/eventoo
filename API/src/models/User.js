@@ -36,12 +36,6 @@ module.exports = (sequelize) => {
         },
         profile_pic: {
             type: DataTypes.STRING,
-            validate: {
-              isURL: {
-                args: true,
-                msg: 'URL invalid'
-              }
-            }
         },
         born: {
             type:DataTypes.DATEONLY,
