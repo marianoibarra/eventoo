@@ -94,7 +94,7 @@ function Form() {
     parking: null,
     pet_friendly: null,
     placeName: null,
-    price: '',
+    price: 0,
     smoking_zone: null,
     start_date: '',
     start_time: '',
