@@ -95,7 +95,7 @@ const register = async (req, res) => {
         password,
         name,
         last_name,
-        profile_pic: `https://ui-avatars.com/api/?size=128&background=random&name=${name}+${last_name}&length=1`,
+        profile_pic: `https://ui-avatars.com/api/?size=128&background=random&name=${name}+${last_name}&length=1/`,
         born,
         address: {
           address_line,
