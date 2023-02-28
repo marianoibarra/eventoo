@@ -365,7 +365,7 @@ const getTransactionsByEventOrganizer = async (req, res) => {
 
 const updateTransaction = async (req, res) => {
   try {
-    const { payment_proof, status, transactionId } = req.body;
+    const { payment_proof, status, transactionId, format } = req.body;
     const transaction = await Transaction.findByPk(transactionId);
 
     if (!transaction) {
@@ -373,7 +373,7 @@ const updateTransaction = async (req, res) => {
         error: "Transaction not found",
       });
     }
-    await transaction.update({ payment_proof, status });
+    await transaction.update({ payment_proof, status, format });
     return res.status(200).json({
       message: "Transaction updated successfully",
       transaction,
@@ -387,7 +387,7 @@ const updateTransaction = async (req, res) => {
 
 const completeTransaction = async (req, res) => {
   try {
-    const { payment_proof } = req.body;
+    const { payment_proof, format } = req.body;
     const { transactionId } = req.params;
     const transaction = await Transaction.findByPk(transactionId, {
       include: "tickets",
@@ -429,7 +429,7 @@ const completeTransaction = async (req, res) => {
       });
     }
 
-    await transaction.update({ payment_proof, status: "INWAITING" });
+    await transaction.update({ payment_proof, status: "INWAITING", format });
     sendBuyerNotifications(buyer.email, "voucherUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
