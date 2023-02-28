@@ -495,11 +495,11 @@ const ApprovePayment = async (req, res) => {
         : null;
 
     if (status === null) return res.status(401).json({ msg: "invalid status" });
+    
     await transaction.update({ status });
 
     if (status === "DENIED") {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId, {
         include: [
