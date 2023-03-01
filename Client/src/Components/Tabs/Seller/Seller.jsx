@@ -1,32 +1,9 @@
-// import React from 'react'
-// import {  useSelector } from "react-redux";
-// import { Link } from 'react-router-dom';
-// import SpinnerWhite from '../../../utils/SpinnerWhite/SpinnerWhite';
-// import Styles from '../Create/Create.module.css';
-
-// function Buys() {
-
-//   const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
-
-//   return (
-//     <div className={Styles.container}>
-//       {!loading
-//         ? eventsBuyed.map(transaction => (
-//             <div className={Styles.eventCard} key={transaction.event.name}>
-//               <Link to={`/Event/${transaction.event.id}`}><h3 className={Styles.eventCardTitle}>Name: {transaction.event.name}</h3></Link>
-//               <p>Start date: {transaction.event.start_date}</p>
-//               <p>End date: {transaction.event.end_date}</p>
-//               <p>Category: {transaction.eventcategory?.name}</p>
-//               <p>Age range: {transaction.event.age_range}</p>
-//               <p id={transaction.status}>Status: {transaction.status}</p>
-
-//             </div>
-//           ))
-//       : <SpinnerWhite />
-//     }
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
+// import './Events.css'
+import { FaEdit } from "react-icons/fa";
+import { TiArrowSortedDown, TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
 import {
   axiosModeEventsBuys,
   deleteEvent,
@@ -35,29 +12,21 @@ import {
   sortByDescendingEventsBuys,
 } from "../../../Slice/EventsBuysForUser/BuysSlice";
 
-import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
-import './Events.css'
-import { FaEdit } from "react-icons/fa";
-import { TiArrowSortedDown, TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
 import { AiOutlineCheck } from "react-icons/ai";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
-
-import Pending from "./Status/Pending/Pending";
-import Completed from "./Status/Completed/Completed";
+import Completed from "./Status/Expired/Completed";
 import Canceled from "./Status/Canceled/Canceled";
+import Rejected from "./Status/Pending/Rejected";
 import Inwaiting from "./Status/Inwaiting/Inwaiting";
-import Approved from "./Status/Approved/Aproved";
 import Denied from "./Status/Denied/Denied";
-import Expired from "./Status/Expired/Expired";
+import Approved from "./Status/Approved/Approved";
 
 
 
-function Buys() {
-  const { data: { buys: eventBuys }, error } = useSelector((state) => state.eventsManagement);
+function Seller() {
+  const { data: { sells: eventSells }, error } = useSelector((state) => state.eventsManagement);
   const [sortType, setSortType] = useState({ type: null, id: 2 });
   const [transactionId, setTransactionId] = useState(null);
-
-
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -87,6 +56,8 @@ function Buys() {
   const handleSearch = (key) => {
     dispatch(setFilterBuyEvent(key));
   };
+
+console.log(eventSells,'tipo de evento')
 
   return (
     <div>
@@ -177,7 +148,7 @@ function Buys() {
           </div>
         </div>
         <div className="sapConteiner">
-          {eventBuys.map((transaction, index) => (<>
+          {eventSells.map((transaction, index) => (<>
 
             <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
@@ -192,56 +163,38 @@ function Buys() {
                 {transaction?.status}
               </div>
             </div>
-
             {transaction.id === transactionId ?
               <div key={index}>
                 {(() => {
                   switch (transaction.status) {
-                    case 'APPROVED':
-                      return <Approved transaction={transaction} />;
                     case 'CANCELED':
                       return <Canceled transaction={transaction} />;
-                    case 'COMPLETED':
-                      return <Completed transaction={transaction} />;
-                    case 'DENIED':
-                      return <Denied transaction={transaction} />;
-                    case 'EXPIRED':
-                      return <Expired transaction={transaction} />;
                     case 'INWAITING':
                       return <Inwaiting transaction={transaction} />;
-                    case 'PENDING':
-                      return <Pending transaction={transaction} />;
+                    case 'REJECTED':
+                      return <Rejected transaction={transaction} />;
+                    case 'COMPLETED':
+                      return <Completed transaction={transaction} />;
+                    case 'APPROVED':
+                      return <Approved transaction={transaction} />;
+                    case 'DENIED':
+                      return <Denied transaction={transaction} />;
                     default:
                       return <p>no tienes estados pendientes</p>;
                   }
                 })()}
               </div>
               : undefined}</>
-          )).reverse()}</div>
+          ))}
+        </div>
       </div>
     </div>
 
   );
 }
 
-export default Buys;
+export default Seller;
 
 
 
-// - PENDING: Cuando el usuario carga los tickets y la operacion queda pendiente de carga del comprobante
-// - CANCELED: Operacion cancelada por el usuario comprador
-// - INWAITING: Luego de que el usuario carga el comprobante y a la espera de que el organizador confirme la operacion
-// - DENIED: Operacion cancelada por el usuario organizador desde INWAITING
-// - APPROVED: Operacion confirmada por el usuario organizador desde INWAITING
 
-
-
-{/* <button className="btnSap">
-                <FaEdit color="darkslateblue" size={25} />
-              </button>
-              <button className="btnSap">
-                <AiOutlineCheck
-                  onClick={() => handledelete(event.id)}
-                  size={35}
-                />
-              </button> */}
