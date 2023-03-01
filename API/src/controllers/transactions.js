@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 20;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
