@@ -99,7 +99,7 @@ function Form() {
     start_date: '',
     start_time: '',
     state: null,
-    typePack:'',
+    typePack: null,
     virtualURL: '',
     zip_code: null,
     privateEvent_password: '',
