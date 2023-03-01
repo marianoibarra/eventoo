@@ -101,16 +101,16 @@ const createTransactions = async (req, res) => {
     const organizer = await User.findByPk(event.organizer.id);
     const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
-    if (event.stock_ticket < tickets.length) {
-      // se verifica si hay suficiente stock de entradas
-      return res.status(400).json({
-        error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
-      });
-    }
+    // if (event.stock_ticket < tickets.length) {
+    //   // se verifica si hay suficiente stock de entradas
+    //   return res.status(400).json({
+    //     error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
+    //   });
+    // }
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -120,7 +120,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -155,15 +155,15 @@ const createTransactions = async (req, res) => {
       ],
     });
 
-    sendBuyerNotifications(
-      user.email,
-      "reserveTickets",
-      event.id,
-      null,
-      bankAccount.CBU,
-      approvalTimeLimit
-    );
-    sendOrganizerNotifications(organizer.email, "reservationReceived");
+    // sendBuyerNotifications(
+    //   user.email,
+    //   "reserveTickets",
+    //   event.id,
+    //   null,
+    //   bankAccount.CBU,
+    //   approvalTimeLimit
+    // );
+    // sendOrganizerNotifications(organizer.email, "reservationReceived");
 
     return res.status(201).json(newTransaction);
   } catch (error) {
@@ -430,12 +430,12 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
-    sendOrganizerNotifications(
-      event.organizer.email,
-      "newTransfer",
-      payment_proof
-    );
+    // sendBuyerNotifications(buyer.email, "voucherUploaded");
+    // sendOrganizerNotifications(
+    //   event.organizer.email,
+    //   "newTransfer",
+    //   payment_proof
+    // );
 
     return res.status(200).json({
       msg: "Transaction completed successfully",
@@ -524,6 +524,7 @@ const ApprovePayment = async (req, res) => {
           transactionId,
         },
       });
+
       const event = await Event.findByPk(transaction.eventId, {
         include: [
           {
@@ -535,9 +536,10 @@ const ApprovePayment = async (req, res) => {
       });
       const eventName = event.name;
       const doc = new PDFDocument({ autoFirstPage: false });
+      const urls=[]
 
-      for (const t of tickets) {
-        const url = await QRCode.toDataURL(`${t.id}`, {
+      const generateQr = async (t) => {
+       return QRCode.toDataURL(`${t.id}`, {
           errorCorrectionLevel: "H",
           type: "image/jpeg",
           quality: 0.3,
@@ -547,10 +549,24 @@ const ApprovePayment = async (req, res) => {
             light: "#FFFFFF",
           },
         });
+        
+      };
+
+      for(t of tickets) {
+       const promise= await generateQr(t)
+       urls.push(promise)
+      } 
+
+      urls.forEach((url, index) => {
+        const t = tickets[index];
+
         doc.addPage();
-        doc.text(`${eventName}'s ticket`);
+        doc.fontSize(28).text(`${eventName}'s ticket`, {
+          align: "center",
+        });
+        doc.moveDown();
         doc.image(url, { width: 150, height: 150 });
-        doc.text(`${t.id}`);
+        doc.fontSize(14).text(`${t.id}`, 135, 290).moveDown();
         doc.text(`Titular: ${t.name} ${t.last_name}`);
         doc.text(`Date: ${event.start_date}`);
         doc.text(`Time: ${event.start_time}`);
@@ -561,9 +577,10 @@ const ApprovePayment = async (req, res) => {
         event.cover_pic &&
           doc.image(event.cover_pic, { width: 150, height: 150 });
         doc.save();
-      }
+      });
+
       doc.end();
-      sendBuyerNotifications(buyer.email, "accepted");
+      // sendBuyerNotifications(buyer.email, "accepted");
       sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
     }
     return res.status(200).json({
