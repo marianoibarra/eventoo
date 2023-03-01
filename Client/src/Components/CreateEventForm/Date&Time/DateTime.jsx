@@ -65,8 +65,8 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                         />
                     </div>
                 </div>
-                <h4 className={style.title}>Start and end time</h4>
                 <div className={style.datetime}>
+                <h4 className={style.title}>Start time:</h4>
                         <input
                             type='time'
                             className={style.inputs}
@@ -79,6 +79,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                         {showMsg.start_time && (
                             <p className={style.warning}>{errors.start_time}</p>
                         )}
+                    <h4 className={style.title}>End time:</h4>
                     <input
                         type='time'
                         className={style.inputs}

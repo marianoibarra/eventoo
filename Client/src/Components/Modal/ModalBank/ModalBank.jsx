@@ -51,6 +51,10 @@ const ModalBank = ({ setShowModal, input, setInput }) => {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(createBankAccount({ name, CBU }));
+    setName('');
+    setCBU('');
+    setErrors({});
+    setShowMsg({});
   };
 
   const handleDone = (e) => {
@@ -74,7 +78,7 @@ const ModalBank = ({ setShowModal, input, setInput }) => {
             label="Bank name"
             name='name'
             variant="standard"
-            value={input.bankAcount}
+            value={name}
             sx={{ width: '35ch' }}
             placeholder='Name'
             onChange={(e) => setName(e.target.value)}
@@ -85,22 +89,22 @@ const ModalBank = ({ setShowModal, input, setInput }) => {
             style={{ marginBottom: showMsg.name && errors.name ? '0px' : '20px' }}
           />
           <div className={style.cbu}>
-          <TextField
-            label="CBU"
-            name='cbu'
-            variant="standard"
-            value={input.bankAcount}
-            sx={{ width: '27ch' }}
-            placeholder='CBU'
-            onChange={(e) => setCBU(e.target.value)}
-            onBlur={handleBlur}
-            margin="dense"
-            maxLength='22'
-            endAdornment={<InputAdornment position="end">{cbuNums}/22</InputAdornment>}
-            helperText={showMsg.cbu ? errors.cbu : ""}
-            error={showMsg.cbu && errors.cbu}
-            style={{ marginBottom: showMsg.cbu && errors.cbu ? '0px' : '20px' }}
-          /> <p>{cbuNums}/22</p>
+            <TextField
+              label="CBU"
+              name='cbu'
+              variant="standard"
+              value={CBU}
+              sx={{ width: '27ch' }}
+              placeholder='CBU'
+              onChange={(e) => setCBU(e.target.value)}
+              onBlur={handleBlur}
+              margin="dense"
+              maxLength='22'
+              endAdornment={<InputAdornment position="end">{cbuNums}/22</InputAdornment>}
+              helperText={showMsg.cbu ? errors.cbu : ""}
+              error={showMsg.cbu && errors.cbu}
+              style={{ marginBottom: showMsg.cbu && errors.cbu ? '0px' : '20px' }}
+            /> <p>{cbuNums}/22</p>
           </div>
           <button type="button" className={style.butcreate} onClick={handleClick}>Create Bank Account</button>
         </div>

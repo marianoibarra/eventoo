@@ -24,7 +24,7 @@ const CheckboxFacilities = ({input, setInput}) => {
           color: '#007F80' ,
           '&.Mui-checked': {
             color: '#007F80',
-          },
+          },WebkitTextFillColor: 'var(--dark-text)'
         }}/>
         <span className={style.iconspan}> <TbDisabled size={37}/> </span>
         Disability Access

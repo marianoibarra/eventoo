@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Spinner } from "../Modal/Spinner/Spinner";
 
-function CheckOut({ errors, isLogged, input }) {
+function CheckOut({ errors, isLogged, input,setConfirm, confirm}) {
   const dispatch = useDispatch();
   const { loading, preference_id } = useSelector((state) => state.event);
 
@@ -18,6 +18,9 @@ function CheckOut({ errors, isLogged, input }) {
   const handleclick = (e) => {
     e.preventDefault();
     if (isLogged) {
+      setConfirm(false);
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
       dispatch(createEvent(input));
     } else {
       alert("Please Log in");
