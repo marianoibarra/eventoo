@@ -11,6 +11,7 @@
 
 .text{
     margin: 5px;
+    color:var(--dark-text);
 }
 
 .overview{
@@ -26,12 +27,13 @@
 }
 
 .inputs{
-    background-color: white;
+    background-color: var(--bg-elevation);
     padding: 10px;
     margin: 10px;
     max-width: 400px;
     border-radius: 5px;
     border: 1px solid rgb(170, 170, 170);
+    color:var(--dark-text);
 }
 
 .warning {

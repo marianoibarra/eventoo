@@ -21,7 +21,7 @@ function MoreInfo({ input, setInput, loading}) {
                 multiline
                 value={input.large_description}
                 rows={8}
-                sx={{ m: 1, width: '100%' }}
+                sx={{ m: 1, width: '100%',WebkitTextFillColor: 'var(--dark-text)',borde: 'var(--border-color)',backgroundColor: 'var(--bg-elevation)'}}
                 placeholder='Write here...'
                 onChange={handleChange}
                 margin="dense"

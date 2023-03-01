@@ -5,7 +5,7 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { clear } from '../../Slice/CreateEvent/CreateEvent'
+import { clear, createEvent } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -59,6 +59,8 @@ function Form() {
       script.addEventListener('load', addCheckout);
       document.body.appendChild(script);
     } else if(preference_id === false) {
+      // dispatch(createEvent(input));
+      //setear un true para modal, en modal poner click para el navigate.
       navigate('/Event/' + event.id + '?checkout=true')
     }
 
@@ -209,7 +211,8 @@ function Form() {
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
-        {error ?
+      {/* {showModal && created  <ModalCreateEvent stgData={stgData} eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />} */}
+        {/* {error ?
           <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
           </Stack> :
@@ -219,7 +222,7 @@ function Form() {
               <AlertTitle>Success</AlertTitle>
               This is a success alert — <strong>check it out!</strong>
             </Alert>
-          </Stack> : undefined}
+          </Stack> : undefined} */}
       {/* <Lateral/> */}
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>

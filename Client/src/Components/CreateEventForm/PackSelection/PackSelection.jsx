@@ -52,7 +52,8 @@ function PackSelection({ input, setInput }) {
             setInput({
                 ...input,
                 isPremium: false,
-                items: null
+                items: null,
+                typePack: null,
             });
         }
     };
