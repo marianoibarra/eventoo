@@ -155,15 +155,15 @@ const createTransactions = async (req, res) => {
       ],
     });
 
-    // sendBuyerNotifications(
-    //   user.email,
-    //   "reserveTickets",
-    //   event.id,
-    //   null,
-    //   bankAccount.CBU,
-    //   approvalTimeLimit
-    // );
-    // sendOrganizerNotifications(organizer.email, "reservationReceived");
+    sendBuyerNotifications(
+      user.email,
+      "reserveTickets",
+      event.id,
+      null,
+      bankAccount.CBU,
+      approvalTimeLimit
+    );
+    sendOrganizerNotifications(organizer.email, "reservationReceived");
 
     return res.status(201).json(newTransaction);
   } catch (error) {
@@ -430,12 +430,12 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
-    // sendBuyerNotifications(buyer.email, "voucherUploaded");
-    // sendOrganizerNotifications(
-    //   event.organizer.email,
-    //   "newTransfer",
-    //   payment_proof
-    // );
+    sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendOrganizerNotifications(
+      event.organizer.email,
+      "newTransfer",
+      payment_proof
+    );
 
     return res.status(200).json({
       msg: "Transaction completed successfully",
@@ -536,10 +536,10 @@ const ApprovePayment = async (req, res) => {
       });
       const eventName = event.name;
       const doc = new PDFDocument({ autoFirstPage: false });
-      const urls=[]
+      const urls = [];
 
       const generateQr = async (t) => {
-       return QRCode.toDataURL(`${t.id}`, {
+        return QRCode.toDataURL(`${t.id}`, {
           errorCorrectionLevel: "H",
           type: "image/jpeg",
           quality: 0.3,
@@ -549,36 +549,69 @@ const ApprovePayment = async (req, res) => {
             light: "#FFFFFF",
           },
         });
-        
       };
 
-      for(t of tickets) {
-       const promise= await generateQr(t)
-       urls.push(promise)
-      } 
+      for (t of tickets) {
+        const promise = await generateQr(t);
+        urls.push(promise);
+      }
 
       urls.forEach((url, index) => {
         const t = tickets[index];
-
+        const stringAddress = event.address.address_line.concat(
+          `, ${event.address.city}, ${event.address.state}`
+        );
         doc.addPage();
-        doc.fontSize(28).text(`${eventName}'s ticket`, {
+        doc.fontSize(32).text(`${eventName}'s ticket`, {
           align: "center",
         });
-        doc.moveDown();
-        doc.image(url, { width: 150, height: 150 });
-        doc.fontSize(14).text(`${t.id}`, 135, 290).moveDown();
-        doc.text(`Titular: ${t.name} ${t.last_name}`);
-        doc.text(`Date: ${event.start_date}`);
-        doc.text(`Time: ${event.start_time}`);
-        doc.text(`Price: ${event.price}`);
+        doc.moveDown(1);
+        doc.image(url, 40, 145, { width: 150, height: 150 });
+        doc.fontSize(14).text(`${t.id}`, 100, 300).moveDown();
+        doc
+          .text(`Titular: ${t.name} ${t.last_name}`, 325, 150, {
+            width: 410,
+          })
+          .moveDown();
+        doc
+          .text(`Date: ${event.start_date}`, 325, 180, { width: 410 })
+          .moveDown();
+        doc
+          .text(`Time: ${event.start_time}`, 325, 210, { width: 410 })
+          .moveDown();
+        doc.text(`Price: ${event.price}`, 325, 240, { width: 410 }).moveDown();
+        stringAddress.length <= 31
+          ? doc
+              .text(
+                `Address: ${event.address.address_line}, ${event.address.city}, ${event.address.state}`,
+                325,
+                270,
+                { width: 410 }
+              )
+              .moveDown()
+          : doc
+              .text(`Address: ${event.address.address_line}, `, 325, 270, {
+                width: 410,
+              })
+              .moveDown()
+              .text(`${event.address.city}, ${event.address.state}`, 325, 290, {
+                width: 410,
+              });
+        doc
+          .lineWidth(2)
+          .lineJoin("round")
+          .rect(20, 120, 570, 200)
+          .strokeColor("#007F80")
+          .stroke();
         doc.text(
-          `Address: ${event.address.address_line}, ${event.address.city}, ${event.address.state}`
+          `      Thank you for your purchase,
+          we hope you enjoy the event. See you soon!`,
+          20,
+          600,
+          { align: "center" }
         );
-        event.cover_pic &&
-          doc.image(event.cover_pic, { width: 150, height: 150 });
         doc.save();
       });
-
       doc.end();
       // sendBuyerNotifications(buyer.email, "accepted");
       sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
