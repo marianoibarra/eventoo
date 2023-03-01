@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 20;
+const approvalTimeLimit = 1;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -157,11 +157,7 @@ const createTransactions = async (req, res) => {
 
     sendBuyerNotifications(
       user.email,
-      "reserveTickets",
-      event.id,
-      null,
-      bankAccount.CBU,
-      approvalTimeLimit
+      "reserveTickets"
     );
     sendOrganizerNotifications(organizer.email, "reservationReceived");
 
@@ -430,11 +426,10 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendBuyerNotifications(buyer.email, "receiptUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
       "newTransfer",
-      payment_proof
     );
 
     return res.status(200).json({
@@ -511,7 +506,7 @@ const ApprovePayment = async (req, res) => {
         ],
       });
       await event.increment("stock_ticket", { by: ticketsToReturn });
-      sendBuyerNotifications(buyer.email, "refused");
+      sendBuyerNotifications(buyer.email, "denied");
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
@@ -613,7 +608,7 @@ const ApprovePayment = async (req, res) => {
         doc.save();
       });
       doc.end();
-      // sendBuyerNotifications(buyer.email, "accepted");
+      sendBuyerNotifications(buyer.email, "accepted");
       sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
     }
     return res.status(200).json({
