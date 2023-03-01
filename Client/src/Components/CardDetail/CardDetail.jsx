@@ -182,9 +182,10 @@ const CardDetailPublic = () => {
                 </span>
                 <span className={style.iconspantext}>About the event</span>
               </div> 
-              <div className={style.aboutevent}>
+              {/* <div className={style.aboutevent}>
                 <p>{eventDetail.large_description ? eventDetail.large_description : lorem}</p>
-              </div>
+              </div> */}
+              <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description ? eventDetail.large_description.replace(/\n/g, '<br>') : lorem }}></div>
               <hr></hr>
             </div>
 
