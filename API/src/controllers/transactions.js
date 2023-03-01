@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 20;
+const approvalTimeLimit = 1;
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -101,16 +101,16 @@ const createTransactions = async (req, res) => {
     const organizer = await User.findByPk(event.organizer.id);
     const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
-    // if (event.stock_ticket < tickets.length) {
-    //   // se verifica si hay suficiente stock de entradas
-    //   return res.status(400).json({
-    //     error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
-    //   });
-    // }
+    if (event.stock_ticket < tickets.length) {
+      // se verifica si hay suficiente stock de entradas
+      return res.status(400).json({
+        error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
+      });
+    }
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -120,7 +120,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
