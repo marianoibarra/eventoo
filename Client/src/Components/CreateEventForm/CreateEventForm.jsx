@@ -5,7 +5,7 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { clear } from '../../Slice/CreateEvent/CreateEvent'
+import { clear, createEvent } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -21,7 +21,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 function Form() {
   const dispatch = useDispatch();
-  const { event, preference_id, loading } = useSelector(state => state.event);
+  const { event, preference_id, loading, error } = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
@@ -59,6 +59,8 @@ function Form() {
       script.addEventListener('load', addCheckout);
       document.body.appendChild(script);
     } else if(preference_id === false) {
+      // dispatch(createEvent(input));
+      //setear un true para modal, en modal poner click para el navigate.
       navigate('/Event/' + event.id + '?checkout=true')
     }
 
@@ -94,12 +96,12 @@ function Form() {
     parking: null,
     pet_friendly: null,
     placeName: null,
-    price: '',
+    price: null,
     smoking_zone: null,
     start_date: '',
     start_time: '',
     state: null,
-    typePack:'',
+    typePack: null,
     virtualURL: '',
     zip_code: null,
     privateEvent_password: '',
@@ -129,7 +131,7 @@ function Form() {
     } else if (selectedModality === 'Virtual' && !urlRegex.test(input.virtualURL)) {
       errors.virtualURL = "Invalid URL";
     }
-    if (!input.address_line && selectedModality === 'Presential') { errors.address_line = 'Address is required' };
+    if (!input.address_line && input.modality === 'Presential') { errors.address_line = 'Address is required' };
 
     const now = new Date();
     const startDate = new Date(input.start_date);
@@ -209,17 +211,18 @@ function Form() {
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
-        {event.error ?
+      {/* {showModal && created  <ModalCreateEvent stgData={stgData} eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />} */}
+        {/* {error ?
           <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
           </Stack> :
-          event.create ? <Stack sx={{ width: '100%' }} spacing={2}>
+          preference_id ? <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="success">Event Created succesfully.</Alert>
             <Alert severity="success">
               <AlertTitle>Success</AlertTitle>
               This is a success alert — <strong>check it out!</strong>
             </Alert>
-          </Stack> : undefined}
+          </Stack> : undefined} */}
       {/* <Lateral/> */}
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>
@@ -238,7 +241,7 @@ function Form() {
         <div className={style.split}></div>
         <PackSelection input={input} setInput={setInput} />
       </div>
-      <CheckOut errors={errors} isLogged={isLogged} input={input} />
+      <CheckOut errors={errors} isLogged={isLogged} input={input} setConfirm={setConfirm} confirm={confirm} />
     </div>
   )
 };

@@ -15,7 +15,7 @@ import GoogleMaps from '../../Modal/ModalSession/MapRegister';
 function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, setSelectedModality}){
   const dispatch = useDispatch();//                      STATE GLOBAL.REDUCER.PROPIEDADREDUCER
   const { categories, loading, error } = useSelector(state => state.categories.categories);
-    
+  
   const [filteredCategories, setFilteredCategories] = useState([]);
   const selectRef = useRef()
   
@@ -25,9 +25,9 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
   
     useEffect(() => {
       if (!loading && categories) {
-        setFilteredCategories(categories.filter(c => c.modality === selectedModality));
+        setFilteredCategories(categories.filter(c => c.modality === input.modality));
       }
-    }, [categories, loading, selectedModality]);
+    }, [categories, loading, input.modality]);
 
     const handleChanges = (e) => {
       setInput({
@@ -76,11 +76,10 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
                     onChange={handleChanges}
                     onBlur={handleBlur}
                     margin="dense"
-                    sx={{m: 2, width: '25ch' }}
+                    sx={{m: 2, width: '25ch', WebkitTextFillColor: 'var(--dark-text)' }}
                     helperText={showMsg.category ? errors.category : ""}
                     error={showMsg.category && errors.category}
                     style={{ marginBottom: showMsg.category && errors.category ? '0px' : '20px' }}
-                    disabled={loading}
                 >
                     {filteredCategories.map((option) => (
                         <MenuItem key={option.id} value={option.name}>
@@ -93,7 +92,7 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
               {selectedModality  && (
               <div>
               <div>
-                {selectedModality === "Presential"
+                {input.modality === "Presential"
                ? <>
                 <p className={style.text}>Help locate your event and make sure attendees know where to go.</p>
                 <GoogleMaps input={input} setInput={setInput} errors={errors} showMsg={showMsg} setShowMsg={setShowMsg} />
@@ -101,12 +100,13 @@ function Category({input,setInput,errors, showMsg, setShowMsg,selectedModality, 
                 <CheckboxFacilities input={input} setInput={setInput}/>
                 </>
                 : <div>
-                  <p>Add the Link to the virtual event.This is only going to be for your guests and sended the day of the event</p>
+                  <p className={style.text}>Add the Link to the virtual event.This is only going to be for your guests and sended the day of the event</p>
                   <input
                   className={style.inputs}
                   type="text"
                   placeholder='URL'
                   name='virtualURL'
+                  value={input.virtualURL}
                   onChange={handleChanges}
                   onBlur={handleBlur} style={ showMsg.virtualURL && errors.virtualURL ? {border:'red 1px solid'}: {}}/>
                  {showMsg.virtualURL&&(

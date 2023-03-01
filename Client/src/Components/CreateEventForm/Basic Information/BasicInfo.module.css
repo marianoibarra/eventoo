@@ -7,6 +7,7 @@
 
 .text{
     margin: 5px;
+    color: var(--dark-text);
 }
 
 .overview{
@@ -17,8 +18,8 @@
 .inputs{
     margin: 10px;
     width: 150px;
-    border: solid 1px #667080;
-    background-color: white;
+    border: solid 1px var(--border-color);
+    background-color: var(--ligth-background-color);
     border-radius: 5px;
 }
 

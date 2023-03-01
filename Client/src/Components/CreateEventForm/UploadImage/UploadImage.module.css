@@ -39,10 +39,13 @@
     height: 100%;
     gap: 5px;
     font-size: 0.95rem;
-    background-color: #007F8019;
+    background-color: var(--load-image);
     transition: filter .3s ease-in-out, border .3s ease-in-out;
 }
 
+.text{
+    color: var(--dark-text)
+}
 .onDragDropArea {
     width: 95%;
     height: 100%;
@@ -52,7 +55,7 @@
     background-color: #007F8033;
     filter: brightness(105%);
     transition: filter .2s ease-in-out, border .2s ease-in-out;
-    border: 2px dashed #0003;
+    border: 2px dashed var(--border-colo);
 }
 
 .imgUpload {
