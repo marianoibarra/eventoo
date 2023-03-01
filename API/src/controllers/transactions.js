@@ -101,16 +101,16 @@ const createTransactions = async (req, res) => {
     const organizer = await User.findByPk(event.organizer.id);
     const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
-    if (event.stock_ticket < tickets.length) {
-      // se verifica si hay suficiente stock de entradas
-      return res.status(400).json({
-        error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
-      });
-    }
+    // if (event.stock_ticket < tickets.length) {
+    //   // se verifica si hay suficiente stock de entradas
+    //   return res.status(400).json({
+    //     error: `No hay suficientes entradas disponibles para el evento: ${event.name}`,
+    //   });
+    // }
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -120,7 +120,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -157,11 +157,7 @@ const createTransactions = async (req, res) => {
 
     sendBuyerNotifications(
       user.email,
-      "reserveTickets",
-      event.id,
-      null,
-      bankAccount.CBU,
-      approvalTimeLimit
+      "reserveTickets"
     );
     sendOrganizerNotifications(organizer.email, "reservationReceived");
 
@@ -430,11 +426,10 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING" });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendBuyerNotifications(buyer.email, "receiptUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
       "newTransfer",
-      payment_proof
     );
 
     return res.status(200).json({
@@ -511,7 +506,7 @@ const ApprovePayment = async (req, res) => {
         ],
       });
       await event.increment("stock_ticket", { by: ticketsToReturn });
-      sendBuyerNotifications(buyer.email, "refused");
+      sendBuyerNotifications(buyer.email, "denied");
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
@@ -564,7 +559,7 @@ const ApprovePayment = async (req, res) => {
       }
       doc.end();
       sendBuyerNotifications(buyer.email, "accepted");
-      sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
+      sendBuyerNotifications(buyer.email, "tickets",  doc);
     }
     return res.status(200).json({
       msg: `Transaction status updated to ${status}`,
