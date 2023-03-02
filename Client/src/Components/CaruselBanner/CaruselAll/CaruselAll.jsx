@@ -8,6 +8,7 @@ import { getPremiumEvents } from '../../../Slice/PremiumEvents/PremiumEventsSlic
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 import CarouselPremium from './CarouselPremium/CarouselPremium';
+import { style } from '@mui/system';
 
 
 const CaruselAll = () => {
@@ -32,7 +33,7 @@ const CaruselAll = () => {
       
       <div className={Style.container_inPerson}>
 
-        <CarouselPremium />
+        {!filter.name && !filter.favorites && !filter.category && !filter.modality && !filter.isNextWeekend && !filter.isToday && <CarouselPremium />}
 
         <div className={Style.container_text}> Events  {`(${events.filter(filter.favorites ? e => favorites.some(f => f === e.id) : e => true).length})`} </div>
 
@@ -52,6 +53,9 @@ const CaruselAll = () => {
                         price={event.price}
                         category={event.category === null ? 'N/A' : event.category.name}
                         id={event.id}
+                        premium={event.typePack === 'PREMIUM' ? true : false}
+                        classic={event.typePack === 'CLASSIC' ? true : false}
+                        home={true}
                       />
                     )) 
                   : <div className={Style.notFoundWrapper}>
