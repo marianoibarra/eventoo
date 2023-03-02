@@ -3,6 +3,8 @@ import CaruselAll from './CaruselAll/CaruselAll'
 import Style from './CaruselBanner.module.css'
 import CategoriesFilter from './CategoriesFilter/CategoriesFilter'
 import FilterMode from './FilterMode/FilterMode'
+import Fab from '@mui/material/Fab';
+import NavigationIcon from '@mui/icons-material/Navigation';
 
 
 const CaruselBanner = () => {
@@ -43,6 +45,7 @@ const CaruselBanner = () => {
             <CategoriesFilter />
             <FilterMode />
             <CaruselAll />
+            
         </div>
     )
 }

@@ -1,17 +1,26 @@
-.body {
+.background {
     position: relative;
-    max-width: 1280px;
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 40px;
-    margin-bottom: 120px;
-    border: solid 1px var(--primary-color);
-    border-radius: 15px;
-    background-color: white;
+    background-color: var(--ligth-background-color);
+    width: 100%;
+    height: 100%;
+    padding-bottom: 100px;
+    margin-bottom: 80px;
 }
 
-.body_premium {
-    border: solid 2px black;
+hr {
+    color: var(--dark-text);
+}
+
+.body {
+    position: relative;
+    top: 40px;
+    max-width: 1280px;
+    height: 50%;
+    width: 95%;
+    margin: 0 auto;
+    border: solid 1px var(--primary-color);
+    border-radius: 15px;
+    background-color: var(--bg-elevation);
 }
 
 .containerimg {
@@ -46,6 +55,7 @@
     margin-top: 20px;
     font-size: 4.2vw;
     font-weight: 400;
+    color: var(--dark-text);
 }
 
 .containerdescription {
@@ -58,6 +68,7 @@
 .containerdescription p {
     font-size: 1.5vw;
     margin-bottom: 50px;
+    color: var(--dark-text);
 }
 
 .containerdescription a {
@@ -75,6 +86,8 @@
     font-weight: 400;
     height: 20vh;
     width: 100%;
+    background-color: var(--bg-elevation);
+    color: var(--dark-text);
 }
 
 textarea:focus {
@@ -114,7 +127,8 @@ textarea:focus {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 4.2vw;
-    background-color: white;
+    background-color: var(--bg-elevation);
+    color: var(--dark-text);
 }
 
 .organizerinput_error {
@@ -127,7 +141,7 @@ textarea:focus {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 4.2vw;
-    background-color: white;
+    background-color: var(--bg-elevation);
 }
 
 h1 a:hover {
@@ -142,6 +156,7 @@ h1 a:hover {
     margin-left: 35px;
     margin-bottom: 50px;
     width: 63%;
+    color: var(--dark-text);
 }
 
 .container_date h3 {
@@ -162,19 +177,25 @@ h1 a:hover {
     align-items: center;
 }
 
+.organizericon {
+    cursor: pointer;
+    width: min-content;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+.organizericon:hover {
+    color: #ab2a3e;
+}
+
 .iconspan {
     color: var(--secondary-color);
-    background-color: #cccccc40;
+    background-color: var(--background-icon);
     padding-top: 5px;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 2px;
     border-radius: 50%;
-}
-
-.iconspan_premium {
-    color: #FFD700;
-    background-color: black;
 }
 
 .iconspantext {
@@ -185,13 +206,40 @@ h1 a:hover {
     font-weight: 400;
 }
 
+.category_and_age {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 65%;
+    margin-top: 20px;
+    margin-left: 35px;
+}
+
+.favorite {
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    border: #0002 1px solid;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(---secondary-color);
+}
+
+.favEnabled {
+    color: var(--secondary-color);
+}
+
 .aboutevent {
     margin-top: 5px;
     margin-bottom: 50px;
+    padding-left: 55px;
     width: 100%;
     height: max-content;
     border-radius: 12px;
-    background-color: white;
+    background-color: var(--bg-elevation);
 }
 
 .aboutevent p {

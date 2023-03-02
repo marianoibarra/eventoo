@@ -6,6 +6,8 @@ import styles from './LocationFilter.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from '../../../Slice/newFilter/newFilterSlice'
 import GoogleMaps from '../../Modal/ModalSession/MapRegister';
+import Fab from '@mui/material/Fab';
+import NavigationIcon from '@mui/icons-material/Navigation';
 
 const LocationFilter = () => {
 
@@ -43,11 +45,12 @@ const LocationFilter = () => {
 
 
   return (
-    <div ref={dropdownRef} className={styles.location}>
+    <>
+    <div ref={dropdownRef}>
       <div onClick={() => setLocationIsOpen(!locationIsOpen)} className={styles.toggleLocation}>
-        <HiOutlineLocationMarker color="#fffa" size={20}/>
+        <HiOutlineLocationMarker size={20}/>
         {filter.state === null || filter.state.length === 0 ? 'Everywhere' : filter.state}
-        <BiChevronDown color="#fffa" size={18}/>
+        <BiChevronDown size={18}/>
       </div>
       <div className={locationIsOpen ? styles.locationDropdownOpen : styles.locationDropdownClose}>
         <div className={styles.locationDropdownWrapper}>
@@ -64,6 +67,7 @@ const LocationFilter = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

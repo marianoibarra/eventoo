@@ -14,7 +14,7 @@ function SampleNextArrow(props) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "black" }}
+      style={{ borderRadius: "50%", color: "transparent", outline:"none", display: "block", background: "#007F80"}}
       onClick={onClick}
     />
   );
@@ -25,7 +25,7 @@ function SamplePrevArrow(props) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "black"}}
+      style={{ borderRadius: "50%", color: "transparent", outline:"none", display: "block", background: "#007F80"}}
       onClick={onClick}
     />
   );
@@ -39,6 +39,7 @@ export default function CarouselPremium() {
         className: "center",
         infinite: true,
         speed: 500,
+        adaptiveHeight: true,
         slidesToShow: 6,
         initialSlide: 0,
         centerMode: true,
@@ -89,8 +90,9 @@ export default function CarouselPremium() {
     };
 
     return (
-      <div>
+      <>
         <div className={Style.container_text}> Premium Events  {`(${premiumEvents.length})`} </div>
+        <div className={Style.container_slider}>
         <Slider className={Style.slider} {...settings}>
           {
             loading
@@ -117,6 +119,7 @@ export default function CarouselPremium() {
                     </div>
           }
         </Slider>
-      </div>
+        </div>
+      </>
     );
 }

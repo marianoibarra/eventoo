@@ -13,8 +13,6 @@ const Navbar = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
   let { pathname } = useLocation();
 
-  console.log(pathname)
-
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollHeight(position)
@@ -36,10 +34,14 @@ const Navbar = () => {
             {" "}
             <span className={Styles.Titulo}>
               <MdArrowBackIos size={20} color={pathname === '/' ? 'transparent' : 'white'} />
-              Even<span className={Styles.bold}>too</span>
+              <img src={require('../../Assets/logo.png')} alt="Eventoo" />
             </span>
           </Link>
-          {pathname === '/' && <LocationFilter />}
+          {pathname === '/' && 
+            <div className={Styles.locationWrapper}>
+              <LocationFilter />
+            </div>
+          }
           </div>
         <div className={Styles.searchbarOpen}>
           {pathname === '/' && <SearchBar />}
@@ -47,10 +49,16 @@ const Navbar = () => {
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
             <div className={Styles.divisor}></div>
-            { isLogged && <Notifications /> }
+             { isLogged && <Notifications /> } 
             <Menu />
         </div>
       </nav>
+      {
+        pathname === '/' &&
+          <div className={Styles.locationBar}>
+            <LocationFilter />
+          </div>
+      }
     </header>
   );
 };

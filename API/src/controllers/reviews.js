@@ -48,9 +48,7 @@ const createReview = async (req, res) => {
     });
     sendOrganizerNotifications(
       event.organizer.email,
-      "reviewReceived",
-      null,
-      newReview
+      "reviewReceived",id
     );
     return res.status(200).json({ newReview });
   } catch (error) {
@@ -63,7 +61,7 @@ const getAllReviewsByEvent = async (req, res) => {
 
   try {
     const response = await Review.findAll({
-      where: { eventId: id, isActive: true },
+      where: { eventId: id },
       attributes: ["stars", "comment", "createdAt"],
       include: [
         {
@@ -84,14 +82,15 @@ const getUserScore = async (req, res) => {
 
   try {
     const scoreByUser = await Event.findAll({
-      where: { "$organizer.id$": id, isActive: true },
+      where: { "$organizer.id$": id },
       include: [Review, "organizer"],
       raw: true,
       nest: true,
     });
 
-    const preResult = scoreByUser.map(a => a.reviews.stars)
-    const resultScore = preResult.reduce((acc, curr) => acc + curr) / preResult.length;
+    const preResult = scoreByUser.map((a) => a.reviews.stars);
+    const resultScore =
+      preResult.reduce((acc, curr) => acc + curr) / preResult.length;
 
     return res.json({ userScore: resultScore.toFixed(2) });
   } catch (error) {

@@ -5,7 +5,7 @@ import MoreInfo from './MoreInfo/MoreInfo';
 import Category from './Category/Category';
 import DateTime from './Date&Time/DateTime';
 import Tickets from './Tickets/Tickets';
-import { clear } from '../../Slice/CreateEvent/CreateEvent'
+import { clear, createEvent } from '../../Slice/CreateEvent/CreateEvent'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -18,10 +18,11 @@ import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
+import ModalCreate from '../Modal/ModalCreate/ModalCreate';
 
 function Form() {
   const dispatch = useDispatch();
-  const { event, preference_id, loading } = useSelector(state => state.event);
+  const { event, preference_id, loading, error } = useSelector(state => state.event);
   const { isLogged } = useSelector(state => state.user);
   const [selectedModality, setSelectedModality] = useState('Presential');
   const [showModal, setShowModal] = useState(false);
@@ -51,6 +52,8 @@ function Form() {
     });
   }
 
+  const [created, setCreated]= useState(false);
+
   useEffect(() => {
     if (preference_id) {
       const script = document.createElement('script');
@@ -59,7 +62,12 @@ function Form() {
       script.addEventListener('load', addCheckout);
       document.body.appendChild(script);
     } else if(preference_id === false) {
-      navigate('/Event/' + event.id + '?checkout=true')
+      // dispatch(createEvent(input));
+      setCreated(true);
+      // navigate('/Event/' + event.id + '?checkout=true')
+      setTimeout(() => {
+        navigate('/Event/' + event.id + '?checkout=true')
+      }, 2000); // 2 segundos de retraso
     }
 
     return () => {
@@ -94,12 +102,12 @@ function Form() {
     parking: null,
     pet_friendly: null,
     placeName: null,
-    price: 0,
+    price: null,
     smoking_zone: null,
     start_date: '',
     start_time: '',
     state: null,
-    typePack:'',
+    typePack: null,
     virtualURL: '',
     zip_code: null,
     privateEvent_password: '',
@@ -129,18 +137,18 @@ function Form() {
     } else if (selectedModality === 'Virtual' && !urlRegex.test(input.virtualURL)) {
       errors.virtualURL = "Invalid URL";
     }
-    if (!input.address_line && selectedModality === 'Presential') { errors.address_line = 'Address is required' };
+    if (!input.address_line && input.modality === 'Presential') { errors.address_line = 'Address is required' };
 
     const now = new Date();
     const startDate = new Date(input.start_date);
 
-    if (!input.start_date) { errors.start_date = 'Start date is required' }
-    if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
+    if (!input.start_date) { errors.start_date = 'Start date is required'
+    }else if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
     // if (!input.end_date) {
     //   errors.end_date = 'End date is required'
     // } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
     if (!input.start_time) { errors.start_time = 'Start time is required' }
-    if (!input.end_time) { errors.end_time = 'End date is required'
+    if (!input.end_time) { errors.end_time = 'End time is required'
   } else if (input.start_time >= input.end_time) {errors.end_time = 'End time can not be before the start time'}
     // if (input.start_date === input.end_date) {
     //   const start = new Date(`${input.start_date} ${input.start_time}`);
@@ -209,17 +217,18 @@ function Form() {
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
-        {event.error ?
+      {created && <ModalCreate  eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />}
+        {/* {error ?
           <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
           </Stack> :
-          event.create ? <Stack sx={{ width: '100%' }} spacing={2}>
+          preference_id ? <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="success">Event Created succesfully.</Alert>
             <Alert severity="success">
               <AlertTitle>Success</AlertTitle>
               This is a success alert — <strong>check it out!</strong>
             </Alert>
-          </Stack> : undefined}
+          </Stack> : undefined} */}
       {/* <Lateral/> */}
       <div className={style.form} >
         {/* <h1 className={style.title}>EVENT INFORMATION</h1>
@@ -238,7 +247,7 @@ function Form() {
         <div className={style.split}></div>
         <PackSelection input={input} setInput={setInput} />
       </div>
-      <CheckOut errors={errors} isLogged={isLogged} input={input} />
+      <CheckOut errors={errors} isLogged={isLogged} input={input} setConfirm={setConfirm} confirm={confirm} />
     </div>
   )
 };

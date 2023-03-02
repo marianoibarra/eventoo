@@ -57,9 +57,9 @@ const BuyButton = () => {
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
 
 
-      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING') : true) && isPaid === true ?
+      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING' || element.status === 'INWAITING') : true) && isPaid === true ?
 
-        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
+        <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
             <div className={style.divtext}>
               <p>
@@ -67,7 +67,7 @@ const BuyButton = () => {
               </p>
               <p className={style.price}>{"$" + price}</p>
             </div>
-            <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
+            <div className={style.containertickets}>
               <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
               <span><b>{tickets}</b></span>
               <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
@@ -82,8 +82,8 @@ const BuyButton = () => {
         : null
       }
 
-      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING') : true) && isPaid === false ?
-        <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
+      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING' || element.status === 'INWAITING') : true) && isPaid === false ?
+        <div className={style.buycontainer}>
           <div className={style.container_text_and_tickets}>
             <div className={style.divtext}>
                 <p>
@@ -91,7 +91,7 @@ const BuyButton = () => {
                 </p>
                 <p className={style.price}>Free</p>
             </div>
-            <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
+            <div className={style.containertickets}>
                 <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
                 <span><b>{tickets}</b></span>
                 <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  activateEvent,
-  changeStateEvent,
+    changeStateEvent,
 } from "../../../Slice/Admin/AdminSlice";
 import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
 import Styles from "./Category.module.css";
@@ -56,8 +55,6 @@ function Buys() {
     };
     console.log(e)
     dispatch(changeStateEvent(event));
-    setName('')
-    setModality('')
     setImage('')
   };
 

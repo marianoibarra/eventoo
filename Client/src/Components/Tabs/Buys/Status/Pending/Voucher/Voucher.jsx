@@ -2,12 +2,13 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Style from './Voucher.module.css'
-import { loadPaymentProof , cancelTransaction} from '../../../../../../Slice/eventsManagement/eventsManagementSlice';
+import { loadPaymentProof, cancelTransaction } from '../../../../../../Slice/eventsManagement/eventsManagementSlice';
+import ModalBuysVoucher from '../../../../../Modal/ModalBuysVoucher/ModalBuysVoucher';
 
 
 
 
-const Voucher = ({transaction, eventId}) => {
+const Voucher = ({ transaction }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [dragActive, setDragActive] = useState(false);
@@ -16,27 +17,45 @@ const Voucher = ({transaction, eventId}) => {
   const [urlFile, seturlFile] = useState(null)
   const [imgDocument, setImgDocument] = useState(null)
   const [pdfDocument, setPdfDocument] = useState(null)
+  const [format, setFormat] = useState(null)
   const [accepted, setAccepted] = useState(true);
+  const [showModal, setShowModal] = useState(false)
+  const [btnSelector, setBtnSelector] = useState(null)
   const refInputImg = useRef()
-  
 
 
   //useEffect que instanciar el urlFile, para hacer un PUT en el handle
   useEffect(() => {
     if (pdfDocument) {
-      // const url = pdfDocument.replace("view", "download");
       seturlFile(pdfDocument)
+      setFormat('pdf')
     } else if (imgDocument) {
       seturlFile(imgDocument)
+      setFormat('image')
     }
   }, [pdfDocument, imgDocument])
 
 
   //handle que realiza el dispatch, de la url
-  const handleAccept = () => {
-    dispatch(loadPaymentProof({ id: transaction, data: {payment_proof: urlFile } }))
-  };
+  // const handleAccept = () => {
+  //   dispatch(loadPaymentProof({ id: transaction, data: { payment_proof: urlFile, format: format } }))
+  //   // navigate(0)
+  // };
 
+  // const handleDelete = () => {
+  //   dispatch(cancelTransaction(transaction))
+  //   navigate(0)
+  // }
+
+  const handleBtnAcept = () => {
+    setShowModal(!showModal)
+    setBtnSelector('acept')
+  }
+
+  const handleBtnCancel = () => {
+    setShowModal(!showModal)
+    setBtnSelector('cancel')
+  }
 
 
   const handleDrag = (e) => {
@@ -89,13 +108,11 @@ const Voucher = ({transaction, eventId}) => {
     }
   }
 
-  const handleDelete = () => {
-    dispatch(cancelTransaction(transaction))
-    navigate(0)
-  }
+
 
   return (
     <div>
+      {showModal && <ModalBuysVoucher setShowModal={setShowModal} transaction={transaction} payment_proof={urlFile} format={format} btnSelector={btnSelector} />}
       {transaction &&
         <div onDragEnter={handleDrag} className={Style.imageWrapper}>
           <div className={Style.containerLoadVoucher}>
@@ -103,6 +120,7 @@ const Voucher = ({transaction, eventId}) => {
             {
               !preview
                 ?
+                
                 <div className={Style.containerVoucher}>
                   <input
                     hidden
@@ -147,7 +165,7 @@ const Voucher = ({transaction, eventId}) => {
                     </div>
                     :
                     <div className={Style.imgPreviewWrappper}>
-                      <embed className={Style.embedPdf} src={`${pdfDocument}#toolbar=0`} type='application/pdf' />
+                      <embed className={Style.embedPdf} src={`${pdfDocument}#toolbar=0`} type='application/pdf' width="283" height="399" />
                     </div>
             }
 
@@ -155,19 +173,19 @@ const Voucher = ({transaction, eventId}) => {
               <button
                 type='button'
                 className={'btnprimario'}
-                onClick={handleDelete}>
+                onClick={handleBtnCancel}>
                 CANCEL
-              </button>
+              </button>``
 
               <button
                 type='button'
                 className={accepted ? Style.btnAceptar : 'btnprimario'}
                 disabled={accepted}
-                onClick={handleAccept}>
+                onClick={handleBtnAcept}>
                 ACEPT
               </button>
             </div>
-          </div>        
+          </div>
           {dragActive && <div className={Style.dragImgElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
         </div>}
     </div>

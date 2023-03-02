@@ -18,12 +18,15 @@
 }
 
 .Titulo {
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-  font-size: 32px;
   color: white;
   display: flex;
+  width: auto;
+  flex-shrink: 1;
   align-items: center;
+}
+
+.Titulo img {
+  height: 30px;
 }
 
 .searchbarOpen, .searchbarClose {
@@ -37,7 +40,7 @@
 .left {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 .divisor {
@@ -70,6 +73,7 @@
   align-items: center;
   display: flex;
   gap: 16px;
+  margin-right: 10px;
 }
 
 .MenuLink{
@@ -83,13 +87,53 @@
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-size: 0.9rem;
-  transition: filter 300ms ease-in-out
+  transition: background 300ms ease-in-out
 }
 
 .MenuLink:hover{
-  filter: brightness(105%);
-  transition: filter 200ms ease-in-out
+  background-color: #9F3200;
+  transition: background 200ms ease-in-out
+}
+
+.locationBar {
+  display: none;
+}
+
+.locationWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  padding: 0 6px 0 10px;
+  border-right: #fff3 1px solid;
+  border-left: #fff3 1px solid;
+  height: 36px;
 }
 
 
+@media screen and (max-width: 1024px) {
+  
+  .ContenedorNavbar {
+    padding: 0;
+  }
 
+
+  .MenuLink {
+    display: none;
+  }
+
+  
+  .locationBar {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    height: 36px;
+    background-color: var(--ligth-background-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .locationWrapper {
+    display: none;
+  }
+}

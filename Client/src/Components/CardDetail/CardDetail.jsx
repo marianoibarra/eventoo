@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -16,11 +16,32 @@ import EventLocation from "./EventLocation/EventLocation";
 import covers from "../../imgs/covers";
 import moment from "moment";
 import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
-import { RiTicket2Fill } from "react-icons/ri";
+import { RiMedalLine, RiTicket2Fill } from "react-icons/ri";
 import style from "./CardDetail.module.css";
 import ContainerButtonRight from "./ContainerButtonRight/ContainerButtonRight";
+import { MdLocalFireDepartment } from "react-icons/md";
+import { Chip } from "@mui/material";
+import { SessionContext } from "../..";
+import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
+import { switchFavorites } from "../../Slice/Favorites/FavoritesSlice";
 
-const lorem = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
+const sx = {
+  bgcolor: "#BC4001",
+  color: "white",
+  mr: "10px"
+}
+
+const classic_sx = {
+  bgcolor: '#BC4001',
+  color: 'white',
+  mr: '10px'
+}
+
+const premium_sx = {
+  bgcolor: '#007F80',
+  color: 'white',
+  mr: '10px'
+}
 
 const CardDetailPublic = () => {
   const { eventDetail, loading, error } = useSelector(
@@ -31,6 +52,11 @@ const CardDetailPublic = () => {
 
   // estados para usuario organizador
   const user = useSelector((state) => state.user);
+  const {isLogged} = useSelector(state => state.user);
+  const {favorites} = useSelector(state => state.favorites);
+  const { setShowSessionModal } = useContext(SessionContext);
+  const [thisLoading, setThisLoading] = useState(false);
+  const { id } = useParams();
   const { organizer, modeEdit, editedEvent, errors} = useSelector(state => state.eventDetail.eventEdition);
 
   const genDate = () => {
@@ -78,6 +104,33 @@ const CardDetailPublic = () => {
     dispatch(setErrors(validate(object)));
   }
 
+  const handleFav = (e) => {
+    e.stopPropagation()
+    if(isLogged) {
+      setThisLoading(true)
+      dispatch(switchFavorites(id))
+    } else {
+      setShowSessionModal('login')
+    }
+  }
+
+  function editButton(event) {
+    event.preventDefault();
+    console.log(modeEdit);
+    if(modeEdit === false){
+      dispatch(setModeEdit(true));
+    }
+    else {
+      dispatch(setModeEdit(false));
+      dispatch(setErrors({}));
+      dispatch(setEditedEvent({
+        name: eventDetail.name,
+        description: eventDetail.description,
+        edited: false,
+      }));
+    }
+  }
+
   useEffect(() => {
     dispatch(getEventsManagement());
     if (user.isLogged) {
@@ -95,10 +148,9 @@ const CardDetailPublic = () => {
   }, [eventDetail, user]);
 
   return (
-    <>
+    <div className={style.background}>
       {eventDetail && data && Object.keys(eventDetail).length > 0 && (
-        <>
-          <div className={`${style.body} ${eventDetail.typePack === 'PREMIUM' && style.body_premium}`}>
+          <div className={style.body}>
             <div className={style.containerimg}>
               <img
                 src={
@@ -109,6 +161,36 @@ const CardDetailPublic = () => {
                 alt="cover_pic"
               />
             </div>
+
+            <div className={style.category_and_age}>
+
+              {eventDetail.typePack === 'CLASSIC' && <Chip sx={classic_sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
+              {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
+
+              {eventDetail.category && 
+                <Chip sx={sx} label={eventDetail.category.name}  />              
+              }
+
+              <Chip label={eventDetail.age_range} sx={sx} />
+
+              {!organizer && 
+                <div className={style.favorite} onClick={handleFav}>
+                  {
+                    favorites.some(f => f === id)
+                    ? <HiHeart className={style.favEnabled} size={20} />
+                    : <HiOutlineHeart size={20} />
+                  }
+                  {loading && thisLoading && <div class={style.loadingRing}></div>}
+                </div>
+              }
+
+              {organizer === true &&
+                <a className={style.organizericon} onClick={editButton}>
+                  <AiFillEdit size={30} style={{color: '#BC4001'}}/>
+                </a>
+              }
+            </div>
+
             <div className={style.container_title_and_description}>
               <div className={style.container_title}>
                 {modeEdit === false ? (
@@ -159,7 +241,7 @@ const CardDetailPublic = () => {
 
             <div className={style.container_date}>
               <div className={style.containericon}>
-                <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}>
+                <span className={style.iconspan}>
                   {" "}
                   <AiTwotoneCalendar size={30} />{" "}
                 </span>
@@ -176,15 +258,16 @@ const CardDetailPublic = () => {
 
             <div className={style.container_date}>
               <div className={style.containericon}>
-                <span className={`${style.iconspan} ${eventDetail.typePack === 'PREMIUM' && style.iconspan_premium}`}>
+                <span className={style.iconspan}>
                   {" "}
                   <RiTicket2Fill size={35} />{" "}
                 </span>
                 <span className={style.iconspantext}>About the event</span>
-              </div> 
-              <div className={style.aboutevent}>
-                <p>{eventDetail.large_description ? eventDetail.large_description : lorem}</p>
               </div>
+              <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
+                ? eventDetail.large_description.replace(/\n/g, '<br>')
+                : eventDetail.description
+              }}></div>
               <hr></hr>
             </div>
 
@@ -192,9 +275,8 @@ const CardDetailPublic = () => {
 
             <ContainerButtonRight />
           </div>
-        </>
       )}
-    </>
+    </div>
   );
 };
 
@@ -236,7 +318,7 @@ const CardDetail = () => {
   if (error)
     return <div className={style.error}>Something was wrong..</div>;
 
-  if (showEvent) return <CardDetailPublic />;
+  if (showEvent !== false) return <CardDetailPublic />;
 
   return (
     <div className={style.containerEventPrivate}>
