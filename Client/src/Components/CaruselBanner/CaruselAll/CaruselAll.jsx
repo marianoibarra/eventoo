@@ -24,7 +24,6 @@ const CaruselAll = () => {
 
   const navigate = useNavigate()
 
-
   useEffect(() => {
     dispatch(getPremiumEvents());
     dispatch(axiosCombinedFilter());

@@ -34,7 +34,8 @@ import { getFavorites } from "./Slice/Favorites/FavoritesSlice";
 import { getEventsManagement } from "./Slice/eventsManagement/eventsManagementSlice";
 
 export const API = axios.create({
-  baseURL: 'https://api.eventoo.com.ar',
+  baseURL: 'http://localhost:3001',
+  // baseURL: 'https://api.eventoo.com.ar',
   headers: {
     common: {
       'authorization': 'Bearer ' + localStorage.getItem("token"),
