@@ -250,6 +250,7 @@ const getEventByUser = async ({ userId }, res) => {
     const events = await Event.findAll({
       where: {
         organizerId: userId,
+        isActive: true
       },
       include: [
         "bankAccount",
