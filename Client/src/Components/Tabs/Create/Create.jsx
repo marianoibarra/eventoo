@@ -136,18 +136,7 @@ function Buys() {
 
           <div
             className="sapListItem"
-            id={sortType.type == `status` ? "sapSelection" : undefined}
           >
-            { sortType.type === 'status'? 
-            <TiArrowUnsorted
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("status")}
-            /> : <TiArrowSortedDown
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("status")}
-            /> }
             Action
           </div>
 

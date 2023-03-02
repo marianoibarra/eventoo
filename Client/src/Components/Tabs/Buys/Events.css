@@ -17,7 +17,20 @@
   background-color: rgba(130, 133, 132, 0.178);
   transition: 0.4ms;
 }
+.nameEventSap{
+  display: inline-block;
+  color: var(--secondary-color);
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
 
+  transition: all 0.2s ease-in-out;
+}
+.nameEventSap:hover{
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  color: var(--primary-color);
+  transform: translateY(-3px);
+}
 .sapListHeader > div {
   flex: 1;
   text-align: center;
@@ -143,4 +156,46 @@ font-size: 12px;
   color: var(--accent-color); 
   background-color: #ff990085; 
   border-radius: 10px;
+}
+
+.APPROVEDSAP {
+  color: #4CAF50;
+  background-color: transparent;
+  border: 1px solid #4CAF50;
+}
+
+.CANCELEDSAP {
+  color: #F44336;
+  background-color: transparent;
+  border: 1px solid #F44336;
+}
+
+.COMPLETEDSAP {
+  color: #2196F3;
+  background-color: transparent;
+  border: 1px solid #2196F3;
+}
+
+.DENIEDSAP {
+  color: #9C27B0;
+  background-color: transparent;
+  border: 1px solid #9C27B0;
+}
+
+.EXPIREDSAP {
+  color: #FFC107;
+  background-color: transparent;
+  border: 1px solid #FFC107;
+}
+
+.INWAITINGSAP {
+  color: #FF9800;
+  background-color: transparent;
+  border: 1px solid #FF9800;
+}
+
+.PENDINGSAP {
+  color: #607D8B;
+  background-color: transparent;
+  border: 1px solid #607D8B;
 }

@@ -179,15 +179,35 @@ function Buys() {
 
             <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
-              <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
+              {console.log(transaction, 'hola')}
+              <Link to={`/Event/${transaction.eventId}`}><div className="sapListItem sapListItemWide sap nameEventSap">{transaction?.event?.name}</div></Link>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}
               </div>
               <div className="sapListItem sap">
-                {transaction?.isPremium ? "Premium" : "Free"}
+                {transaction?.isPremium ? <p className="premiumSap">Premium</p> : <p className="freeSap">Free</p>}
               </div>
               <div className="sapListItem sap">
-                {transaction?.status}
+              {(() => {
+                  switch (transaction.status) {
+                    case 'APPROVED':
+                      return <p className={`${transaction.status}SAP`}>APPROVED</p>
+                    case 'CANCELED':
+                      return <p className={`${transaction.status}SAP`}>CANCELED</p>
+                    case 'COMPLETED':
+                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
+                    case 'DENIED':
+                      return <p className={`${transaction.status}SAP`}>DENIED</p>
+                    case 'EXPIRED':
+                      return <p className={`${transaction.status}SAP`}>EXPIRED</p>
+                    case 'INWAITING':
+                      return <p className={`${transaction.status}SAP`}>INWAITING</p>
+                    case 'PENDING':
+                      return <p className={`${transaction.status}SAP`}>PENDING</p>
+                    default:
+                      return <p>no tienes estados pendientes</p>;
+                  }
+                })()}
               </div>
             </div>
 

@@ -19,7 +19,8 @@
     align-items: center;
     flex-direction: row;
     justify-content: flex-start;
-    color: var(--accent-color)
+    color: var(--accent-color);
+    height: max-content;
   }
   
   .tab span {
