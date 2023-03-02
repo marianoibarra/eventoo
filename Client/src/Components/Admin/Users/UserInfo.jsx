@@ -103,11 +103,11 @@ const UserInfo = ({
     {users.map((user) => (
       <div className={`${Styles.sapListRow}`} key={user.id}>
         <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user.id}</div>
-        <div className={`${Styles.sapListItem} ${Styles.sap}`} id="sapListImage">
+        <div className={`${Styles.info} ${Styles.sap}`} id="sapListImage">
           <img className={`${Styles.sapListImage}`} src={user.profile_pic ? user.profile_pic : User} />
           {`${user?.name} ${user?.last_name}`}
         </div>
-        <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap}`}>{user?.email}</div>
+        <div className={`${Styles.info} ${Styles.sapListItemWide} ${Styles.sap}`}>{user?.email}</div>
         <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap} ${Styles.date}`}>{user?.born}</div>
         <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user?.roleAdmin?.name === "USER" ? (
           <p className={Styles.banned}>Admin</p>

@@ -41,16 +41,16 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.sapListRow> div:hover {
+.sapListRow> .info:hover {
   overflow: visible;
 font-size: 12px;
 }
 
-.sapListRow> div:hover > * {
+.sapListRow> .info:hover > * {
   z-index: 2;
 }
 
-.sapListRow > div.sapListCellWide {
+.sapListRow > .info.sapListCellWide {
   flex: 2;
   text-align: left;
 }
