@@ -119,7 +119,7 @@ const Review = () => {
                             multiline
                             value={comment}
                             rows={4}
-                            sx={{ m: 1, width: '70%', flexGrow:1}}
+                            sx={{m: 1, width: '70%', flexGrow:1}}
                             label='Comment'
                             onChange={handleOnChange}
                             // onBlur={handleBlur}
