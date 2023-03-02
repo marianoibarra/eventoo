@@ -67,6 +67,7 @@ function Buys() {
   };
 
   const accent = (e) => {
+    console.log(e)
     if (sortType.type === e) {
       if (sortType.id === 2) {
         setSortType({ type: e, id: 1 });
@@ -97,7 +98,7 @@ function Buys() {
             className="sapListItem"
             id={sortType.type == `organizer` ? "sapSelection" : undefined}
           >
-            {sortType.type === 'organizer' ?
+             {sortType.type === 'organizer' ?
               <TiArrowUnsorted
                 size={18}
                 cursor="pointer"
@@ -179,8 +180,7 @@ function Buys() {
 
             <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
-              {console.log(transaction, 'hola')}
-              <Link to={`/Event/${transaction.eventId}`}><div className="sapListItem sapListItemWide sap nameEventSap">{transaction?.event?.name}</div></Link>
+              <div className="sapListItem sapListItemWide sap nameEventSap"><Link to={`/Event/${transaction.eventId}`}>{transaction?.event?.name}</Link></div>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}
               </div>

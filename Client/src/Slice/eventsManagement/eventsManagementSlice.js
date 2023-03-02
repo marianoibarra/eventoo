@@ -143,9 +143,9 @@ export const eventsManagementSlice = createSlice({
           return a[propiedad].localeCompare(b[propiedad]);
         });
       } else if (propiedad === "organizer") {
-        state.data.buys.sort((a, b) => {
-          let c = a[propiedad] && a[propiedad].name;
-          let d = b[propiedad] && b[propiedad].name;
+        state.data.buys.event.organizer.name.sort((a, b) => {
+          let c = a !== null && a
+          let d = b !== null && b
           if (!c || !d || typeof c !== "string" || typeof d !== "string") {
             return 0;
           }

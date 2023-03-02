@@ -160,7 +160,26 @@ console.log(eventSells,'tipo de evento')
                 {transaction?.isPremium ? "Premium" : "Free"}
               </div>
               <div className="sapListItem sap">
-                {transaction?.status}
+              {(() => {
+                  switch (transaction.status) {
+                    case 'APPROVED':
+                      return <p className={`${transaction.status}SAP`}>APPROVED</p>
+                    case 'CANCELED':
+                      return <p className={`${transaction.status}SAP`}>CANCELED</p>
+                    case 'COMPLETED':
+                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
+                    case 'DENIED':
+                      return <p className={`${transaction.status}SAP`}>DENIED</p>
+                    case 'EXPIRED':
+                      return <p className={`${transaction.status}SAP`}>EXPIRED</p>
+                    case 'INWAITING':
+                      return <p className={`${transaction.status}SAP`}>INWAITING</p>
+                    case 'PENDING':
+                      return <p className={`${transaction.status}SAP`}>PENDING</p>
+                    default:
+                      return <p>no tienes estados pendientes</p>;
+                  }
+                })()}
               </div>
             </div>
             {transaction.id === transactionId ?

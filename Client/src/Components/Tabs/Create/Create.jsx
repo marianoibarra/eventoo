@@ -144,7 +144,7 @@ function Buys() {
         {eventsCreated.map((event,index) => (
           <div className="sapListRow" key={index}>
             <div className="sapListItem sap">{`${event?.organizer?.name} ${event?.organizer?.last_name}`}</div>
-            <div className="sapListItem sapListItemWide sap">{event.name}</div>
+            <div className="sapListItem sapListItemWide sap " >{event.name}</div>
             <div className="sapListItem sapListItemWide sap">
               {event?.start_date}
             </div>
