@@ -24,16 +24,16 @@ export const getEventsManagement = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "eventsBuysSlice/deleteEvent",
-  async (eventId, {rejectWithValue}) => {
-   try {
-    const response = await API.put(`/event/${eventId}`);
-    return  eventId
-   } catch (error) {
-    if (error.response) {
-      return rejectWithValue(error.response.data);
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await API.put(`/event/${eventId}`);
+      return eventId
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
     }
-    throw error;
-  }
   }
 );
 
@@ -68,7 +68,7 @@ export const cancelTransaction = createAsyncThunk(
 
 export const loadPaymentProof = createAsyncThunk(
   "eventsManagement/loadPaymentProof",
-  async ({id, data}, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     try {
       const res = await API.put(`/transaction/complete/${id}`, data);
       return res.data;
@@ -79,6 +79,21 @@ export const loadPaymentProof = createAsyncThunk(
     }
   }
 );
+
+
+export const putApprovePayment = createAsyncThunk(
+  "eventsManagement/putApprovePayment",
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/transaction/approvePayment/${id}`, data)
+      return res.data
+    } catch (error) {
+      if (error.res) {
+        return rejectWithValue(error.response.data)
+      }
+    }
+  }
+)
 
 
 const initialState = {
@@ -116,7 +131,7 @@ export const eventsManagementSlice = createSlice({
       if (
         propiedad === "start_date" ||
         propiedad === "name" ||
-        propiedad === "status" 
+        propiedad === "status"
       ) {
         state.events.sort((a, b) => {
           if (
@@ -125,7 +140,7 @@ export const eventsManagementSlice = createSlice({
             typeof a[propiedad] !== "string" ||
             typeof b[propiedad] !== "string"
           ) {
-            return 0; 
+            return 0;
           }
           return a[propiedad].localeCompare(b[propiedad]);
         });
@@ -143,7 +158,7 @@ export const eventsManagementSlice = createSlice({
           }
           return c.localeCompare(d);
         });
-      }else {
+      } else {
         state.events.sort((a, b) => a[propiedad] - b[propiedad]);
       }
     },
@@ -151,7 +166,7 @@ export const eventsManagementSlice = createSlice({
       const propiedad = action.payload;
       if (
         propiedad === "start_date" ||
-        propiedad === "name"  ||
+        propiedad === "name" ||
         propiedad === "status"
       ) {
         state.filteredDataUser = state.events.sort((a, b) => {
@@ -179,8 +194,8 @@ export const eventsManagementSlice = createSlice({
           }
           return d.localeCompare(c);
         });
-      
-      }else {
+
+      } else {
         state.events.sort((a, b) => b[propiedad] - a[propiedad]);
       }
     },
@@ -199,7 +214,6 @@ export const eventsManagementSlice = createSlice({
       state.loading.get = false;
       state.error = action.payload;
     },
-
     [postNewTransaction.pending]: (state) => {
       state.loading.post = true
       state.transactionWasCreated = false
@@ -214,7 +228,6 @@ export const eventsManagementSlice = createSlice({
       state.loading.post = false;
       state.error = action.payload;
     },
-
     [cancelTransaction.pending]: (state) => {
       state.loading.put = true
       state.transactionWasCancel = false
@@ -229,7 +242,6 @@ export const eventsManagementSlice = createSlice({
       state.error = action.payload;
       state.transactionWasCancel = false
     },
-
     [loadPaymentProof.pending]: (state) => {
       state.loading.put = true
       state.paymentWasLoaded = false
@@ -250,10 +262,10 @@ export const eventsManagementSlice = createSlice({
     [deleteEvent.fulfilled]: (state, action) => {
       state.loading = false;
       const eventId = action.payload;
-    
+
       // Buscar el índice del evento en el arreglo state.eventsCreated usando findIndex
       const eventIndex = state.data.eventsCreated.findIndex((e) => e.id === eventId);
-    
+
       // Si el evento existe en el arreglo, eliminarlo usando splice
       if (eventIndex !== -1) {
         state.data.eventsCreated.splice(eventIndex, 1);
@@ -262,6 +274,17 @@ export const eventsManagementSlice = createSlice({
     [deleteEvent.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error;
+    },
+    [putApprovePayment.pending]: (state) => {
+      state.loading.put = false
+    },
+    [putApprovePayment.fulfilled]: (state) => {
+      state.loading.put = true
+      state.error = false
+    },
+    [putApprovePayment.rejected]: (state, action) => {
+      state.loading.put = false
+      state.error = action.payload
     }
   }
 })

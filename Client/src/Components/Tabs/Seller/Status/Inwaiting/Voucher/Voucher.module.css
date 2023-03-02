@@ -1,23 +1,18 @@
-.containerLoadVoucher {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+.containerLoadVoucher{
+    width: 60%;
+    height: 69.5%;
 }
-
 
 .containerVoucher_tittle {
     width: 100%;
     display: flex;
     justify-content: center;
-    font-size: 25px;
-    margin-top: 1%;
+    font-size: 30px;
+    margin-top: 3%;
     font-weight: 400;
 }
 
-.containerVoucher_tittle>p {
+.containerVoucher_tittle > p{
     font-weight: 500;
     color: var(--primary-color);
     margin-left: 2%;
@@ -47,7 +42,7 @@
     color: var(--primary-color);
 }
 
-.containerVoucher {
+.containerVoucher{
     height: 100%;
 }
 
@@ -71,11 +66,12 @@
 
 .imageWrapper {
     position: relative;
-    justify-content: center;
-    display: flex;
+    display: flex; 
     width: 100%;
+    max-width: 1280px;
     height: 100%;
     overflow: hidden;
+    /* margin: 3% auto; */
 }
 
 .imgDropArea {
@@ -90,12 +86,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 300px;
-    height: 400px;
+    width: 50%;
+    height: 90%;
     gap: 12px;
     font-size: 0.95rem;
     background-color: #007F8019;
-    margin: 2% auto;
+    margin: 0 auto;
     transition: filter .3s ease-in-out, border .3s ease-in-out;
     border: 2px dashed transparent;
     border-radius: 15px;
@@ -157,7 +153,7 @@
     border-radius: 1rem;
     top: 0px;
     right: 0px;
-    bottom: 0px;    
+    bottom: 0px;
     left: 0px;
 }
 
@@ -169,22 +165,24 @@
     flex-direction: column;
     width: 500px;
     height: 400px;
-    margin: 1.5% 0;
+     margin: 1.5% 0; 
     /* background: blueviolet; */
     border: none;
 }
 
+.embedPdf{
+    height: 100%;
+}
 
 
 .imgPreview {
     width: 80%;
-    height: 100%;
-    background-size: contain;
+    height: 80%;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
     animation: previewIn .3s ease-in-out;
     z-index: 40;
-    /* margin-bottom: 2%; */
+    margin-bottom: 2%;
 }
 
 .deleteImg {
@@ -228,17 +226,19 @@
 
 .uploadMsg {
     display: flex;
+    /* position: absolute; */
     top: 95px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 62.6%;
-    height: 430px;
+    height: 100%;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     font-size: 1.2rem;
+    /* background-color: #0005; */
     color: var(--dark-text);
-    /* margin-left: 18.8%; */
+    margin-left: 18.8%;
 }
 
 
@@ -253,9 +253,9 @@
     align-self: center;
     justify-self: center;
     text-align: center;
-}
-
-.spinner div {
+  }
+  
+  .spinner div {
     position: absolute;
     top: 4px;
     width: 13px;
@@ -264,57 +264,54 @@
     background: #007F80;
     opacity: .9;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-
-.spinner div:nth-child(1) {
+  }
+  
+  .spinner div:nth-child(1) {
     left: 8px;
     animation: spinner1 0.6s infinite;
-}
-
-.spinner div:nth-child(2) {
+  }
+  
+  .spinner div:nth-child(2) {
     left: 8px;
     animation: spinner2 0.6s infinite;
-}
-
-.spinner div:nth-child(3) {
+  }
+  
+  .spinner div:nth-child(3) {
     left: 32px;
     animation: spinner2 0.6s infinite;
-}
-
-.spinner div:nth-child(4) {
+  }
+  
+  .spinner div:nth-child(4) {
     left: 56px;
     animation: spinner3 0.6s infinite;
-}
-
-@keyframes spinner1 {
+  }
+  
+  @keyframes spinner1 {
     0% {
         transform: scale(0);
     }
-
     100% {
         transform: scale(1);
     }
-}
-
-@keyframes spinner3 {
+  }
+  
+  @keyframes spinner3 {
     0% {
         transform: scale(1);
     }
-
     100% {
         transform: scale(0);
     }
-}
-
-@keyframes spinner2 {
+  }
+  
+  @keyframes spinner2 {
     0% {
         transform: translate(0, 0);
     }
-
     100% {
         transform: translate(24px, 0);
     }
-}
+  }
 
 @media screen and (max-width: 940px) {
 
@@ -366,34 +363,107 @@
 
 }
 
-.containerVoucher_button {
+.containerVoucher_button{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    margin: 0 auto;
-    width: 25%;
-}
-
-
-.containerVoucher_button>button{
-    margin: 0;
-}
-
-
-.btnAceptar {
-    display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    font-size: 1.3vw;
+}
+
+
+.btnAceptar{
+ display: flex;
+justify-content: center;
+align-items: center;
+width: 150px;
+font-size: 1.3vw;
+font-weight: 500;
+border: none;
+color: var(--white-text);
+cursor: pointer;
+margin: 0 auto;
+height: 50px;
+background-size: 300% 100%;
+border-radius: 10px;
+background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+}
+
+
+.detailWrapper {
+    display: flex;
+    height: 100%;
+    width: 40%;
+    flex-direction: column;
+}
+
+.imgWrapper {
+    width: 100%;
+    height: 220px;
+}
+
+.detailEvent_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.detail {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 22px;
+    padding: 5%;
+}
+
+.detailEvent_resume {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
     font-weight: 500;
-    border: none;
+}
+
+.detailEvent_tickets {
+    width: 100%;
+    display: flex;
+    font-size: 1.1rem;
+    justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: #0002 1px solid;
+}
+
+.detailEvent_total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.detail span::before {
+    content: "$";
+    position: relative;
+    bottom: 5%;
+    right: 5%;
+    font-size: 65%;
+}
+
+.detailBankAccount {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 44%;
+    margin-left: -6%;
+    width: 112%;
+    gap: 6px;
+    background-color: var(--primary-color);
     color: var(--white-text);
-    cursor: pointer;
-    margin: 0 auto;
-    height: 50px;
-    background-size: 300% 100%;
-    border-radius: 10px;
-    background-image: linear-gradient(to right, #DF8354 0%, #D76D37 40%, #BC4000 100%);
+}
+
+.detailBankAccount_CBU_name {
+    font-weight: 300;
+    font-size: 18px;
+}
+
+
+.containerUrl{
+    background-color: #BC4000;
 }

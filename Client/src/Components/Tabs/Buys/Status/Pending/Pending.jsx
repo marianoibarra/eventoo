@@ -10,9 +10,7 @@ const Pending = ({
   return (
   <>
     <div className={styles.container}>
-      <h2> Total {totalPrice}</h2>
-      <h2> Total Ticket {transaction.tickets.length}</h2>
-      </div>
+     </div>
       <div>
       <Voucher
         transaction={transaction.id}
