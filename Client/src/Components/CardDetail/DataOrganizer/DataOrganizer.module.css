@@ -1,0 +1,31 @@
+.miniRecuadro {
+    display: flex;
+    align-items: center;
+    gap: 33px;
+    padding: 16px;
+    flex-direction: column;
+    border: 1px solid gray;
+    position: sticky;
+    z-index: 300;
+    top: 294px;
+    left: 0;
+    width: 20vw;
+    height: max-content;
+    border-radius: 12px;
+    cursor: pointer;
+}
+  
+  .icono {
+    cursor: pointer;
+    size: 20px;
+    margin-left: 15px;
+  }
+  
+  .confirmacion {
+    color: green;
+  }
+  .title{
+    display: flex;
+    flex-direction: row;
+
+  }

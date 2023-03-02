@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { axiosModeCategories } from "../../../Slice/Filter/categorieSlice";
-import { getAllEvents } from "../../../Slice/Admin/AdminSlice";
-import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
+import { axiosModeCategories } from "../../../../Slice/Filter/categorieSlice";
+import { getAllEvents } from "../../../../Slice/Admin/AdminSlice";
 import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Pie from "./Pie/Pie";
+import StackedBarChart from "./Table/TableStadistic";
 
 const useStyles = makeStyles({
   chartContainer: {
-    display: "flex",
-    flexDirection: "column",
+    display: "grid",
+    gap: "50",
     alignItems: "center",
     marginTop: "3rem",
     height: "100%",
     width: "100%",
+    justifyContent:'canter'
   },
   title: {
-    fontSize: "2rem",
-    fontWeight: "bold",
-    marginBottom: "1rem",
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: 'var(--accent-color)',
+    letterSpacing: '2px',
+    lineHeight: '1.2',
+    marginBottom: '30px',
+    paddingBottom: '10px',
+    borderBottom: '1px solid #ddd'
   },
   chart: {
     width: "100%",
@@ -39,7 +46,7 @@ function Grafict() {
   const { events } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const [chartData, setChartData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [modality, setModality] = useState(null);
   const classes = useStyles();
 
   useEffect(() => {
@@ -54,22 +61,47 @@ function Grafict() {
     }
     return color;
   }
+
   useEffect(() => {
     if (events.length && categories.length) {
       const data = categories
-        .map((category) => {
+        .map((category, index) => {
           const results = events.filter((event) =>
             JSON.stringify(event).includes(category.name)
           );
-          return {
-            name: category.name,
-            value: results.length,
-            color: getRandomColor(),
-          };
+          const value = results.length;
+          const id =
+            category.name !== "Congresses"
+              ? category.name
+              : category.modality === "Presential"
+              ? "Congresses Presential"
+              : "congresses Virtual"; // Agrega un prefijo único
+          return value === 0
+            ? null
+            : {
+                id: id,
+                label: category.name,
+                value: value,
+              };
         })
+        .filter((category) => category !== null)
         .sort((a, b) => b.value - a.value);
+        console.log(data)
       setChartData(data);
-      setLoading(false);
+    }
+    if (events.length && categories.length) {
+      const resultsP = events.filter(
+        (event) => event.category && event.category.modality === "Presential"
+      );
+      
+      const resultsv = events.filter(
+        (event) => event.category && event.category.modality === "Virtual"
+      );
+    
+      setModality([
+        { id: "Presential", label: "Presential", value: resultsP.length },
+        { id: "Virtual", label: "Virtual", value: resultsv.length },
+      ]);
     }
   }, [events, categories]);
 
@@ -96,37 +128,11 @@ function Grafict() {
   return (
     <div className={classes.chartContainer}>
       <h2 className={classes.title}>Events for Category</h2>
-      {loading ? (
-        <div className={classes.loadingContainer}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <PieChart className={classes.chart} width={800} height={400}>
-          <Pie
-            data={chartData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={120}
-            fill="#8884d8"
-            label={({ name, value }) => `${name}: ${value}`}
-            activeIndex={activeIndex}
-            activeShape={{ r: 120 }}
-            onMouseEnter={onPieEnter}
-          >
-            {chartData.map((entry, index) => (
-              <Cell key={entry.name} fill={entry.color} />
-              ))}
-              <Tooltip content={renderCustomTooltip} />
-              </Pie>
-              <Legend
-                       layout="vertical"
-                       align=""
-                       verticalAlign="bottom"
-                     />
-              </PieChart>
-      )}
+      <Pie data={chartData} />
+      <h2 className={classes.title}>Events for Modality</h2>
+      <Pie data={modality}  />
+      <h2 className={classes.title}>Events sold in the year</h2>
+      <StackedBarChart />
     </div>
   );
 }

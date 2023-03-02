@@ -5,34 +5,11 @@ import Tab from '@material-ui/core/Tab';
 import Create from './Create/Create';
 import Buys from './Buys/Buys';
 import Seller from './Seller/Seller';
-
-
-const useStyles = makeStyles(theme => ({
-
-  root: {
-    margin: '0 auto',
-    width: '100%',
-    backgroundColor: `var(--ligth-background-color)`,
-    color: `var(--dark-text)`,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  tabs: {
-    width: '100%',
-    marginTop: theme.spacing(2),
-  },
-  tab: {
-    width: '50%',
-  },
-  content: {
-    width: '100%',
-    textAlign: 'center',
-  },
-}));
+import Styles from './Tabs.module.css'
+import { MdSell , MdCreateNewFolder } from "react-icons/md";
+import { FcSalesPerformance } from "react-icons/fc";
 
 function TabsComponent() {
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -40,36 +17,51 @@ function TabsComponent() {
   };
 
   return (
-    <div className={classes.root}>
-      <Tabs
-        className={classes.tabs}
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab className={classes.tab} label="Buys" />
-        <Tab className={classes.tab} label="Seller" />
-        <Tab className={classes.tab} label="Organizator" />
-      </Tabs>
-      {value === 0 && (
-        <div className={classes.content}>
+    <div className={Styles.root}>
+    <Tabs
+      className={`${Styles.tabs} ${Styles.tabsCustom}`}
+      value={value}
+      onChange={handleChange}
+      indicatorColor="var(--accent-color)"
+      color='var(--accent-color)'
+
+    >
+      <Tab
+        className={Styles.tab}
+        icon={<MdSell className={Styles.tabIcon} />}
+
+       label="Buys"
+      />
+      <Tab
+        className={Styles.tab}
+        icon={<FcSalesPerformance className={Styles.tabIcon} />}
+      label="Seller"
+      />
+      <Tab
+        className={Styles.tab}
+        icon={<MdCreateNewFolder className={Styles.tabIcon} />}
+       label="Organizator"
+      />
+    </Tabs>
+    {value === 0 && (
+        <div className={Styles.content}>
           <Buys />
         </div>
       )}
       {value === 1 && (
-        <div className={classes.content}>
+        <div className={Styles.content}>
           <Seller />
         </div>
       )}
       {value === 2 && (
-        <div className={classes.content}>
+        <div className={Styles.content}>
           <Create />
-        </div>
-      )}
-    </div>
+        </div>)}
+  </div>
   );
 }
 
 export default TabsComponent;
+
+
+

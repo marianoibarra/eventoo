@@ -28,12 +28,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
-  axiosModeEventsBuys,
-  deleteEvent,
   setFilterBuyEvent,
   sortByAscendingEventsBuys,
   sortByDescendingEventsBuys,
-} from "../../../Slice/EventsBuysForUser/BuysSlice";
+} from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
 import './Events.css'
@@ -53,7 +51,7 @@ import Expired from "./Status/Expired/Expired";
 
 
 function Buys() {
-  const { data: { buys: eventBuys }, error } = useSelector((state) => state.eventsManagement);
+  const { data: { buys: eventBuys }, errorBuyEvents } = useSelector((state) => state.eventsManagement);
   const [sortType, setSortType] = useState({ type: null, id: 2 });
   const [transactionId, setTransactionId] = useState(null);
 
@@ -69,6 +67,7 @@ function Buys() {
   };
 
   const accent = (e) => {
+    console.log(e)
     if (sortType.type === e) {
       if (sortType.id === 2) {
         setSortType({ type: e, id: 1 });
@@ -91,7 +90,7 @@ function Buys() {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <h3>{error ? error : undefined}</h3>
+      <h3>{errorBuyEvents ? errorBuyEvents : undefined}</h3>
 
       <div className="sapList">
         <div className="sapListHeader">
@@ -99,7 +98,7 @@ function Buys() {
             className="sapListItem"
             id={sortType.type == `organizer` ? "sapSelection" : undefined}
           >
-            {sortType.type === 'organizer' ?
+             {sortType.type === 'organizer' ?
               <TiArrowUnsorted
                 size={18}
                 cursor="pointer"
@@ -181,15 +180,34 @@ function Buys() {
 
             <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
-              <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
+              <div className="sapListItem sapListItemWide sap nameEventSap"><Link to={`/Event/${transaction.eventId}`}>{transaction?.event?.name}</Link></div>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}
               </div>
               <div className="sapListItem sap">
-                {transaction?.isPremium ? "Premium" : "Free"}
+                {transaction?.isPremium ? <p className="premiumSap">Premium</p> : <p className="freeSap">Free</p>}
               </div>
               <div className="sapListItem sap">
-                {transaction?.status}
+              {(() => {
+                  switch (transaction.status) {
+                    case 'APPROVED':
+                      return <p className={`${transaction.status}SAP`}>APPROVED</p>
+                    case 'CANCELED':
+                      return <p className={`${transaction.status}SAP`}>CANCELED</p>
+                    case 'COMPLETED':
+                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
+                    case 'DENIED':
+                      return <p className={`${transaction.status}SAP`}>DENIED</p>
+                    case 'EXPIRED':
+                      return <p className={`${transaction.status}SAP`}>EXPIRED</p>
+                    case 'INWAITING':
+                      return <p className={`${transaction.status}SAP`}>INWAITING</p>
+                    case 'PENDING':
+                      return <p className={`${transaction.status}SAP`}>PENDING</p>
+                    default:
+                      return <p>no tienes estados pendientes</p>;
+                  }
+                })()}
               </div>
             </div>
 

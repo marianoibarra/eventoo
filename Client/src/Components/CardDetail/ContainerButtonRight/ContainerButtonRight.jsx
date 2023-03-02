@@ -7,6 +7,7 @@ import UserIcon from "../../../Assets/UserProfile.png";
 import style from "./ContainerButtonRight.module.css";
 import ModalReviews from "../../Modal/ModalReviews/ModalReviews";
 import { Rating } from "@mui/material";
+import DataOrganizer from "../DataOrganizer/DataOrganizer";
 
 function ContainerButtonRight() {
 
@@ -52,6 +53,7 @@ function ContainerButtonRight() {
       </div>}
 
       {organizer === false && <BuyButton />}
+      {user.roleAdmin ===  "SUPERADMIN" && <DataOrganizer id={eventDetail?.id} organizador={eventDetail?.organizer?.name+' '+ eventDetail?.organizer?.last_name}/>}
 
       {user.isLogged && organizer === true && (
         <div className={style.organizerbutton_div}>

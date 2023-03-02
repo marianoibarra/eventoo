@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Styles from './SearchBarAdmin.module.css'
-import { AiOutlineSearch, AiFillDelete } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 function SearchBar({ onSearch }) {
   const [input, setInput] = useState('');
@@ -24,7 +24,7 @@ function SearchBar({ onSearch }) {
     <form onSubmit={handleFormSubmit}className={Styles.searchBar}>
       <input type="text" placeholder="Buscar" value={input} onChange={handleInputChange} className={Styles.searchInput}/>
       <button type="submit" className={Styles.searchButton}><AiOutlineSearch size={18}/></button>
-      <button onClick={deleteFormSubmit}className={Styles.searchButton}><AiFillDelete size={18}/></button>
+      <button onClick={deleteFormSubmit}className={Styles.searchButton}><AiOutlineClose size={18}/></button>
     </form>
   );
 }
