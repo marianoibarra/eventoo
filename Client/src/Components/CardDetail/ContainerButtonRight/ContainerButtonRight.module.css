@@ -15,21 +15,6 @@
     }
 }
 
-.container_typePack {
-    margin: 0 auto;
-    width: min-content;
-}
-
-.category_and_age {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: max-content;
-    margin-bottom: 35px;
-}
-
 .text {
     display: block;
     width: min-content;
@@ -89,11 +74,6 @@
     border: solid 1px var(--primary-color);
 }
 
-/* .container_organizer_premium {
-    background-color: black;
-    color: #FFD700;
-} */
-
 .organizer_text {
     max-width: 50%;
     margin-top: 10px;
@@ -105,38 +85,4 @@
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
-}
-
-/* .profile_pic_premium {
-    border: solid 2px #FFD700;
-} */
-
-.organizericon {
-    cursor: pointer;
-    width: min-content;
-    color: var(--secondary-color);
-    margin-top: 10px;
-}
-
-.organizericon:hover {
-    color: #ab2a3e;
-}
-
-.favEnabled {
-    transition: all .4s cubic-bezier(.4,0,.3,1);
-    color: #BC4001;
-}
-
-.favorite {
-    margin-top: 10px;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    border: #0002 1px solid;
-    background-color: #f9f9f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(---secondary-color);
 }
