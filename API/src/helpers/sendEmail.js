@@ -2943,7 +2943,7 @@ const sendBuyerNotifications = (to, template, pdf,eventId) => {
      
                                    <div style="font-family: 'Cabin',sans-serif; font-size: 18px; color: #000000; line-height: 160%; text-align: center; word-wrap: break-word;">
                                      <p style="line-height: 160%;"> </p>
-                                     <p style="line-height: 160%;">Thanks foryour purchase, see you soon!<br /><br /></p>
+                                     <p style="line-height: 160%;">Thanks for your purchase, see you soon!<br /><br /></p>
                                    </div>
      
                                  </td>
@@ -3670,7 +3670,7 @@ const sendBuyerNotifications = (to, template, pdf,eventId) => {
                                 <td style="overflow-wrap:break-word;word-break:break-word;padding:33px 55px;font-family:'Cabin',sans-serif;" align="left">
     
                                   <div style="font-family: 'Cabin',sans-serif; font-size: 18px; line-height: 160%; text-align: center; word-wrap: break-word;">
-                                    <p style="line-height: 160%;">Rate your experience and helps us improve.<br />Your review is very important for future events.</p>
+                                    <p style="line-height: 160%;">Rate your experience and help us improve.<br />Your review is very important for future events.</p>
                                   </div>
     
                                 </td>
