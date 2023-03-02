@@ -8,6 +8,7 @@ export const createEvent = createAsyncThunk(
       const response = await API.post("/event", formData);
       return response.data;
     } catch (error) {
+      console.log(error)
       if (error.response) {
         return rejectWithValue(error.response.data);
       }
@@ -47,7 +48,7 @@ export const eventSlice = createSlice({
     },
     [createEvent.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      state.error = action.payload;
     },
   },
 });

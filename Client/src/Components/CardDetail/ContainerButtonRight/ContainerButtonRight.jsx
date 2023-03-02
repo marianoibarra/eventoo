@@ -72,7 +72,7 @@ function ContainerButtonRight() {
         }
       </div>
 
-      {eventDetail.organizer.name && <div className={`${style.container_organizer} ${eventDetail.typePack === 'PREMIUM' && style.container_organizer_premium}`}>
+      {eventDetail.organizer.name && <div className={style.container_organizer}  onClick={() => {setShowModal(true)}}>
 
         <img 
           src={eventDetail.organizer.profile_pic ? eventDetail.organizer.profile_pic : UserIcon}

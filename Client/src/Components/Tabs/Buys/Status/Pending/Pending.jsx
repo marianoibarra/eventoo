@@ -16,7 +16,7 @@ const Pending = ({
       <div>
       <Voucher
         transaction={transaction.id}
-        eventId={transaction.event.div}
+        eventId={transaction.event.id}
       />
       </div>
     </>

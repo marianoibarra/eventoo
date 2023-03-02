@@ -5,11 +5,13 @@ const {
   Ticket,
   Category,
   Address,
+  BankAccount,
 } = require("../db");
-require("dotenv").config();
+const {
+  sendBuyerNotifications,
+  sendOrganizerNotifications,
+} = require("../helpers/sendEmail");
 const moment = require("moment");
-const nodemailer = require('nodemailer');
-// const fs = require("fs"); para pruebas locales de pdf
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const approvalTimeLimit = 1;
@@ -34,6 +36,7 @@ const cleanTransactions = async (IdEvent) => {
       },
     ],
   });
+
   const expiredTransactions = event.transactions.filter(
     (transaction) =>
       moment().isAfter(moment(transaction.dataValues.expiration_date)) &&
@@ -61,6 +64,7 @@ const cleanTransactions = async (IdEvent) => {
 };
 
 const updateEventLowStock = async (eventId,percentageThreshold) => {
+  let percentageThreshold = 15;
   const event = await Event.findByPk(eventId);
   const availableTickets =event.stock_ticket;
   const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
@@ -76,14 +80,26 @@ const createTransactions = async (req, res) => {
     const { eventId, tickets } = req.body;
 
     const event = await Event.findByPk(eventId, {
-      include: {
-        model: Transaction,
-        as: "transactions",
-      },
+      include: [
+        {
+          model: Transaction,
+          as: "transactions",
+        },
+        {
+          model: BankAccount,
+          as: "bankAccount",
+        },
+        {
+          model: User,
+          as: "organizer",
+        },
+      ],
     });
     await cleanTransactions(event,approvalTimeLimit);
     await event.reload();
     const user = await User.findByPk(buyerId);
+    const organizer = await User.findByPk(event.organizer.id);
+    const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
 
     if (event.stock_ticket < tickets.length) {
       // se verifica si hay suficiente stock de entradas
@@ -94,7 +110,7 @@ const createTransactions = async (req, res) => {
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -104,7 +120,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -138,6 +154,13 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
+
+    sendBuyerNotifications(
+      user.email,
+      "reserveTickets"
+    );
+    sendOrganizerNotifications(organizer.email, "reservationReceived");
+
     return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
@@ -365,6 +388,10 @@ const completeTransaction = async (req, res) => {
     const transaction = await Transaction.findByPk(transactionId, {
       include: "tickets",
     });
+    const buyer = await User.findByPk(transaction.buyerId);
+    const event = await Event.findByPk(transaction.eventId, {
+      include: { model: User, as: "organizer" },
+    });
 
     // if (transaction.status !== "PENDING") {
     //   return res.status(400).json({
@@ -391,83 +418,20 @@ const completeTransaction = async (req, res) => {
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
+      sendBuyerNotifications(buyer.email, "expiredReservation");
       return res.status(400).json({
         error:
           "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
       });
     }
-    const tickets = await Ticket.findAll({
-      where: {
-        transactionId,
-      },
-    });
-    const event = await Event.findByPk(transaction.eventId);
-    const eventName = event.name;
-    const address = await Address.findByPk(event.addressId);
-    const user = await User.findByPk(transaction.buyerId)
-    const doc = new PDFDocument({ autoFirstPage: false });
-
-    for (const t of tickets) {
-      const url = await QRCode.toDataURL(`${t.id}`, {
-        errorCorrectionLevel: "H",
-        type: "image/jpeg",
-        quality: 0.3,
-        margin: 1,
-        color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
-      });
-      doc.addPage();
-      doc.text(`${eventName}'s ticket`);
-      doc.image(url, { width: 150, height: 150 });
-      doc.text(`${t.id}`);
-      doc.text(`Titular: ${t.name} ${t.last_name}`);
-      doc.text(`Date: ${t.start_date}`);
-      doc.text(`Time: ${t.start_time}`);
-      doc.text(`Price: ${t.price}`);
-      doc.text(`Address: ${address}`);
-      event.cover_pic && doc.image(event.cover_pic, { width: 150, height: 150 });
-      doc.save();
-    }
-    doc.end();
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      secureConnection: false, 
-      port: 465,
-      tls: {
-         ciphers:'SSLv3'
-      },
-      auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-      }
-    });
-
-    const options = {
-      from: `Eventoo <${process.env.EMAIL_USER}>`,
-      to: 'marianoibarratesta@outlook.com',
-      subject: 'Tickets',
-      text: 'Enjoy the event!!',
-      attachments: [
-        {
-          filename: 'tickets.pdf',
-          content: doc,
-          contentType: 'application/pdf'
-        }
-      ]
-    };
-
-    transporter.sendMail(options, (error, info) => {
-      if (error) {
-        console.log('Error sending mail: ', error);
-      } else {
-        console.log('Mail sent: ', info.response);
-      }
-    })
 
     await transaction.update({ payment_proof, status: "INWAITING" });
+    sendBuyerNotifications(buyer.email, "receiptUploaded");
+    sendOrganizerNotifications(
+      event.organizer.email,
+      "newTransfer",
+    );
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,
@@ -484,7 +448,6 @@ const ApprovePayment = async (req, res) => {
     const { isApproved } = req.body;
     const { transactionId } = req.params;
     const userId = req.userId;
-
     // if (transaction.status !== "INWAITING") {
     //   return res.status(400).json({
     //     error: "Transaction is not in waiting status",
@@ -505,6 +468,7 @@ const ApprovePayment = async (req, res) => {
         },
       ],
     });
+    const buyer = await User.findByPk(transaction.buyerId);
 
     if (transaction.event.dataValues.organizerId !== userId) {
       return res.status(401).json({
@@ -532,12 +496,120 @@ const ApprovePayment = async (req, res) => {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
       await transaction.update({ status: "CANCELED" });
       const ticketsToReturn = transaction.tickets.length;
-      const event = await Event.findByPk(transaction.eventId);
+      const event = await Event.findByPk(transaction.eventId, {
+        include: [
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+        ],
+      });
       await event.increment("stock_ticket", { by: ticketsToReturn });
+      sendBuyerNotifications(buyer.email, "denied");
       return res.status(200).json({
         msg: `Transaction status updated to ${status}`,
         transaction,
       });
+    }
+
+    if (status === "APPROVED") {
+      const tickets = await Ticket.findAll({
+        where: {
+          transactionId,
+        },
+      });
+
+      const event = await Event.findByPk(transaction.eventId, {
+        include: [
+          {
+            model: Address,
+            as: "address",
+            attributes: { exclude: ["id"] },
+          },
+        ],
+      });
+      const eventName = event.name;
+      const doc = new PDFDocument({ autoFirstPage: false });
+      const urls = [];
+
+      const generateQr = async (t) => {
+        return QRCode.toDataURL(`${t.id}`, {
+          errorCorrectionLevel: "H",
+          type: "image/jpeg",
+          quality: 0.3,
+          margin: 1,
+          color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+          },
+        });
+      };
+
+      for (t of tickets) {
+        const promise = await generateQr(t);
+        urls.push(promise);
+      }
+
+      urls.forEach((url, index) => {
+        const t = tickets[index];
+        const stringAddress = event.address.address_line.concat(
+          `, ${event.address.city}, ${event.address.state}`
+        );
+        doc.addPage();
+        doc.fontSize(32).text(`${eventName}'s ticket`, {
+          align: "center",
+        });
+        doc.moveDown(1);
+        doc.image(url, 40, 145, { width: 150, height: 150 });
+        doc.fontSize(14).text(`${t.id}`, 100, 300).moveDown();
+        doc
+          .text(`Titular: ${t.name} ${t.last_name}`, 325, 150, {
+            width: 410,
+          })
+          .moveDown();
+        doc
+          .text(`Date: ${event.start_date}`, 325, 180, { width: 410 })
+          .moveDown();
+        doc
+          .text(`Time: ${event.start_time}`, 325, 210, { width: 410 })
+          .moveDown();
+        doc.text(`Price: ${event.price}`, 325, 240, { width: 410 }).moveDown();
+        stringAddress.length <= 31
+          ? doc
+              .text(
+                `Address: ${event.address.address_line}, ${event.address.city}, ${event.address.state}`,
+                325,
+                270,
+                { width: 410 }
+              )
+              .moveDown()
+          : doc
+              .text(`Address: ${event.address.address_line}, `, 325, 270, {
+                width: 410,
+              })
+              .moveDown()
+              .text(`${event.address.city}, ${event.address.state}`, 325, 290, {
+                width: 410,
+              });
+        doc
+          .lineWidth(2)
+          .lineJoin("round")
+          .rect(20, 120, 570, 200)
+          .strokeColor("#007F80")
+          .stroke();
+        doc.text(
+          `      Thank you for your purchase,
+          we hope you enjoy the event. See you soon!`,
+          20,
+          600,
+          { align: "center" }
+        );
+        doc.save();
+      });
+      doc.end();
+      sendBuyerNotifications(buyer.email, "accepted");
+      sendBuyerNotifications(buyer.email, "tickets", event.id, doc);
     }
     return res.status(200).json({
       msg: `Transaction status updated to ${status}`,
@@ -562,6 +634,17 @@ const cancelTransaction = async (req, res) => {
       });
     }
     await transaction.update({ payment_proof, status: "CANCELED" });
+
+    if (transaction.status === "PENDING") {
+      const ticketsToReturn = transaction.tickets.length;
+      const event = await Event.findByPk(transaction.eventId);
+
+      await event.increment("stock_ticket", { by: ticketsToReturn });
+      await transaction.update({ payment_proof, status: "CANCELED" });
+    }
+
+    updateEventLowStock(transaction.eventId);
+
     return res.status(200).json({
       msg: "Transaction completed successfully",
       transaction,

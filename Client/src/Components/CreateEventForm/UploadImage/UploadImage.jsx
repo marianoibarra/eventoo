@@ -87,8 +87,8 @@ function UploadImage({input, setInput}) {
                         <label className={styles.imgDropArea} htmlFor="imgInput">
                             {!dragActive
                                 ?   <div className={styles.defaultDropArea}>
-                                        <p>Drag and drop a photo here</p>
-                                        <p>or</p>
+                                        <p className={styles.text}>Drag and drop a photo here</p>
+                                        <p className={styles.text}>or</p>
                                         <button
                                             type='button'
                                             className={styles.uploadButton}

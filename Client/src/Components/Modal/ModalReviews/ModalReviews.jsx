@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const ModalReviews = ({ stgData, setConfirm, setShowModal }) => {
     const [value, setValue] = React.useState(4);
@@ -53,6 +54,7 @@ const ModalReviews = ({ stgData, setConfirm, setShowModal }) => {
                                             height: '50px',
                                             maxWidth: 50,
                                             margin: 2,
+                                            objectFit: 'cover'
                                         }}>
                                             <img src={review.reviewedBy.profile_pic} />
                                         </Avatar>
@@ -62,7 +64,7 @@ const ModalReviews = ({ stgData, setConfirm, setShowModal }) => {
                                                     {review.reviewedBy.name} {review.reviewedBy.last_name}
                                                 </Typography>
                                                 <Typography variant="subtitle2">
-                                                    {review.createdAt}
+                                                    {moment(review.createdAt).calendar() }
                                                 </Typography>
                                             </div>
                                             <Rating name="read-only" value={review.stars} readOnly />

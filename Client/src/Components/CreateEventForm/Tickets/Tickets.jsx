@@ -17,7 +17,7 @@ import { Input } from '@mui/material';
 
 
 
-function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
+function Tickets({ input, setInput, errors, showMsg, setShowMsg,loading }) {
   const dispatch = useDispatch();
   const [isPublic, setIsPublic] = useState(true);
   const [isPaid, setIsPaid] = useState(true);
@@ -84,6 +84,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           value={input.privateEvent_password}
           onChange={handleChange}
           margin="dense"
+          disabled={loading}
           helperText={showMsg.privateEvent_password ? errors.privateEvent_password : ""}
           error={showMsg.privateEvent_password && errors.privateEvent_password}
           type={showPassword ? "text" : "password"}
@@ -124,6 +125,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
           helperText={showMsg.guests_capacity ? errors.guests_capacity : ""}
           error={showMsg.guests_capacity && errors.guests_capacity}
           style={{ marginBottom: showMsg.guests_capacity && errors.guests_capacity ? '0px' : '20px' }}
+          disabled={loading}
         />
       </div>
       {input.isPaid === true && (
@@ -139,6 +141,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg }) {
             margin="dense"
             error={showMsg.price && errors.price}
             style={{ marginBottom: showMsg.price && errors.price ? '0px' : '20px' }}
+            disabled={loading}
           /> {showMsg.price && (
             <p className={style.warning}>{errors.price}</p>
           )}

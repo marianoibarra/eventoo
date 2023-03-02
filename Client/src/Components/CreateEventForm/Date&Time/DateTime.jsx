@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
-function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
+function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
     const dispatch = useDispatch();
     const [value, setValue] = React.useState(dayjs('2023-02-17'));
 
@@ -45,27 +45,28 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             label="Date of event"
                             variant="standard"
                             openTo="day"
-                            inputFormat="DD/MM/YYYY"
+                            inputFormat="YYYY-MM-DD"
                             views={['year', 'month', 'day']}
                             value={input.start_date}
                             OpenPickerButtonProps={{ tabIndex: -1 }}
                             onChange={(value) => {
-                                const fecha = new Date(value._d);
-                                const fechaISO = fecha.toISOString();
-                                const fechaFormateada = fechaISO.slice(0, 10);
+                                // const fecha = new Date();
+                                // const fechaISO = fecha.toISOString();
+                                // const fechaFormateada = fechaISO.slice(0, 10);
                                 setInput({
                                     ...input,
-                                    start_date: fechaFormateada,
+                                    start_date: value && value.hasOwnProperty('_d') ? value._d : value,
+                                    end_date: value && value.hasOwnProperty('_d') ? value._d : value,
                                 });
-                                console.log('start', fechaFormateada, input)
                             }}
                             onBlur={handleBlur}
                             renderInput={(params) => <TextField {...params} />}
+                            disabled={loading}
                         />
                     </div>
                 </div>
-                <h4 className={style.title}>Start and end time</h4>
                 <div className={style.datetime}>
+                <h4 className={style.title}>Start time:</h4>
                         <input
                             type='time'
                             className={style.inputs}
@@ -73,10 +74,12 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={input.start_time}
+                            disabled={loading}
                             style={showMsg.start_time && errors.start_time ? { border: 'red 1px solid' } : {}} />
                         {showMsg.start_time && (
                             <p className={style.warning}>{errors.start_time}</p>
                         )}
+                    <h4 className={style.title}>End time:</h4>
                     <input
                         type='time'
                         className={style.inputs}
@@ -84,6 +87,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg }) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={input.end_time}
+                        disabled={loading}
                         style={showMsg.end_time && errors.end_time ? { border: 'red 1px solid' } : {}} />
                     {showMsg.end_time && (
                         <p className={style.warning}>{errors.end_time}</p>

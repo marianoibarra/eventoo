@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API } from '../../App';
 import { getBankAccounts } from '../BankAcount/BankAcount';
+import { getEventsManagement } from '../eventsManagement/eventsManagementSlice';
 import { getFavorites } from '../Favorites/FavoritesSlice';
 
 const initialState = {
@@ -75,6 +76,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("id", response.data.id);
       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       dispatch(getFavorites());
+      dispatch(getEventsManagement());
       dispatch(getBankAccounts());
       setShowSessionModal(null);
       return response.data;
@@ -99,6 +101,7 @@ export const googleLogin = createAsyncThunk(
       localStorage.setItem("id", response.data.id);
       API.defaults.headers.common["authorization"] = "Bearer " + response.data.token;
       dispatch(getFavorites());
+      dispatch(getEventsManagement());
       dispatch(getBankAccounts());
       if(!response.data.isNewUser) {
         setShowSessionModal(null)
@@ -165,6 +168,8 @@ export const UserSlice = createSlice({
       localStorage.removeItem("id");
       localStorage.removeItem("location_inputValue");
       localStorage.removeItem("location_value");
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
       window.google.accounts.id.disableAutoSelect();
        API.defaults.headers.common["authorization"] = null;
       return initialState

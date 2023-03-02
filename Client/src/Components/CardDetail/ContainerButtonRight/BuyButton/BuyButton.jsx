@@ -55,52 +55,56 @@ const BuyButton = () => {
     
     <>
       {showModal && <ModalTransaction setShowModal={setShowModal} quantity={tickets}/> }
-      {console.log(eventsBuyed)}
-      {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === true &&
+
+
+      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING') : true) && isPaid === true ?
+
         <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
-              <div className={style.divtext}>
-                  <p>
-                      <b>Tickets</b>
-                  </p>
-                  <p className={style.price}>{"$" + price}</p>
-              </div>
-              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
-                  <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
-                  <span><b>{tickets}</b></span>
-                  <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
-              </div>
+            <div className={style.divtext}>
+              <p>
+                  <b>Tickets</b>
+              </p>
+              <p className={style.price}>{"$" + price}</p>
+            </div>
+            <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
+              <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
+              <span><b>{tickets}</b></span>
+              <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
+            </div>
           </div>
           <div>
-        <div>
-          <button className={`btnprimario ${style.buybutton}`} href="" onClick={handleBuy}>{`Buy by $${totalPrice}`}</button>         
-        </div>
+            <div>
+              <button className={`btnprimario ${style.buybutton}`} href="" onClick={handleBuy}>{`Buy by $${totalPrice}`}</button>         
+            </div>
           </div>
         </div>
+        : null
       }
 
-      {isLogged && eventsBuyed.length > 0 ? !eventsBuyed.find(element => element.status === 'PENDING') : true && isPaid === false &&
+      {(isLogged ? !eventsBuyed.find(element => element.status === 'PENDING') : true) && isPaid === false ?
         <div className={`${style.buycontainer} ${eventDetail.typePack === 'PREMIUM' && style.buycontainer_premium}`}>
           <div className={style.container_text_and_tickets}>
-              <div className={style.divtext}>
-                  <p>
-                      <b>General Admission</b>
-                  </p>
-                  <p className={style.price}>Free</p>
-              </div>
-              <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
-                  <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
-                  <span><b>{tickets}</b></span>
-                  <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
-              </div>
+            <div className={style.divtext}>
+                <p>
+                    <b>General Admission</b>
+                </p>
+                <p className={style.price}>Free</p>
+            </div>
+            <div className={`${style.containertickets} ${eventDetail.typePack === 'PREMIUM' && style.containertickets_premium}`}>
+                <button onClick={handleButtonSubtraction} disabled={tickets === 1 ? true : false}><span>−</span></button>
+                <span><b>{tickets}</b></span>
+                <button onClick={handleButtonAddition} disabled={tickets === 10 ? true : false}><span>+</span></button>
+            </div>
           </div>
           <div>
             <button className={`btnprimario ${style.buybutton}`} href="" onClick={handleBuy}>Book a place</button>  
           </div>
         </div>      
+        : null
       }
 
-      {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'PENDING') && 
+      {(eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'PENDING')) && 
         <div className={style.container_buyer_pending} >
           <Alert sx={sxPending} severity="warning">
             <AlertTitle>Warning</AlertTitle>
@@ -110,7 +114,7 @@ const BuyButton = () => {
         
       }
 
-    {eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'INWAITING') && 
+    {(eventsBuyed.length > 0 && isLogged && eventsBuyed.find(element => element.status === 'INWAITING')) && 
         <div className={style.container_buyer_pending} >
           <Alert sx={sxAwaitting} severity="warning">
             Inwaitting

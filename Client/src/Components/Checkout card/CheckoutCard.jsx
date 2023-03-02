@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SessionContext } from "../..";
 import { createEvent } from "../../Slice/CreateEvent/CreateEvent";
 import style from "./CheckoutCard.module.css";
@@ -7,15 +7,20 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import { Spinner } from "../Modal/Spinner/Spinner";
 
-function CheckOut({ errors, isLogged, input }) {
+function CheckOut({ errors, isLogged, input,setConfirm, confirm}) {
   const dispatch = useDispatch();
+  const { loading, preference_id } = useSelector((state) => state.event);
 
   const { setShowSessionModal } = useContext(SessionContext);
 
   const handleclick = (e) => {
     e.preventDefault();
     if (isLogged) {
+      setConfirm(false);
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
       dispatch(createEvent(input));
     } else {
       alert("Please Log in");
@@ -51,9 +56,9 @@ function CheckOut({ errors, isLogged, input }) {
             <button
               onClick={handleclick}
               className='btnprimario'
-              disabled={Object.keys(errors).length !== 0}
+              disabled={loading || preference_id || Object.keys(errors).length !== 0}
             >
-              Create
+              {loading ? <Spinner/> : 'Create'}
             </button>
           </div>
         </div>

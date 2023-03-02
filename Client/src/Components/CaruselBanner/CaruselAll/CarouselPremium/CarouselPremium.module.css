@@ -1,10 +1,11 @@
 .container_text{
     font-size: 1.7rem;
     color: var(--dark-text);
-    border-bottom: 2px solid #0003;
+    background-color: var(--ligth-background-color);
+    border-bottom: 2px solid var(--border-color);
     padding: 12px 0 12px 6px;
     position: sticky;
-    top: 60px;
+    top: 54px;
     z-index: 20;
     margin-bottom: 15px;
 }

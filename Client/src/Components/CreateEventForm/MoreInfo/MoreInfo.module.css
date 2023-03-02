@@ -11,6 +11,7 @@
 
 .text{
     margin: 5px;
+    color: var(--dark-text);
 }
 
 .more{

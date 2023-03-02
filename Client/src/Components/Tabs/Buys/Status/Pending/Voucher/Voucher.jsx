@@ -34,10 +34,7 @@ const Voucher = ({transaction, eventId}) => {
 
   //handle que realiza el dispatch, de la url
   const handleAccept = () => {
-    const objUrlFile = {
-      payment_proof: urlFile
-    }
-    dispatch(loadPaymentProof({ id: eventId, objUrlFile }))
+    dispatch(loadPaymentProof({ id: transaction, data: {payment_proof: urlFile } }))
   };
 
 

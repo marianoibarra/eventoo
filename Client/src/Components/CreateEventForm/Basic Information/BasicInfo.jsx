@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Box from "@mui/material/Box";
 
-function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
+function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, loading }) {
     const dispatch = useDispatch();
 
     const agesRange = [
@@ -59,7 +59,9 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 margin="dense"
                 helperText={showMsg.name ? errors.name : ""}
                 error={showMsg.name && errors.name}
-                style={{ marginBottom: showMsg.name && errors.name ? '0px' : '20px' }}
+                style={{ marginBottom: showMsg.name && errors.name ? '0px' : '20px', backgroundColor: 'var(--bg-elevation)', WebkitTextFillColor: 'var(--dark-text)' }}
+                disabled={loading}
+                maxLength='40'
             />
             <h2 className={style.title}>Short overview</h2>
             <p className={style.text}>Sum up in 140 characters or less why your event is unique, thrilling and worth attending.</p>
@@ -69,14 +71,16 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 multiline
                 value={input.description}
                 rows={5}
-                sx={{ m: 1, width: '100%' }}
+                sx={{ m: 1, width: '100%', WebkitTextFillColor: 'var(--dark-text)' }}
                 placeholder='Write here...'
                 onChange={handleChange}
                 onBlur={handleBlur}
                 margin="dense"
                 helperText={showMsg.description ? errors.description : ""}
                 error={showMsg.description && errors.description}
-                style={{ marginBottom: showMsg.description && errors.description ? '0px' : '20px' }}
+                style={{ marginBottom: showMsg.description && errors.description ? '0px' : '20px', backgroundColor: 'var(--bg-elevation)' }}
+                disabled={loading}
+                maxLength={140}
             />
             <h2 className={style.title}>Public target</h2>
             <p className={style.text}>Select your public target</p>
@@ -89,10 +93,11 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, event }) {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 margin="dense"
-                sx={{ m: 1, width: '25ch' }}
+                sx={{ m: 1, width: '25ch',WebkitTextFillColor: 'var(--dark-text)' }}
                 helperText={showMsg.age_range ? errors.age_range : ""}
                 error={showMsg.age_range && errors.age_range}
-                style={{ marginBottom: showMsg.age_range && errors.age_range ? '0px' : '20px' }}
+                style={{ marginBottom: showMsg.age_range && errors.age_range ? '0px' : '20px',backgroundColor: 'var(--bg-elevation)' }}
+                disabled={loading}
             >
                 {agesRange.map((option) => (
                     <MenuItem key={option.value} value={option.value}>

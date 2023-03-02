@@ -1,7 +1,7 @@
 const { User, Address, EmailCode, RoleAdmin } = require("../db");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const sendEmail = require("../helpers/sendEmail");
+const {sendEmail} = require("../helpers/sendEmail");
 const regexp_password = require("../helpers/regexps");
 const generateEmailCode = require("../helpers/generateEmailCode");
 

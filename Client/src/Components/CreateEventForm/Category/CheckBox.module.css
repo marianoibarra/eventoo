@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     width: 120px;
+    color: var(--dark-text);
 }
 
 .iconspan {

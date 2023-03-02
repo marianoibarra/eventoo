@@ -1,17 +1,17 @@
 import Styles from "./Menu.module.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { CiLogout } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../../Slice/User/UserSlice";
-import { SessionContext } from "../../..";
+import { SessionContext, ThemeContext } from "../../..";
 import { clearFavorites } from "../../../Slice/Favorites/FavoritesSlice";
 import { clearEventsManagement } from "../../../Slice/eventsManagement/eventsManagementSlice";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineSetting, AiOutlineCalendar } from "react-icons/ai";
 import { GrUserAdmin } from "react-icons/gr";
 import { BiChevronDown } from "react-icons/bi";
+import { MdLightMode, MdOutlineDarkMode } from "react-icons/md";
 
 
 const Menu = () => {
@@ -21,6 +21,7 @@ const Menu = () => {
     useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { setShowSessionModal } = useContext(SessionContext);
+  const { theme, setTheme } = useContext(ThemeContext);
   const menuRef = useRef();
 
   const handleLogout = () => {
@@ -30,6 +31,10 @@ const Menu = () => {
     navigate("/");
     setIsOpen(false);
   };
+
+  const handleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light')
+  }
 
   const handleClick = () => {
     if (isLogged) {
@@ -90,6 +95,16 @@ const Menu = () => {
           </div>
           <div className={Styles.label}>My events</div>
         </Link>
+        <div className={Styles.rowC} onClick={handleTheme}>
+          <div className={Styles.icon}>
+            {
+              theme === 'light'
+                ? <MdOutlineDarkMode />
+                : <MdLightMode />
+            }
+          </div>
+          <div className={Styles.label}>{theme === 'light' ? 'Dark mode' : 'Light mode'}</div>
+        </div>
         <Link to="/Setting" className={Styles.rowC}>
           <div className={Styles.icon}>
             <AiOutlineSetting />
