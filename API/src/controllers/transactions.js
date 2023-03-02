@@ -64,7 +64,6 @@ const cleanTransactions = async (IdEvent) => {
 };
 
 const updateEventLowStock = async (eventId,percentageThreshold) => {
-  let percentageThreshold = 15;
   const event = await Event.findByPk(eventId);
   const availableTickets =event.stock_ticket;
   const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
