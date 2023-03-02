@@ -14,7 +14,6 @@ import Styles from "./Tabs.module.css";
 
 function TabsComponent() {
   const [value, setValue] = React.useState(0);
-  const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

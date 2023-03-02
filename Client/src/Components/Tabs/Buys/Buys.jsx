@@ -28,12 +28,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
-  axiosModeEventsBuys,
-  deleteEvent,
   setFilterBuyEvent,
   sortByAscendingEventsBuys,
   sortByDescendingEventsBuys,
-} from "../../../Slice/EventsBuysForUser/BuysSlice";
+} from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
 import './Events.css'
@@ -53,7 +51,7 @@ import Expired from "./Status/Expired/Expired";
 
 
 function Buys() {
-  const { data: { buys: eventBuys }, error } = useSelector((state) => state.eventsManagement);
+  const { data: { buys: eventBuys }, errorBuyEvents } = useSelector((state) => state.eventsManagement);
   const [sortType, setSortType] = useState({ type: null, id: 2 });
   const [transactionId, setTransactionId] = useState(null);
 
@@ -91,7 +89,7 @@ function Buys() {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <h3>{error ? error : undefined}</h3>
+      <h3>{errorBuyEvents ? errorBuyEvents : undefined}</h3>
 
       <div className="sapList">
         <div className="sapListHeader">
