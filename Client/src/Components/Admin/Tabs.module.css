@@ -11,12 +11,22 @@
     align-items: center;
     flex-direction: row;
     justify-content: center;
+    color: var(--accent-color)
   }
   
   .tab {
     display: inline-flex;
     align-items: center;
     flex-direction: row;
+    justify-content: flex-start;
+    color: var(--accent-color)
+  }
+  
+  .tab span {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    /* flex-direction: column; */
     justify-content: center;
   }
   

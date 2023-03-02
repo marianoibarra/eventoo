@@ -25,12 +25,14 @@ function TabsComponent() {
         className={`${Styles.tabs} ${Styles.tabsCustom}`}
         value={value}
         onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
+        indicatorColor="var(--accent-color)"
+        color='var(--accent-color)'
+
       >
         <Tab
           className={Styles.tab}
           icon={<BsCalendar className={Styles.tabIcon} />}
+
           label="Events"
         />
         <Tab
