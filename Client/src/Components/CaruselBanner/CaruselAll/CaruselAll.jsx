@@ -35,9 +35,6 @@ const CaruselAll = () => {
 
   const useStyles = makeStyles((theme) => ({
     fab: {
-      position: 'fixed',
-      right: '30px',
-      bottom: '20px',
       backgroundColor: '#BC4001',
       textTransform: 'none',
       fontFamily: 'Poppins',
@@ -91,10 +88,13 @@ const CaruselAll = () => {
                     </div>
           }
         </div>
-        <Fab onClick={() => navigate("/create-event")} className={`${classes.fab} ${Style.fab}` } variant="extended" size='large'>
-          <AddIcon />
-          Create event
-        </Fab>
+        <div className={Style.fab}>
+          <Fab onClick={() => navigate("/create-event")} className={classes.fab} variant="extended" size='large'>
+            <AddIcon />
+            Create event
+          </Fab>
+        </div>
+        
         {
           events.length > 0 && moreEvents < events.length && !loading && !filter.favorites &&
             <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>
