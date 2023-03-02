@@ -97,3 +97,9 @@
   font-weight: 600;
   color: var(--primary-color);
 }
+
+@media screen and (max-width: 1024px) {
+  .categoriesWrapper {
+    margin-top: 32px;
+  }
+}

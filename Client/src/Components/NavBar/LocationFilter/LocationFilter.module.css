@@ -80,7 +80,7 @@
 .location {
   position: relative;
   user-select: none;
-  padding: 0 10px 0 14px;
+  padding: 0 6px 0 10px;
   border-right: #fff3 1px solid;
   border-left: #fff3 1px solid;
   height: 36px;
@@ -95,4 +95,24 @@
   font-size: 0.9rem;
   cursor: pointer;
   align-items: center;
+  user-select: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .toggleLocation {
+    color: var(--primary-color);
+  }
+
+  .locationDropdownClose {
+    left: 50%;
+    transform: translate(-50%, -5px);
+    top: 2.8rem;
+  }
+  
+  .locationDropdownOpen {
+    left: 50%;
+    transform: translate(-50%, 0px);
+    top: 2.8rem;
+  }
+
 }

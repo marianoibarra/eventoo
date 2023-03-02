@@ -9,6 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 import CarouselPremium from './CarouselPremium/CarouselPremium';
 import { style } from '@mui/system';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
 
 
 const CaruselAll = () => {
@@ -17,6 +21,8 @@ const CaruselAll = () => {
   const filter = useSelector(state => state.newFilter)
   const {favorites} = useSelector(state => state.favorites)
   const [moreEvents, setMoreEvents] = useState(10)
+
+  const navigate = useNavigate()
 
 
   useEffect(() => {
@@ -27,6 +33,27 @@ const CaruselAll = () => {
   const handleMoreEvents = () => {
     setMoreEvents(moreEvents + 10)
   }
+
+  const useStyles = makeStyles((theme) => ({
+    fab: {
+      position: 'fixed',
+      right: '30px',
+      bottom: '20px',
+      backgroundColor: '#BC4001',
+      textTransform: 'none',
+      fontFamily: 'Poppins',
+      fontWeight: 400,
+      gap: '8px',
+      alignItems: 'center',
+      paddingRight: '18px',
+      color: '#fff',
+      '&:hover': {
+        backgroundColor: '#9F3200',
+      },
+    },
+  }));
+  
+  const classes = useStyles();
 
   return (
     <div className={Style.container_carusel}>
@@ -65,6 +92,10 @@ const CaruselAll = () => {
                     </div>
           }
         </div>
+        <Fab onClick={() => navigate("/create-event")} className={`${classes.fab} ${Style.fab}` } variant="extended" size='large'>
+          <AddIcon />
+          Create event
+        </Fab>
         {
           events.length > 0 && moreEvents < events.length && !loading && !filter.favorites &&
             <a className={`btnprimario btnMore`} onClick={handleMoreEvents}>

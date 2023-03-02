@@ -25,6 +25,10 @@
     gap: 32px;
 }
 
+.fab {
+  display: none;
+}
+
 .title_noReults{
     width: 83.33vw;
     text-align: center;
@@ -129,5 +133,12 @@
     }
     100% {
         transform: translate(24px, 0);
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    
+    .fab {
+      display: flex;
     }
   }
