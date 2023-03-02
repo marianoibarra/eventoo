@@ -18,6 +18,7 @@ import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
+import ModalCreate from '../Modal/ModalCreate/ModalCreate';
 
 function Form() {
   const dispatch = useDispatch();
@@ -51,6 +52,8 @@ function Form() {
     });
   }
 
+  const [created, setCreated]= useState(false);
+
   useEffect(() => {
     if (preference_id) {
       const script = document.createElement('script');
@@ -60,8 +63,11 @@ function Form() {
       document.body.appendChild(script);
     } else if(preference_id === false) {
       // dispatch(createEvent(input));
-      //setear un true para modal, en modal poner click para el navigate.
-      navigate('/Event/' + event.id + '?checkout=true')
+      setCreated(true);
+      // navigate('/Event/' + event.id + '?checkout=true')
+      setTimeout(() => {
+        navigate('/Event/' + event.id + '?checkout=true')
+      }, 2000); // 2 segundos de retraso
     }
 
     return () => {
@@ -211,7 +217,7 @@ function Form() {
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
-      {/* {showModal && created  <ModalCreateEvent stgData={stgData} eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />} */}
+      {created && <ModalCreate  eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />}
         {/* {error ?
           <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
