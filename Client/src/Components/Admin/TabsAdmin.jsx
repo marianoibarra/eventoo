@@ -12,7 +12,8 @@ import { BsCalendar } from 'react-icons/bs';
 import { FaUserFriends } from 'react-icons/fa';
 import { MdLocalOffer } from 'react-icons/md';
 import { MdOutlineDashboard } from 'react-icons/md';
-import Grafict from './dateEventGrafic/Grafict';
+import Grafict from './dateEventGrafic/grafict/Grafict';
+import Styles from './Tabs.module.css'
 
 const useStyles = makeStyles(theme => ({
 
@@ -82,8 +83,8 @@ function TabsComponent() {
         </div>
       )}
       {value === 3 && (
-        <div className={classes.content}>
-          <Grafict/>
+        <div className={`${classes.content} ${Styles.stadic}`}>
+          <Grafict />
       
         </div>
       )}
