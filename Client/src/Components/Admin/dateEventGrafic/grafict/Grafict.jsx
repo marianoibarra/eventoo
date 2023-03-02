@@ -4,12 +4,7 @@ import { axiosModeCategories } from "../../../../Slice/Filter/categorieSlice";
 import { getAllEvents } from "../../../../Slice/Admin/AdminSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import Pie from "./Pie/Pie";
-import Table from "./Table/TableStadistic";
-import sells from "./Table/sells.json";
-import TableStadistic from "./Table/TableStadistic";
 import StackedBarChart from "./Table/TableStadistic";
-import StadisticsForModality from "./StadisticsForModality/StadisticsForModality";
-import { dateTimePickerTabsClasses } from "@mui/x-date-pickers";
 
 const useStyles = makeStyles({
   chartContainer: {
