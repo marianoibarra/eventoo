@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -6,8 +6,6 @@ import Users from './Users/Users';
 import Category from './Categories/Category';
 import EventsAdmin from './Events/EventAdmin';
 import { useDispatch } from 'react-redux';
-import { getAllEvents } from '../../Slice/Admin/AdminSlice';
-import { axiosModeCategories } from '../../Slice/Filter/categorieSlice';
 import { BsCalendar } from 'react-icons/bs';
 import { FaUserFriends } from 'react-icons/fa';
 import { MdLocalOffer } from 'react-icons/md';
@@ -29,11 +27,11 @@ const useStyles = makeStyles(theme => ({
   tabs: {
     width: '100vw',
     marginTop: theme.spacing(2),
-
   },
   tab: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row-reverse', 
+    alignItems: 'center',
   },
   content: {
     width: '100%',
