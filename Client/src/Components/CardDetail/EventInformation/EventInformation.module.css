@@ -34,7 +34,7 @@
 
 .iconspan {
     color: var(--secondary-color);
-    background-color: #cccccc40;
+    background-color: var(--background-icon);
     padding-top: 6px;
     padding-left: 6px;
     padding-right: 6px;
@@ -43,15 +43,11 @@
     width: min-content;
 }
 
-.iconspan_premium {
-    color: #FFD700;
-    background-color: black;
-}
-
 .iconspantext {
     display: block;
     width: min-content;
     font-size: 1.1vw;
     font-weight: 400;
     margin-left: 1vw;
+    color: var(--dark-text);
 }
