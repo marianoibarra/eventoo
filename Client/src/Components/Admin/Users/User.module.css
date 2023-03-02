@@ -13,10 +13,9 @@
   font-weight: bold;
   border-bottom: none;
 }
-.sapListHeader > div:hover{
-background-color: rgba(130, 133, 132, 0.178);
-transition: 0.4ms;
-
+.sapListHeader > div:hover {
+  background-color: rgba(130, 133, 132, 0.178);
+  transition: 0.4ms;
 }
 
 .sapListHeader > div {
@@ -28,9 +27,11 @@ transition: 0.4ms;
 .sapListRow {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   border-bottom: none;
+  position: relative;
 }
-
 
 .sapListRow > div {
   flex: 1;
@@ -40,12 +41,19 @@ transition: 0.4ms;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.sapListRow> div:hover {
+  overflow: visible;
+font-size: 12px;
+}
+
+.sapListRow> div:hover > * {
+  z-index: 2;
+}
 
 .sapListRow > div.sapListCellWide {
   flex: 2;
   text-align: left;
 }
-
 
 .sapListActions {
   display: flex;
@@ -60,10 +68,44 @@ transition: 0.4ms;
   cursor: pointer;
   padding: 5px;
   font-size: 14px;
-  color:darkslateblue;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1vw;
+}
+.banned {
+  color: white;
+  background-color: #ff5733;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.3vw;
+  font-size: 1vw;
+}
+.active {
+  color: white;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.3vw;
+  font-size: 1vw;
+}
+.date {
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #bdbdbd;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  color: var(--accent-color);
 }
 
-
+.date:hover {
+  color: #f5f5f5;
+  background-color: #212121;
+}
 .sapListRow:nth-child(even) {
   background-color: #188b8b1f;
 }
@@ -72,12 +114,12 @@ transition: 0.4ms;
   background-color: #ffffff;
 }
 
-.sap{
+.sap {
   font-size: 20px;
   font-weight: 500;
 }
 
-.sapListImage  {
+.sapListImage {
   border-radius: 50%;
   width: 30px;
   height: 30px;

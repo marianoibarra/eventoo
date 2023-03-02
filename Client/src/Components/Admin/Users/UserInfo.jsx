@@ -108,25 +108,29 @@ const UserInfo = ({
           {`${user?.name} ${user?.last_name}`}
         </div>
         <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap}`}>{user?.email}</div>
-        <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap}`}>{user?.born}</div>
-        <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user?.roleAdmin?.name}</div>
+        <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap} ${Styles.date}`}>{user?.born}</div>
+        <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user?.roleAdmin?.name === "USER" ? (
+          <p className={Styles.banned}>Admin</p>
+          ) : (
+            <p className={Styles.active}>User</p>
+            )}</div>
         <div className={`${Styles.sapListItem} ${Styles.sap}`}>
           {user?.isBanned ? "Banned" : "Active"}
         </div>
         <div className={`${Styles.sapListItem} ${Styles.sap}`}>
-          <button className={`${Styles.btnSap}`}>
+          <button className={`${Styles.btnSap}`} onClick={()=>handleChangeRole(user.id)}>
             {user?.roleAdmin?.name === "USER" ? (
-              <RiAdminLine color="darkslateblue" size={25}  onClick={()=>handleChangeRole(user.id)}/>
-            ) : (
-              <RiAdminFill color="darkslateblue" size={25}  onClick={()=>handleChangeRole(user.id)}/>
+              <p className={Styles.active}>User</p>
+              ) : (
+                <p className={Styles.banned}>Admin</p>
             )}
           </button>
-          <button className={`${Styles.btnSap}`}>
-            {!user?.isBanned ? (
-              <AiFillLike size={25} onClick={()=> handleBanned(user.id)} />
-            ) : (
-              <BsHandThumbsUp size={25} onClick={()=> handleBanned(user.id)}/>
-            )}
+          <button className={`${Styles.btnSap}`} onClick={()=> handleBanned(user.id)}>
+            {!user?.isBanned ? 
+              <p className={Styles.banned}>Banned</p>
+             : 
+              <p className={Styles.active}>Active</p>
+            }
           </button>
         </div>
       </div>
