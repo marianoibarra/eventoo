@@ -5,13 +5,9 @@
     left: 0;
     width: 100%;
     height: max-content;
-    background-color: white;
+    background-color: var(--bg-elevation);
     border: solid 1px var(--primary-color);
     border-radius: 12px;
-}
-
-.buycontainer_premium {
-    border: solid 1px black;
 }
 
 .container_text_and_tickets {
@@ -29,6 +25,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: var(--dark-text);
 }
 
 .divtext p {
@@ -51,6 +48,7 @@
     margin-right: 5px;
     height: 50%;
     width: 45%;
+    color: var(--dark-text);
 }
 
 .containertickets button {
@@ -61,11 +59,6 @@
     height: 45%;
     width: 25%;
     cursor: pointer;
-}
-
-.containertickets_premium button {
-    background-color: black;
-    color: #FFD700;
 }
 
 button:disabled {

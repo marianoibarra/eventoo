@@ -20,17 +20,12 @@
 
 .iconspan {
     color: var(--secondary-color);
-    background-color: #cccccc40;
+    background-color: var(--background-icon);
     padding-top: 5px;
     padding-left: 6px;
     padding-right: 6px;
     padding-bottom: 4px;
     border-radius: 50%;
-}
-
-.iconspan_premium {
-    color: #FFD700;
-    background-color: black;
 }
 
 .iconspantext {
@@ -39,11 +34,13 @@
     width: max-content;
     font-size: 2vw;
     font-weight: 400;
+    color: var(--dark-text);
 }
 
 .ubicationtext {
     margin-left: 50px;
     font-size: 1.1vw;
+    color: var(--dark-text);
 }
 
 .containermap {

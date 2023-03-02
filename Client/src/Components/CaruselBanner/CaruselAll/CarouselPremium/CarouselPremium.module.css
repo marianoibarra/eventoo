@@ -1,3 +1,7 @@
+.container_slider {
+    margin-bottom: 10px;
+}
+
 .container_text{
     font-size: 1.7rem;
     color: var(--dark-text);
@@ -12,4 +16,28 @@
 
 .container_card {
     margin-right: 200px;
+}
+
+.notFoundWrapper {
+    margin-top: 40px;
+    grid-column: 1/-1;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.notFoundWrapper svg {
+    color: var(--secondary-color);
+}
+
+.notFoundWrapper h4 {
+    font-size: 2rem;
+    font-family: 'Lato';
+    margin: 8px 0;
+    color: #000b;
+}
+
+.notFoundWrapper p {
+    color: #000a;
+    font-weight: 400;
 }
