@@ -5,3 +5,30 @@
     align-items: center;
     justify-content: space-around;
   }
+
+  .tabs {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .tabIcon {
+    margin-right: 10px;
+  }
+
+  .content{
+    margin-top: 1rem;
+    min-height: 100%;
+  }
+
+  .root{
+    background-color: var(--ligth-background-color) ;
+  }

@@ -8,6 +8,7 @@ import {
   sortByAscendingUser,
   sortByDescendingUsers,
 } from "../../../Slice/Admin/AdminSlice";
+import Loading from "../Loading/Loading";
 import SearchBar from "../SearchBar/SearchAdmin";
 import UserInfo from "./UserInfo";
 function Users() {
@@ -53,7 +54,7 @@ function Users() {
           />
         </>
       ) : (
-        <h2>Loading...</h2>
+        <Loading/>
       )}
     </>
   );

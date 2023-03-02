@@ -8,6 +8,7 @@ import {
 import EventsInfo from "./EventsInfo";
 import { sortByAscendingEvents, sortByDescendingEvents } from "../../../Slice/Admin/AdminSlice";
 import SearchBar from "../SearchBar/SearchAdmin";
+import Loading from "../Loading/Loading";
 
 function EventsAdmin() {
   const { events, errorEvents } = useSelector((state) => state.admin);
@@ -52,7 +53,7 @@ const desccent = (e) => {
         />
       </>
     ) : (
-      <h2>Loading...</h2>
+      <Loading/>
     )}
   </>
   );

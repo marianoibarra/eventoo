@@ -17,9 +17,15 @@ const useStyles = makeStyles({
     justifyContent:'canter'
   },
   title: {
-    fontSize: "2rem",
-    fontWeight: "bold",
-    marginBottom: "1rem",
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: 'var(--accent-color)',
+    letterSpacing: '2px',
+    lineHeight: '1.2',
+    marginBottom: '30px',
+    paddingBottom: '10px',
+    borderBottom: '1px solid #ddd'
   },
   chart: {
     width: "100%",
