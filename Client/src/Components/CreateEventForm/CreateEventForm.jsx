@@ -18,6 +18,7 @@ import PackSelection from './PackSelection/PackSelection';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
+import ModalCreate from '../Modal/ModalCreate/ModalCreate';
 
 function Form() {
   const dispatch = useDispatch();
@@ -51,6 +52,8 @@ function Form() {
     });
   }
 
+  const [created, setCreated]= useState(false);
+
   useEffect(() => {
     if (preference_id) {
       const script = document.createElement('script');
@@ -60,8 +63,11 @@ function Form() {
       document.body.appendChild(script);
     } else if(preference_id === false) {
       // dispatch(createEvent(input));
-      //setear un true para modal, en modal poner click para el navigate.
-      navigate('/Event/' + event.id + '?checkout=true')
+      setCreated(true);
+      // navigate('/Event/' + event.id + '?checkout=true')
+      setTimeout(() => {
+        navigate('/Event/' + event.id + '?checkout=true')
+      }, 2000); // 2 segundos de retraso
     }
 
     return () => {
@@ -136,13 +142,13 @@ function Form() {
     const now = new Date();
     const startDate = new Date(input.start_date);
 
-    if (!input.start_date) { errors.start_date = 'Start date is required' }
-    if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
+    if (!input.start_date) { errors.start_date = 'Start date is required'
+    }else if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
     // if (!input.end_date) {
     //   errors.end_date = 'End date is required'
     // } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
     if (!input.start_time) { errors.start_time = 'Start time is required' }
-    if (!input.end_time) { errors.end_time = 'End date is required'
+    if (!input.end_time) { errors.end_time = 'End time is required'
   } else if (input.start_time >= input.end_time) {errors.end_time = 'End time can not be before the start time'}
     // if (input.start_date === input.end_date) {
     //   const start = new Date(`${input.start_date} ${input.start_time}`);
@@ -211,7 +217,7 @@ function Form() {
   return (
     <div className={style.container}>
       {showModal && <ModalFormEvent stgData={stgData} setConfirm={setConfirm} setShowModal={setShowModal} />}
-      {/* {showModal && created  <ModalCreateEvent stgData={stgData} eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />} */}
+      {created && <ModalCreate  eventId={event.id} setConfirm={setConfirm} setShowModal={setShowModal} />}
         {/* {error ?
           <Stack sx={{ width: '100%' }} spacing={2}>
             <Alert severity="error">There was an error at creating event - Please verify everything it's rigth.</Alert>
