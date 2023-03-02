@@ -168,6 +168,8 @@ export const UserSlice = createSlice({
       localStorage.removeItem("id");
       localStorage.removeItem("location_inputValue");
       localStorage.removeItem("location_value");
+      localStorage.removeItem("formEvent");
+      localStorage.removeItem("lastTime");
       window.google.accounts.id.disableAutoSelect();
        API.defaults.headers.common["authorization"] = null;
       return initialState

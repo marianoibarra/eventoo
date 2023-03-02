@@ -29,11 +29,15 @@ const cronJob = cron.schedule("* * * * *", async () => {
       const transactions = await Transaction.findAll({
         where: {
           eventId: event.id,
+          status: 'APPROVED'
         },
       });
 
       for (const transaction of transactions) {
+
         const buyer = await User.findByPk(transaction.buyerId);
+        
+        if(!buyer) continue;
 
         const notification = await Notification.findOne({
           where: {
@@ -43,7 +47,7 @@ const cronJob = cron.schedule("* * * * *", async () => {
         });
 
         if (!notification || !notification.notified) {
-          sendBuyerNotifications(buyer.email, "reviewEvent",event.id);
+          sendBuyerNotifications(buyer.email, "reviewEvent",null,event.id);
 
           if (notification) {
             notification.notified = true;
@@ -58,6 +62,7 @@ const cronJob = cron.schedule("* * * * *", async () => {
         }
       }
     }
+
   } catch (error) {
     console.error(error);
   }

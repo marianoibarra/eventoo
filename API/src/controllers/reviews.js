@@ -48,9 +48,7 @@ const createReview = async (req, res) => {
     });
     sendOrganizerNotifications(
       event.organizer.email,
-      "reviewReceived",
-      null,
-      newReview
+      "reviewReceived",id
     );
     return res.status(200).json({ newReview });
   } catch (error) {

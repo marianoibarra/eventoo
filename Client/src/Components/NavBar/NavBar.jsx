@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className={Styles.MenuItems}>
             <Link className={Styles.MenuLink} to={"/create-event"}>Create Event</Link>
             <div className={Styles.divisor}></div>
-            { isLogged && <Notifications /> }
+             { isLogged && <Notifications /> } 
             <Menu />
         </div>
       </nav>

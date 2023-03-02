@@ -4,15 +4,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Create from './Create/Create';
 import Buys from './Buys/Buys';
+import Seller from './Seller/Seller';
 
 
 const useStyles = makeStyles(theme => ({
 
   root: {
-    margin:'0 auto',
+    margin: '0 auto',
     width: '100%',
     backgroundColor: `var(--ligth-background-color)`,
-    color:`var(--dark-text)`,
+    color: `var(--dark-text)`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -48,18 +49,23 @@ function TabsComponent() {
         textColor="primary"
         centered
       >
-        <Tab className={classes.tab} label="Buys events" />
+        <Tab className={classes.tab} label="Buys" />
+        <Tab className={classes.tab} label="Seller" />
         <Tab className={classes.tab} label="Organizator" />
       </Tabs>
       {value === 0 && (
         <div className={classes.content}>
-          <Buys/>
+          <Buys />
         </div>
       )}
       {value === 1 && (
         <div className={classes.content}>
-          
-          <Create/>
+          <Seller />
+        </div>
+      )}
+      {value === 2 && (
+        <div className={classes.content}>
+          <Create />
         </div>
       )}
     </div>

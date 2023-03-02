@@ -10,6 +10,7 @@
   --dark-text: #333;
   --border-color: #0003;
   --background-icon: #cccccc40;
+  --load-image: #007f8021;
 }
 
 [data-theme='dark'] {
@@ -20,9 +21,10 @@
   --bg-elevation: #292929;
   --white-text: #FDF7F4;
   --dark-background-color: #121318;
-  --dark-text: #e2e2e2;
+  --dark-text: #ffffffb3;
   --border-color: #fff3;
   --background-icon: #cccccc15;
+  --load-image: #59bcbd38;
 }
 
 * {
