@@ -136,13 +136,13 @@ function Form() {
     const now = new Date();
     const startDate = new Date(input.start_date);
 
-    if (!input.start_date) { errors.start_date = 'Start date is required' }
-    if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
+    if (!input.start_date) { errors.start_date = 'Start date is required'
+    }else if (startDate < now) { errors.start_date = 'Start date cannot be in the past' }
     // if (!input.end_date) {
     //   errors.end_date = 'End date is required'
     // } else if (input.end_date < input.start_date) { errors.end_date = 'End date can not be before the start date' }
     if (!input.start_time) { errors.start_time = 'Start time is required' }
-    if (!input.end_time) { errors.end_time = 'End date is required'
+    if (!input.end_time) { errors.end_time = 'End time is required'
   } else if (input.start_time >= input.end_time) {errors.end_time = 'End time can not be before the start time'}
     // if (input.start_date === input.end_date) {
     //   const start = new Date(`${input.start_date} ${input.start_time}`);

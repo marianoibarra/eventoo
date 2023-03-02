@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import style from './DateTime.module.css';
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker, DateValidationError } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
@@ -11,6 +11,24 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
     const dispatch = useDispatch();
     const [value, setValue] = React.useState(dayjs('2023-02-17'));
+    const today = dayjs();
+
+    const [error, setError] = useState(null);
+    const errorMessage = useMemo(() => {
+        switch (error) {
+          case 'minDate': {
+            return 'Please select a date that it is not in the past';
+          }
+    
+          case 'invalidDate': {
+            return 'Your date is not valid';
+          }
+    
+          default: {
+            return '';
+          }
+        }
+      }, [error]);
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -39,6 +57,7 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                     {/* <h4 className={style.title}>Start</h4> */}
                     <div className={style.datetime}>
                         <DatePicker
+                            disablePast
                             tabIndex={-1}
                             id="date"
                             name='start_date'
@@ -49,6 +68,13 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                             views={['year', 'month', 'day']}
                             value={input.start_date}
                             OpenPickerButtonProps={{ tabIndex: -1 }}
+                            onError={(newError) => setError(newError)}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessage,
+                                },
+                            }}
+                            minDate={today}
                             onChange={(value) => {
                                 // const fecha = new Date();
                                 // const fechaISO = fecha.toISOString();
@@ -62,23 +88,24 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                             onBlur={handleBlur}
                             renderInput={(params) => <TextField {...params} />}
                             disabled={loading}
+                            style={{ marginBottom: showMsg.start_date && errors.start_date ? '0px' : '20px', backgroundColor: 'var(--bg-elevation)', WebkitTextFillColor: 'var(--dark-text)' }}
                         />
                     </div>
                 </div>
                 <div className={style.datetime}>
-                <h4 className={style.title}>Start time:</h4>
-                        <input
-                            type='time'
-                            className={style.inputs}
-                            name='start_time'
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={input.start_time}
-                            disabled={loading}
-                            style={showMsg.start_time && errors.start_time ? { border: 'red 1px solid' } : {}} />
-                        {showMsg.start_time && (
-                            <p className={style.warning}>{errors.start_time}</p>
-                        )}
+                    <h4 className={style.title}>Start time:</h4>
+                    <input
+                        type='time'
+                        className={style.inputs}
+                        name='start_time'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={input.start_time}
+                        disabled={loading}
+                        style={showMsg.start_time && errors.start_time ? { border: 'red 1px solid' } : {}} />
+                    {showMsg.start_time && (
+                        <p className={style.warning}>{errors.start_time}</p>
+                    )}
                     <h4 className={style.title}>End time:</h4>
                     <input
                         type='time'
