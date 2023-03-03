@@ -20,7 +20,7 @@ import Rejected from "./Status/Pending/Rejected";
 import Inwaiting from "./Status/Inwaiting/Inwaiting";
 import Denied from "./Status/Denied/Denied";
 import Approved from "./Status/Approved/Approved";
-
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 
 function Seller() {
@@ -150,7 +150,7 @@ console.log(eventSells,'tipo de evento')
         <div className="sapConteiner">
           {eventSells.map((transaction, index) => (<>
 
-            <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
+            <div className="sapListRow" key={index} onClick={() => information(transaction.id)} onDoubleClick={()=>setTransactionId('')}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
               <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
               <div className="sapListItem sapListItemWide sap">
