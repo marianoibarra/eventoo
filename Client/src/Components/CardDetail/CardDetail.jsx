@@ -143,156 +143,157 @@ const CardDetailPublic = () => {
 
   return (
     <div className={style.background}>
-      {eventDetail && data && Object.keys(eventDetail).length > 0 && (
-        <div className={style.body}>
-          <div className={style.containerimg}>
-            <img
-              src={
-                eventDetail.cover_pic
-                  ? eventDetail.cover_pic
-                  : covers[eventDetail.category.name]
-              }
-              alt="cover_pic"
-            />
-          </div>
-
-          <div className={style.category_and_age}>
-
-              {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
-              {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
-              
-              {eventDetail.low_stock && 
-                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} icon={<IoTicketSharp style={{color: 'orange'}}/>} label={`Last Tickets`}  />
-              }
-
-              {eventDetail.category && 
-                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} label={eventDetail.category.name}  />              
-              }
-
-              <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
-
-            {!organizer &&
-              <div className={style.favorite} onClick={handleFav}>
-                {
-                  favorites.some(f => f === id)
-                    ? <HiHeart className={style.favEnabled} size={20} />
-                    : <HiOutlineHeart size={20} />
+      {(eventDetail && data && Object.keys(eventDetail).length > 0) && (
+        <div>
+          <div className={style.body}>
+            <div className={style.containerimg}>
+              <img
+                src={
+                  eventDetail.cover_pic
+                    ? eventDetail.cover_pic
+                    : covers[eventDetail.category.name]
                 }
-                {loading && thisLoading && <div class={style.loadingRing}></div>}
+                alt="cover_pic"
+              />
+            </div>
+
+            <div className={style.category_and_age}>
+
+                {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
+                {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
+                
+                {eventDetail.low_stock && 
+                  <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} icon={<IoTicketSharp style={{color: 'orange'}}/>} label={`Last Tickets`}  />
+                }
+
+                {eventDetail.category && 
+                  <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} label={eventDetail.category.name}  />              
+                }
+
+                <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
+
+              {!organizer &&
+                <div className={style.favorite} onClick={handleFav}>
+                  {
+                    favorites.some(f => f === id)
+                      ? <HiHeart className={style.favEnabled} size={20} />
+                      : <HiOutlineHeart size={20} />
+                  }
+                  {loading && thisLoading && <div class={style.loadingRing}></div>}
+                </div>
+              }
+
+              {organizer === true &&
+                <a className={style.organizericon} onClick={editButton}>
+                  <AiFillEdit size={30} style={{ color: '#BC4001' }} />
+                </a>
+              }
+            </div>
+
+            <div className={style.container_title_and_description}>
+              <div className={style.container_title}>
+                {modeEdit === false ? (
+                  <h1>
+                    {eventDetail.name && eventDetail.name}{" "}
+                  </h1>
+                ) : (
+                  <div className={style.organizerdiv}>
+                    <input
+                      className={
+                        errors.name
+                          ? style.organizerinput_error
+                          : style.organizerinput
+                      }
+                      type="text"
+                      name="name"
+                      value={editedEvent.name}
+                      onChange={handleOnChange}
+                    />
+                    {organizer === true && errors.name && <p>{errors.name}</p>}
+                  </div>
+                )}
               </div>
-            }
-
-            {organizer === true &&
-              <a className={style.organizericon} onClick={editButton}>
-                <AiFillEdit size={30} style={{ color: '#BC4001' }} />
-              </a>
-            }
-          </div>
-
-          <div className={style.container_title_and_description}>
-            <div className={style.container_title}>
-              {modeEdit === false ? (
-                <h1>
-                  {eventDetail.name && eventDetail.name}{" "}
-                </h1>
-              ) : (
-                <div className={style.organizerdiv}>
-                  <input
+              <div className={style.containerdescription}>
+                {modeEdit === false ? (
+                  <p>{eventDetail.description}</p>
+                ) : (
+                  <textarea
                     className={
-                      errors.name
-                        ? style.organizerinput_error
-                        : style.organizerinput
+                      errors.description
+                        ? style.textarea_error
+                        : style.textarea_border
                     }
-                    type="text"
-                    name="name"
-                    value={editedEvent.name}
+                    name="description"
+                    value={editedEvent.description}
                     onChange={handleOnChange}
                   />
-                  {organizer === true && errors.name && <p>{errors.name}</p>}
-                </div>
-              )}
-            </div>
-            <div className={style.containerdescription}>
-              {modeEdit === false ? (
-                <p>{eventDetail.description}</p>
-              ) : (
-                <textarea
-                  className={
-                    errors.description
-                      ? style.textarea_error
-                      : style.textarea_border
-                  }
-                  name="description"
-                  value={editedEvent.description}
-                  onChange={handleOnChange}
-                />
-              )}
+                )}
 
-              {organizer === true && errors.description && (
-                <p className={style.textdescription_error}>
-                  {errors.description}
-                </p>
-              )}
-              <hr></hr>
-            </div>
-          </div>
-
-            <div className={style.container_date}>
-              <div className={style.containericon}>
-                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
-                  {" "}
-                  <AiTwotoneCalendar size={30} />{" "}
-                </span>
-                <span className={style.iconspantext}>Date and Time</span>
+                {organizer === true && errors.description && (
+                  <p className={style.textdescription_error}>
+                    {errors.description}
+                  </p>
+                )}
+                <hr></hr>
               </div>
-              <h3>
-                {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
-              </h3>
             </div>
-            <h3>
-              {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
-            </h3>
-          </div>
 
-            {eventDetail.category?.modality === "Presential" && (
-              <EventLocation />
-            )}
-
-            {eventDetail.category?.modality === "Virtual" && 
               <div className={style.container_date}>
                 <div className={style.containericon}>
-                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
-                  {" "}
-                  <AiOutlineLink size={35} />{" "}
-                </span>
-                <span className={style.iconspantext}>URL</span>
+                  <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                    {" "}
+                    <AiTwotoneCalendar size={30} />{" "}
+                  </span>
+                  <span className={style.iconspantext}>Date and Time</span>
                 </div>
-                <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+                <h3>
+                  {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
+                </h3>
               </div>
-            }
-
-            <div className={style.container_date}>
-              <div className={style.containericon}>
-                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
-                  {" "}
-                  <RiTicket2Fill size={35} />{" "}
-                </span>
-                <span className={style.iconspantext}>About the event</span>
-              </div>
-              <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
-                ? eventDetail.large_description.replace(/\n/g, '<br>')
-                : eventDetail.description
-            }}></div>
-            <hr></hr>
+              <h3>
+                {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
+              </h3>
           </div>
 
-          <EventInformation />
+          {eventDetail.category?.modality === "Presential" && (
+            <EventLocation />
+          )}
 
-          <ContainerButtonRight />
+          {eventDetail.category?.modality === "Virtual" && 
+            <div className={style.container_date}>
+              <div className={style.containericon}>
+              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                {" "}
+                <AiOutlineLink size={35} />{" "}
+              </span>
+              <span className={style.iconspantext}>URL</span>
+              </div>
+              <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+            </div>
+          }
+
+        <div className={style.container_date}>
+            <div className={style.containericon}>
+              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                {" "}
+                <RiTicket2Fill size={35} />{" "}
+              </span>
+              <span className={style.iconspantext}>About the event</span>
+            </div>
+            <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
+              ? eventDetail.large_description.replace(/\n/g, '<br>')
+              : eventDetail.description
+          }}></div>
+          <hr></hr>
         </div>
+
+        <EventInformation />
+
+        <ContainerButtonRight />
+      </div>
       )}
     </div>
-  );
+ );
 };
 
 const CardDetail = () => {
