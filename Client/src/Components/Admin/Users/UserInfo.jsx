@@ -109,7 +109,7 @@ const UserInfo = ({
         </div>
         <div className={`${Styles.info} ${Styles.sapListItemWide} ${Styles.sap}`}>{user?.email}</div>
         <div className={`${Styles.sapListItem} ${Styles.sapListItemWide} ${Styles.sap} ${Styles.date}`}>{user?.born}</div>
-        <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user?.roleAdmin?.name === "USER" ? (
+        <div className={`${Styles.sapListItem} ${Styles.sap}`}>{user?.roleAdmin?.name === "ADMIN" ? (
           <p className={Styles.banned}>Admin</p>
           ) : (
             <p className={Styles.active}>User</p>
