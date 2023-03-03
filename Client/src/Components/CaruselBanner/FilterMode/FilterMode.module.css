@@ -48,6 +48,7 @@
 
 
 .moreFilter{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -139,3 +140,13 @@
 .border {
     border-left: var(--border-color) 1px solid;
 }
+
+.dot {
+    position: absolute;
+    background-color: var(--primary-color);
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    top: 0;
+    right: -2px;
+  }
