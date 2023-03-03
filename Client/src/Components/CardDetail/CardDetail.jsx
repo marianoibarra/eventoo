@@ -111,7 +111,7 @@ const CardDetailPublic = () => {
 
   function editButton(event) {
     event.preventDefault();
-    if(modeEdit === false){
+    if (modeEdit === false) {
       dispatch(setModeEdit(true));
     }
     else {
@@ -159,18 +159,18 @@ const CardDetailPublic = () => {
 
             <div className={style.category_and_age}>
 
-                {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
-                {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
-                
-                {eventDetail.low_stock && 
-                  <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} icon={<IoTicketSharp style={{color: 'orange'}}/>} label={`Last Tickets`}  />
-                }
+              {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{ color: 'orange' }} />} label={`Featured`} />}
+              {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{ color: 'orange' }} />} label={`Premium`} />}
 
-                {eventDetail.category && 
-                  <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} label={eventDetail.category.name}  />              
-                }
+              {eventDetail.low_stock &&
+                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} icon={<IoTicketSharp style={{ color: 'orange' }} />} label={`Last Tickets`} />
+              }
 
-                <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
+              {eventDetail.category &&
+                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} label={eventDetail.category.name} />
+              }
+
+              <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
 
               {!organizer &&
                 <div className={style.favorite} onClick={handleFav}>
@@ -238,62 +238,62 @@ const CardDetailPublic = () => {
               </div>
             </div>
 
+            <div className={style.container_date}>
+              <div className={style.containericon}>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <AiTwotoneCalendar size={30} />{" "}
+                </span>
+                <span className={style.iconspantext}>Date and Time</span>
+              </div>
+              <h3>
+                {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
+              </h3>
+            </div>
+            
+            {/* <h3>
+              {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
+            </h3> */}
+
+            {eventDetail.category?.modality === "Presential" && (
+              <EventLocation />
+            )}
+
+            {eventDetail.category?.modality === "Virtual" &&
               <div className={style.container_date}>
                 <div className={style.containericon}>
                   <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
                     {" "}
-                    <AiTwotoneCalendar size={30} />{" "}
+                    <AiOutlineLink size={35} />{" "}
                   </span>
-                  <span className={style.iconspantext}>Date and Time</span>
+                  <span className={style.iconspantext}>URL</span>
                 </div>
-                <h3>
-                  {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
-                </h3>
+                <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
               </div>
-              <h3>
-                {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
-              </h3>
-          </div>
+            }
 
-          {eventDetail.category?.modality === "Presential" && (
-            <EventLocation />
-          )}
-
-          {eventDetail.category?.modality === "Virtual" && 
             <div className={style.container_date}>
               <div className={style.containericon}>
-              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
-                {" "}
-                <AiOutlineLink size={35} />{" "}
-              </span>
-              <span className={style.iconspantext}>URL</span>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <RiTicket2Fill size={35} />{" "}
+                </span>
+                <span className={style.iconspantext}>About the event</span>
               </div>
-              <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+              <div className={style.aboutevent} dangerouslySetInnerHTML={{
+                __html: eventDetail.large_description
+                  ? eventDetail.large_description.replace(/\n/g, '<br>')
+                  : eventDetail.description
+              }}></div>
+              <hr></hr>
+              <ContainerButtonRight />
+              <EventInformation />
             </div>
-          }
-
-        <div className={style.container_date}>
-            <div className={style.containericon}>
-              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
-                {" "}
-                <RiTicket2Fill size={35} />{" "}
-              </span>
-              <span className={style.iconspantext}>About the event</span>
-            </div>
-            <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
-              ? eventDetail.large_description.replace(/\n/g, '<br>')
-              : eventDetail.description
-          }}></div>
-          <hr></hr>
+          </div>
         </div>
-
-        <EventInformation />
-
-        <ContainerButtonRight />
-      </div>
       )}
     </div>
- );
+  );
 };
 
 const CardDetail = () => {
