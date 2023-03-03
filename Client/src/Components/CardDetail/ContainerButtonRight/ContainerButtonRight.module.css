@@ -81,6 +81,11 @@
     color: var(--dark-text);
 }
 
+.organizer_text h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .profile_pic {
     width: 4rem;
     height: 4rem;

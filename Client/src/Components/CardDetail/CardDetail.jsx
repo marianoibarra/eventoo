@@ -246,7 +246,7 @@ const CardDetailPublic = () => {
                 </span>
                 <span className={style.iconspantext}>Date and Time</span>
               </div>
-              <h3>
+              <h3 className={style.date_text}>
                 {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
               </h3>
             </div>
