@@ -9,7 +9,7 @@ function Approved({ transaction }) {
       <TiTick className={styles.icon} />
     </div>
     <div className={styles.messageContainer}>
-      <h1 className={styles.heading}>Transaction Rejected</h1>
+      <h1 className={styles.heading}>Transaction Approved</h1>
       <p className={styles.message}>
       Your transfer for <span>{transaction.event.name}</span> was approved, your tickets were sent by email.
       </p>
