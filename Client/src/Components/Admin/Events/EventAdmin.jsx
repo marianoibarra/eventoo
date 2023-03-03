@@ -22,10 +22,7 @@ function EventsAdmin() {
 
     dispatch(changeStateEvent(e));
   };
-  const handledelete = (e) => {
 
-    dispatch(changeStateEvent(e));
-  };
 
 const accent = (e) => {
   dispatch(sortByAscendingEvents(e))
