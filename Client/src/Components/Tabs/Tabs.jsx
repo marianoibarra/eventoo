@@ -1,11 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Create from './Create/Create';
 import Buys from './Buys/Buys';
 import Seller from './Seller/Seller';
-import Styles from './Tabs.module.css'
+import Styles from './Tabs.module.css';
 import { MdSell , MdCreateNewFolder } from "react-icons/md";
 import { FcSalesPerformance } from "react-icons/fc";
 
