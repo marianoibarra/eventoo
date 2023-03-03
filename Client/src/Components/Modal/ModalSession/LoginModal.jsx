@@ -9,7 +9,7 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./LoginModal.module.css";
 import { clearErrors, login } from "../../../Slice/User/UserSlice";
-import { HiX } from 'react-icons/hi'
+import { HiX } from "react-icons/hi";
 
 const LoginModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -47,7 +47,8 @@ const LoginModal = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
-    if(error.hasOwnProperty('msg') && error.msg.length > 0) dispatch(clearErrors());
+    if (error.hasOwnProperty("msg") && error.msg.length > 0)
+      dispatch(clearErrors());
   };
 
   useEffect(() => {
@@ -61,15 +62,18 @@ const LoginModal = () => {
     });
   };
 
-  const { loading, error: {login: error} } = useSelector((state) => state.user);
+  const {
+    loading,
+    error: { login: error },
+  } = useSelector((state) => state.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login({input,setShowSessionModal}));
+    dispatch(login({ input, setShowSessionModal }));
   };
 
   useEffect(() => {
-    dispatch(clearErrors())
+    dispatch(clearErrors());
     window.google.accounts.id.renderButton(googleButton.current, {
       theme: "outline",
       size: "large",
@@ -84,7 +88,7 @@ const LoginModal = () => {
         <div
           className={styles.closeBtn}
           onClick={() => {
-            dispatch(clearErrors())
+            dispatch(clearErrors());
             setShowSessionModal(null);
           }}
         >
@@ -113,45 +117,57 @@ const LoginModal = () => {
             onChange={handleChange}
             fullWidth
             onBlur={handleBlur}
-            style={{marginBottom: showErr.email && errors.email ? '0px' : '23px'}}
+            style={{
+              marginBottom: showErr.email && errors.email ? "0px" : "23px",
+            }}
           />
-          <Textfield
-            name="password"
-            variant="standard"
-            label="Password"
-            value={input.password}
-            onChange={handleChange}
-            margin="dense"
-            fullWidth
-            helperText={showErr.password ? errors.password : ""}
-            error={showErr.password && errors.password}
-            type={showPassword ? "text" : "password"}
-            style={{marginBottom: showErr.password && errors.password ? '0px' : '23px'}}
-            onBlur={handleBlur}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
+          <div className={styles.passwordKey}>
+            <Textfield
+              name="password"
+              variant="standard"
+              label="Password"
+              value={input.password}
+              onChange={handleChange}
+              margin="dense"
+              fullWidth
+              helperText={showErr.password ? errors.password : ""}
+              error={showErr.password && errors.password}
+              type={showPassword ? "text" : "password"}
+              style={{
+                marginBottom:
+                  showErr.password && errors.password ? "0px" : "23px",
+              }}
+              onBlur={handleBlur}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
 
-          
+              {showPassword ? <AiFillEyeInvisible onClick={() => setShowPassword(!showPassword)}/> : <AiFillEye onClick={() => setShowPassword(!showPassword)}/>}
+
+          </div>
           <span
             className={styles.forgotLink}
             onClick={() => setShowSessionModal("forgotPassword")}
-            >
+          >
             Forgot your password?
           </span>
           {error && <span className={styles.errorMsg}>{error.msg}</span>}
 
-          <button disabled={loading || Object.keys(errors).length > 0} className={styles.submit} type="submit">
-              {loading ? <Spinner/> : 'Log in with Email'}
+          <button
+            disabled={loading || Object.keys(errors).length > 0}
+            className={styles.submit}
+            type="submit"
+          >
+            {loading ? <Spinner /> : "Log in with Email"}
           </button>
           <span className={styles.registerLink}>
             New to Eventoo?

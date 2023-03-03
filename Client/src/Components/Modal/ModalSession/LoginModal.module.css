@@ -156,3 +156,10 @@
   margin: 28px 0 -12px;
   width: 100%;
 }
+
+.passwordKey{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
