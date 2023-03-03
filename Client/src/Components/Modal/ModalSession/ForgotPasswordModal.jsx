@@ -5,6 +5,7 @@ import { Spinner } from "../Spinner/Spinner";
 import styles from "./ForgotPasswordModal.module.css";
 import axios from "axios";
 import { API } from "../../../App";
+import { HiX } from 'react-icons/hi'
 
 const ForgotPasswordModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -72,7 +73,7 @@ const ForgotPasswordModal = () => {
               setShowSessionModal(null);
             }}
           >
-            🗙
+            <HiX />
           </div>
         </header>
         <main className={styles.main}>

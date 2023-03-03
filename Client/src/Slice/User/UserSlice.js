@@ -25,6 +25,10 @@ const initialState = {
     country: null,
     zip_code: null,
   },
+  error: {
+    login: null,
+    register: null
+  }
 };
 
 function getLocation(address) {
@@ -175,42 +179,51 @@ export const UserSlice = createSlice({
       return initialState
     },
     clearErrors: (state, action) => {
-      state.error = null;
+      state.error = {
+        login: null,
+        register: null
+      };
     },
   },
   extraReducers: {
     [login.pending]: (state) => {
       state.loading = true;
-      state.error = null;
+      state.error.login = null;
     },
     [login.fulfilled]: (state, action) => {
       return {
         ...action.payload.data,
         isLogged: true,
         loading: false,
-        error: null,
+        error: {
+          ...state.error,
+          login: null
+        },
       };
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error.login = action.payload;
       state.data = null;
     },
     [register.pending]: (state) => {
       state.loading = true;
-      state.error = null;
+      state.error.register = null;
     },
     [register.fulfilled]: (state, action) => {
       return {
         ...action.payload.data,
         isLogged: true,
         loading: false,
-        error: null,
+        error: {
+          ...state.error,
+          register: null
+        },
       };
     },
     [register.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error.register = action.payload;
       state.data = null;
     },
     [getUserData.pending]: (state) => {
