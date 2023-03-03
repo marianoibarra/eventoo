@@ -161,9 +161,9 @@ h1 a:hover {
 
 .container_date h3 {
     margin-top: 6px;
-    /* margin-left: 52px; */
-    font-size: 1rem;
-    font-weight: 400;
+    margin-left: 52px;
+    font-size: 1.5rem;
+    font-weight: 600;
     width: max-content;
     color: var(--secondary-color);
 }
@@ -260,7 +260,7 @@ h1 a:hover {
     width: 100%;
     font-size: 1.3vw;
     font-weight: 400;
-} 
+}
 
 .spinner {
     display: inline-block;
@@ -365,7 +365,7 @@ h1 a:hover {
     line-height: 4rem;
 }
 
-.containerPass{
+.containerPass {
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -376,15 +376,15 @@ h1 a:hover {
     padding: 5% 0;
 }
 
-.pass{
+.pass {
     width: 65%;
     height: 50px;
-    padding: 5px ;
+    padding: 5px;
     font-size: 20px;
     border-bottom: 1px solid var(--dark-text);
 }
 
-.btnSubmit{
+.btnSubmit {
     width: 150px;
     height: 42px;
     letter-spacing: 0.5px;
@@ -397,7 +397,7 @@ h1 a:hover {
     margin-left: 8%;
 }
 
-.btnSubmit:hover{
+.btnSubmit:hover {
     background-color: var(--primary-color);
     color: white;
     width: 150px;
@@ -409,7 +409,7 @@ h1 a:hover {
     cursor: pointer;
 }
 
-.btnBack{
+.btnBack {
     width: 100%;
     margin-top: 5%;
 }
