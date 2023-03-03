@@ -28,6 +28,16 @@
     border-radius: 50%;
 }
 
+.iconspan_premium {
+    color: var(--primary-color);
+    background-color: var(--background-icon);
+    padding-top: 5px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 4px;
+    border-radius: 50%;
+}
+
 .iconspantext {
     display: block;
     margin-left: 8px;
@@ -39,7 +49,7 @@
 
 .ubicationtext {
     margin-left: 50px;
-    font-size: 1.1vw;
+    font-size: 1.2vw;
     color: var(--dark-text);
 }
 
