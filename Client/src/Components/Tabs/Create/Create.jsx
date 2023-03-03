@@ -95,7 +95,7 @@ function Buys() {
               cursor="pointer"
               onClick={() =>accent("isPremium")}
             /> }
-            Type
+            Pack
           </div>
           <div
             className="sapListItem"
@@ -135,7 +135,9 @@ function Buys() {
               {event?.start_date}
             </div>
             <div className="sapListItem sap">
-              {event?.isPremium ? "Premium" : "Free"}
+              {event?.typePack==='CLASSIC' ? "Classic" :
+              event?.typePack==='PREMIUM'? "Premium":
+              'Free'}
             </div>
             <div className="sapListItem sap">
             <p>{event.isPublic ? 'Public' : 'Private'} </p>

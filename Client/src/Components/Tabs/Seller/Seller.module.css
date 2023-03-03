@@ -1,0 +1,201 @@
+.sapList {
+    display: flex;
+    flex-direction: column;
+    border: none;
+    margin: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .sapListHeader {
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+    font-weight: bold;
+    border-bottom: none;
+  }
+  .sapListHeader > div:hover {
+    background-color: rgba(130, 133, 132, 0.178);
+    transition: 0.4ms;
+  }
+  .nameEventSap{
+    display: inline-block;
+    color: var(--secondary-color);
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+  
+    transition: all 0.2s ease-in-out;
+  }
+  .nameEventSap:hover{
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+    color: var(--primary-color);
+    transform: translateY(-3px);
+  }
+  .sapListHeader > div {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+  }
+  
+  .sapListRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: none;
+    position: relative;
+  }
+  
+  .sapListRow > div {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .sapListRow> .info:hover {
+    overflow: visible;
+  font-size: 12px;
+  }
+  
+  .sapListRow> .info:hover > * {
+    z-index: 2;
+  }
+  
+  .sapListRow > .info.sapListCellWide {
+    flex: 2;
+    text-align: left;
+  }
+  
+  .sapListActions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .btnSap {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1vw;
+  }
+  .banned {
+    color: white;
+    background-color: #ff5733;
+    border-radius: 5px;
+    text-align: center;
+    padding: 0.3vw;
+    font-size: 1vw;
+  }
+  .active {
+    color: white;
+    background-color: var(--accent-color);
+    border-radius: 5px;
+    text-align: center;
+    padding: 0.3vw;
+    font-size: 1vw;
+  }
+  .date {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #bdbdbd;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    color: var(--accent-color);
+  }
+  
+  .date:hover {
+    color: #f5f5f5;
+    background-color: #212121;
+  }
+  .sapListRow:nth-child(even) {
+    background-color: #188b8b1f;
+  }
+  
+  .sapListRow:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  .sap {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .sapListImage {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 5px;
+    right: 10px;
+  }
+  .disableBtnSap{
+    opacity: 0.5;
+  }
+  
+  .freeSap {
+    font-weight: bold;
+    color: var(--secundary-color); 
+    /* background-color: #4caf4f73; 
+    border-radius: 10px; */
+  }
+  
+  .premiumSap {
+    font-weight: bold;
+    color: var(--accent-color); 
+    /* background-color: #ff990085; 
+    border-radius: 10px; */
+  }
+  
+  .APPROVEDSAP {
+    color: #3cb87c;
+    background-color: transparent;
+    /* border: 1px solid #4CAF50; */
+  }
+  
+  .CANCELEDSAP {
+    color: #b83c3c;
+    background-color: transparent;
+    /* border: 1px solid #F44336; */
+  }
+  
+  .COMPLETEDSAP {
+    color: #3cb87c;
+    background-color: transparent;
+    /* border: 1px solid #2196F3; */
+  }
+  
+  .DENIEDSAP {
+    color: #b83c3c;
+    background-color: transparent;
+    /* border: 1px solid #9C27B0; */
+  }
+  
+  .EXPIREDSAP {
+    color: #515151;
+    background-color: transparent;
+    /* border: 1px solid #FFC107; */
+  }
+  
+  .INWAITINGSAP {
+    color: #FF9800;
+    background-color: transparent;
+    /* border: 1px solid #FF9800; */
+  }
+  
+  .PENDINGSAP {
+    color: #607D8B;
+    background-color: transparent;
+    /* border: 1px solid #607D8B; */
+  }

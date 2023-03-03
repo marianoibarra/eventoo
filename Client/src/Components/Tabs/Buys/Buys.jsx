@@ -13,12 +13,11 @@ import { TiArrowSortedDown, TiArrowUnsorted } from "react-icons/ti";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
 
 import Pending from "./Status/Pending/Pending";
-import Completed from "./Status/Completed/Completed";
-import Canceled from "./Status/Canceled/Canceled";
 import Inwaiting from "./Status/Inwaiting/Inwaiting";
 import Approved from "./Status/Approved/Aproved";
 import Denied from "./Status/Denied/Denied";
 import Expired from "./Status/Expired/Expired";
+import Canceled from "./Status/Canceled/Canceled";
 
 
 
@@ -157,7 +156,7 @@ function Buys() {
                 {transaction?.event?.start_date}
               </div>
               <div className="sapListItem sap">
-                {transaction?.isPremium ? <p className="premiumSap">Premium</p> : <p className="freeSap">Free</p>}
+                {transaction?.event?.isPaid ? <p className="premiumSap">Paid</p> : <p className="freeSap">Free</p>}
               </div>
               <div className="sapListItem sap">
               {(() => {
@@ -166,8 +165,6 @@ function Buys() {
                       return <p className={`${transaction.status}SAP`}>APPROVED</p>
                     case 'CANCELED':
                       return <p className={`${transaction.status}SAP`}>CANCELED</p>
-                    case 'COMPLETED':
-                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
                     case 'DENIED':
                       return <p className={`${transaction.status}SAP`}>DENIED</p>
                     case 'EXPIRED':
@@ -191,8 +188,6 @@ function Buys() {
                       return <Approved transaction={transaction} />;
                     case 'CANCELED':
                       return <Canceled transaction={transaction} />;
-                    case 'COMPLETED':
-                      return <Completed transaction={transaction} />;
                     case 'DENIED':
                       return <Denied transaction={transaction} />;
                     case 'EXPIRED':

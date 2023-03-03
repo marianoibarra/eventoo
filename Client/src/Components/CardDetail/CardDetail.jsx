@@ -47,12 +47,12 @@ const CardDetailPublic = () => {
 
   // estados para usuario organizador
   const user = useSelector((state) => state.user);
-  const {isLogged} = useSelector(state => state.user);
-  const {favorites} = useSelector(state => state.favorites);
+  const { isLogged } = useSelector(state => state.user);
+  const { favorites } = useSelector(state => state.favorites);
   const { setShowSessionModal } = useContext(SessionContext);
   const [thisLoading, setThisLoading] = useState(false);
   const { id } = useParams();
-  const { organizer, modeEdit, editedEvent, errors} = useSelector(state => state.eventDetail.eventEdition);
+  const { organizer, modeEdit, editedEvent, errors } = useSelector(state => state.eventDetail.eventEdition);
 
   const genDate = () => {
     const [hour, minute] = eventDetail.start_time.split(":");
@@ -101,7 +101,7 @@ const CardDetailPublic = () => {
 
   const handleFav = (e) => {
     e.stopPropagation()
-    if(isLogged) {
+    if (isLogged) {
       setThisLoading(true)
       dispatch(switchFavorites(id))
     } else {
@@ -144,19 +144,19 @@ const CardDetailPublic = () => {
   return (
     <div className={style.background}>
       {eventDetail && data && Object.keys(eventDetail).length > 0 && (
-          <div className={style.body}>
-            <div className={style.containerimg}>
-              <img
-                src={
-                  eventDetail.cover_pic
-                    ? eventDetail.cover_pic
-                    : covers[eventDetail.category.name]
-                }
-                alt="cover_pic"
-              />
-            </div>
+        <div className={style.body}>
+          <div className={style.containerimg}>
+            <img
+              src={
+                eventDetail.cover_pic
+                  ? eventDetail.cover_pic
+                  : covers[eventDetail.category.name]
+              }
+              alt="cover_pic"
+            />
+          </div>
 
-            <div className={style.category_and_age}>
+          <div className={style.category_and_age}>
 
               {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
               {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
@@ -171,71 +171,71 @@ const CardDetailPublic = () => {
 
               <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
 
-              {!organizer && 
-                <div className={style.favorite} onClick={handleFav}>
-                  {
-                    favorites.some(f => f === id)
+            {!organizer &&
+              <div className={style.favorite} onClick={handleFav}>
+                {
+                  favorites.some(f => f === id)
                     ? <HiHeart className={style.favEnabled} size={20} />
                     : <HiOutlineHeart size={20} />
-                  }
-                  {loading && thisLoading && <div class={style.loadingRing}></div>}
-                </div>
-              }
-
-              {organizer === true &&
-                <a className={style.organizericon} onClick={editButton}>
-                  <AiFillEdit size={30} style={{color: '#BC4001'}}/>
-                </a>
-              }
-            </div>
-
-            <div className={style.container_title_and_description}>
-              <div className={style.container_title}>
-                {modeEdit === false ? (
-                  <h1>
-                    {eventDetail.name && eventDetail.name}{" "}
-                  </h1>
-                ) : (
-                  <div className={style.organizerdiv}>
-                    <input
-                      className={
-                        errors.name
-                          ? style.organizerinput_error
-                          : style.organizerinput
-                      }
-                      type="text"
-                      name="name"
-                      value={editedEvent.name}
-                      onChange={handleOnChange}
-                    />
-                    {organizer === true && errors.name && <p>{errors.name}</p>}
-                  </div>
-                )}
+                }
+                {loading && thisLoading && <div class={style.loadingRing}></div>}
               </div>
-              <div className={style.containerdescription}>
-                {modeEdit === false ? (
-                  <p>{eventDetail.description}</p>
-                ) : (
-                  <textarea
+            }
+
+            {organizer === true &&
+              <a className={style.organizericon} onClick={editButton}>
+                <AiFillEdit size={30} style={{ color: '#BC4001' }} />
+              </a>
+            }
+          </div>
+
+          <div className={style.container_title_and_description}>
+            <div className={style.container_title}>
+              {modeEdit === false ? (
+                <h1>
+                  {eventDetail.name && eventDetail.name}{" "}
+                </h1>
+              ) : (
+                <div className={style.organizerdiv}>
+                  <input
                     className={
-                      errors.description
-                        ? style.textarea_error
-                        : style.textarea_border
+                      errors.name
+                        ? style.organizerinput_error
+                        : style.organizerinput
                     }
-                    name="description"
-                    value={editedEvent.description}
+                    type="text"
+                    name="name"
+                    value={editedEvent.name}
                     onChange={handleOnChange}
                   />
-                )}
-
-                {organizer === true && errors.description && (
-                  <p className={style.textdescription_error}>
-                  {errors.description}
-                  </p>
-                )}
-                <hr></hr>
-              </div>
+                  {organizer === true && errors.name && <p>{errors.name}</p>}
+                </div>
+              )}
             </div>
+            <div className={style.containerdescription}>
+              {modeEdit === false ? (
+                <p>{eventDetail.description}</p>
+              ) : (
+                <textarea
+                  className={
+                    errors.description
+                      ? style.textarea_error
+                      : style.textarea_border
+                  }
+                  name="description"
+                  value={editedEvent.description}
+                  onChange={handleOnChange}
+                />
+              )}
+
+              {organizer === true && errors.description && (
+                <p className={style.textdescription_error}>
+                  {errors.description}
+                </p>
+              )}
+              <hr></hr>
+            </div>
+          </div>
 
             <div className={style.container_date}>
               <div className={style.containericon}>
@@ -249,6 +249,10 @@ const CardDetailPublic = () => {
                 {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
               </h3>
             </div>
+            <h3>
+              {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
+            </h3>
+          </div>
 
             {eventDetail.category?.modality === "Presential" && (
               <EventLocation />
@@ -278,14 +282,14 @@ const CardDetailPublic = () => {
               <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
                 ? eventDetail.large_description.replace(/\n/g, '<br>')
                 : eventDetail.description
-              }}></div>
-              <hr></hr>
-            </div>
-
-            <EventInformation />
-
-            <ContainerButtonRight />
+            }}></div>
+            <hr></hr>
           </div>
+
+          <EventInformation />
+
+          <ContainerButtonRight />
+        </div>
       )}
     </div>
   );
@@ -302,7 +306,7 @@ const CardDetail = () => {
   useEffect(() => {
     dispatch(axiosModeEventDetail(id));
 
-    return() => {
+    return () => {
       dispatch(clear());
     }
   }, []);
@@ -311,7 +315,7 @@ const CardDetail = () => {
     e.preventDefault()
     if (privatePass) {
       dispatch(
-        axiosGetEventPrivate({ id, privateEvent_password: privatePass })
+        axiosGetEventPrivate({ objPrivate: { id, privateEvent_password: privatePass } })
       );
       setPrivatePass("");
     }
@@ -336,16 +340,16 @@ const CardDetail = () => {
       <div className={style.containerInfoEventPrivate}>
         <p>{eventDetail.start_date} at {eventDetail.start_time}</p>
         <h1>Event {eventDetail.name}</h1>
-        <form  className={style.containerPass} onSubmit={handleSubmit}>
-          <input 
-          type="password" 
-          onChange={(e) => setPrivatePass(e.target.value)}
-          placeholder='Enter the password'
-          className={style.pass} />
-          <input 
-          type="submit" 
-          value={'Send'} 
-          className={style.btnSubmit}/>
+        <form className={style.containerPass} onSubmit={handleSubmit}>
+          <input
+            type="password"
+            onChange={(e) => setPrivatePass(e.target.value)}
+            placeholder='Enter the password'
+            className={style.pass} />
+          <input
+            type="submit"
+            value={'Send'}
+            className={style.btnSubmit} />
         </form>
         {errorPass && <span>Invalid password</span>}
         <Link className={style.btnBack} to="/">

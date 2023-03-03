@@ -10,7 +10,7 @@ const SettingForm = () => {
         last_name: last_name,
         email: email,
         password: 'contrasenia',
-        address: address? `${address.address_line}, ${address.city}, ${address.state}, ${address.country}` : 'No address loaded' ,
+        address: address ? `${address.address_line}, ${address.city}, ${address.state}, ${address.country}` : 'No address loaded',
         age: born,
     }
 

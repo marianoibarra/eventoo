@@ -38,9 +38,10 @@ export const deleteEvent = createAsyncThunk(
 
 export const postNewTransaction = createAsyncThunk(
   "eventsManagement/postNewTransaction",
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.post("/transaction", data);
+      dispatch(getEventsManagement())
       res.data.type = "BUY";
       return res.data;
     } catch (error) {
@@ -53,9 +54,10 @@ export const postNewTransaction = createAsyncThunk(
 
 export const cancelTransaction = createAsyncThunk(
   "eventsManagement/cancelTransaction",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/cancel/${id}`);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.response) {
@@ -67,9 +69,10 @@ export const cancelTransaction = createAsyncThunk(
 
 export const loadPaymentProof = createAsyncThunk(
   "eventsManagement/loadPaymentProof",
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/complete/${id}`, data);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.response) {
@@ -81,9 +84,10 @@ export const loadPaymentProof = createAsyncThunk(
 
 export const putApprovePayment = createAsyncThunk(
   "eventsManagement/putApprovePayment",
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/approvePayment/${id}`, data);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.res) {
