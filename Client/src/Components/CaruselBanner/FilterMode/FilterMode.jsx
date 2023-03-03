@@ -14,6 +14,7 @@ const FilterMode = () => {
 
   const dispatch = useDispatch()
   const filter = useSelector(state => state.newFilter)
+  const {isLogged} = useSelector(state => state.user)
   const [someActive, setSomeActive] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
@@ -45,6 +46,7 @@ const FilterMode = () => {
         </button>
       }
 
+      {isLogged &&    
       <div className={`${Style.favorites} ${someActive ? Style.border : ''}`}>
         <div className={Style.container_btns_favorites}>
           <button
@@ -54,10 +56,9 @@ const FilterMode = () => {
             <AiFillStar style={{pointerEvents: 'none'}} /> Favorites
           </button>
         </div>
+      </div>}
 
-      </div>
-
-      <div className={`${Style.modality} ${Style.border}`}>
+      <div className={`${Style.modality}`}>
         <div className={Style.container_btns_modality}>
           <button
             onClick={handleClick}

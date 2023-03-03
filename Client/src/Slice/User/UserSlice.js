@@ -245,7 +245,8 @@ export const UserSlice = createSlice({
     },
     [googleLogin.pending]: (state) => {
       state.loading = true;
-      state.error = null;
+      state.error.login = null;
+      state.error.register = null;
     },
     [googleLogin.fulfilled]: (state, action) => {
       return {
@@ -253,17 +254,21 @@ export const UserSlice = createSlice({
         isLogged: true,
         isNewUser: action.payload.isNewUser,
         loading: false,
-        error: null,
+        error: {
+          register: null,
+          login: null
+        },
       };
     },
     [googleLogin.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error.login = action.payload;
+      state.error.register = action.payload;
       state.data = null;
     },
     [update.pending]: (state) => {
       state.loading = true;
-      state.error = null;
+      state.error.register = null;
     },
     [update.fulfilled]: (state, action) => {
       return {
@@ -271,12 +276,15 @@ export const UserSlice = createSlice({
         address: action.payload.data.address,
         born: action.payload.data.born,
         loading: false,
-        error: null,
+        error: {
+          ...state.error,
+          register: null
+        },
       };
     },
     [update.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error.register = action.payload;
       state.data = null;
     },
   },
