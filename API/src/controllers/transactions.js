@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 5;
 const percentageThreshold = 20;
 const sendConfig = {approvalTimeLimit,percentageThreshold}
 
@@ -107,7 +107,7 @@ const createTransactions = async (req, res) => {
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -117,7 +117,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
@@ -423,7 +423,7 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING", format });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendBuyerNotifications(buyer.email, "receiptUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
       "newTransfer",
