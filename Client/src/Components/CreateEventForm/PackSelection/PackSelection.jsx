@@ -61,7 +61,7 @@ function PackSelection({ input, setInput }) {
     return (
         <div className={style.packContainer}>
             <h1 className={style.title}>Packs</h1>
-            <h4>Choose the type of publicity</h4>
+            <h4 style={{ color:'var(--dark-text)'}}>Choose the type of publicity</h4>
             <div className={style.cardsContainer}>
                 {packs.map((pack,i) => (
                     <div

@@ -21,9 +21,6 @@ const Footer = () => {
           <li>
             <NavLink to="/faq">FAQ</NavLink>
           </li>
-          <li>
-            <NavLink to="/Help">HELP</NavLink>
-          </li>
         </motion.ul>
       </div>
       <div >

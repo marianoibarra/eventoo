@@ -109,7 +109,7 @@ const createTransactions = async (req, res) => {
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -119,7 +119,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [

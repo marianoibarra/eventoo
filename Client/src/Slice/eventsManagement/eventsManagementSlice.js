@@ -22,10 +22,11 @@ export const getEventsManagement = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "eventsBuysSlice/deleteEvent",
-  async (eventId, { rejectWithValue }) => {
+  async (eventId, { rejectWithValue, dispatch }) => {
     try {
-      const response = await API.put(`/event/${eventId}`);
-      return eventId;
+      const response = await API.delete(`/event/${eventId}`);
+      dispatch(getEventsManagement());
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -37,9 +38,10 @@ export const deleteEvent = createAsyncThunk(
 
 export const postNewTransaction = createAsyncThunk(
   "eventsManagement/postNewTransaction",
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.post("/transaction", data);
+      dispatch(getEventsManagement())
       res.data.type = "BUY";
       return res.data;
     } catch (error) {
@@ -52,9 +54,10 @@ export const postNewTransaction = createAsyncThunk(
 
 export const cancelTransaction = createAsyncThunk(
   "eventsManagement/cancelTransaction",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/cancel/${id}`);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.response) {
@@ -66,9 +69,10 @@ export const cancelTransaction = createAsyncThunk(
 
 export const loadPaymentProof = createAsyncThunk(
   "eventsManagement/loadPaymentProof",
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/complete/${id}`, data);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.response) {
@@ -80,9 +84,10 @@ export const loadPaymentProof = createAsyncThunk(
 
 export const putApprovePayment = createAsyncThunk(
   "eventsManagement/putApprovePayment",
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue, dispatch }) => {
     try {
       const res = await API.put(`/transaction/approvePayment/${id}`, data);
+      dispatch(getEventsManagement())
       return res.data;
     } catch (error) {
       if (error.res) {
@@ -102,11 +107,13 @@ const initialState = {
     get: false,
     post: false,
     put: false,
+    delete: false
   },
   error: null,
   transactionWasCreated: false,
   transactionWasCanceled: false,
   paymentWasLoaded: false,
+  deleteMsg: null
 };
 
 export const eventsManagementSlice = createSlice({
@@ -186,13 +193,156 @@ export const eventsManagementSlice = createSlice({
         state.data.buys.sort((a, b) => b[propiedad] - a[propiedad]);
       }
     },
+    setFilterCreateEvent: (state, action) => {
+      const keyword = action.payload;
+      const results = state.copy.eventsCreated.filter((event) =>
+        JSON.stringify(event).includes(keyword)
+      );
+      state.data.buys = results.length ? results : state.data.buys;
+      state.errorBuyEvents = !results.length
+        ? "No data has been found"
+        : undefined;
+    },
+    sortByAscendingEventsCreate: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.eventsCreated.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return a[propiedad].localeCompare(b[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.eventsCreated.event.organizer.name.sort((a, b) => {
+          let c = a !== null && a
+          let d = b !== null && b
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return c.localeCompare(d);
+        });
+      } else {
+        state.data.eventsCreated.sort((a, b) => a[propiedad] - b[propiedad]);
+      }
+    },
+    sortByDescendingEventsCreate: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.eventsCreated = state.data.eventsCreated.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return b[propiedad].localeCompare(a[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.eventsCreated.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return d.localeCompare(c);
+        });
+      } else {
+        state.data.eventsCreated.sort((a, b) => b[propiedad] - a[propiedad]);
+      }
+    },
+    setFilterSellerEvent: (state, action) => {
+      const keyword = action.payload;
+      const results = state.copy.sells.filter((event) =>
+        JSON.stringify(event).includes(keyword)
+      );
+      state.data.sells = results.length ? results : state.data.sells;
+      state.errorBuyEvents = !results.length
+        ? "No data has been found"
+        : undefined;
+    },
+    sortByAscendingEventsSeller: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.sells.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return a[propiedad].localeCompare(b[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.sells.event.organizer.name.sort((a, b) => {
+          let c = a !== null && a
+          let d = b !== null && b
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return c.localeCompare(d);
+        });
+      } else {
+        state.data.sells.sort((a, b) => a[propiedad] - b[propiedad]);
+      }
+    },
+    sortByDescendingEventsSeller: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.sells = state.data.sells.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return b[propiedad].localeCompare(a[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.sells.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return d.localeCompare(c);
+        });
+      } else {
+        state.data.sells.sort((a, b) => b[propiedad] - a[propiedad]);
+      }
+    },
   },
   extraReducers: {
     [getEventsManagement.pending]: (state) => {
       state.loading.get = true;
     },
     [getEventsManagement.fulfilled]: (state, action) => {
-      console.log(action.payload.eventsCreated);
       state.data = action.payload;
       state.copy = action.payload;
       state.loading.get = false;
@@ -245,24 +395,14 @@ export const eventsManagementSlice = createSlice({
       state.paymentWasLoaded = false;
     },
     [deleteEvent.pending]: (state) => {
-      state.loading = true;
+      state.loading.delete = true;
     },
     [deleteEvent.fulfilled]: (state, action) => {
-      state.loading = false;
-      const eventId = action.payload;
-
-      // Buscar el índice del evento en el arreglo state.eventsCreated usando findIndex
-      const eventIndex = state.data.eventsCreated.findIndex(
-        (e) => e.id === eventId
-      );
-
-      // Si el evento existe en el arreglo, eliminarlo usando splice
-      if (eventIndex !== -1) {
-        state.data.eventsCreated.splice(eventIndex, 1);
-      }
+      state.loading.delete = false;
+      state.deleteMsg = action.payload
     },
     [deleteEvent.rejected]: (state, action) => {
-      state.loading = false;
+      state.loading.delete = false;
       state.error = action.error;
     },
     [putApprovePayment.pending]: (state) => {
@@ -284,6 +424,12 @@ export const {
   setFilterBuyEvent,
   sortByAscendingEventsBuys,
   sortByDescendingEventsBuys,
+  setFilterCreateEvent,
+sortByAscendingEventsCreate,
+sortByDescendingEventsCreate,
+setFilterSellerEvent,
+sortByAscendingEventsSeller,
+sortByDescendingEventsSeller
 } = eventsManagementSlice.actions;
 
 export default eventsManagementSlice.reducer;

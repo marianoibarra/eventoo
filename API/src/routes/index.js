@@ -10,7 +10,6 @@ const adminMiddleware = require("./admin");
 const paymentMPMiddleware = require("./paymentMP");
 const varMiddleware = require("./var");
 
-
 router.use("/user", userMiddleware);
 router.use("/event", eventMiddleware);
 router.use("/bank-account", bankAccountMiddleware);

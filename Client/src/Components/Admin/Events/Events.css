@@ -134,13 +134,13 @@ font-size: 12px;
 .freeSap {
   font-weight: bold;
   color: var(--secundary-color); 
-  background-color: #4caf4f73; 
-  border-radius: 10px;
+  /* background-color: #4caf4f73; 
+  border-radius: 10px; */
 }
 
 .premiumSap {
   font-weight: bold;
   color: var(--accent-color); 
-  background-color: #ff990085; 
-  border-radius: 10px;
+  /* background-color: #ff990085; 
+  border-radius: 10px; */
 }

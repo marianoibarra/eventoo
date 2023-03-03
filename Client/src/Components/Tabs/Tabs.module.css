@@ -49,4 +49,5 @@
 
   .root{
     background-color: var(--ligth-background-color) ;
+    min-height: 110vh;
   }
