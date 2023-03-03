@@ -1,7 +1,7 @@
 import Styles from "./Menu.module.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../../Slice/User/UserSlice";
 import { SessionContext, ThemeContext } from "../../..";
@@ -16,6 +16,7 @@ import { MdLightMode, MdOutlineDarkMode } from "react-icons/md";
 
 const Menu = () => {
   const navigate = useNavigate();
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState(false);
   const { name, last_name, email, profile_pic, isLogged, roleAdmin } =
     useSelector((state) => state.user);
@@ -24,12 +25,19 @@ const Menu = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const menuRef = useRef();
 
+
+
+
   const handleLogout = () => {
     dispatch(logOut());
     dispatch(clearFavorites());
     dispatch(clearEventsManagement());
-    navigate("/");
     setIsOpen(false);
+    if (location.pathname === "/") {
+      navigate(0)
+    } else {
+      navigate("/");
+    }
   };
 
   const handleTheme = () => {
