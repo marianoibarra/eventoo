@@ -147,55 +147,55 @@ font-size: 12px;
 .freeSap {
   font-weight: bold;
   color: var(--secundary-color); 
-  background-color: #4caf4f73; 
-  border-radius: 10px;
+  /* background-color: #4caf4f73; 
+  border-radius: 10px; */
 }
 
 .premiumSap {
   font-weight: bold;
   color: var(--accent-color); 
-  background-color: #ff990085; 
-  border-radius: 10px;
+  /* background-color: #ff990085; 
+  border-radius: 10px; */
 }
 
 .APPROVEDSAP {
-  color: #4CAF50;
+  color: #3cb87c;
   background-color: transparent;
-  border: 1px solid #4CAF50;
+  /* border: 1px solid #4CAF50; */
 }
 
 .CANCELEDSAP {
-  color: #F44336;
+  color: #b83c3c;
   background-color: transparent;
-  border: 1px solid #F44336;
+  /* border: 1px solid #F44336; */
 }
 
 .COMPLETEDSAP {
-  color: #2196F3;
+  color: #3cb87c;
   background-color: transparent;
-  border: 1px solid #2196F3;
+  /* border: 1px solid #2196F3; */
 }
 
 .DENIEDSAP {
-  color: #9C27B0;
+  color: #b83c3c;
   background-color: transparent;
-  border: 1px solid #9C27B0;
+  /* border: 1px solid #9C27B0; */
 }
 
 .EXPIREDSAP {
-  color: #FFC107;
+  color: #515151;
   background-color: transparent;
-  border: 1px solid #FFC107;
+  /* border: 1px solid #FFC107; */
 }
 
 .INWAITINGSAP {
   color: #FF9800;
   background-color: transparent;
-  border: 1px solid #FF9800;
+  /* border: 1px solid #FF9800; */
 }
 
 .PENDINGSAP {
   color: #607D8B;
   background-color: transparent;
-  border: 1px solid #607D8B;
+  /* border: 1px solid #607D8B; */
 }

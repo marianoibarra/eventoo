@@ -1,17 +1,17 @@
 import React from 'react';
-import { FaTimesCircle } from 'react-icons/fa';
+import { BiTimeFive } from 'react-icons/bi';
 import styles from './Expired.module.css';
 
 function Expired({transaction}) {
   return (
     <div className={styles.container}>
       <div className={styles.iconContainer}>
-        <FaTimesCircle className={styles.icon} />
+        <BiTimeFive className={styles.icon} />
       </div>
       <div className={styles.messageContainer}>
-        <h1 className={styles.heading}>Transaction Rejected</h1>
+        <h1 className={styles.heading}>Transaction Expired</h1>
         <p className={styles.message}>
-          The transaction <p>{transaction?.id?.slice(0, 8)}</p> has been rejected by the event seller.
+        Your reservation for <span>{transaction.event.name}</span> expired for not having loaded the proof of payment.
         </p>
       </div>
     </div>

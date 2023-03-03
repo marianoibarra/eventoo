@@ -4,15 +4,17 @@ import { TiCancel } from "react-icons/ti";
 
 function Canceled({ transaction }) {
   return (
-    <>
-      <div className={styles.transaction}>
-        <TiCancel
-          className={styles.icon}
-           />
-      <h1 className={styles.heading}>Transaction Cancelled</h1>
+    <div className={styles.container}>
+      <div className={styles.iconContainer}>
+        <TiCancel className={styles.icon} />
       </div>
-      <p className={styles.message}>You canceled your reservation to<p>{transaction.event.name}</p>by transaction<p> {transaction?.id?.slice(0, 8)}</p></p>
-    </>
+      <div className={styles.messageContainer}>
+        <h1 className={styles.heading}>Transaction Canceled</h1>
+        <p className={styles.message}>
+        You canceled your reservation to <span>{transaction.event.name}</span>
+        </p>
+      </div>
+    </div>
   );
 }
 
