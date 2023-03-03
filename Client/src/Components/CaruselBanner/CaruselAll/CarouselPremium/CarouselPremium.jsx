@@ -89,9 +89,11 @@ export default function CarouselPremium() {
         prevArrow: <SamplePrevArrow />,
     };
 
+    console.log(premiumEvents)
+
     return (
       <>
-        <div className={Style.container_text}> Premium Events  {`(${premiumEvents.length})`} </div>
+        <div className={Style.container_text}> Premium Events  {`(${premiumEvents?.filter(event => event.isActive === true).length})`} </div>
         <div className={Style.container_slider}>
         <Slider className={Style.slider} {...settings}>
           {
@@ -99,7 +101,7 @@ export default function CarouselPremium() {
               ?  <div className={Style.spinner}><div></div><div></div><div></div><div></div></div>
               : premiumEvents.length > 0
                   ? premiumEvents.map(event => (
-                      <CaruselCard
+                      event.isActive ? <CaruselCard
                         img={event.cover_pic ? event.cover_pic : covers[event.category?.name]}
                         key={event.id}
                         name={event.name}
@@ -110,7 +112,7 @@ export default function CarouselPremium() {
                         category={event.category === null ? 'N/A' : event.category.name}
                         id={event.id}
                         premium={true}
-                      />
+                      /> : null
                     )) 
                   : <div className={Style.notFoundWrapper}>
                       <FontAwesomeIcon icon={faHeartBroken} size="6x" />
