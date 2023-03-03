@@ -4,7 +4,6 @@ import Tab from "@material-ui/core/Tab";
 import Users from "./Users/Users";
 import Category from "./Categories/Category";
 import EventsAdmin from "./Events/EventAdmin";
-import { useDispatch } from "react-redux";
 import { BsCalendar } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { MdLocalOffer } from "react-icons/md";

@@ -10,6 +10,7 @@
     font-weight: 250;
     text-align: center;
     margin-right: 35rem;
+    color: var(--dark-text);
 }
 
 .title span {
@@ -35,25 +36,30 @@ input {
     border: 0px;
     outline: none;
     width: 98%;
+    color: var(--dark-text);
 }
 
 input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none; 
-    margin: 0; 
+    margin: 0;
+    color: var(--dark-text);
 }
 
 .name_and_lastname {
     display: flex;
     justify-content: space-between;
+    color: var(--dark-text);
 }
 
 .name_and_lastname input {
     width: 96%;
+    color: var(--dark-text);
 }
 
 .container_input {
     border-bottom: solid 2px var(--primary-color);
     margin-bottom: 26px;
+    color: var(--dark-text);
 }
 
 .container_input_name_last {

@@ -1,14 +1,13 @@
 .Contenedor {
   width: 100%;
-position: relative;
-top: 30%;
+  position: relative;
+  top: 30%;
   background-color: var(--ligth-background-color);
-
+  padding: 25px
 }
 
 .ContenedorDestacado {
   width: 100%;
-
   margin: auto;
   padding: 0 0 10px 20px;
 }
@@ -27,20 +26,21 @@ top: 30%;
 .ContenedorDetalles {
 
   display: flex;
-  margin-top: 10%;
+  margin-top: 5%;
 }
 
 .ContenedorInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 380px;
-  justify-content: center;
-  text-align: center;
-  margin: 0 auto;
-  width: max-content;
-  border: 3px solid var(--accent-color) ;
-  border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 468px;
+    justify-content: center;
+    text-align: center;
+    height: 50vh;
+    margin: 0 auto;
+    width: max-content;
+    border: 3px solid var(--accent-color);
+    border-radius: 30px;
 }
 
 .ContenedorInfo h3 {

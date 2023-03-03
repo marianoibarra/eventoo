@@ -447,7 +447,7 @@ const verifyAdmins = async (req, res, next) => {
   const userId = req.userId;
   try {
     const user = await User.findByPk(userId);
-    const role = await RoleAdmin.findByPk(user.roleAdminId);
+    const role = await RoleAdmin.findByPk(user.roleAdminId)
     if (role.name === "ADMIN" || role.name === "SUPERADMIN") {
       next();
     } else {

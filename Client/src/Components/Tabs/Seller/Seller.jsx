@@ -5,21 +5,21 @@ import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManag
 import { FaEdit } from "react-icons/fa";
 import { TiArrowSortedDown, TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
 import {
-  axiosModeEventsBuys,
-  deleteEvent,
-  setFilterBuyEvent,
-  sortByAscendingEventsBuys,
-  sortByDescendingEventsBuys,
-} from "../../../Slice/EventsBuysForUser/BuysSlice";
+  setFilterSellerEvent,
+  sortByAscendingEventsSeller,
+  sortByDescendingEventsSeller
+} from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 import { AiOutlineCheck } from "react-icons/ai";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
-import Completed from "./Status/Expired/Completed";
+import Completed from "./Status/Expired/Expired";
 import Canceled from "./Status/Canceled/Canceled";
-import Rejected from "./Status/Pending/Rejected";
 import Inwaiting from "./Status/Inwaiting/Inwaiting";
 import Denied from "./Status/Denied/Denied";
 import Approved from "./Status/Approved/Approved";
+import Expired from "./Status/Expired/Expired";
+import Pending from "./Status/Pending/Pending";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 
 
@@ -41,23 +41,23 @@ function Seller() {
     if (sortType.type === e) {
       if (sortType.id === 2) {
         setSortType({ type: e, id: 1 });
-        dispatch(sortByAscendingEventsBuys(e));
+        dispatch(sortByAscendingEventsSeller(e));
       }
       if (sortType.id === 1) {
         setSortType({ type: e, id: 2 });
-        dispatch(sortByDescendingEventsBuys(e));
+        dispatch(sortByDescendingEventsSeller(e));
       }
     } else {
       setSortType({ type: e, id: 1 });
-      dispatch(sortByAscendingEventsBuys(e));
+      dispatch(sortByAscendingEventsSeller(e));
     }
   };
 
   const handleSearch = (key) => {
-    dispatch(setFilterBuyEvent(key));
+    dispatch(setFilterSellerEvent(key));
   };
 
-console.log(eventSells,'tipo de evento')
+  console.log(eventSells, 'tipo de evento')
 
   return (
     <div>
@@ -66,22 +66,6 @@ console.log(eventSells,'tipo de evento')
 
       <div className="sapList">
         <div className="sapListHeader">
-          <div
-            className="sapListItem"
-            id={sortType.type == `organizer` ? "sapSelection" : undefined}
-          >
-            {sortType.type === 'organizer' ?
-              <TiArrowUnsorted
-                size={18}
-                cursor="pointer"
-                onClick={() => accent("organizer")}
-              /> : <TiArrowSortedDown
-                size={18}
-                cursor="pointer"
-                onClick={() => accent("organizer")}
-              />}
-            Organizator
-          </div>
           <div
             className="sapListItem sapListItemWide"
             id={sortType.type == `name` ? "sapSelection" : undefined}
@@ -150,8 +134,7 @@ console.log(eventSells,'tipo de evento')
         <div className="sapConteiner">
           {eventSells.map((transaction, index) => (<>
 
-            <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
-              <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
+            <div className="sapListRow" key={index} onClick={() => information(transaction.id)} onDoubleClick={()=>setTransactionId('')}>
               <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}
@@ -160,7 +143,7 @@ console.log(eventSells,'tipo de evento')
                 {transaction?.isPremium ? "Premium" : "Free"}
               </div>
               <div className="sapListItem sap">
-              {(() => {
+                {(() => {
                   switch (transaction.status) {
                     case 'APPROVED':
                       return <p className={`${transaction.status}SAP`}>APPROVED</p>
@@ -186,18 +169,21 @@ console.log(eventSells,'tipo de evento')
               <div key={index}>
                 {(() => {
                   switch (transaction.status) {
-                    case 'CANCELED':
-                      return <Canceled transaction={transaction} />;
-                    case 'INWAITING':
-                      return <Inwaiting transaction={transaction} />;
-                    case 'REJECTED':
-                      return <Rejected transaction={transaction} />;
-                    case 'COMPLETED':
-                      return <Completed transaction={transaction} />;
                     case 'APPROVED':
                       return <Approved transaction={transaction} />;
+                    case 'CANCELED':
+                      return <Canceled transaction={transaction} />;
                     case 'DENIED':
                       return <Denied transaction={transaction} />;
+                    case 'EXPIRED':
+                      return <Expired transaction={transaction} />;
+                    case 'INWAITING':
+                      return <Pending transaction={transaction} />;
+                    case 'PENDING':
+                      return <Pending transaction={transaction} />;
+                    case 'COMPLETED':
+                      return <Completed transaction={transaction} />;
+
                     default:
                       return <p>no tienes estados pendientes</p>;
                   }

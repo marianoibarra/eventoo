@@ -40,3 +40,9 @@
     color:red;
     font-size: 0.8rem;
 }
+
+.category{
+    display: flex;
+    justify-content: center;
+    margin: 2%;
+}

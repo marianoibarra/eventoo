@@ -119,8 +119,7 @@ const Voucher = ({ transaction }) => {
             <h1 className={Style.containerVoucher_tittle}>Operation <p>{transaction?.slice(0, 8)}</p></h1>
             {
               !preview
-                ?
-                
+                ?                
                 <div className={Style.containerVoucher}>
                   <input
                     hidden
@@ -175,7 +174,7 @@ const Voucher = ({ transaction }) => {
                 className={'btnprimario'}
                 onClick={handleBtnCancel}>
                 CANCEL
-              </button>``
+              </button>
 
               <button
                 type='button'

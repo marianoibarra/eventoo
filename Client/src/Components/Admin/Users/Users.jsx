@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeUserRole,
@@ -20,12 +20,10 @@ function Users() {
   }, []);
   const handleBanned = (e) => {
     dispatch(disableUser(e));
-    // dispatch(deleteUser(e));
+
   };
   const handleChangeRole = (e) => {
-    console.log(e)
     dispatch(changeUserRole(e));
-    // dispatch(deleteUser(e));
   };
 
   const handleSearch = (e) => {

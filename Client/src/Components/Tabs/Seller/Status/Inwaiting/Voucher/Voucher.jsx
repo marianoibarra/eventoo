@@ -58,20 +58,18 @@ const Voucher = ({ transaction }) => {
                 </div> :
                 undefined
             }
-
             <div className={Style.containerVoucher_button}>
               <button
                 type='button'
                 value='cancel'
-                className={'btnprimario'}
+                className={`btnprimario ${Style.modify}`}
                 onClick={handleBtn}>
                 CANCEL
               </button>
-
               <button
                 type='button'
                 value='acept'
-                className={'btnprimario'}
+                className={`btnprimario ${Style.modify} ${Style.modifyAcept}`}
                 onClick={handleBtn}>
                 ACEPT
               </button>

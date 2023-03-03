@@ -1,29 +1,3 @@
-// import React from 'react'
-// import {  useSelector } from "react-redux";
-// import { Link } from 'react-router-dom';
-// import SpinnerWhite from '../../../utils/SpinnerWhite/SpinnerWhite';
-// import Styles from '../Create/Create.module.css';
-
-// function Buys() {
-
-//   const { data: {buys: eventsBuyed}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
-
-//   return (
-//     <div className={Styles.container}>
-//       {!loading
-//         ? eventsBuyed.map(transaction => (
-//             <div className={Styles.eventCard} key={transaction.event.name}>
-//               <Link to={`/Event/${transaction.event.id}`}><h3 className={Styles.eventCardTitle}>Name: {transaction.event.name}</h3></Link>
-//               <p>Start date: {transaction.event.start_date}</p>
-//               <p>End date: {transaction.event.end_date}</p>
-//               <p>Category: {transaction.eventcategory?.name}</p>
-//               <p>Age range: {transaction.event.age_range}</p>
-//               <p id={transaction.status}>Status: {transaction.status}</p>
-
-//             </div>
-//           ))
-//       : <SpinnerWhite />
-//     }
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -35,18 +9,15 @@ import {
 
 import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManagementSlice'
 import './Events.css'
-import { FaEdit } from "react-icons/fa";
-import { TiArrowSortedDown, TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
-import { AiOutlineCheck } from "react-icons/ai";
+import { TiArrowSortedDown, TiArrowUnsorted } from "react-icons/ti";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
 
 import Pending from "./Status/Pending/Pending";
-import Completed from "./Status/Completed/Completed";
-import Canceled from "./Status/Canceled/Canceled";
 import Inwaiting from "./Status/Inwaiting/Inwaiting";
 import Approved from "./Status/Approved/Aproved";
 import Denied from "./Status/Denied/Denied";
 import Expired from "./Status/Expired/Expired";
+import Canceled from "./Status/Canceled/Canceled";
 
 
 
@@ -178,14 +149,14 @@ function Buys() {
         <div className="sapConteiner">
           {eventBuys.map((transaction, index) => (<>
 
-            <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
+            <div className="sapListRow" key={index} onClick={() => information(transaction.id)} onDoubleClick={()=>setTransactionId('')}>
               <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
               <div className="sapListItem sapListItemWide sap nameEventSap"><Link to={`/Event/${transaction.eventId}`}>{transaction?.event?.name}</Link></div>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}
               </div>
               <div className="sapListItem sap">
-                {transaction?.isPremium ? <p className="premiumSap">Premium</p> : <p className="freeSap">Free</p>}
+                {transaction?.event?.isPaid ? <p className="premiumSap">Paid</p> : <p className="freeSap">Free</p>}
               </div>
               <div className="sapListItem sap">
               {(() => {
@@ -194,8 +165,6 @@ function Buys() {
                       return <p className={`${transaction.status}SAP`}>APPROVED</p>
                     case 'CANCELED':
                       return <p className={`${transaction.status}SAP`}>CANCELED</p>
-                    case 'COMPLETED':
-                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
                     case 'DENIED':
                       return <p className={`${transaction.status}SAP`}>DENIED</p>
                     case 'EXPIRED':
@@ -219,8 +188,6 @@ function Buys() {
                       return <Approved transaction={transaction} />;
                     case 'CANCELED':
                       return <Canceled transaction={transaction} />;
-                    case 'COMPLETED':
-                      return <Completed transaction={transaction} />;
                     case 'DENIED':
                       return <Denied transaction={transaction} />;
                     case 'EXPIRED':
