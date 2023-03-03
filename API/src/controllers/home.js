@@ -174,8 +174,8 @@ const getEventById = async (req, res) => {
     
       // event.scoreByUser = Math.round(resultScore); dejo por si necesitamos que sea solo un entero... (por las estrellitas)
 
-    if (event.isPublic) {
-      res.json({  isPublic: true , event})
+    if (event.isPublic || event.organizer.id === req.userId) {
+      res.json({ isPublic: true , event})
     } else {
       res.json({
         isPublic: false,
