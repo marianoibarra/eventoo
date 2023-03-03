@@ -36,7 +36,6 @@ export const axiosGetEventPrivate = createAsyncThunk(
   'eventDetail/axiosGetEventPrivate',
   async (data, { rejectWithValue }) => {
     try {
-      // const res = await API.get(`/event/checkPrivate`, objPrivate)
       const res = await API.post(`/event/checkPrivate`, data)
       return res.data
     } catch (error) {
