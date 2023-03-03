@@ -89,8 +89,6 @@ export default function CarouselPremium() {
         prevArrow: <SamplePrevArrow />,
     };
 
-    console.log(premiumEvents)
-
     return (
       <>
         <div className={Style.container_text}> Premium Events  {`(${premiumEvents?.filter(event => event.isActive === true).length})`} </div>

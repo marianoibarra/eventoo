@@ -174,7 +174,6 @@ function Form() {
       errors.privateEvent_password = "Password must be at least 6 characters length";
     }
 
-    console.log(errors)
     return errors;
   }
 
@@ -187,7 +186,6 @@ function Form() {
       localStorage.setItem("formEvent", JSON.stringify(input));
       localStorage.setItem("lastTime", new Date());
     }
-    console.log(input);
   }, [input]);
 
   useEffect(() => {
