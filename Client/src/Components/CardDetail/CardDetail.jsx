@@ -116,7 +116,6 @@ const CardDetailPublic = () => {
 
   function editButton(event) {
     event.preventDefault();
-    console.log(modeEdit);
     if(modeEdit === false){
       dispatch(setModeEdit(true));
     }

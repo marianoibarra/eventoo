@@ -65,22 +65,6 @@ console.log(eventSells,'tipo de evento')
       <div className="sapList">
         <div className="sapListHeader">
           <div
-            className="sapListItem"
-            id={sortType.type == `organizer` ? "sapSelection" : undefined}
-          >
-            {sortType.type === 'organizer' ?
-              <TiArrowUnsorted
-                size={18}
-                cursor="pointer"
-                onClick={() => accent("organizer")}
-              /> : <TiArrowSortedDown
-                size={18}
-                cursor="pointer"
-                onClick={() => accent("organizer")}
-              />}
-            Organizator
-          </div>
-          <div
             className="sapListItem sapListItemWide"
             id={sortType.type == `name` ? "sapSelection" : undefined}
           >
@@ -149,7 +133,6 @@ console.log(eventSells,'tipo de evento')
           {eventSells.map((transaction, index) => (<>
 
             <div className="sapListRow" key={index} onClick={() => information(transaction.id)} onDoubleClick={()=>setTransactionId('')}>
-              <div className="sapListItem sap">{`${transaction.event?.organizer?.name} ${transaction.event?.organizer?.last_name}`}</div>
               <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
               <div className="sapListItem sapListItemWide sap">
                 {transaction?.event?.start_date}

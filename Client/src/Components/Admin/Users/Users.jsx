@@ -20,12 +20,12 @@ function Users() {
   }, []);
   const handleBanned = (e) => {
     dispatch(disableUser(e));
-    // dispatch(deleteUser(e));
+
   };
   const handleChangeRole = (e) => {
-    console.log(e)
+
     dispatch(changeUserRole(e));
-    // dispatch(deleteUser(e));
+
   };
 
   const handleSearch = (e) => {

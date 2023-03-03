@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -9,7 +9,7 @@ sortByDescendingEventsCreate,
 } from "../../../Slice/eventsManagement/eventsManagementSlice";
 import '../Buys/Events.css'
 
-import { TiArrowSortedDown, TiArrowUnsorted ,TiArrowSortedUp } from "react-icons/ti";
+import { TiArrowSortedDown, TiArrowUnsorted  } from "react-icons/ti";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
@@ -47,22 +47,6 @@ function Buys() {
       <SearchBar onSearch={handleSearch} />
       <div className="sapList">
         <div className="sapListHeader">
-          <div
-            className="sapListItem"
-            id={sortType.type == `organizer` ? "sapSelection" : undefined}
-          >
-            { sortType.type === 'organizer'? 
-            <TiArrowUnsorted
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("organizer")}
-            /> : <TiArrowSortedDown
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("organizer")}
-            /> }
-            Organizator
-          </div>
           <div
             className="sapListItem sapListItemWide"
             id={sortType.type == `name` ? "sapSelection" : undefined}
@@ -142,7 +126,6 @@ function Buys() {
         </div>
         {eventsCreated.map((event,index) => (
           <div className="sapListRow" key={index}>
-            <div className="sapListItem sap">{`${event?.organizer?.name} ${event?.organizer?.last_name}`}</div>
             <div className="sapListItem sapListItemWide sap " >{event.name}</div>
             <div className="sapListItem sapListItemWide sap">
               {event?.start_date}

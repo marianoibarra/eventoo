@@ -19,11 +19,11 @@ function EventsAdmin() {
     dispatch(getAllEvents());}
   }, []);
   const handleChange = (e) => {
-    console.log(e);
+
     dispatch(changeStateEvent(e));
   };
   const handledelete = (e) => {
-    console.log(e);
+
     dispatch(changeStateEvent(e));
   };
 

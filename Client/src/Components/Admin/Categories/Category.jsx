@@ -53,7 +53,6 @@ function Buys() {
     image:image
   
     };
-    console.log(e)
     dispatch(changeStateEvent(event));
     setImage('')
   };
