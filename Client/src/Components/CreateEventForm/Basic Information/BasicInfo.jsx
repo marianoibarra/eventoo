@@ -66,7 +66,7 @@ function BasicInfo({ input, setInput, errors, showMsg, setShowMsg, loading }) {
             <h2 className={style.title}>Short overview</h2>
             <p className={style.text}>Sum up in 140 characters or less why your event is unique, thrilling and worth attending.</p>
             <TextField
-                // label="Description"
+              
                 name='description'
                 multiline
                 value={input.description}

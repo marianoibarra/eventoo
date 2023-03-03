@@ -1,18 +1,15 @@
-// import React from 'react'
-// import { useSelector } from "react-redux";
-// import { Link } from 'react-router-dom';
-// import Styles from'./Create.module.css';
 
-// function Create() {
-
-//   const { data: {eventsCreated}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { axiosModeEventsCreateForUser, setFiltercreateEvent, sortByAscendingEventscreate, sortByDescendingEventscreate } from '../../../Slice/EventsCreateForUser/CreateForUserSlice';
+import {
+  setFilterCreateEvent,
+sortByAscendingEventsCreate,
+sortByDescendingEventsCreate,
+} from "../../../Slice/eventsManagement/eventsManagementSlice";
 import '../Buys/Events.css'
-import { FaEdit } from "react-icons/fa";
-import { TiArrowSortedDown, TiArrowUnsorted ,TiArrowSortedUp } from "react-icons/ti";
+
+import { TiArrowSortedDown, TiArrowUnsorted  } from "react-icons/ti";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
@@ -25,9 +22,6 @@ function Buys() {
   const [sortType, setSortType] = useState({ type:null, id: 2 });
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(axiosModeEventsCreateForUser());
-  }, [dispatch]);
 
 
 
@@ -35,19 +29,19 @@ function Buys() {
     if(sortType.type === e){
     if (sortType.id === 2) {
       setSortType({ type: e, id: 1 });
-      dispatch(sortByAscendingEventscreate(e));
+      dispatch(sortByAscendingEventsCreate(e));
     }
     if (sortType.id === 1) {
       setSortType({ type: e, id: 2 });
-      dispatch(sortByDescendingEventscreate(e));
+      dispatch(sortByDescendingEventsCreate(e));
     }}else{
       setSortType({ type: e, id: 1 });
-      dispatch(sortByAscendingEventscreate(e));
+      dispatch(sortByAscendingEventsCreate(e));
     }
   };
 
   const handleSearch = (key) => {
-    dispatch(setFiltercreateEvent(key));
+    dispatch(setFilterCreateEvent(key));
   };
 
   return (
@@ -55,22 +49,6 @@ function Buys() {
       <SearchBar onSearch={handleSearch} />
       <div className="sapList">
         <div className="sapListHeader">
-          <div
-            className="sapListItem"
-            id={sortType.type == `organizer` ? "sapSelection" : undefined}
-          >
-            { sortType.type === 'organizer'? 
-            <TiArrowUnsorted
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("organizer")}
-            /> : <TiArrowSortedDown
-              size={18}
-              cursor="pointer"
-              onClick={() =>accent("organizer")}
-            /> }
-            Organizator
-          </div>
           <div
             className="sapListItem sapListItemWide"
             id={sortType.type == `name` ? "sapSelection" : undefined}
@@ -139,6 +117,11 @@ function Buys() {
           <div
             className="sapListItem"
           >
+            Count
+          </div>
+          <div
+            className="sapListItem"
+          >
             Action
           </div>
 
@@ -156,6 +139,9 @@ function Buys() {
             </div>
             <div className="sapListItem sap">
             <p>{event.isPublic ? 'Public' : 'Private'} </p>
+            </div>
+            <div className="sapListItem sap">
+            <p>{event.stock_ticket }/{event.guests_capacity } </p>
             </div>
             
             <div className="sapListItem sap">
