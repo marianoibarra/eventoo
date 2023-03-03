@@ -89,7 +89,7 @@ const ComponentContact = () => {
             />
           </div>
           <div className={style.description}>
-            <h3 className={style.h3}>Mary Laura Betancourt Sequera</h3>
+            <h3 className={style.h3}>Mary Laura Betancourt S.</h3>
             <p>
               <a target="_blank" href="https://github.com/marylaurab">GitHub</a>
             </p>
