@@ -186,6 +186,150 @@ export const eventsManagementSlice = createSlice({
         state.data.buys.sort((a, b) => b[propiedad] - a[propiedad]);
       }
     },
+    setFilterCreateEvent: (state, action) => {
+      const keyword = action.payload;
+      const results = state.copy.eventsCreated.filter((event) =>
+        JSON.stringify(event).includes(keyword)
+      );
+      state.data.buys = results.length ? results : state.data.buys;
+      state.errorBuyEvents = !results.length
+        ? "No data has been found"
+        : undefined;
+    },
+    sortByAscendingEventsCreate: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.eventsCreated.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return a[propiedad].localeCompare(b[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.eventsCreated.event.organizer.name.sort((a, b) => {
+          let c = a !== null && a
+          let d = b !== null && b
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return c.localeCompare(d);
+        });
+      } else {
+        state.data.eventsCreated.sort((a, b) => a[propiedad] - b[propiedad]);
+      }
+    },
+    sortByDescendingEventsCreate: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.eventsCreated = state.data.eventsCreated.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return b[propiedad].localeCompare(a[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.eventsCreated.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return d.localeCompare(c);
+        });
+      } else {
+        state.data.eventsCreated.sort((a, b) => b[propiedad] - a[propiedad]);
+      }
+    },
+    setFilterSellerEvent: (state, action) => {
+      const keyword = action.payload;
+      const results = state.copy.sells.filter((event) =>
+        JSON.stringify(event).includes(keyword)
+      );
+      state.data.sells = results.length ? results : state.data.sells;
+      state.errorBuyEvents = !results.length
+        ? "No data has been found"
+        : undefined;
+    },
+    sortByAscendingEventsSeller: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.sells.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return a[propiedad].localeCompare(b[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.sells.event.organizer.name.sort((a, b) => {
+          let c = a !== null && a
+          let d = b !== null && b
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return c.localeCompare(d);
+        });
+      } else {
+        state.data.sells.sort((a, b) => a[propiedad] - b[propiedad]);
+      }
+    },
+    sortByDescendingEventsSeller: (state, action) => {
+      const propiedad = action.payload;
+      if (
+        propiedad === "start_date" ||
+        propiedad === "name" ||
+        propiedad === "status"
+      ) {
+        state.data.sells = state.data.sells.sort((a, b) => {
+          if (
+            !a[propiedad] ||
+            !b[propiedad] ||
+            typeof a[propiedad] !== "string" ||
+            typeof b[propiedad] !== "string"
+          ) {
+            return 0;
+          }
+          return b[propiedad].localeCompare(a[propiedad]);
+        });
+      } else if (propiedad === "organizer") {
+        state.data.sells.sort((a, b) => {
+          let c = a[propiedad] && a[propiedad].name;
+          let d = b[propiedad] && b[propiedad].name;
+          if (!c || !d || typeof c !== "string" || typeof d !== "string") {
+            return 0;
+          }
+          return d.localeCompare(c);
+        });
+      } else {
+        state.data.sells.sort((a, b) => b[propiedad] - a[propiedad]);
+      }
+    },
   },
   extraReducers: {
     [getEventsManagement.pending]: (state) => {
@@ -284,6 +428,12 @@ export const {
   setFilterBuyEvent,
   sortByAscendingEventsBuys,
   sortByDescendingEventsBuys,
+  setFilterCreateEvent,
+sortByAscendingEventsCreate,
+sortByDescendingEventsCreate,
+setFilterSellerEvent,
+sortByAscendingEventsSeller,
+sortByDescendingEventsSeller
 } = eventsManagementSlice.actions;
 
 export default eventsManagementSlice.reducer;

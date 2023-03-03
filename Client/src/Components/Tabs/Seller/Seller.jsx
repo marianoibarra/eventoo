@@ -5,12 +5,10 @@ import { getEventsManagement } from '../../../Slice/eventsManagement/eventsManag
 import { FaEdit } from "react-icons/fa";
 import { TiArrowSortedDown, TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
 import {
-  axiosModeEventsBuys,
-  deleteEvent,
-  setFilterBuyEvent,
-  sortByAscendingEventsBuys,
-  sortByDescendingEventsBuys,
-} from "../../../Slice/EventsBuysForUser/BuysSlice";
+  setFilterSellerEvent,
+  sortByAscendingEventsSeller,
+  sortByDescendingEventsSeller
+} from "../../../Slice/eventsManagement/eventsManagementSlice";
 
 import { AiOutlineCheck } from "react-icons/ai";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
@@ -41,20 +39,20 @@ function Seller() {
     if (sortType.type === e) {
       if (sortType.id === 2) {
         setSortType({ type: e, id: 1 });
-        dispatch(sortByAscendingEventsBuys(e));
+        dispatch(sortByAscendingEventsSeller(e));
       }
       if (sortType.id === 1) {
         setSortType({ type: e, id: 2 });
-        dispatch(sortByDescendingEventsBuys(e));
+        dispatch(sortByDescendingEventsSeller(e));
       }
     } else {
       setSortType({ type: e, id: 1 });
-      dispatch(sortByAscendingEventsBuys(e));
+      dispatch(sortByAscendingEventsSeller(e));
     }
   };
 
   const handleSearch = (key) => {
-    dispatch(setFilterBuyEvent(key));
+    dispatch(setFilterSellerEvent(key));
   };
 
 console.log(eventSells,'tipo de evento')
