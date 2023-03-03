@@ -157,36 +157,32 @@ const getEventById = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }  
 
+    let userId = null
+
+    const { authorization } = req.headers;
+    if (authorization) {
+    const token = authorization.split(" ")[1];
+    jwt.verify(token, process.env.SECRET, (err, user) => {
+      if (err) {
+        console.log(err)
+      } else {
+        userId = user.id;
+      }
+    });
+    }
+
     event.organizer.reviews = event.organizer.organizer.map(r => r.reviews).flat().map(r => { 
       r.reviewedBy = r.user
       delete r.user
       return r
     })
-    
     delete event.organizer.organizer
-    
-    if(event.organizer.reviews.length > 0) {
-      const preResult = event.organizer.reviews.map(a => a.stars)
-      event.organizer.score = (preResult.reduce((acc, curr) => acc + curr) / preResult.length).toFixed(1);
-    } else {
-       event.organizer.score = 0
-    }
-    
-      // event.scoreByUser = Math.round(resultScore); dejo por si necesitamos que sea solo un entero... (por las estrellitas)
 
-    if (event.isPublic || event.organizer.id === req.userId) {
-      res.json({ isPublic: true , event})
+    if (event.isPublic || event.organizer.id === userId) {
+      res.json({  isPublic: true , event })
     } else {
-      res.json({
-        isPublic: false,
-        event: {
-          id: id,
-          name: event.name,
-          start_date: event.start_date,
-          start_time: event.start_time,
-        },
-      });
-    }
+      res.json ({ isPublic: false, event: { id: id, name: event.name , start_date: event.start_date, start_time: event.start_time }})
+    } 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

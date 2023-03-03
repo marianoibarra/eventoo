@@ -223,7 +223,10 @@ const RegisterModal = () => {
                     </IconButton>
                   </InputAdornment>
                 }
-              />
+                />
+                <div onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                </div>
               {error && <span className={styles.errorMsg}>{error.msg}</span>}
               <button
                 className={`${styles.submit} ${styles.right}`}
