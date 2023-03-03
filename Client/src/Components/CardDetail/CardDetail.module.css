@@ -161,8 +161,8 @@ h1 a:hover {
 
 .container_date h3 {
     margin-top: 6px;
-    margin-left: 52px;
-    font-size: 1.5vw;
+    /* margin-left: 52px; */
+    font-size: 1rem;
     font-weight: 400;
     width: max-content;
     color: var(--secondary-color);
