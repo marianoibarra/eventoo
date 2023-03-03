@@ -34,7 +34,7 @@ const RegisterModal = () => {
 
   const validate = (input) => {
     const regexp_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const regexp_pass =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regexp_pass =  /^(?=.*[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/;
     const errors = {};
 
     if (input.email.length === 0) {
