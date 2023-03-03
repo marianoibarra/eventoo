@@ -254,6 +254,14 @@ h1 a:hover {
     font-weight: 400;
 }
 
+.url {
+    margin-top: 5px;
+    padding-left: 55px;
+    width: 100%;
+    font-size: 1.3vw;
+    font-weight: 400;
+} 
+
 .spinner {
     display: inline-block;
     position: absolute;

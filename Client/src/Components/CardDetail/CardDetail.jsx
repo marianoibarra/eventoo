@@ -15,7 +15,7 @@ import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import covers from "../../imgs/covers";
 import moment from "moment";
-import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
+import { AiTwotoneCalendar, AiFillEdit, AiOutlineLink } from "react-icons/ai";
 import { RiMedalLine, RiTicket2Fill } from "react-icons/ri";
 import style from "./CardDetail.module.css";
 import ContainerButtonRight from "./ContainerButtonRight/ContainerButtonRight";
@@ -254,6 +254,19 @@ const CardDetailPublic = () => {
             {eventDetail.category?.modality === "Presential" && (
               <EventLocation />
             )}
+
+            {eventDetail.category?.modality === "Virtual" && 
+              <div className={style.container_date}>
+                <div className={style.containericon}>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <AiOutlineLink size={35} />{" "}
+                </span>
+                <span className={style.iconspantext}>URL</span>
+                </div>
+                <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+              </div>
+            }
 
             <div className={style.container_date}>
               <div className={style.containericon}>
