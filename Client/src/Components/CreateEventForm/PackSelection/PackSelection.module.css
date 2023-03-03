@@ -26,6 +26,7 @@
     border: solid 1px var(--primary-color);
     justify-content: space-between;
     height: 180px;
+    color:var(--white-text)
 }
 
 .card:hover{

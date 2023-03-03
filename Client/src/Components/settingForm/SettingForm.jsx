@@ -10,7 +10,7 @@ const SettingForm = () => {
         last_name: last_name,
         email: email,
         password: 'contrasenia',
-        adress: `${address.address_line}, ${address.city}, ${address.state}, ${address.country}`,
+        address: address? `${address.address_line}, ${address.city}, ${address.state}, ${address.country}` : 'No address loaded' ,
         age: born,
     }
 
@@ -52,7 +52,7 @@ const SettingForm = () => {
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="adress">Adress</legend>
-                    <input type='text' name="adress" value={input?.adress} onChange={handleOnChange}/>
+                    <input type='text' name="address" value={input.address ? input.address : 'No address loaded'} onChange={handleOnChange}/>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="age">Age</legend>
@@ -60,7 +60,7 @@ const SettingForm = () => {
                 </div>
             </form>
             <div className={style.divprueba}>
-                <img src={input.profile_pic} alt="Profile Pic" className={style.imagesetting} />
+                <img src={input?.profile_pic} alt="Profile Pic" className={style.imagesetting} />
             </div>
         </div>
         </div>

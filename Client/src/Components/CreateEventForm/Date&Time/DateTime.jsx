@@ -76,9 +76,6 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                             }}
                             minDate={today}
                             onChange={(value) => {
-                                // const fecha = new Date();
-                                // const fechaISO = fecha.toISOString();
-                                // const fechaFormateada = fechaISO.slice(0, 10);
                                 setInput({
                                     ...input,
                                     start_date: value && value.hasOwnProperty('_d') ? value._d : value,
@@ -86,7 +83,12 @@ function DateTime({ input, setInput, errors, showMsg, setShowMsg, loading }) {
                                 });
                             }}
                             onBlur={handleBlur}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} sx={{
+                                svg: {color:'var(--dark-text)'},
+                                input: {color:'var(--dark-text)'},
+                                label: {color:'var(--dark-text)'},
+                                backgroundColor: 'var(--ligth-background-color)'
+                              }}/>}
                             disabled={loading}
                             style={{ marginBottom: showMsg.start_date && errors.start_date ? '0px' : '20px', backgroundColor: 'var(--bg-elevation)', WebkitTextFillColor: 'var(--dark-text)' }}
                         />
