@@ -67,10 +67,8 @@ const updateEventLowStock = async (eventId,percentageThreshold) => {
   const event = await Event.findByPk(eventId);
   const availableTickets =event.stock_ticket;
   const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
-
   const isLowStock = percentageAvailable <= percentageThreshold ;
   await event.update({ low_stock: isLowStock });
-  console.log("capacity:" +event.guests_capacity, "stock_ticket:" + event.stock_ticket,"isLowStock" + isLowStock,"percentageThreshold:" + percentageThreshold,"percentageAvailable:" + percentageAvailable)
 };
 
 const createTransactions = async (req, res) => {
@@ -109,7 +107,7 @@ const createTransactions = async (req, res) => {
     const newTransaction = await Transaction.create(
       {
         tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+        // expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
       },
       {
         include: ["tickets"],
@@ -119,7 +117,7 @@ const createTransactions = async (req, res) => {
     await newTransaction.setBuyer(user);
     await newTransaction.setEvent(event);
 
-    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    // await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
     await newTransaction.reload({
       include: [
