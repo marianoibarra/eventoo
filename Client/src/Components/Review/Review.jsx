@@ -83,9 +83,7 @@ const Review = () => {
 
     const today = new Date();
     const dateEvent = new Date(`${eventDetail?.end_date}, ${eventDetail?.end_time}`);
-
-    console.log(today, 1)
-    console.log(dateEvent, 2);
+  
 
     return(
         <>

@@ -28,6 +28,7 @@ function Seller() {
   const [sortType, setSortType] = useState({ type: null, id: 2 });
   const [transactionId, setTransactionId] = useState(null);
 
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getEventsManagement());
@@ -56,8 +57,6 @@ function Seller() {
   const handleSearch = (key) => {
     dispatch(setFilterSellerEvent(key));
   };
-
-  console.log(eventSells, 'tipo de evento')
 
   return (
     <div>
@@ -132,64 +131,64 @@ function Seller() {
           </div>
         </div>
         <div className="sapConteiner">
-          {eventSells.map((transaction, index) => (<>
+          {eventSells.map((transaction, index) => (
+            <>
+              <div className="sapListRow" key={index} onClick={() => information(transaction.id)}>
+                <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
+                <div className="sapListItem sapListItemWide sap">
+                  {transaction?.event?.start_date}
+                </div>
+                <div className="sapListItem sap">
+                  {transaction?.isPremium ? "Premium" : "Free"}
+                </div>
+                <div className="sapListItem sap">
+                  {(() => {
+                    switch (transaction.status) {
+                      case 'APPROVED':
+                        return <p className={`${transaction.status}SAP`}>APPROVED</p>
+                      case 'CANCELED':
+                        return <p className={`${transaction.status}SAP`}>CANCELED</p>
+                      case 'COMPLETED':
+                        return <p className={`${transaction.status}SAP`}>COMPLETED</p>
+                      case 'DENIED':
+                        return <p className={`${transaction.status}SAP`}>DENIED</p>
+                      case 'EXPIRED':
+                        return <p className={`${transaction.status}SAP`}>EXPIRED</p>
+                      case 'INWAITING':
+                        return <p className={`${transaction.status}SAP`}>INWAITING</p>
+                      case 'PENDING':
+                        return <p className={`${transaction.status}SAP`}>PENDING</p>
+                      default:
+                        return <p>no tienes estados pendientes</p>;
+                    }
+                  })()}
+                </div>
+              </div>
+              {transaction.id === transactionId ?
+                <div key={index}>
+                  {(() => {
+                    switch (transaction.status) {
+                      case 'APPROVED':
+                        return <Approved transaction={transaction} />;
+                      case 'CANCELED':
+                        return <Canceled transaction={transaction} />;
+                      case 'DENIED':
+                        return <Denied transaction={transaction} />;
+                      case 'EXPIRED':
+                        return <Expired transaction={transaction} />;
+                      case 'INWAITING':
+                        return <Inwaiting transaction={transaction} />;
+                      case 'PENDING':
+                        return <Pending transaction={transaction} />;
+                      case 'COMPLETED':
+                        return <Completed transaction={transaction} />;
 
-            <div className="sapListRow" key={index} onClick={() => information(transaction.id)} onDoubleClick={()=>setTransactionId('')}>
-              <div className="sapListItem sapListItemWide sap">{transaction?.event?.name}</div>
-              <div className="sapListItem sapListItemWide sap">
-                {transaction?.event?.start_date}
-              </div>
-              <div className="sapListItem sap">
-                {transaction?.isPremium ? "Premium" : "Free"}
-              </div>
-              <div className="sapListItem sap">
-                {(() => {
-                  switch (transaction.status) {
-                    case 'APPROVED':
-                      return <p className={`${transaction.status}SAP`}>APPROVED</p>
-                    case 'CANCELED':
-                      return <p className={`${transaction.status}SAP`}>CANCELED</p>
-                    case 'COMPLETED':
-                      return <p className={`${transaction.status}SAP`}>COMPLETED</p>
-                    case 'DENIED':
-                      return <p className={`${transaction.status}SAP`}>DENIED</p>
-                    case 'EXPIRED':
-                      return <p className={`${transaction.status}SAP`}>EXPIRED</p>
-                    case 'INWAITING':
-                      return <p className={`${transaction.status}SAP`}>INWAITING</p>
-                    case 'PENDING':
-                      return <p className={`${transaction.status}SAP`}>PENDING</p>
-                    default:
-                      return <p>no tienes estados pendientes</p>;
-                  }
-                })()}
-              </div>
-            </div>
-            {transaction.id === transactionId ?
-              <div key={index}>
-                {(() => {
-                  switch (transaction.status) {
-                    case 'APPROVED':
-                      return <Approved transaction={transaction} />;
-                    case 'CANCELED':
-                      return <Canceled transaction={transaction} />;
-                    case 'DENIED':
-                      return <Denied transaction={transaction} />;
-                    case 'EXPIRED':
-                      return <Expired transaction={transaction} />;
-                    case 'INWAITING':
-                      return <Pending transaction={transaction} />;
-                    case 'PENDING':
-                      return <Pending transaction={transaction} />;
-                    case 'COMPLETED':
-                      return <Completed transaction={transaction} />;
-
-                    default:
-                      return <p>no tienes estados pendientes</p>;
-                  }
-                })()}
-              </div>
-              : undefined}</>
+                      default:
+                        return <p>no tienes estados pendientes</p>;
+                    }
+                  })()}
+                </div>
+                : undefined}</>
           ))}
         </div>
       </div>

@@ -16,14 +16,13 @@
     padding-bottom: 40px;
     width: 100%;
     color: var(--primary-color);
-    font-size: 5vw;
+    font-size: 3vw;
     font-weight: 400;
 }
 
 .list {
     width: 90%;
     margin-bottom: 30px;
-    font-size: 2vw;
     font-weight: 400;
 }
 

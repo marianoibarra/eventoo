@@ -122,3 +122,16 @@
   margin-top: 10px;
   font-size: 1vw;
 }
+
+.passwordInputContainer{
+  display: flex;
+  flex-direction: row;
+  padding-left: 15px;
+}
+
+.passwordVisibilityButton{
+  background-color: transparent;
+  border: none;
+  padding: 20px;
+  font-size: 20px;
+}

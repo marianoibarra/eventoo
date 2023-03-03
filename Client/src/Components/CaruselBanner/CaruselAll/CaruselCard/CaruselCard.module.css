@@ -161,7 +161,8 @@
 
 .details_title{
     font-family: 'Lato';
-    font-size: 1.2rem;
+    font-weight: 800;
+    font-size: 1rem;
     margin: auto;
     color: var(--dark-text);
     text-align: left;

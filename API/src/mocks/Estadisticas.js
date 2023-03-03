@@ -1,0 +1,1 @@
+let categories = [ "Concerts",  "Fairs",  "Festivals",  "Business meetings",  "Exhibitions",  "Congresses",  "Conventions",  "Workshops",  "Sports",  "Birthday celebration",  "Weddings celebration",  "Religious celebration",  "Parties",  "Plays",  "Fashion shows",  "Infantiles",  "Seminars",  "Conferences",  "Talks",  "Online games",  "Online workshops",  "Online courses"]

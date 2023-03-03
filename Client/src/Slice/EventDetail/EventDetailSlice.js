@@ -21,8 +21,7 @@ export const axiosModeEditEventDetail = createAsyncThunk(
   async ({ id, editedEvent }, { rejectWithValue }) => {
     try {
       const res = await API.put(`/event/${id}`, editedEvent);
-      console.log(res.data)
-       return res.data;
+           return res.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -39,7 +38,6 @@ export const axiosGetEventPrivate = createAsyncThunk(
     try {
       // const res = await API.get(`/event/checkPrivate`, objPrivate)
       const res = await API.post(`/event/checkPrivate`, objPrivate)
-      console.log(res.data)
       return res.data
     } catch (error) {
       return rejectWithValue(error.response.data)

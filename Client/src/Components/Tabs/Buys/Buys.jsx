@@ -38,7 +38,6 @@ function Buys() {
   };
 
   const accent = (e) => {
-    console.log(e)
     if (sortType.type === e) {
       if (sortType.id === 2) {
         setSortType({ type: e, id: 1 });

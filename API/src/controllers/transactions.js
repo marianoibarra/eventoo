@@ -14,7 +14,7 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
-const approvalTimeLimit = 1;
+const approvalTimeLimit = 5;
 const percentageThreshold = 20;
 const sendConfig = {approvalTimeLimit,percentageThreshold}
 
@@ -67,10 +67,8 @@ const updateEventLowStock = async (eventId,percentageThreshold) => {
   const event = await Event.findByPk(eventId);
   const availableTickets =event.stock_ticket;
   const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
-
   const isLowStock = percentageAvailable <= percentageThreshold ;
   await event.update({ low_stock: isLowStock });
-  console.log("capacity:" +event.guests_capacity, "stock_ticket:" + event.stock_ticket,"isLowStock" + isLowStock,"percentageThreshold:" + percentageThreshold,"percentageAvailable:" + percentageAvailable)
 };
 
 const createTransactions = async (req, res) => {
@@ -425,7 +423,7 @@ const completeTransaction = async (req, res) => {
     }
 
     await transaction.update({ payment_proof, status: "INWAITING", format });
-    sendBuyerNotifications(buyer.email, "voucherUploaded");
+    sendBuyerNotifications(buyer.email, "receiptUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
       "newTransfer",
