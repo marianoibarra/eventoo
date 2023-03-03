@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Event, Address, Category, User, Review } = require("../db");
+const jwt = require("jsonwebtoken");
 
 const getEventsPublic = async (req, res) => { //modificque excluyendo el privateEvent_password en el finone del model event.
   try {
