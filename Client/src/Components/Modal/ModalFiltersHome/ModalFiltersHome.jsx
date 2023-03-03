@@ -40,6 +40,7 @@ const ModalFiltersHome = ({setShowModal}) => {
   }
 
   const handleSuccess = () => {
+    console.log(moreFilters,'evento')
     dispatch(setFilter(moreFilters))
     setShowModal(false)
   }
@@ -70,9 +71,9 @@ const ModalFiltersHome = ({setShowModal}) => {
           Facilities
           <FormGroup className={style.checkboxes}>
             <FormControlLabel onChange={handleClick} checked={moreFilters.disability_access} name='disability_access' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>} label={<span className={style.label}><TbDisabled size={26}/>Disability Access</span>} />
-            <FormControlLabel onChange={handleClick} checked={moreFilters.parking} name='parking' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>} label={<span className={style.label}><MdPets size={26}/>Pet Friendly</span>}/>
-            <FormControlLabel onChange={handleClick} checked={moreFilters.smoking_zone} name='smoking_zone' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>} label={<span className={style.label}><TbParking size={26}/>Parking</span>} />
-            <FormControlLabel onChange={handleClick} checked={moreFilters.pet_friendly} name='pet_friendly' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>} label={<span className={style.label}><MdSmokingRooms size={26}/>Smoking Zone</span>}/>
+            <FormControlLabel onChange={handleClick} checked={moreFilters.parking} name='parking' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>}label={<span className={style.label}><TbParking size={26}/>Parking</span>} />
+            <FormControlLabel onChange={handleClick} checked={moreFilters.smoking_zone} name='smoking_zone' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>} label={<span className={style.label}><MdSmokingRooms size={26}/>Smoking Zone</span>}/>
+            <FormControlLabel onChange={handleClick} checked={moreFilters.pet_friendly} name='pet_friendly' className={style.checkbox} control={<Checkbox  sx={{'&.Mui-checked': {color: '#007F80'}}}/>}  label={<span className={style.label}><MdPets size={26}/>Pet Friendly</span>} />
           </FormGroup>
         </div>
         <div className={style.ageranges}>
