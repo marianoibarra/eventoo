@@ -1,0 +1,36 @@
+.background {
+    background-color: var(--ligth-background-color);
+    margin-bottom: 80px;
+    min-height: 100vh;
+    padding-bottom: 10px;
+}
+
+.body {
+    margin: 0 auto;
+    width: 90%;
+    height: max-content;
+}
+
+.title {
+    padding-top: 50px;
+    padding-bottom: 40px;
+    width: 100%;
+    color: var(--primary-color);
+    font-size: 5vw;
+    font-weight: 400;
+}
+
+.list {
+    width: 90%;
+    margin-bottom: 30px;
+    font-size: 2vw;
+    font-weight: 400;
+}
+
+.list p {
+    color: var(--dark-text);
+}
+
+.list h3 {
+    color: var(--dark-text);
+}

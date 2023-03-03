@@ -17,8 +17,10 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import SearchBar from "../../Admin/SearchBar/SearchAdmin";
 import { deleteEvent } from "../../../Slice/eventsManagement/eventsManagementSlice";
+import ModalDeleteEvent from "../../Modal/ModalDeleteEvent/ModalDeleteEvent";
 
 function Buys() {
+  const [showModal, setShowModal] = useState(false);
   const { data: {eventsCreated}, loading: {get: loading} } = useSelector(state => state.eventsManagement)
   const [sortType, setSortType] = useState({ type:null, id: 2 });
   const dispatch = useDispatch();
@@ -143,6 +145,7 @@ function Buys() {
         </div>
         {eventsCreated.map((event,index) => (
           <div className="sapListRow" key={index}>
+            {showModal && <ModalDeleteEvent setShowModal={setShowModal} eventId={event.id}/>}
             <div className="sapListItem sap">{`${event?.organizer?.name} ${event?.organizer?.last_name}`}</div>
             <div className="sapListItem sapListItemWide sap " >{event.name}</div>
             <div className="sapListItem sapListItemWide sap">
@@ -157,7 +160,7 @@ function Buys() {
             
             <div className="sapListItem sap">
               <Link to={`/Event/${event?.id}`} ><BiEdit /></Link>
-              <div onClick={()=> dispatch(deleteEvent(event.id))}><MdDelete cursor={'pointer'}/></div>
+              <div onClick={() => setShowModal(!showModal)}><MdDelete cursor={'pointer'}/></div>
             </div>
           </div>
         ))} 

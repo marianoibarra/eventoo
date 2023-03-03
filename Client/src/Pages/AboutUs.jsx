@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "../Components/Footer/Footer";
+import ComponentAboutUs from "../Components/Footer/ComponentAboutUs/ComponentAboutUs";
 
 import NavBar from '../Components/NavBar/NavBar'
 
@@ -7,7 +8,8 @@ function AboutUs() {
   return (
     <div>
       <NavBar />
-      <Footer/>
+      <ComponentAboutUs />
+      <Footer />
     </div>
   );
 }
