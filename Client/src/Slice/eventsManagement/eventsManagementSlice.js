@@ -22,10 +22,11 @@ export const getEventsManagement = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "eventsBuysSlice/deleteEvent",
-  async (eventId, { rejectWithValue }) => {
+  async (eventId, { rejectWithValue, dispatch }) => {
     try {
-      const response = await API.put(`/event/${eventId}`);
-      return eventId;
+      const response = await API.delete(`/event/${eventId}`);
+      dispatch(getEventsManagement());
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data);
@@ -102,11 +103,13 @@ const initialState = {
     get: false,
     post: false,
     put: false,
+    delete: false
   },
   error: null,
   transactionWasCreated: false,
   transactionWasCanceled: false,
   paymentWasLoaded: false,
+  deleteMsg: null
 };
 
 export const eventsManagementSlice = createSlice({
@@ -336,7 +339,6 @@ export const eventsManagementSlice = createSlice({
       state.loading.get = true;
     },
     [getEventsManagement.fulfilled]: (state, action) => {
-      console.log(action.payload.eventsCreated);
       state.data = action.payload;
       state.copy = action.payload;
       state.loading.get = false;
@@ -389,24 +391,14 @@ export const eventsManagementSlice = createSlice({
       state.paymentWasLoaded = false;
     },
     [deleteEvent.pending]: (state) => {
-      state.loading = true;
+      state.loading.delete = true;
     },
     [deleteEvent.fulfilled]: (state, action) => {
-      state.loading = false;
-      const eventId = action.payload;
-
-      // Buscar el índice del evento en el arreglo state.eventsCreated usando findIndex
-      const eventIndex = state.data.eventsCreated.findIndex(
-        (e) => e.id === eventId
-      );
-
-      // Si el evento existe en el arreglo, eliminarlo usando splice
-      if (eventIndex !== -1) {
-        state.data.eventsCreated.splice(eventIndex, 1);
-      }
+      state.loading.delete = false;
+      state.deleteMsg = action.payload
     },
     [deleteEvent.rejected]: (state, action) => {
-      state.loading = false;
+      state.loading.delete = false;
       state.error = action.error;
     },
     [putApprovePayment.pending]: (state) => {

@@ -1,0 +1,107 @@
+.label svg {
+  color: var(--primary-color);
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.radios,
+.MuiRadioGroup-row {
+  width: 65%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.MuiFormGroup-root,
+.checkboxes {
+  display: grid !important;
+  width: 75%;
+  margin: 0 auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: auto;
+  padding-left: 28px;
+}
+
+.radio span,
+.checkbox span {
+  user-select: none;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-family: 'Lato';
+}
+
+.modalWrapper {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-family: 'Lato';
+}
+
+.buttons {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 20%;
+  align-items: center;
+}
+
+.clear,
+.success {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  user-select: none;
+}
+
+.success {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+.clear {
+  color: var(--dark-text);
+  font-weight: 500;
+}
+
+.clear[disabled] {
+  opacity: .5;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+.ageranges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  font-size: .9;
+  font-weight: 500
+  ;
+}

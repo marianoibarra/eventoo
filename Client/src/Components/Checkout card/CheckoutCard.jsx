@@ -37,18 +37,31 @@ function CheckOut({ errors, isLogged, input,setConfirm, confirm}) {
               sx={{
                 width: '100%',
                 maxWidth: 360,
+                color:'var(--dark-text)',
+                WebkitTextFillColor: 'var(--dark-text)',
               }}
             >
               <ListItem>
                 <ListItemText
+                sx={{
+                  WebkitTextFillColor: 'var(--dark-text)',
+                  color:'var(--dark-text)'
+                }}
                 primary={input.items !== null ? input.items[0].title : 'Free Pack'}
                 secondary="Selected publicity" />
               </ListItem>
-              <Divider component="li" />
+              <Divider sx={{
+                  WebkitTextFillColor: 'var(--dark-text)',
+                  color:'var(--dark-text)'
+                }} component="li" />
               <ListItem>
                 <ListItemText
                 primary={input.items !== null ? `$${input.items[0].unit_price}` : '0'}
-                secondary="Price" />
+                secondary="Price"
+                sx={{
+                  WebkitTextFillColor: 'var(--dark-text)',
+                  color:'var(--dark-text)'
+                }}/>
               </ListItem>
             </List>
           </div>

@@ -147,7 +147,7 @@ const createTransactions = async (req, res) => {
             {
               model: Category,
               as: "category",
-              attributes: ["name", "modality"],
+              attributes: ["name", "modality", "image"],
             },
           ],
         },
@@ -360,7 +360,7 @@ const getTransactionsByEventOrganizer = async (req, res) => {
 
 const updateTransaction = async (req, res) => {
   try {
-    const { payment_proof, status, transactionId } = req.body;
+    const { payment_proof, status, transactionId, format } = req.body;
     const transaction = await Transaction.findByPk(transactionId);
 
     if (!transaction) {
@@ -368,7 +368,7 @@ const updateTransaction = async (req, res) => {
         error: "Transaction not found",
       });
     }
-    await transaction.update({ payment_proof, status });
+    await transaction.update({ payment_proof, status, format });
     return res.status(200).json({
       message: "Transaction updated successfully",
       transaction,
@@ -382,7 +382,7 @@ const updateTransaction = async (req, res) => {
 
 const completeTransaction = async (req, res) => {
   try {
-    const { payment_proof } = req.body;
+    const { payment_proof, format } = req.body;
     const { transactionId } = req.params;
     const transaction = await Transaction.findByPk(transactionId, {
       include: "tickets",
@@ -413,22 +413,23 @@ const completeTransaction = async (req, res) => {
     const fifteenMinutesAgo = moment().subtract(approvalTimeLimit, "minutes");
     if (moment(transaction.createdAt).isBefore(fifteenMinutesAgo)) {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
+      await transaction.update({ status: "EXPIRED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId);
       await event.increment("stock_ticket", { by: ticketsToReturn });
       sendBuyerNotifications(buyer.email, "expiredReservation");
       return res.status(400).json({
         error:
-          "Transaction has expired, status updated to CANCELED and tickets have been returned to event",
+          "Transaction has expired, status updated to EXPIRED and tickets have been returned to event",
       });
     }
 
-    await transaction.update({ payment_proof, status: "INWAITING" });
-    sendBuyerNotifications(buyer.email, "receiptUploaded");
+    await transaction.update({ payment_proof, status: "INWAITING", format });
+    sendBuyerNotifications(buyer.email, "voucherUploaded");
     sendOrganizerNotifications(
       event.organizer.email,
       "newTransfer",
+      payment_proof
     );
 
     return res.status(200).json({
@@ -493,7 +494,7 @@ const ApprovePayment = async (req, res) => {
 
     if (status === "DENIED") {
       // Si han pasado más de 15 minutos, devuelve las entradas al evento
-      await transaction.update({ status: "CANCELED" });
+      await transaction.update({ status: "DENIED" });
       const ticketsToReturn = transaction.tickets.length;
       const event = await Event.findByPk(transaction.eventId, {
         include: [

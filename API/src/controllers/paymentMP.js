@@ -15,7 +15,7 @@ const manageMercadoPagoResponse = async (req, res) => {
       });
       await event.update({isActive: true})
 
-      return res.redirect(`${response.external_reference}/Event/${eventId}?checkout=true`);
+      return res.redirect(`https://eventoo.com.ar/Event/${eventId}?checkout=true`);
     }
 
     const eventToDestroy = await Event.findByPk(eventId)

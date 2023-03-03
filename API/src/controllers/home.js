@@ -133,6 +133,7 @@ const getEventById = async (req, res) => {
             as: 'organizer',
             include: [{
               model: Review,
+              where: {isActive: true},
               attributes: ["stars", "comment", "createdAt"],
               include: [
                 {

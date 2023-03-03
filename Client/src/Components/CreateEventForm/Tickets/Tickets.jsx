@@ -74,8 +74,8 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg,loading }) {
         input={input}
       />
       {input.isPublic === false && (<>
-        <p>Remember private events will not show in the home page</p>
-        <h4 style={{ margin: '15px' }} >Enter a password for your guests so only them will have the access</h4>
+        <p style={{ color:'var(--dark-text)'}}>Remember private events will not show in the home page</p>
+        <h4 style={{ margin: '15px', color:'var(--dark-text)'}} >Enter a password for your guests so only them will have the access</h4>
         <Textfield
           required
           name="privateEvent_password"
@@ -85,10 +85,11 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg,loading }) {
           onChange={handleChange}
           margin="dense"
           disabled={loading}
+          sx={{ WebkitTextFillColor: 'var(--dark-text)',borde: 'var(--border-color)',backgroundColor: 'var(--ligth-background-color)'}}
           helperText={showMsg.privateEvent_password ? errors.privateEvent_password : ""}
           error={showMsg.privateEvent_password && errors.privateEvent_password}
           type={showPassword ? "text" : "password"}
-          style={{ marginBottom: showMsg.privateEvent_password && errors.privateEvent_password ? '0px' : '23px' }}
+          style={{ marginBottom: showMsg.privateEvent_password && errors.privateEvent_password ? '0px' : '23px', backgroundColor: 'var(--ligth-background-color)' }}
           onBlur={handleBlur}
           endAdornment={
             <InputAdornment position="end">
@@ -118,7 +119,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg,loading }) {
           name="guests_capacity"
           variant="standard"
           value={input.guests_capacity}
-          sx={{ m: 1, width: '25ch' }}
+          sx={{ m: 1, width: '25ch',WebkitTextFillColor: 'var(--dark-text)',border: 'var(--border-color)',backgroundColor: 'var(--ligth-background-color)' }}
           onChange={handleChange}
           onBlur={handleBlur}
           margin="dense"
@@ -139,6 +140,7 @@ function Tickets({ input, setInput, errors, showMsg, setShowMsg,loading }) {
             onChange={handleChange}
             onBlur={handleBlur}
             margin="dense"
+            sx={{WebkitTextFillColor: 'var(--dark-text)',border: 'var(--border-color)',backgroundColor: 'var(--ligth-background-color)' }}
             error={showMsg.price && errors.price}
             style={{ marginBottom: showMsg.price && errors.price ? '0px' : '20px' }}
             disabled={loading}
