@@ -215,7 +215,7 @@ function Buys() {
                     case 'APPROVED':
                       return <Approved transaction={transaction} />;
                     case 'CANCELED':
-                      return <Pending transaction={transaction} />;
+                      return <Canceled transaction={transaction} />;
                     case 'DENIED':
                       return <Denied transaction={transaction} />;
                     case 'EXPIRED':
