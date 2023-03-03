@@ -15,7 +15,7 @@ import EventInformation from "./EventInformation/EventInformation";
 import EventLocation from "./EventLocation/EventLocation";
 import covers from "../../imgs/covers";
 import moment from "moment";
-import { AiTwotoneCalendar, AiFillEdit } from "react-icons/ai";
+import { AiTwotoneCalendar, AiFillEdit, AiOutlineLink } from "react-icons/ai";
 import { RiMedalLine, RiTicket2Fill } from "react-icons/ri";
 import style from "./CardDetail.module.css";
 import ContainerButtonRight from "./ContainerButtonRight/ContainerButtonRight";
@@ -23,18 +23,13 @@ import { MdLocalFireDepartment } from "react-icons/md";
 import { Chip } from "@mui/material";
 import { SessionContext } from "../..";
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
+import { IoTicketSharp } from 'react-icons/io5'
 import { switchFavorites } from "../../Slice/Favorites/FavoritesSlice";
 
 const sx = {
   bgcolor: "#BC4001",
   color: "white",
   mr: "10px"
-}
-
-const classic_sx = {
-  bgcolor: '#BC4001',
-  color: 'white',
-  mr: '10px'
 }
 
 const premium_sx = {
@@ -61,7 +56,7 @@ const CardDetailPublic = () => {
 
   const genDate = () => {
     const [hour, minute] = eventDetail.start_time.split(":");
-    const date = new Date(eventDetail.start_date);
+    const date = new Date(eventDetail.start_date.split("-"));
     date.setHours(hour);
     date.setMinutes(minute);
     return date;
@@ -69,7 +64,7 @@ const CardDetailPublic = () => {
 
   const genEndDate = () => {
     const [hour, minute] = eventDetail.end_time.split(":");
-    const date = new Date();
+    const date = new Date(eventDetail.start_date.split("-"));
     date.setHours(hour);
     date.setMinutes(minute);
     return date.getTime();
@@ -116,8 +111,7 @@ const CardDetailPublic = () => {
 
   function editButton(event) {
     event.preventDefault();
-    console.log(modeEdit);
-    if (modeEdit === false) {
+    if(modeEdit === false){
       dispatch(setModeEdit(true));
     }
     else {
@@ -164,14 +158,18 @@ const CardDetailPublic = () => {
 
           <div className={style.category_and_age}>
 
-            {eventDetail.typePack === 'CLASSIC' && <Chip sx={classic_sx} icon={<MdLocalFireDepartment style={{ color: 'orange' }} />} label={`Featured`} />}
-            {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{ color: 'orange' }} />} label={`Premium`} />}
+              {eventDetail.typePack === 'CLASSIC' && <Chip sx={sx} icon={<MdLocalFireDepartment style={{color: 'orange'}}/>} label={`Featured`}  />}
+              {eventDetail.typePack === 'PREMIUM' && <Chip sx={premium_sx} icon={<RiMedalLine style={{color: 'orange'}}/>} label={`Premium`}  />}
+              
+              {eventDetail.low_stock && 
+                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} icon={<IoTicketSharp style={{color: 'orange'}}/>} label={`Last Tickets`}  />
+              }
 
-            {eventDetail.category &&
-              <Chip sx={sx} label={eventDetail.category.name} />
-            }
+              {eventDetail.category && 
+                <Chip sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} label={eventDetail.category.name}  />              
+              }
 
-            <Chip label={eventDetail.age_range} sx={sx} />
+              <Chip label={eventDetail.age_range} sx={eventDetail.typePack === 'PREMIUM' ? premium_sx : sx} />
 
             {!organizer &&
               <div className={style.favorite} onClick={handleFav}>
@@ -239,33 +237,49 @@ const CardDetailPublic = () => {
             </div>
           </div>
 
-          <div className={style.container_date}>
-            <div className={style.containericon}>
-              <span className={style.iconspan}>
-                {" "}
-                <AiTwotoneCalendar size={30} />{" "}
-              </span>
-              <span className={style.iconspantext}>Date and Time</span>
+            <div className={style.container_date}>
+              <div className={style.containericon}>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <AiTwotoneCalendar size={30} />{" "}
+                </span>
+                <span className={style.iconspantext}>Date and Time</span>
+              </div>
+              <h3>
+                {`${date && moment(date).format('ddd, MMMM Do, LT')} to ${endDate && moment(endDate).format('LT')}`}
+              </h3>
             </div>
             <h3>
               {`${date && moment(date).format('ddd, MMMM Do, h:mm')} to ${endDate && moment(endDate).format('h:mm')}`}
             </h3>
           </div>
 
-          {eventDetail.category?.modality === "Presential" && (
-            <EventLocation />
-          )}
+            {eventDetail.category?.modality === "Presential" && (
+              <EventLocation />
+            )}
 
-          <div className={style.container_date}>
-            <div className={style.containericon}>
-              <span className={style.iconspan}>
-                {" "}
-                <RiTicket2Fill size={35} />{" "}
-              </span>
-              <span className={style.iconspantext}>About the event</span>
-            </div>
-            <div className={style.aboutevent} dangerouslySetInnerHTML={{
-              __html: eventDetail.large_description
+            {eventDetail.category?.modality === "Virtual" && 
+              <div className={style.container_date}>
+                <div className={style.containericon}>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <AiOutlineLink size={35} />{" "}
+                </span>
+                <span className={style.iconspantext}>URL</span>
+                </div>
+                <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+              </div>
+            }
+
+            <div className={style.container_date}>
+              <div className={style.containericon}>
+                <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                  {" "}
+                  <RiTicket2Fill size={35} />{" "}
+                </span>
+                <span className={style.iconspantext}>About the event</span>
+              </div>
+              <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
                 ? eventDetail.large_description.replace(/\n/g, '<br>')
                 : eventDetail.description
             }}></div>

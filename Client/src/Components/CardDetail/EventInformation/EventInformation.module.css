@@ -43,6 +43,17 @@
     width: min-content;
 }
 
+.iconspan_premium {
+    color: var(--primary-color);
+    background-color: var(--background-icon);
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 2px;
+    border-radius: 50%;
+    width: min-content;
+}
+
 .iconspantext {
     display: block;
     width: min-content;

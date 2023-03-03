@@ -46,7 +46,6 @@ export const newFilterSlice = createSlice({
       }
     },
     clearFilter(state,action) {
-
       return {
         ...initialState,
         name: state.name,

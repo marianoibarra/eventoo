@@ -1031,7 +1031,7 @@ const sendEmail = (to, url, name, template) => {
   });
 };
 
-const sendBuyerNotifications = (to, template, pdf,eventId) => {
+const sendBuyerNotifications = (to, template, eventId, pdf) => {
   const emailTemplates = {
     reserveTickets: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
      <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -4024,7 +4024,7 @@ const sendBuyerNotifications = (to, template, pdf,eventId) => {
     from: `Eventoo <${process.env.EMAIL_USER}>`,
     to,
     subject: subjectTemplates[template],
-    text: "Plaintext version of the message",
+    text: `Plaintext version of the message`,
     html: emailTemplates[template],
   };
 

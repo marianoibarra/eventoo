@@ -11,15 +11,18 @@
 
 .text{
     margin: 5px;
+    color: var(--dark-text);
 }
 
 .inputs{
     width: 20%;
     height: 40px;
-    background-color: white;
-    border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 15px;
+    border: solid 1px var(--border-color);
+    background-color: var(--ligth-background-color);
+    border-radius: 5px;
+    color: var(--dark-text);
 }
 
 .warning {
@@ -34,3 +37,7 @@
     margin:15px;
     justify-content: space-between;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator{
+    filter:var(--dark-text);
+  }

@@ -18,7 +18,7 @@ const FilterMode = () => {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    if(filter.modality || filter.isToday || filter.isNextWeekend) {
+    if(Object.values(filter).some(f => f)) {
       setSomeActive(true)
     } else {
       setSomeActive(false)
@@ -95,6 +95,7 @@ const FilterMode = () => {
         </div>
       </div>
       <button name='modal' onClick={handleClick} className={Style.moreFilter}>
+          {(filter.age_range || filter.parking || filter.pet_friendly || filter.disability_access || filter.smoking_zone) && <div className={Style.dot}/>}
           <MdOutlineTune style={{pointerEvents: 'none'}} size={20} />
       </button>
     </div>

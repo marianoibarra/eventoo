@@ -52,7 +52,7 @@ const SettingForm = () => {
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="adress">Adress</legend>
-                    <input type='text' name="adress" value={input?.address? input.address: 'No address loaded'} onChange={handleOnChange}/>
+                    <input type='text' name="address" value={input.address ? input.address : 'No address loaded'} onChange={handleOnChange}/>
                 </div>
                 <div className={style.container_input}>
                     <legend htmlFor="age">Age</legend>

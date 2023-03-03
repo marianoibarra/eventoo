@@ -8,9 +8,7 @@ import { RiMailSendLine } from "react-icons/ri";
 
 
 const ModalBuysVoucher = ({ setShowModal, transaction, btnSelector, payment_proof, format }) => {
-  // const { loading: { put } } = useSelector(state => state.eventsManagement)
   const dispatch = useDispatch()
-
 
 
   const handleBtnAcept = () => {
