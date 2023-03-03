@@ -137,6 +137,11 @@ function Buys() {
           <div
             className="sapListItem"
           >
+            Count
+          </div>
+          <div
+            className="sapListItem"
+          >
             Action
           </div>
 
@@ -153,6 +158,9 @@ function Buys() {
             </div>
             <div className="sapListItem sap">
             <p>{event.isPublic ? 'Public' : 'Private'} </p>
+            </div>
+            <div className="sapListItem sap">
+            <p>{event.stock_ticket }/{event.guests_capacity } </p>
             </div>
             
             <div className="sapListItem sap">

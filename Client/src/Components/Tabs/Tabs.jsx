@@ -40,7 +40,7 @@ function TabsComponent() {
       <Tab
         className={Styles.tab}
         icon={<MdCreateNewFolder className={Styles.tabIcon} />}
-       label="Organizator"
+       label="My Events"
       />
     </Tabs>
     {value === 0 && (
