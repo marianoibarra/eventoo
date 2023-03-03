@@ -159,11 +159,11 @@ h1 a:hover {
     color: var(--dark-text);
 }
 
-.container_date h3 {
+.date_text {
     margin-top: 6px;
     margin-left: 52px;
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 400;
     width: max-content;
     color: var(--secondary-color);
 }
