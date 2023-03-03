@@ -46,7 +46,7 @@ const Index = () => {
 
   const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const [showSessionModal, setShowSessionModal] = useState(null);
-  const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'dark' : 'light');
+  const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'light' : 'light');
 
   return (
     <SessionContext.Provider value={{ showSessionModal, setShowSessionModal }}>

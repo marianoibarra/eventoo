@@ -145,7 +145,7 @@ const createEvent = async (req, res) => {
 
       let itemsParsed = items.map(i => {return {...i, unit_price: Number(i.unit_price), quantity: Number(i.quantity),}})
       const price = items.reduce((acc, val) =>  acc + (val.quantity * val.unit_price),0)
-      const client_url = req.protocol + '://' + (req.hostname === 'localhost' ? 'localhost:3000' : req.hostname)
+      const client_url = req.protocol + '://' + (req.hostname === 'localhost' ? 'localhost:3000' : 'eventoo.com.ar')
       const server_url = req.headers.host
       preference_id = await getMercadoPago(event.id, itemsParsed, client_url, server_url)
 
@@ -250,6 +250,7 @@ const getEventByUser = async ({ userId }, res) => {
     const events = await Event.findAll({
       where: {
         organizerId: userId,
+        isActive: true
       },
       include: [
         "bankAccount",

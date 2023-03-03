@@ -4,7 +4,7 @@ mercadopago.configure({
   access_token: MP_ACCESS_TOKEN,
 });
 
-const getMercadoPago = async (eventId, items, client_url, server_url) => {
+const getMercadoPago = async (eventId, items, client_url) => {
   let preference = {
     items,
     back_urls: {
