@@ -177,7 +177,7 @@ function Seller() {
                       case 'EXPIRED':
                         return <Expired transaction={transaction} />;
                       case 'INWAITING':
-                        return <Pending transaction={transaction} />;
+                        return <Inwaiting transaction={transaction} />;
                       case 'PENDING':
                         return <Pending transaction={transaction} />;
                       case 'COMPLETED':
