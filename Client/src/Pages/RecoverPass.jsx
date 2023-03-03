@@ -1,14 +1,15 @@
-import React from 'react'
-import Footer from '../Components/Footer/Footer'
-import FormRecover from '../Components/ForgotPass/FormRecover/FormRecover.jsx'
-
+import React from "react";
+import Footer from "../Components/Footer/Footer";
+import FormRecover from "../Components/ForgotPass/FormRecover/FormRecover.jsx";
+import NavBar from "../Components/NavBar/NavBar";
 function RecoverPass() {
   return (
     <div>
-        <FormRecover/>
-      <Footer/>
+      <NavBar />
+      <FormRecover />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default RecoverPass
+export default RecoverPass;

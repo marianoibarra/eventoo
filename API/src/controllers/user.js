@@ -305,7 +305,7 @@ const forgotPassword = async (req, res) => {
 
     sendEmail(
       user.email,
-      `${process.env.CLIENT_URL}/reset-password/${reset_token}`,
+      `https://www.eventoo.com.ar/reset-password/${reset_token}`,
       user.name,
       "resetPassword"
     );

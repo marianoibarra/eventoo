@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMaps from "./MapRegister";
 import { clearErrors, register, update } from "../../../Slice/User/UserSlice";
+import { HiX } from 'react-icons/hi'
 
 const RegisterModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -33,7 +34,7 @@ const RegisterModal = () => {
 
   const validate = (input) => {
     const regexp_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const regexp_pass =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regexp_pass =  /^(?=.*[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/;
     const errors = {};
 
     if (input.email.length === 0) {
@@ -62,7 +63,7 @@ const RegisterModal = () => {
   const [errors, setErrors] = useState({});
   const [showErr, setShowErr] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, isNewUser, error } = useSelector((state) => state.user);
+  const { loading, isNewUser, error: {register: error} } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     setInput({
@@ -75,6 +76,10 @@ const RegisterModal = () => {
     setErrors(validate(input));
   }, [input]);
 
+  useEffect(() => {
+    setStep(styles.s1);
+  }, [error]);
+  
   const handleBlur = (e) => {
     setShowErr({
       ...showErr,
@@ -98,6 +103,7 @@ const RegisterModal = () => {
   };
 
   useEffect(() => {
+    dispatch(clearErrors())
     window.google.accounts.id.renderButton(googleButton.current, {
       theme: "outline",
       size: "large",
@@ -118,7 +124,7 @@ const RegisterModal = () => {
             dispatch(clearErrors())
           }}
         >
-          🗙
+          <HiX />
         </div>
       </header>
       <div className={`${styles.scrollBox} ${step}`}>
@@ -218,7 +224,7 @@ const RegisterModal = () => {
                   </InputAdornment>
                 }
               />
-
+              {error && <span className={styles.errorMsg}>{error.msg}</span>}
               <button
                 className={`${styles.submit} ${styles.right}`}
                 type="button"
@@ -280,6 +286,7 @@ const RegisterModal = () => {
                     Back
                   </button>
                 )}
+                
                 <button
                   className={`${styles.submit} ${styles.next}`}
                   type="submit"

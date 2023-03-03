@@ -9,6 +9,7 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./LoginModal.module.css";
 import { clearErrors, login } from "../../../Slice/User/UserSlice";
+import { HiX } from 'react-icons/hi'
 
 const LoginModal = () => {
   const { setShowSessionModal } = useContext(SessionContext);
@@ -60,7 +61,7 @@ const LoginModal = () => {
     });
   };
 
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error: {login: error} } = useSelector((state) => state.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,6 +69,7 @@ const LoginModal = () => {
   };
 
   useEffect(() => {
+    dispatch(clearErrors())
     window.google.accounts.id.renderButton(googleButton.current, {
       theme: "outline",
       size: "large",
@@ -86,7 +88,7 @@ const LoginModal = () => {
             setShowSessionModal(null);
           }}
         >
-          🗙
+          <HiX />
         </div>
       </header>
       <main className={styles.main}>

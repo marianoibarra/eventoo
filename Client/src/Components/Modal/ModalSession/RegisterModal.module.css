@@ -199,7 +199,8 @@
   color: rgb(216, 2, 2);
   font-size: 0.85rem;
   text-align: center;
-  margin: 28px 0 -12px;
+  margin: 0 0 -12px;
+  height: 40px;
   width: 100%;
 }
 
