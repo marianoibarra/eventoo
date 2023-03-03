@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { cancelTransaction, loadPaymentProof, putApprovePayment } from '../../../Slice/eventsManagement/eventsManagementSlice'
 import Modal from '../Modal'
 import { Spinner } from '../Spinner/Spinner'
@@ -10,18 +11,15 @@ const ModalBuysVoucher = ({ setShowModal, transaction, btnSelector, payment_proo
   const dispatch = useDispatch()
 
 
-
   const handleBtnAcept = () => {
     dispatch(loadPaymentProof({ id: transaction, data: { payment_proof: payment_proof, format: format } }))
     setShowModal(false)
-    window.location.reload()
   }
 
 
   const handleBtnCancel = () => {
     dispatch(cancelTransaction(transaction))
     setShowModal(false)
-    window.location.reload()
   }
 
 

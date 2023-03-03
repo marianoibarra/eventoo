@@ -77,7 +77,7 @@ function Category({ input, setInput, errors, showMsg, setShowMsg, selectedModali
               onChange={handleChanges}
               onBlur={handleBlur}
               margin="dense"
-              sx={{ m: 1, width: '27ch', WebkitTextFillColor: 'var(--dark-text)' }}
+              sx={{ m: 1, width: '27ch', WebkitTextFillColor: 'var(--dark-text)',backgroundColor: 'var(--ligth-background-color)' }}
               helperText={showMsg.category ? errors.category : ""}
               error={showMsg.category && errors.category}
               style={{ marginBottom: showMsg.category && errors.category ? '0px' : '20px' }}
