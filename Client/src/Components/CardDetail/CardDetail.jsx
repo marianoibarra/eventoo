@@ -54,33 +54,35 @@ const CardDetailPublic = () => {
   const { id } = useParams();
   const { organizer, modeEdit, editedEvent, errors } = useSelector(state => state.eventDetail.eventEdition);
 
-  const genDate = () => {
-    const [hour, minute] = eventDetail.start_time.split(":");
-    const date = new Date(eventDetail.start_date.split("-"));
-    date.setHours(hour);
-    date.setMinutes(minute);
-    return date;
-  };
 
-  const genEndDate = () => {
-    const [hour, minute] = eventDetail.end_time.split(":");
-    const date = new Date(eventDetail.start_date.split("-"));
-    date.setHours(hour);
-    date.setMinutes(minute);
-    return date.getTime();
-  }
+  {eventDetail.category?.modality === "Virtual" && 
+  <div className={style.container_date}>
+    <div className={style.containericon}>
+    <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+      {" "}
+      <AiOutlineLink size={35} />{" "}
+    </span>
+    <span className={style.iconspantext}>URL</span>
+    </div>
+    <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+  </div>
+}
 
-  const date = eventDetail.start_date && eventDetail.start_time ? genDate() : null;
-  const endDate = eventDetail.end_time ? genEndDate() : null;
+<div className={style.container_date}>
+  <div className={style.containericon}>
+    <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+      {" "}
+      <RiTicket2Fill size={35} />{" "}
+    </span>
+    <span className={style.iconspantext}>About the event</span>
+  </div>
+  <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
+    ? eventDetail.large_description.replace(/\n/g, '<br>')
+    : eventDetail.description
+}}></div>
+<hr></hr>
+</div>
 
-  //funciones de usuario organizador
-  function validate(input) {
-    let errors = {};
-    if (!input.description.length) {
-      errors.description = "Description is required";
-    }
-    if (input.name.length === 0) {
-      errors.name = "Title is required";
     } else if (input.name.length < 4) {
       errors.name = "Title must have at least 4 characters";
     } else if (input.name.length > 40) {
@@ -120,34 +122,36 @@ const CardDetailPublic = () => {
       dispatch(setEditedEvent({
         name: eventDetail.name,
         description: eventDetail.description,
-        edited: false,
-      }));
-    }
-  }
 
-  useEffect(() => {
-    dispatch(getEventsManagement());
-    if (user.isLogged) {
-      if (eventDetail.organizer) {
-        if (user.id === eventDetail.organizer.id) {
-          dispatch(setOrganizer(true));
-          dispatch(setEditedEvent({
-            ...editedEvent,
-            name: eventDetail.name,
-            description: eventDetail.description,
-          }));
-        }
+
+        {eventDetail.category?.modality === "Virtual" && 
+        <div className={style.container_date}>
+          <div className={style.containericon}>
+          <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+            {" "}
+            <AiOutlineLink size={35} />{" "}
+          </span>
+          <span className={style.iconspantext}>URL</span>
+          </div>
+          <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+        </div>
       }
-    }
-  }, [eventDetail, user]);
 
-  return (
-    <div className={style.background}>
-      {(eventDetail && data && Object.keys(eventDetail).length > 0) && (
-        <div>
-          <div className={style.body}>
-            <div className={style.containerimg}>
-              <img
+    <div className={style.container_date}>
+        <div className={style.containericon}>
+          <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+            {" "}
+            <RiTicket2Fill size={35} />{" "}
+          </span>
+          <span className={style.iconspantext}>About the event</span>
+        </div>
+        <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
+          ? eventDetail.large_description.replace(/\n/g, '<br>')
+          : eventDetail.description
+      }}></div>
+      <hr></hr>
+    </div>
+
                 src={
                   eventDetail.cover_pic
                     ? eventDetail.cover_pic
@@ -192,27 +196,36 @@ const CardDetailPublic = () => {
 
             <div className={style.container_title_and_description}>
               <div className={style.container_title}>
-                {modeEdit === false ? (
-                  <h1>
-                    {eventDetail.name && eventDetail.name}{" "}
-                  </h1>
-                ) : (
-                  <div className={style.organizerdiv}>
-                    <input
-                      className={
-                        errors.name
-                          ? style.organizerinput_error
-                          : style.organizerinput
-                      }
-                      type="text"
-                      name="name"
-                      value={editedEvent.name}
-                      onChange={handleOnChange}
-                    />
-                    {organizer === true && errors.name && <p>{errors.name}</p>}
-                  </div>
-                )}
+          
+
+              {eventDetail.category?.modality === "Virtual" && 
+            <div className={style.container_date}>
+              <div className={style.containericon}>
+              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                {" "}
+                <AiOutlineLink size={35} />{" "}
+              </span>
+              <span className={style.iconspantext}>URL</span>
               </div>
+              <p className={style.url}>{`Once you purchase your ticket we'll send you the link to your email.`}</p>
+            </div>
+          }
+
+        <div className={style.container_date}>
+            <div className={style.containericon}>
+              <span className={eventDetail.typePack === 'PREMIUM' ? style.iconspan_premium : style.iconspan}>
+                {" "}
+                <RiTicket2Fill size={35} />{" "}
+              </span>
+              <span className={style.iconspantext}>About the event</span>
+            </div>
+            <div className={style.aboutevent} dangerouslySetInnerHTML={{ __html: eventDetail.large_description
+              ? eventDetail.large_description.replace(/\n/g, '<br>')
+              : eventDetail.description
+          }}></div>
+          <hr></hr>
+        </div>
+
               <div className={style.containerdescription}>
                 {modeEdit === false ? (
                   <p>{eventDetail.description}</p>
