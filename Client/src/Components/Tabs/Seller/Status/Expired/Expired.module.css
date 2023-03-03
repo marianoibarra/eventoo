@@ -14,9 +14,9 @@
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  background-color: #b83c3c;
+  background-color: #515151;
   border-radius: 50%;
-  margin-right: 1rem;
+  margin-right: 1rem; 
 }
 
 .icon {
@@ -42,6 +42,6 @@
   color: #000;
 }
 
-.message > span{
+.message>span {
   font-weight: 800;
 }

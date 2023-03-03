@@ -5,16 +5,23 @@ import Voucher from './Voucher/Voucher';
 
 function Inwaiting({ transaction }) {
   return (
-    <div className={styles.container}>
-      <div className={styles.iconContainer}>
-        <FaHandPaper className={styles.icon} />
+    <>
+      <div className={styles.container}>
+        <div className={styles.iconContainer}>
+          <FaHandPaper className={styles.icon} />
+        </div>
+        <div className={styles.messageContainer}>
+          <h1 className={styles.heading}>Transaction Inwaiting</h1>
+          <p className={styles.message}>
+            Transfer for <span>{transaction.event.name}</span> awaiting approval.
+          </p>
+        </div>
       </div>
-      <div className={styles.messageContainer}>
-        <h1 className={styles.heading}>Transaction In Waiting</h1>
+      <div>
         <Voucher
           transaction={transaction} />
       </div>
-    </div>
+    </>
   );
 }
 
