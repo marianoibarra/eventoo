@@ -8,7 +8,6 @@ export const createEvent = createAsyncThunk(
       const response = await API.post("/event", formData);
       return response.data;
     } catch (error) {
-      console.log(error)
       if (error.response) {
         return rejectWithValue(error.response.data);
       }

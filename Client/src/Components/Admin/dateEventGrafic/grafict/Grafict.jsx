@@ -86,7 +86,6 @@ function Grafict() {
         })
         .filter((category) => category !== null)
         .sort((a, b) => b.value - a.value);
-        console.log(data)
       setChartData(data);
     }
     if (events.length && categories.length) {
