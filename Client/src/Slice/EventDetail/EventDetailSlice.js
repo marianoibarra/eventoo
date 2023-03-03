@@ -34,12 +34,13 @@ export const axiosModeEditEventDetail = createAsyncThunk(
 
 export const axiosGetEventPrivate = createAsyncThunk(
   'eventDetail/axiosGetEventPrivate',
-  async (objPrivate, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       // const res = await API.get(`/event/checkPrivate`, objPrivate)
-      const res = await API.post(`/event/checkPrivate`, objPrivate)
+      const res = await API.post(`/event/checkPrivate`, data)
       return res.data
     } catch (error) {
+      console.log(error)
       return rejectWithValue(error.response.data)
     }
   }
@@ -125,7 +126,7 @@ export const eventDetailSlice = createSlice({
     [axiosGetEventPrivate.rejected]: (state, action) => {
       state.loading = false;
       state.showEvent = false;
-      state.errorPass = action.error;
+      state.errorPass = action.payload;
     },
   },
 

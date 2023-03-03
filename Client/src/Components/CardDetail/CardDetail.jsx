@@ -316,7 +316,7 @@ const CardDetail = () => {
     e.preventDefault()
     if (privatePass) {
       dispatch(
-        axiosGetEventPrivate({ objPrivate: { id, privateEvent_password: privatePass } })
+        axiosGetEventPrivate({ id, privateEvent_password: privatePass })
       );
       setPrivatePass("");
     }
