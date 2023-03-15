@@ -22,7 +22,7 @@ const DataBankAccount = ({ quantity }) => {
   }
 
   const handleAcept = () => {
-    navigate(0) //ver, rompe el flujo
+    navigate("/user-event") //ver, rompe el flujo
   }
 
   const handleDelete = () => {
