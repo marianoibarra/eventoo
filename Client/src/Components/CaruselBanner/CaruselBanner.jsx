@@ -11,10 +11,10 @@ const CaruselBanner = () => {
     return (
         <div>
             
-            {/* <div className={Style.container_carusel} >
+            <div className={Style.container_carusel} >
                  <div className={Style.carusel_text}>
                     <p>
-                        Hola este es un mensaje de prueba del carusel ONE
+                    Discover the top events or plan your own<br></br> all in a single portal.
                     </p>
                 </div>
 
@@ -41,7 +41,7 @@ const CaruselBanner = () => {
 
                     </div>
                 </div>
-            </div> */}
+            </div> 
             <CategoriesFilter />
             <FilterMode />
             <CaruselAll />

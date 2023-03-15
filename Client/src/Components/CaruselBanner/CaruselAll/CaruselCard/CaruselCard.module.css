@@ -59,6 +59,7 @@
     cursor: pointer;
     user-select: none;
     border: solid 1px var(--primary-color);
+    margin-top: 20px;
 }
 
 .width {

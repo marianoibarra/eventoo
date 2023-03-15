@@ -137,7 +137,6 @@
   }
 
   @media screen and (max-width: 1024px) {
-    
     .fab {
       position: fixed;
       display: inline;
