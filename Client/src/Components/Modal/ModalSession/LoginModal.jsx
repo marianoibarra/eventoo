@@ -151,8 +151,6 @@ const LoginModal = () => {
               }
             />
 
-              {showPassword ? <AiFillEyeInvisible onClick={() => setShowPassword(!showPassword)}/> : <AiFillEye onClick={() => setShowPassword(!showPassword)}/>}
-
           </div>
           <span
             className={styles.forgotLink}

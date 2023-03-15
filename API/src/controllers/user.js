@@ -248,6 +248,8 @@ const login = async (req, res) => {
       expiresIn: "90d",
     });
 
+    if(user.isBanned) return res.status(401).send({msg: 'User is banned'})
+
      const response = await user.toJSON()  
     
      if(response.roleAdmin.name) response.roleAdmin = response.roleAdmin.name;
