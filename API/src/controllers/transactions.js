@@ -16,7 +16,7 @@ const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const approvalTimeLimit = 5;
 const percentageThreshold = 20;
-const sendConfig = {approvalTimeLimit,percentageThreshold}
+const sendConfig = { approvalTimeLimit, percentageThreshold };
 
 const cleanTransactions = async (IdEvent) => {
   const event = await Event.findByPk(IdEvent.id, {
@@ -60,14 +60,14 @@ const cleanTransactions = async (IdEvent) => {
       }
     );
   }
-  updateEventLowStock(IdEvent.id, percentageThreshold)
+  updateEventLowStock(IdEvent.id, percentageThreshold);
 };
 
-const updateEventLowStock = async (eventId,percentageThreshold) => {
+const updateEventLowStock = async (eventId, percentageThreshold) => {
   const event = await Event.findByPk(eventId);
-  const availableTickets =event.stock_ticket;
+  const availableTickets = event.stock_ticket;
   const percentageAvailable = (availableTickets / event.guests_capacity) * 100;
-  const isLowStock = percentageAvailable <= percentageThreshold ;
+  const isLowStock = percentageAvailable <= percentageThreshold;
   await event.update({ low_stock: isLowStock });
 };
 
@@ -92,11 +92,11 @@ const createTransactions = async (req, res) => {
         },
       ],
     });
-    await cleanTransactions(event,approvalTimeLimit);
+    await cleanTransactions(event, approvalTimeLimit);
     await event.reload();
     const user = await User.findByPk(buyerId);
     const organizer = await User.findByPk(event.organizer.id);
-    const bankAccount = await BankAccount.findByPk(event.bankAccount.id);
+    // const bankAccount = await BankAccount.findByPk(event.bankAccount.id); aun no se usa
 
     if (event.stock_ticket < tickets.length) {
       // se verifica si hay suficiente stock de entradas
@@ -104,61 +104,114 @@ const createTransactions = async (req, res) => {
         error: `Not enough tickets available for the event ${event.name}`,
       });
     }
-    const newTransaction = await Transaction.create(
-      {
-        tickets: tickets,
-        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
-      },
-      {
-        include: ["tickets"],
-      }
-    );
-
-    await newTransaction.setBuyer(user);
-    await newTransaction.setEvent(event);
-
-    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
-
-    await newTransaction.reload({
-      include: [
-        "tickets",
+    
+    if (!event.isPaid) {
+      const newTransaction = await Transaction.create(
         {
-          model: User,
-          as: "buyer",
-          attributes: ["id", "name", "last_name", "email"],
+          tickets: tickets,
+          expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+          status: "APPROVED",
+          isPaid: false,
         },
         {
-          model: Event,
-          as: "event",
-          include: [
-            "bankAccount",
-            {
-              model: Address,
-              as: "address",
-              attributes: { exclude: ["id"] },
-            },
-            {
-              model: User,
-              as: "organizer",
-              attributes: ["id", "name", "last_name", "profile_pic"],
-            },
-            {
-              model: Category,
-              as: "category",
-              attributes: ["name", "modality", "image"],
-            },
-          ],
+          include: ["tickets"],
+        }
+      );
+      await newTransaction.setBuyer(user);
+      await newTransaction.setEvent(event);
+
+      await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+
+      await newTransaction.reload({
+        include: [
+          "tickets",
+          {
+            model: User,
+            as: "buyer",
+            attributes: ["id", "name", "last_name", "email"],
+          },
+          {
+            model: Event,
+            as: "event",
+            include: [
+              "bankAccount",
+              {
+                model: Address,
+                as: "address",
+                attributes: { exclude: ["id"] },
+              },
+              {
+                model: User,
+                as: "organizer",
+                attributes: ["id", "name", "last_name", "profile_pic"],
+              },
+              {
+                model: Category,
+                as: "category",
+                attributes: ["name", "modality", "image"],
+              },
+            ],
+          },
+        ],
+      });
+      //envio diferente de mails a usuario comprador y usuario vendedor
+      return res.status(201).json(newTransaction);
+    } else {
+      const newTransaction = await Transaction.create(
+        {
+          tickets: tickets,
+          expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
         },
-      ],
-    });
+        {
+          include: ["tickets"],
+        }
+      );
+      await newTransaction.setBuyer(user);
+      await newTransaction.setEvent(event);
 
-    sendBuyerNotifications(
-      user.email,
-      "reserveTickets"
-    );
-    sendOrganizerNotifications(organizer.email, "reservationReceived");
+      await event.update({ stock_ticket: event.stock_ticket - tickets.length });
 
-    return res.status(201).json(newTransaction);
+      await newTransaction.reload({
+        include: [
+          "tickets",
+          {
+            model: User,
+            as: "buyer",
+            attributes: ["id", "name", "last_name", "email"],
+          },
+          {
+            model: Event,
+            as: "event",
+            include: [
+              "bankAccount",
+              {
+                model: Address,
+                as: "address",
+                attributes: { exclude: ["id"] },
+              },
+              {
+                model: User,
+                as: "organizer",
+                attributes: ["id", "name", "last_name", "profile_pic"],
+              },
+              {
+                model: Category,
+                as: "category",
+                attributes: ["name", "modality", "image"],
+              },
+            ],
+          },
+        ],
+      });
+      sendBuyerNotifications(user.email, "reserveTickets");
+      sendOrganizerNotifications(organizer.email, "reservationReceived");
+      return res.status(201).json(newTransaction);
+     
+    }
+
+   
+
+   
   } catch (error) {
     return res.status(500).json({
       error: error.message,
