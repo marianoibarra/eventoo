@@ -104,114 +104,61 @@ const createTransactions = async (req, res) => {
         error: `Not enough tickets available for the event ${event.name}`,
       });
     }
-    
-    if (!event.isPaid) {
-      const newTransaction = await Transaction.create(
+
+    const newTransaction = await Transaction.create(
+      {
+        tickets: tickets,
+        expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+      },
+      {
+        include: ["tickets"],
+      }
+    );
+    await newTransaction.setBuyer(user);
+    await newTransaction.setEvent(event);
+    await event.update({ stock_ticket: event.stock_ticket - tickets.length });
+    await newTransaction.reload({
+      include: [
+        "tickets",
         {
-          tickets: tickets,
-          expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
-          status: "APPROVED",
-          isPaid: false,
+          model: User,
+          as: "buyer",
+          attributes: ["id", "name", "last_name", "email"],
         },
         {
-          include: ["tickets"],
-        }
-      );
-      await newTransaction.setBuyer(user);
-      await newTransaction.setEvent(event);
-
-      await event.update({ stock_ticket: event.stock_ticket - tickets.length });
-
-      await newTransaction.reload({
-        include: [
-          "tickets",
-          {
-            model: User,
-            as: "buyer",
-            attributes: ["id", "name", "last_name", "email"],
-          },
-          {
-            model: Event,
-            as: "event",
-            include: [
-              "bankAccount",
-              {
-                model: Address,
-                as: "address",
-                attributes: { exclude: ["id"] },
-              },
-              {
-                model: User,
-                as: "organizer",
-                attributes: ["id", "name", "last_name", "profile_pic"],
-              },
-              {
-                model: Category,
-                as: "category",
-                attributes: ["name", "modality", "image"],
-              },
-            ],
-          },
-        ],
-      });
-      //envio diferente de mails a usuario comprador y usuario vendedor
-      return res.status(201).json(newTransaction);
-    } else {
-      const newTransaction = await Transaction.create(
-        {
-          tickets: tickets,
-          expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
+          model: Event,
+          as: "event",
+          include: [
+            "bankAccount",
+            {
+              model: Address,
+              as: "address",
+              attributes: { exclude: ["id"] },
+            },
+            {
+              model: User,
+              as: "organizer",
+              attributes: ["id", "name", "last_name", "profile_pic"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["name", "modality", "image"],
+            },
+          ],
         },
-        {
-          include: ["tickets"],
-        }
-      );
-      await newTransaction.setBuyer(user);
-      await newTransaction.setEvent(event);
-
-      await event.update({ stock_ticket: event.stock_ticket - tickets.length });
-
-      await newTransaction.reload({
-        include: [
-          "tickets",
-          {
-            model: User,
-            as: "buyer",
-            attributes: ["id", "name", "last_name", "email"],
-          },
-          {
-            model: Event,
-            as: "event",
-            include: [
-              "bankAccount",
-              {
-                model: Address,
-                as: "address",
-                attributes: { exclude: ["id"] },
-              },
-              {
-                model: User,
-                as: "organizer",
-                attributes: ["id", "name", "last_name", "profile_pic"],
-              },
-              {
-                model: Category,
-                as: "category",
-                attributes: ["name", "modality", "image"],
-              },
-            ],
-          },
-        ],
-      });
-      sendBuyerNotifications(user.email, "reserveTickets");
-      sendOrganizerNotifications(organizer.email, "reservationReceived");
-      return res.status(201).json(newTransaction);
-     
-    }
-
-   
-
-   
+      ],
+    });
+    //envio diferente de mails a usuario comprador y usuario vendedor si el evento es free: Pasar por parametro
+    //a la funcion enviadora de email que tipo de evento es, aun no esta implementando:
+    sendBuyerNotifications(user.email, "reserveTickets");//pasar por parametro el tipo de evento
+    // aca hacer un condicional al estilo:
+    // !event.isPaid ?   auxFunctionQueHaceLasEntradas(par1,par2) y dentro se ejecute la funcion enviadora de email :
+    //se ejecuta lo de abajo:
+    sendOrganizerNotifications(organizer.email, "reservationReceived");
+    //---------------------------------------------------------------------
+    !event.isPaid ? await newTransaction.update({ status: "APPROVED" }) : null;
+    return res.status(201).json(newTransaction);
   } catch (error) {
     return res.status(500).json({
       error: error.message,
