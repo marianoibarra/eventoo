@@ -104,19 +104,19 @@ const createTransactions = async (req, res) => {
         error: `Not enough tickets available for the event ${event.name}`,
       });
     }
-    
+
     if (!event.isPaid) {
       const newTransaction = await Transaction.create(
         {
           tickets: tickets,
           expiration_date: moment().add(approvalTimeLimit, "minutes").toDate(),
-          status: "APPROVED",
-          isPaid: false,
+          // status: "APPROVED", //No me esta tomando esto.. se actualiza en postman pero no en vercel
         },
         {
           include: ["tickets"],
         }
       );
+      await newTransaction.update({ status: "APPROVED"});
       await newTransaction.setBuyer(user);
       await newTransaction.setEvent(event);
 
@@ -206,12 +206,7 @@ const createTransactions = async (req, res) => {
       sendBuyerNotifications(user.email, "reserveTickets");
       sendOrganizerNotifications(organizer.email, "reservationReceived");
       return res.status(201).json(newTransaction);
-     
     }
-
-   
-
-   
   } catch (error) {
     return res.status(500).json({
       error: error.message,
