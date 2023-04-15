@@ -63,7 +63,8 @@ export default function GoogleMaps({ input, setInput, size="390x150", save=false
 
     if (!autocompleteService.current && window.google) {
       autocompleteService.current =
-        new window.google.maps.places.AutocompleteService();
+      window.google.maps?
+        new window.google.maps.places.AutocompleteService():null
     }
     if (!autocompleteService.current) {
       return undefined;
